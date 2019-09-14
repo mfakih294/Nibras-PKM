@@ -1,0 +1,321 @@
+.uploadr {
+font: 12px normal Arial, Helvetica, sans-serif;
+  width: 250px;
+}
+  .uploadr  .placeholder {
+    color: #abc;
+    font-size: 20px;
+    width: 100%;
+    line-height: 50px;
+    vertical-align: middle;
+    text-align: center;
+    z-index: 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
+  }
+
+  .uploadr   .fileinput {
+    display: block;
+    width: auto;
+    height: 24px;
+    vertical-align: middle;
+    overflow: hidden;
+    margin-bottom: -40px;
+  }
+  .uploadr .message {
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 20px;
+    padding-top: 3px;
+    background-image: url(./images/select.gif);
+    background-repeat: no-repeat;
+    background-position: left center;
+    cursor: pointer;
+  }
+
+  .uploadr input {
+    KHTMLOpacity: 0;
+    MozOpacity: 0;
+    -khtml-opacity: 0;
+    -ms-filter: "alpha(opacity=0)";
+    -moz-opacity: 0;
+    opacity: 0;
+    width: 10px;
+  }
+
+
+  .info-badge {
+    width: 33px;
+    height: 33px;
+    background-image: url(./images/badge.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    left: 417px;
+    top: 24px;
+    color: #fff;
+    font: 12px normal Arial, Helvetica, sans-serif;
+    line-height: 33px;
+    text-align: center;
+    cursor: default;
+  }
+
+  .files {
+    min-height: 50px;
+    margin: 10px;
+    padding: 8px 10px 10px 8px;
+    z-index: 1;
+    box-shadow: 0 0 20px #ccc;
+  }
+
+  .files .uploadr-dropable {
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+      display: none;
+    border: 2px dashed #ccc;
+  }
+
+  .file {
+    width: 100%;
+    height: 40px;
+    background-color: transparent;
+  }
+
+  .file .background {
+    display: block;
+    width: inherit;
+    height: inherit;
+    background-color: #c0ddea;
+    border: 1px solid #003a69;
+  }
+
+  .file .upload-progress {
+    display: block;
+    height: inherit;
+    background: #ffb16f;
+    border: 1px solid #e24912;
+    margin-top: -42px;
+    width: 0%;
+  }
+
+  .file .complete {
+    background: #bce08a;
+    border: 1px solid #545f1d;
+
+  }
+  .file .failed {
+          background-color: #ffb8ad;
+          border: 1px solid #fe4819;
+
+      }
+
+  .file
+  .info {
+    display: block;
+    height: inherit;
+    margin-top: -40px;
+    vertical-align: middle;
+    margin-left: 5px;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  }
+  .file   .spinner {
+          background-image: url(./images/importing.gif);
+          width: 16px;
+          height: 16px;
+          background-repeat: no-repeat;
+          background-position: center;
+          display: inline-block;
+          margin-top: 15px;
+          float:right;
+        }
+
+  .file     .controls {
+    display: inline-block;
+    width: 66px;
+    height: 40px;
+    float: right;
+    overflow: hidden;
+    margin: -2px -2px 0px 0px;
+  }
+  .file     .control .buttons {
+    display: block;
+    vertical-align: top;
+    width: 64px;
+    height: 16px;
+    margin: 2px 2px 2px 0px;
+  }
+  .file     .control   .button {
+    display: inline-block;
+    float: right;
+    width: 16px;
+    height: 16px;
+  }
+  .file     .control .view {
+                background-image: url(./images/view.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+  .file     .control .download {
+                background-image: url(./images/download.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+  .file     .control .color {
+                background-image: url(./images/color.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+  .file     .control .delete {
+                background-image: url(./images/delete.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+  .file     .control .cancel {
+                background-image: url(./images/cancel.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+
+
+
+
+        .details {
+          display: inline-block;
+          width: 300px;
+          height: 40px;
+        }
+  .details  .name {
+            color: #FFFFFF;
+            font-weight: bold;
+            letter-spacing: -1px;
+            font-size: 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.68);
+            width: auto;
+          }
+
+  .details  .size {
+            display: inline-block;
+            color: #243748;
+            width: 50px;
+            font-size: 10px;
+            line-height: 24px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+          }
+
+  .details    .percentage {
+            display: inline-block;
+            width: 50px;
+            color: #243748;
+            font-size: 12px;
+            line-height: 24px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+          }
+
+  .details    .speed {
+            display: inline-block;
+            width: 200px;
+            color: #243748;
+            font-size: 8px;
+            line-height: 24px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+          }
+
+
+
+
+
+  .pickr {
+    width: 124px;
+    height: auto;
+    opacity: 0.8;
+    position: absolute;
+    z-index: 10;
+  }
+  .pickr .arrow {
+      display: inline-block;
+      float: right;
+      vertical-align: top;
+      margin-top: 10px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right:10px solid #000;
+      z-index: 12;
+    }
+
+  .pickr .content {
+    float: right;
+    display: inline-block;
+    width: 106px;
+    height: auto;
+    background-color: #000;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 2px solid #000;
+    box-shadow: 0 0 20px #CCCCCC;
+    z-index: 11;
+  }
+  .pickr    .content  ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 0px 4px;
+  }
+  .pickr    .content   ul   li {
+    display: inline-block;
+    float: left;
+    width: 30px;
+    height: 20px;
+    margin: 0px 4px 5px 0px;
+  }
+  .pickr    .content  ul li .current {
+            background-image: url(./images/clock.png);
+            background-repeat: no-repeat;
+            background-position: center center;
+          }
+
+
+
+/** bootstrap specific adjustments **/
+.container
+  .uploadr {
+  width: 100%;
+}
+  .container    .info-badge {
+      left: calc(100% - 24px);
+    }
+
+  .container  .files
+      .file {
+    margin-top: -1px;
+  }
+  .container  .files
+  .file      .upload-progress {
+          margin-top: -40px;
+        }
+
+  .container  .files
+  .file    .info {
+    margin-top: -39px;
+  }
+  .container  .files
+  .file   .controls
+            .buttons {
+              margin: 5px 2px 2px 0px;
+            }
+
+  .container  .files
+  .file   .controls
+  .buttons    .pickr {
+    width: 120px;
+  }
+  .container  .files
+  .file   .controls
+  .buttons    .content {
+        width: 110px;
+      }

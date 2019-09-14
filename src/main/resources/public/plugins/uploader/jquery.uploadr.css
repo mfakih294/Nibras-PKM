@@ -1,0 +1,421 @@
+.uploadr {
+  font: 12px normal Arial, Helvetica, sans-serif;
+  width: 450px;
+
+  .placeholder {
+    color: #abc;
+    font-size: 20px;
+    width: 100%;
+    line-height: 50px;
+    vertical-align: middle;
+    text-align: center;
+    z-index: 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
+  }
+
+  .fileinput {
+    display: block;
+    width: auto;
+    height: 24px;
+    vertical-align: middle;
+    overflow: hidden;
+    margin-bottom: -40px;
+
+    .message {
+      font-weight: bold;
+      height: 20px;
+      line-height: 20px;
+      padding-left: 20px;
+      padding-top: 3px;
+      background-image: url(../images/select.gif);
+      background-repeat: no-repeat;
+      background-position: left center;
+      cursor: pointer;
+    }
+
+    input {
+      KHTMLOpacity:0;
+      MozOpacity:0;
+      -khtml-opacity:0;
+      -ms-filter:"alpha(opacity=0)";
+      -moz-opacity:0;
+      opacity:0;
+      width: 10px;
+    }
+  }
+
+  .info-badge {
+    width: 33px;
+    height: 33px;
+    background-image: url(../images/badge.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    left: 417px;
+    top: 24px;
+    color: #fff;
+    font: 12px normal Arial, Helvetica, sans-serif;
+    line-height: 33px;
+    text-align: center;
+    cursor: default;
+  }
+
+  .files {
+    min-height: 50px;
+    margin: 10px;
+    padding: 8px 10px 10px 8px;
+    z-index: 1;
+    box-shadow: 0 0 20px #ccc;
+
+    &.uploadr-dropable {
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      border: 2px dashed #ccc;
+    }
+
+    .file {
+      width: 100%;
+      height: 40px;
+      background-color: transparent;
+
+      .background {
+        display: block;
+        width: inherit;
+        height: inherit;
+        background-color: #c0ddea;
+        border: 1px solid #003a69;
+      }
+
+      .upload-progress {
+        display: block;
+        height: inherit;
+        background: #ffb16f;
+        border: 1px solid #e24912;
+        margin-top: -42px;
+        width: 0%;
+
+        &.complete {
+          background: #bce08a;
+          border: 1px solid #545f1d;
+        }
+
+        &.failed {
+          background-color: #ffb8ad;
+          border: 1px solid #fe4819;
+        }
+      }
+
+      .info {
+        display: block;
+        height: inherit;
+        margin-top: -40px;
+        vertical-align: middle;
+        margin-left: 5px;
+        font-family: Arial,'Helvetica Neue',Helvetica,sans-serif;
+
+        .spinner {
+          background-image: url(../images/importing.gif);
+          width: 16px;
+          height: 16px;
+          background-repeat: no-repeat;
+          background-position: center;
+          display: inline-block;
+          margin-top: 15px;
+          float:right;
+        }
+
+        .controls {
+          display: inline-block;
+          width: 66px;
+          height: 40px;
+          float: right;
+          overflow: hidden;
+          margin: -2px -2px 0px 0px;
+
+          .buttons {
+            display: block;
+            vertical-align: top;
+            width: 64px;
+            height: 16px;
+            margin: 2px 2px 2px 0px;
+
+            .button {
+              display: inline-block;
+              float: right;
+              width: 16px;
+              height: 16px;
+
+              &.view {
+                background-image: url(../images/view.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+              &.download {
+                background-image: url(../images/download.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+              &.color {
+                background-image: url(../images/color.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+              &.delete {
+                background-image: url(../images/delete.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+
+              &.cancel {
+                background-image: url(../images/cancel.png);
+                background-repeat: no-repeat;
+                background-position: left center;
+              }
+            }
+          }
+
+          .voting {
+            display: block;
+            width: 34px;
+            height: 16px;
+            float: right;
+            margin: 0px 2px 0px 0px;
+
+            .like {
+              display: inline-block;
+              width: 16px;
+              height: 16px;
+              padding-left: 2px;
+              background-image: url(../images/like.png);
+              background-repeat: no-repeat;
+              background-position: left center;
+            }
+
+            .unlike {
+              display: inline-block;
+              width: 16px;
+              height: 16px;
+              background-image: url(../images/unlike.png);
+              background-repeat: no-repeat;
+              background-position: left center;
+            }
+          }
+        }
+
+        .details {
+          display: inline-block;
+          width: 300px;
+          height: 40px;
+
+          .name {
+            color: #FFFFFF;
+            font-weight: bold;
+            letter-spacing: -1px;
+            font-size: 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.68);
+            width: auto;
+          }
+
+          .size {
+            display: inline-block;
+            color: #243748;
+            width: 50px;
+            font-size: 10px;
+            line-height: 24px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+          }
+
+          .percentage {
+            display: inline-block;
+            width: 50px;
+            color: #243748;
+            font-size: 12px;
+            line-height: 24px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+          }
+
+          .speed {
+            display: inline-block;
+            width: 200px;
+            color: #243748;
+            font-size: 8px;
+            line-height: 24px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+          }
+
+          .rating {
+            display: inline-block;
+            width: 90px;
+            height: 18px;
+
+            .empty {
+              width: 18px;
+              height: 18px;
+              display: inline-block;
+              background-image: url(../images/rating_empty.png);
+            }
+
+            .half {
+              width: 18px;
+              height: 18px;
+              display: inline-block;
+              background-image: url(../images/rating_half.png);
+            }
+
+            .full {
+              width: 18px;
+              height: 18px;
+              display: inline-block;
+              background-image: url(../images/rating_full.png);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: block;
+    height: 20px;
+    width: 100%;
+    margin: -8px 10px 10px 8px;
+
+    .previous {
+      display: inline-block;
+      background-image: url(../images/previous.png);
+      background-repeat: no-repeat;
+      background-position: left center;
+      width: 20px;
+      height: 20px;
+    }
+
+    .next {
+      display: inline-block;
+      background-image: url(../images/next.png);
+      background-repeat: no-repeat;
+      background-position: left center;
+      width: 20px;
+      height: 20px;
+    }
+
+    .pages {
+      display: inline-block;
+      min-width: 20px;
+      height: 18px;
+      line-height: 18px;
+      vertical-align: middle;
+      margin-top: -12px;
+
+      li {
+        display: inline-block;
+        width: 10px;
+        list-style: none;
+        font-family: Arial,'Helvetica Neue',Helvetica,sans-serif;
+        font-size: 10px;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+        letter-spacing: -2px;
+
+        &.current {
+          font-weight: bold;
+          color: #0096db;
+        }
+      }
+    }
+  }
+
+  .pickr {
+    width: 124px;
+    height: auto;
+    opacity: 0.8;
+    position: absolute;
+    z-index: 10;
+
+    .arrow {
+      display: inline-block;
+      float: right;
+      vertical-align: top;
+      margin-top: 10px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right:10px solid #000;
+      z-index: 12;
+    }
+
+    .content {
+      float: right;
+      display: inline-block;
+      width: 106px;
+      height: auto;
+      background-color: #000;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      border: 2px solid #000;
+      box-shadow: 0 0 20px #CCCCCC;
+      z-index: 11;
+
+      ul {
+        list-style-type:none;
+        padding: 0px;
+        margin: 5px 0px 0px 4px;
+
+        li {
+          display: inline-block;
+          float: left;
+          width: 30px;
+          height: 20px;
+          margin: 0px 4px 5px 0px;
+
+          &.current {
+            background-image: url(../images/clock.png);
+            background-repeat: no-repeat;
+            background-position: center center;
+          }
+        }
+      }
+    }
+  }
+}
+
+/** bootstrap specific adjustments **/
+.container {
+  .uploadr {
+    width: 100%;
+
+    .info-badge {
+      left: calc(100% - 24px);
+    }
+
+    .files {
+      .file {
+        margin-top: -1px;
+
+        .upload-progress {
+          margin-top: -40px;
+        }
+
+        .info {
+          margin-top: -39px;
+
+          .controls {
+            .buttons {
+              margin: 5px 2px 2px 0px;
+            }
+          }
+        }
+      }
+    }
+
+    .pickr {
+      width: 120px;
+
+      .content {
+        width: 110px;
+      }
+    }
+  }
+}
