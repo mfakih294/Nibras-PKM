@@ -1,34 +1,27 @@
 # Nibras PKM
 
-**Nibras PKM** is an open source web-based personal knowledge management (PKM) system.
+**Nibras PKM** is an __offline open source system__ for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.
 
-* Its goal is to manage the information needed for long-term use by the individual advanced user.
-* It manages: resources (articles, books, documents), notes, writings, tasks, goals, journal, planner, payments, indicators, and (study) courses and departments.
-* It is cross-platform and written in the Grails framework.
+**Why offline?** The user has full control over his/her data, without the need for (fast) internet connection, and without all the distractions and information overload that the internet can cause.
 
-
-
-* Nibras Homepage: http://khuta.org/nibras.
-* Code, releases and issues: https://github.com/mfakih294/nibras-pkm.
-* Documentation: http://khuta.org/nibras-doc.
+**Why open source?** The user has control over the system itself too, especially when using it on the long term to manage the important personal information and files.
 
 
-Developer: Mohamad Fakih (mail@khuta.org, Telegram: @m_fakih)
+**It manages**: resources (articles, books, documents), notes, writings, tasks, goals, journal, planner, payments, indicators, and (study) courses and departments.
 
+![Screenshots](http://khuta.org/nibras-doc/images/nibras-1.2.4.jpg)
 
-## Main features
+## Main Features
 
-* Text commands to add, update and search records, which provides powerful ways to manage information.
-* Easy creation of records from files named in Nibras command format.
-* Ability to save searches for later use.
+* **Flexible text-based commands** to add, update and search records, which provides powerful ways to manage information.
+* **Saved searches** to save searches for later use.
 * Ability to display records on calendars and Kanban boards.
 * Full-text search of all record fields.
-* Storing records files in a way that reduces greatly the need to organize them manually.
-
+* Simple file system integration so to greatly reduce the need to organize files manually.
 
 ## Technical details
 
 * Nibras is developed in Grails framework 3.3.10, which is based on Groovy language, a dynamic language on top of the Java platform.
 * Grails applications run on any platform that can run Java 8 and later, so practically all platforms, including Windows, Linux, Mac.
-* For production use, Nibras uses MySQL 5.5+ for its database, and the file system to store the files of the records. To testing and demonstration, you can run it with h2 database, with no need to configure it.
-* Apache Tomcat 8+ is the recommended application server to run it.
+* For production use, Nibras uses MySQL 5 for its database, and the file system to store the files of the records. To testing and demonstration, you can run it with h2 database, with no need to configure it.
+* Apache Tomcat 8+ is the recommended application server to run it for production use.
