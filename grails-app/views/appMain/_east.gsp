@@ -377,6 +377,14 @@
             <span id="subDaftarArea">
 
             </span>
+
+            <br/>
+            <br/>
+            <a href="${createLink(controller: 'page', action:'appDaftar')}" target="_self">
+            &nearr;
+            &nearr;
+            </a>
+
         </div>
 
 
@@ -427,7 +435,7 @@
 
 
 
-                <sec:ifAnyGranted roles="ROLE_ADMIN">
+                %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
                 %{--<td>--}%
                 %{--<input type="radio" name="myRadios" onchange="singleDisplay();" value="Single" />--}%
                 %{--<input type="radio" name="myRadios" onchange="dualDisplay();" value="dual display" />--}%
@@ -455,7 +463,7 @@
                     </a>
                 </li>
                 </ul>
-                </sec:ifAnyGranted>
+                %{--</sec:ifAnyGranted>--}%
 
 
                 <li>

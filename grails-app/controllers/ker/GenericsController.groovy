@@ -1242,6 +1242,7 @@ ll
 
         if (!record.bookmarked) {
             record.bookmarked = true
+
         } else
             record.bookmarked = false
 
@@ -2668,8 +2669,9 @@ ll
     }
 
     def findRecords(String input) {
-        if (input.contains('++')) {
 
+        if (input.contains(' ++')) {
+            params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
             def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
             def queryHead = 'from ' + entityMapping[entityCode]
@@ -2684,45 +2686,54 @@ ll
             s.queryType = 'hql'
             s.save(flush: true)
             render(template: '/gTemplates/recordSummary', model: [record: s])
-        } else if (input.endsWith('+')) {
-            def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
+        }
 
-            def queryHead = 'from ' + entityMapping[entityCode]
-            def queryCriteria = transformMcsNotation(input.split(/\+\+/)[0])['queryCriteria']
+        else if (input.endsWith(' +')) {
+            try {
+                     println new Date().format('HH:mm:ss')
+                def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
-            def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+                def queryHead = 'from ' + entityMapping[entityCode]
+                def queryCriteria = transformMcsNotation(input.substring(0, input.length() - 2))['queryCriteria']
 
-            def list = Task.executeQuery(fullquery + ' order by lastUpdated desc')
-            def r
-            def limit = ker.OperationController.getPath('updateResultSet.max-items')?.toInteger() ?: 100
-            if (list.size() < limit) {
-                list.each() {
-                    r = it.entityCode() + it.id
-                    if (!selectedRecords[r] || selectedRecords[r] == 0) {
-                        selectedRecords[r] = 1
-                        session[r] = 1
-                    } else {
-                        selectedRecords[r] = 0
-                        session[r] = 0
+                def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+                println 'fq ' + fullquery
+                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc',[], params)
+                def r
+                def limit = ker.OperationController.getPath('updateResultSet.max-items')?.toInteger() ?: 100
+                if (list.size() < limit) {
+                    list.each() {
+                        r = it.entityCode() + it.id
+                        if (!selectedRecords[r] || selectedRecords[r] == 0) {
+                            selectedRecords[r] = 1
+                            session[r] = 1
+                        } else {
+                            selectedRecords[r] = 0
+                            session[r] = 0
+                        }
                     }
-                }
-                def fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
-                def queryKey = '_' + new Date().format('ddMMyyHHmmss')
-                session[queryKey] = fullquery
+                    def fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+                    def queryKey = '_' + new Date().format('ddMMyyHHmmss')
+                    session[queryKey] = fullquery
 
-                render(template: '/gTemplates/recordListing', model: [
-                        totalHits: Task.executeQuery(fullquerySort)[0], //.size(),
-                        list     : list,
-                        queryKey : queryKey,
-                        fullquery: fullquery,
-                        title    : fullquery
-                ])
-            } else {
-                render 'Result set size is greater than ' + limit + '. Please narrow your search'
+                    println '-> ' + Task.executeQuery(fullquerySort)[0]
+                    params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+                    render(template: '/gTemplates/recordListing', model: [
+                            totalHits: Task.executeQuery(fullquerySort)[0].toLong(), //.size(),
+                            list     : list,
+                            queryKey : queryKey,
+                            fullquery: fullquery,
+                            title    : fullquery
+                    ])
+                } else {
+                    render 'Result set size is greater than ' + limit + '. Please narrow your search'
+                }
+            } catch(Exception e){
+                println e.printStackTrace()
             }
 
-
         } else {
+            params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
             if (input.contains(' {')) {
 
                 def groupBy = input.split(/ \{/)[1]
@@ -2803,7 +2814,8 @@ ll
                     fullquery = session[input]
                     fullquerySort = 'select count(*) ' + fullquery
                     queryKey = input
-                } else {
+                }
+                else {
                     def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
 //        input = params.input.substring(params.input.indexOf(' '))
@@ -2819,7 +2831,7 @@ ll
                     session[queryKey] = fullquery
 
                 }
-                params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+
                 def list = Task.executeQuery(fullquery + ' order by lastUpdated desc', [], params)
 //            if (OperationController.getPath('enable.autoselectResults') == 'yes'){
 //                selectedRecords.keySet().each() {

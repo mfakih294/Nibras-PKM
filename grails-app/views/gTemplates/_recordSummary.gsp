@@ -89,7 +89,7 @@
                                        data-type="select"
                                        data-value="${record.type?.id}"
                                        data-name="${field}-${entityCode}"
-                                       style="font-size: 11px; font-weight: normal;"
+                                       style="font-size: 12px; font-weight: normal;"
 
                                        data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                        data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
@@ -118,7 +118,7 @@
                                        data-value="${record[field]?.id}"
                                        data-name="${field}-${entityCode}"
                                        class="${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
-                                       style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px; float: right;"
+                                       style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px; float: right;"
                                        data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                        data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                        data-title="Edit ${field}">
@@ -436,7 +436,7 @@
                                 <g:set value="context" var="field"></g:set>
 
                                 <a href="#" id="${field}${record.id}" class="${field}"
-                                   style="font-style: italic !important; color: darkgreen !important; font-size: 10px;"
+                                   style="font-style: italic !important; color: darkgreen !important; font-size: 11px;"
                                    data-type="select"
                                    data-value="${record[field]?.id}"
                                    data-name="${field}-${record.entityCode()}"
@@ -534,7 +534,7 @@
 
                             <g:if test="${record.class.declaredFields.name.contains('readOn') && record.readOn}">
                                 <img src="${resource(dir: '/images', file: 'edx-check.png')}" style="width: 15px;"
-                                     title="${record.readOn?.format('dd.MM.yyyy')}"/>
+                                     title="${record.readOn?.format('dd.MM.yyyy HH:mm')}"/>
                             %{--Read ${record.readOn?.format('dd.MM.yyyy')}--}%
                             </g:if>
 
@@ -726,7 +726,7 @@
                                               style="padding: 4px; font-size: 13px;"
                                               before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
-                                    <span style="font-size: 10px; font-style: italic; color: #435d59">
+                                    <span style="font-size: 11px; font-style: italic; color: #435d59">
                                         <pkm:summarize text="${record.fullText}"
                                                        length="${OperationController.getPath('description.summarize.threshold')?.toInteger()}"/>
                                         (${record.fullText?.count(' ')})
@@ -980,7 +980,7 @@
                             %{-- class += hiddenActions--}%
                             <div id="actionsButtons${entityCode}${record.id}"
                                  class="temp44 hiddenActions actionsButtons"
-                                 style="text-align: left; direction: ltr; line-height: 19px;font-size: 10px !important; color: darkgray !important">
+                                 style="text-align: left; direction: ltr; line-height: 20px;font-size: 11px !important; color: darkgray !important">
 
                                 <g:remoteLink controller="generics" action="fetchAddForm"
                                               id="${record.id}"
@@ -994,7 +994,7 @@
                                 %{--</i>--}%
                                 </g:remoteLink>
                                 <g:remoteLink controller="generics" action="fetchQuickAddForm"
-                                              style="padding: 2px; font-size: 12px;"
+                                              style="padding: 2px; font-size: 13px;"
                                               class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"
                                               id="${record.id}"
                                               params="[entityController: record.class.name,
@@ -1018,7 +1018,7 @@
                                            data-type="select"
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
-                                           style=" border-radius: 3px; font-size: 11px; font-style: italic; padding-left: 3px; padding-right: 3px;"
+                                           style=" border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 3px; padding-right: 3px;"
                                            data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1037,7 +1037,7 @@
                                            data-type="select"
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
-                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 11px; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1053,7 +1053,7 @@
                                                           id="${record.book?.id}"
                                                           params="[entityCode: 'R']"
                                                           update="below${entityCode}Record${record.id}"
-                                                          style="font-style: italic; font-size: 11px;"
+                                                          style="font-style: italic; font-size: 12px;"
                                                           title="Show book">
                                                 &larr;
                                             </g:remoteLink>
@@ -1087,7 +1087,7 @@
                                            data-type="select"
                                            data-value="${record.recordId ?: null}"
                                            data-name="${field}-${entityCode}"
-                                           style=" border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style=" border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&recordId=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1110,7 +1110,7 @@
                                            data-type="select"
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
-                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1145,7 +1145,7 @@
                                            data-type="select"
                                            data-value="${record[field]}"
                                            data-name="${field}-${entityCode}"
-                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1428,7 +1428,7 @@
 
                             <g:if test="${record.class.declaredFields.name.contains('--writtenOn') && record.writtenOn}">
 
-                                <span style="font-size: 11px; font-weight: bold;  padding-right: 4px;"
+                                <span style="font-size: 12px; font-weight: bold;  padding-right: 4px;"
                                       title="${record.writtenOn?.format(OperationController.getPath('datetime.format'))}">
                                     <g:if test="${record.class.declaredFields.name.contains('approximateDate') && record.approximateDate}">
                                         ~
@@ -1504,7 +1504,7 @@
                                data-type="select"
                                data-value="${record[field]?.id}"
                                data-name="${field}-${entityCode}"
-                               style=" border-radius: 3px; font-size: 11px; font-weight: bold;font-style: italic; padding-left: 1px; padding-right: 1px;"
+                               style=" border-radius: 3px; font-size: 12px; font-weight: bold;font-style: italic; padding-left: 1px; padding-right: 1px;"
                                data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                data-title="Edit ${field}">
@@ -1553,11 +1553,11 @@
                     <td>
                         %{--<g:if test="${session['showFullCard'] == 'on' || showFull}">--}%
                             %{--<br/>--}%
-%{--                        value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes().getSession()[entityCode + record.id] == 1}"--}%
+
                             <g:checkBox name="select-${record.id}-${entityCode}"
                                         title="Select record"
+                                        value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes().getSession()[entityCode + record.id] == 1}"
                                 style="height: 14px !important;"
-
                                         onclick="jQuery('#selectBasketRegion').load('/nibras/generics/select/${entityCode}${record.id}')"
                                         />
                         %{--</g:if>--}%

@@ -50,6 +50,7 @@ class Task implements Comparable {  // entity id = 127
 
     Contact contact
 
+
     // new value - migrate to it
     WorkStatus status
 
@@ -68,6 +69,10 @@ class Task implements Comparable {  // entity id = 127
 
 //    Location location
     Context context
+
+    Integer nbFiles
+    String filesList
+
 
     Boolean isTodo = false
     Boolean isTopic = false
@@ -120,6 +125,7 @@ class Task implements Comparable {  // entity id = 127
         //name (index:'name_index')
         description(sqlType: 'longtext')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

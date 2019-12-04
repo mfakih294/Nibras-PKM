@@ -59,6 +59,10 @@ class Excerpt implements Comparable {  // entity id = 143
     String language = 'ar'
 
 
+    Integer nbFiles
+    String filesList
+
+
     Boolean bookmarked = false
 
 
@@ -92,6 +96,7 @@ class Excerpt implements Comparable {  // entity id = 143
         //name (index:'name_index')
         description(sqlType: 'longtext')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

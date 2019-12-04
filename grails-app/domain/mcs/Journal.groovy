@@ -67,6 +67,12 @@ class Journal implements Comparable {  // entity id = 125
 
     Book book
     Excerpt excerpt
+
+    Integer nbFiles
+    String filesList
+
+
+
     // end of links
 
     Integer energyLevel
@@ -122,6 +128,7 @@ class Journal implements Comparable {  // entity id = 125
         //name (index:'name_index')
         description(sqlType: 'longtext')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

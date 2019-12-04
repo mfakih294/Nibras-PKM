@@ -195,10 +195,7 @@ ${i.name}
                     createLink(controller: 'operation', action: 'generateCover', id: recordId, params: [path: i, module: module, type: type])
                 }')"    title="${i.path}">
   cvr
-            </a> &nbsp;
- <a onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFileOut', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
-              &nbsp;    out
-                  </a>
+            </a>
  &nbsp;
  <a onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFile', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
               &nbsp;    ->
@@ -211,6 +208,15 @@ ${i.name}
 			<br/>
 			</div>
 </li>"""
+
+
+                // removed 28.11.2019
+//                &nbsp;
+//                <a onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFileOut', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
+//                        &nbsp;    out
+//                </a>
+
+
                 //${i.path ? i.path?.replaceAll('/mhi', 'Z:')?.replaceAll('/host', 'D:') : ''}
             }
 
@@ -490,15 +496,19 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
 //        out << supportService.toWeekDate(attrs.date)
 
         if (attrs.date) {
-            Calendar c = new GregorianCalendar()
-            c.setLenient(false)
-            c.setMinimalDaysInFirstWeek(4)
-            c.setFirstDayOfWeek(java.util.Calendar.MONDAY)
-            c.time = attrs.date
-            def tmp = c.get(java.util.Calendar.DAY_OF_WEEK)
-            def week = c.get(java.util.Calendar.WEEK_OF_YEAR)
-            def year = c.get(java.util.Calendar.YEAR)
-            out << '' + (week < 10 ? '0' + week.toString() : week) + '' + (tmp == 1 ? 7 : tmp - 1) + '.' + year.toString().substring(2, 4) + ''
+            try {
+                Calendar c = new GregorianCalendar()
+                c.setLenient(false)
+                c.setMinimalDaysInFirstWeek(4)
+                c.setFirstDayOfWeek(java.util.Calendar.MONDAY)
+                c.time = attrs.date
+                def tmp = c.get(java.util.Calendar.DAY_OF_WEEK)
+                def week = c.get(java.util.Calendar.WEEK_OF_YEAR)
+                def year = c.get(java.util.Calendar.YEAR)
+                out << '' + (week < 10 ? '0' + week.toString() : week) + '' + (tmp == 1 ? 7 : tmp - 1) + '.' + year.toString().substring(2, 4) + ''
+            } catch(Exception e){
+                out << 'WD error!'
+            }
         } else
             out << ''
     }

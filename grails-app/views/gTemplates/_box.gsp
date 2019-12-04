@@ -119,30 +119,28 @@
                             (${record?.book?.publisher},
                             ${record?.book?.publicationDate})
                         </i>&nbsp;
-                        <br/>
+
                         <i style="font-size: small">${record.class.declaredFields.name.contains('type') ? record?.type?.code: ''} ${record.class.declaredFields.name.contains('department') ? record.department?.code: ''}</i>&nbsp;
                     </g:if>
                 </span>
 
-                </td>
-        </tr>
-        <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important; ">
-        <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
+
+
                     <g:remoteLink controller="generics" action="showSummary" update="underBox${record.entityCode()}${record.id}"
-                        style="font-family: tahoma; font-size: 0.9em;"
+                                  style="font-family: tahoma; font-size: 0.9em;"
                                   class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};"
                                   params="${[id: record.id, entityCode: record.entityCode(), mobileView:  mobileView]}" >
 
 
                         <span style="" class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
 
-                        <g:if test="${'P'.contains(record.entityCode()) && record.task}">
-                            <span title="${record?.summary}">${record.task?.summary}</span>
-                        </g:if>
-                        <g:elseif test="${'N'.contains(record.entityCode())}">
-                            ${record?.orderInWriting ? '#' + record?.orderInWriting + ' ' : ''}
-                            ${record?.summary}
-                            %{--${StringUtils.abbreviate(record.description?.encodeAsHTML(), 240)}--}%
+                            <g:if test="${'P'.contains(record.entityCode()) && record.task}">
+                                <span title="${record?.summary}">${record.task?.summary}</span>
+                            </g:if>
+                            <g:elseif test="${'N'.contains(record.entityCode())}">
+                                ${record?.orderInWriting ? '#' + record?.orderInWriting + ' ' : ''}
+                                ${record?.summary}
+
 
                                 <g:if test="${record.fileName}">
                                     <a href="${createLink(controller: 'operation', action: 'downloadNoteFile', id: record.id)}" target="_blank">
@@ -151,52 +149,76 @@
                                         </span></a>
                                 </g:if>
 
-                        </g:elseif>
-                        <g:elseif test="${'R'.contains(record.entityCode())}">
+                            </g:elseif>
+                            <g:elseif test="${'R'.contains(record.entityCode())}">
 
-                            ${record?.title ?: record?.legacyTitle}
-                            <i>${record?.author}</i>
+                                ${record?.title ?: record?.legacyTitle}
+                                <i>${record?.author}</i>
 
-                        </g:elseif>
+                            </g:elseif>
 
-                        <g:elseif test="${'E'.contains(record.entityCode())}">
+                            <g:elseif test="${'E'.contains(record.entityCode())}">
 
-                            <span style="color: gray">${record?.book?.title ?: record?.book?.legacyTitle}</span>
-                            <u>${record.chapters}</u>
-                            <i>${record?.summary}</i>
-                        </g:elseif>
+                                <span style="color: gray">${record?.book?.title ?: record?.book?.legacyTitle}</span>
+                                <u>${record.chapters}</u>
+                                <i>${record?.summary}</i>
+                            </g:elseif>
 
-                        <g:else>
-                            ${record?.summary}
-                        </g:else>
-
-
+                            <g:else>
+                                ${record?.summary}
+                            </g:else>
 
 
 
-                    %{--<g:if test="${'C'.contains(record.entityCode())}">--}%
-                            %{--<b>${record.code}--}%
-                                %{--${record.code}</b>--}%
-                            %{--${record.summary}--}%
+
+
+                        %{--<g:if test="${'C'.contains(record.entityCode())}">--}%
+                        %{--<b>${record.code}--}%
+                        %{--${record.code}</b>--}%
+                        %{--${record.summary}--}%
                         %{--</g:if>--}%
                         </span>
-                        %{--<br/>--}%
+                    %{--<br/>--}%
                     </g:remoteLink>
 
 
 
 
-                %{--<div style="line-height: 20px; dir: auto !important;">--}%
-                     %{-- ${record.description?.encodeAsHTML()?.replaceAll('\n', '<br/>')} --}%
-                %{--</div>--}%
+                    %{--<div style="line-height: 20px; dir: auto !important;">--}%
+                    %{-- ${record.description?.encodeAsHTML()?.replaceAll('\n', '<br/>')} --}%
+                    %{--</div>--}%
                     <g:if test="${record.class.declaredFields.name.contains('language')}">
                         </div>
                     </g:if>
 
 
+                </td>
+        </tr>
+        <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important; ">
+        <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
 
 
+            <span style="color: dimgray">${record.class.declaredFields.name.contains('description') && record.description?  StringUtils.abbreviate(record.description?.encodeAsHTML(), 240): ''}</span>
 
+            <g:if test="${record.entityCode() == 'N' && record.recordId}">
+
+                <g:remoteLink controller="generics" action="showSummary"
+                              id="${record.recordId}"
+                              params="[entityCode: record.entityCode]"
+                              update="belowNRecord${record.id}"
+                              title="Show parent entity">
+
+                    <b>${record.entityCode}</b>
+                    <i>${record.recordId}</i>
+
+
+                <g:if test="${record.entityCode == 'R'}">
+                ${Book.get(record.recordId)}
+                </g:if>
+
+                </g:remoteLink>
+
+            </g:if>
 
                 </td>
 

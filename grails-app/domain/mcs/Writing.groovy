@@ -74,6 +74,10 @@ class Writing implements Comparable {  // entity id = 144
 
     Contact contact
 
+    Integer nbFiles
+    String filesList
+
+
 
 
     WritingType type
@@ -139,6 +143,7 @@ class Writing implements Comparable {  // entity id = 144
         //sort "id":"desc"
         //name (index:'name_index')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

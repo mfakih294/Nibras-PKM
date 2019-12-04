@@ -4,8 +4,9 @@
     c.setFirstDayOfWeek(java.util.Calendar.MONDAY)
     %>
     <b>Week</b> ${c.get(Calendar.WEEK_OF_YEAR)}
-
-    ${new Date().format("dd MMM yyyy")}
+&nbsp;  |
+&nbsp;
+    ${new Date().format("E dd MMM yyyy")}
 
 &nbsp;  |
 &nbsp;

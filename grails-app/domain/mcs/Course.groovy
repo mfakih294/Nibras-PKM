@@ -68,6 +68,10 @@ class Course implements Comparable {  // entity id = 130
     Date lastUpdated
     Date deletedOn
 
+    Integer nbFiles
+    String filesList
+
+
     //static transients = ['numberOfTasks']
     //long getNumberOfTasks() { return tasks ? tasks.size() : 0 }
 
@@ -94,6 +98,7 @@ class Course implements Comparable {  // entity id = 130
         //sort "id":"desc"
         //name (index:'name_index')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

@@ -98,8 +98,8 @@ body {
     /*background: #fdfdfd;*/
     color: #333;
     /*line-height: 1.4;*/
-    /*font: 13px tahoma;*/
-    font-family:  14px Lato !important;
+    font-size: 1em;
+    font-family:  Lato !important;
 
     background: #D8D4C9 url(../images/bg-main.gif) repeat-x;
     /*font: 12px/20px Verdana, Arial, Tahoma, sans-serif;*/
@@ -149,7 +149,7 @@ h1 {
 }
 
 h2 {
-    font-family: arial;
+    font-family: Lato, arial;
     font-size: 14px;
     color: #144a6c;
     font-weight: bold;
@@ -165,7 +165,7 @@ h2:hover {
 }
 
 h3 {
-    font-family: arial;
+    font-family: Lato, arial;
     font-size: 13px;
     color: #799edd;
     font-weight: bold;
@@ -178,11 +178,11 @@ h4 {
     color: #212121;
     /*4e5f6e;*/
     font-weight: bold;
-    font-size: 12px;
+    font-size: 15px;
     /*margin: .2em 0 .2em 0;*/
     padding: 5px;
     /*margin-left: 1em;*/
-    font-family: "DejaVu Sans Mono";
+    font-family: Lato, "DejaVu Sans Mono";
 
     /*padding: 4px;*/
     /*vertical-align: top;*/
@@ -209,7 +209,7 @@ ul {
 input, select, textarea {
     background-color: #fcfcfc;
     border: 1px solid #ccc;
-    font: 11px tahoma, verdana, arial, helvetica, sans-serif;
+    font: 11px lato, tahoma, verdana, arial, helvetica, sans-serif;
     margin: 1px 0;
     padding: 2px 2px;
     min-width: 20px !important;
@@ -282,7 +282,7 @@ input:focus, textarea:focus {
     color: #ffffff !important;
     /*border-bottom: 1px solid #D3D3D3;*/
     /*border-style: solid none solid none;*/
-    font-family: tahoma;
+    font-family: Lato, tahoma;
     padding-top: 2px;
     /*margin-bottom: 2px;*/
     padding-bottom: 2px;
@@ -292,7 +292,7 @@ input:focus, textarea:focus {
 
 .nav a {
     color: #6E6E6E !important;
-    font-family: tahoma;
+    font-family: Lato, tahoma;
 }
 
 .nav a:hover {
@@ -665,7 +665,7 @@ div.calendar {
     padding: 4px;
     margin: 4px;
     font-size: 11px;
-    font-family: verdana;
+    font-family: Lato, verdana;
 }
 
 .appCardContainer {
@@ -696,7 +696,7 @@ div.calendar {
 
 #rssList td a {
     font-size: 12px !important;
-    font-family: "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif !important;
+    font-family: Lato, "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif !important;
     color: white !important;
     text-decoration: none;
 }
@@ -722,7 +722,7 @@ div.calendar {
 
 .nicelisting {
     font-size: 13px;
-    font-family: "DejaVu Sans Mono";
+    font-family: Lato, "DejaVu Sans Mono";
     line-height: 20px;
 }
 
@@ -736,7 +736,7 @@ div.calendar {
     margin-right: 10px;
     /*font-size: 11px;*/
     padding: 10px;
-    font-family: "DejaVu Sans Mono";
+    font-family: Lato, "DejaVu Sans Mono";
 }
 
 #panoramasTab a:hover {
@@ -773,14 +773,14 @@ div.calendar {
 .exrNotRead {
     color: #040f29 !important;
     font-size: 12px !important;
-    font-family: verdana !important;
+    font-family: Lato, verdana !important;
     font-weight: bold !important;
 }
 
 .exrRead {
     color: #006666 !important;
     font-size: 11px !important;
-    font-family: tahoma !important;
+    font-family: Lato, tahoma !important;
 }
 
 .urgent {
@@ -834,7 +834,7 @@ div.calendar {
 
 .fullTextPopup {
     font-size: 12px;
-    font-family: "DejaVu Sans Mono";
+    font-family: Lato, "DejaVu Sans Mono";
     line-height: 20px;
 }
 
@@ -1021,7 +1021,7 @@ ul.ui-tabs-nav {
     width: 90px;
     font-size: 11px;
     text-align: left;
-    font-family: georgia;
+    font-family: Lato, georgia;
     font-weight: normal;
     font-style: italic;
     overflow: hidden;
@@ -1033,12 +1033,12 @@ ul.ui-tabs-nav {
     /*width: 140px;*/
     font-size: 11px;
     font-style: normal;
-    font-family: "Lucida Console";
+    font-family: Lato, "Lucida Console";
 }
 
 .record-summary {
     /*width: auto;*/
-    font-family: tahoma;
+    font-family: Lato, tahoma;
     padding-left: 0px;
     padding-right: 2px;
     /*font-size: 11px;*/
@@ -1047,7 +1047,7 @@ ul.ui-tabs-nav {
 }
 
 .record-summary a {
-    font-family: tahoma;
+    font-family: Lato, tahoma;
     /*"Lucida Sans";*/
     font-size: 10px;
     text-align: left;
@@ -1620,7 +1620,7 @@ ul.ui-autocomplete.ui-menu {
     /*margin: .2em 0 .2em 0;*/
     padding: 3px;
     /*margin-left: 1em;*/
-    font-family: "DejaVu Sans Mono";
+    font-family: Lato, "DejaVu Sans Mono";
 
 }
 
@@ -1635,7 +1635,7 @@ h3, h4 {
 }
 
 h2 {
-    font-family: Georgia;
+    font-family: Lato, Georgia;
     color: rgb(92, 109, 121);
     font-weight: bold;
     /*line-height: 40px;*/
@@ -1743,7 +1743,7 @@ ul.ui-autocomplete.ui-menu {
 
 .actionsButtons {
     /*visibility: hidden;*/
-    padding: 1px;
+    padding: 2px;
 }
 
 .actionsButtons a {
@@ -1805,7 +1805,7 @@ ul.ui-autocomplete.ui-menu {
 
 .dashboardLabel {
     font-size: 14px;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: Lato, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     text-align: right;
     float: right;
 }
@@ -1854,10 +1854,10 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .commandBarTexField {
-    font-family: tahoma !important;
+    font-family: Lato, tahoma !important;
     font-size: 1.1em;
     width: 98% !important;
-    height: 200px;
+    height: 160px;
     background: #dce5e5;
     margin: 0px !important;
 }
@@ -1919,7 +1919,7 @@ ul.ui-autocomplete.ui-menu {
 
 .footerRegion a {
     font-size: 12px !important;
-    font-family: "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-family: Lato, "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif;
     color: white !important;
 }
 

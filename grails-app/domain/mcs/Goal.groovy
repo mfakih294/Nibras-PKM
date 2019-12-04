@@ -55,6 +55,11 @@ class Goal implements Comparable {  // entity id = 126
     Writing writing
 
 
+    Integer nbFiles
+    String filesList
+
+
+
     Integer priority = 2
     Integer percentCompleted
     Integer totalSteps
@@ -118,6 +123,7 @@ class Goal implements Comparable {  // entity id = 126
         //sort "id":"desc"
         //name (index:'name_index')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

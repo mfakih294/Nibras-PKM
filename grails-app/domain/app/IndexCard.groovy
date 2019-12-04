@@ -42,7 +42,7 @@ class IndexCard implements Comparable {  // entity id = 16
 
     Markup markup
 
-
+    IndexCard parent
 
     Contact contact
 
@@ -69,6 +69,11 @@ class IndexCard implements Comparable {  // entity id = 16
     Writing writing
     Department department
     Course course
+
+
+
+    Integer nbFiles
+    String filesList
 
 
 
@@ -165,6 +170,7 @@ class IndexCard implements Comparable {  // entity id = 16
         sourceFree(sqlType: 'longtext')
         url(sqlType: 'longtext')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
 //        password type: GormEncryptedStringType
     }
 

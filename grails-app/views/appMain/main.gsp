@@ -422,13 +422,19 @@ $("#accordionCenter").accordion({
 //                jQuery('#quickAddTextField').select();
 //
 //            });
-
+      /*
             Mousetrap.bindGlobal('f2', function (e) {
                 jQuery('#accordionEast').accordion({ active: 6});
 //                jQuery('#addXcdFormDaftarSubmit').click();
                 jQuery('#quickAddRecordTextArea').select().focus();
 
                 jQuery('#descriptionDaftar').focus();
+            });
+            */
+  Mousetrap.bindGlobal('f2', function (e) {
+                jQuery('#quickAddXcdSubmitExecute').click();
+                jQuery('#quickAddTextField').select().focus();
+//                jQuery('#quickAddTextField').focus();
             });
 
             Mousetrap.bindGlobal('shift+f2', function (e) {

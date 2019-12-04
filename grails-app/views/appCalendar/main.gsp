@@ -61,7 +61,32 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,dayGridWeek'
+        right: 'dayGridMonth,timeGridWeek,dayGridWeek,timeGridDay'
+      },
+      views: {
+        dayGridMonth: {
+          buttonText: 'Month',
+          columnHead: true
+        },timeGridWeek: {
+          buttonText: 'Week (grid)',
+          columnHead: true
+        },dayGridWeek: {
+          buttonText: 'Week (list)',
+          columnHead: true
+        }
+//        ,listWeek: {
+//          buttonText: 'Week (list)',
+//          columnHead: true
+//        }
+        ,timeGridDay: {
+          buttonText: 'Day',
+          columnHead: true
+        }
+//        ,
+//        basicDay: {
+//          buttonText: 'basicDay',
+//          columnHead: false
+
       },
       defaultView: 'dayGridWeek',
         allDaySlot: true,

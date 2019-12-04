@@ -55,6 +55,10 @@ class Payment implements Comparable {  // entity id = 24
     Integer priority
     Boolean bookmarked
 
+    Integer nbFiles
+    String filesList
+
+
     static constraints = {
         category(nullable: false)
         date(nullable: false)
@@ -77,6 +81,7 @@ class Payment implements Comparable {  // entity id = 24
 
         // name (index:'name_index')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
     }
 
     static namedQueries = {

@@ -37,7 +37,7 @@
                 %{--</select>--}%
                     <g:submitButton name="batch" value="Execute"
                                     style="margin: 0px; width: 60px !important;"
-                                    id="quickAddXcdSubmit"
+                                    id="quickAddXcdSubmitExecute"
                                     class="fg-button ui-widget ui-state-default"/>
 
                 </td>

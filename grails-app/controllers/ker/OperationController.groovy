@@ -1327,61 +1327,106 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
         def typeRepositoryPath
 
         def filesCount
-        def filesList = ''
+        def filesList = []
         def folders
 
         def list
-        if (params.id)
-            list = [Book.get(params.id)]
-        else list = [Book.get(1)]
 
-        for (b in list) {
-            filesCount = 0
-            folders = []
-            typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code
-            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
-            //ResourceType.findByCode(type).libraryPath
-            typeRepositoryPath = OperationController.getPath('root.rps2.path') + 'R/' + b.type?.code
-            folders = [
-                    typeSandboxPath + '/' + (b.id / 100).toInteger(),
-                    typeRepositoryPath + '/' + (b.id / 100).toInteger(),
-                    typeLibraryPath + '/' + (b.id / 100).toInteger()
-            ]
-            folders.each() { folder ->
+        if (params.entityCode == 'R') {
 
-                if (new File(folder).exists()) {
-                    new File(folder).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
-                        filesCount++
-                        filesList += it.name + '\n'
+            if (params.id)
+                list = [Book.get(params.id)]
+            else list = [Book.get(1)] //Todo
+
+            for (b in list) {
+                filesCount = 0
+                folders = []
+                typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code
+//            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
+                //ResourceType.findByCode(type).libraryPath
+                typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code
+                folders.add(
+                        [typeSandboxPath + '/' + (b.id / 100).toInteger()])
+                if (!b.bookmarked)
+                folders.add(
+                        [typeRepositoryPath + '/' + (b.id / 100).toInteger()])
+//                    typeLibraryPath + '/' + (b.id / 100).toInteger()
+           //     ]
+                folders.each() { folder ->
+
+                    if (new File(folder[0]).exists()) {
+                        new File(folder[0]).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
+                            filesCount++
+                            filesList += it.name// + '\n'
+                        }
                     }
                 }
+                folders = []
+                folders.add(
+                        [typeSandboxPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+//                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
+                if (!b.bookmarked)
+                        folders.add([typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+//                ]
+
+                folders.each() { folder ->
+//                    println 'fld ' + folder + ' class ' + folder.class
+                    if (new File(folder[0]).exists()) {
+                        new File(folder[0]).eachFileRecurse() {
+//Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
+                            if (!it.isFile())
+                                filesList += '*** ' + it.name
+                            else {
+                                filesCount++
+                                filesList += it.name
+                            }
+                        }
+                    }
+                }
+                //println filesCount
+                b.nbFiles = filesCount
+                b.filesList = filesList.join('\n')
+
+
             }
-            folders = [
-                    typeSandboxPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
-                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
-                    typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id
-            ]
+        }
+            else {
+
+            list =
+                    [grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)]
+
+            for (b in list) {
+                    filesCount = 0
+                    folders = []
+                    typeSandboxPath = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/'
+
+                    typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/'
+                    folders.add([typeSandboxPath + '/' + (b.id)])
+                if (!b.bookmarked)
+                    folders.add([typeRepositoryPath + '/' + (b.id)])
+
 
 
             folders.each() { folder ->
-                if (new File(folder).exists()) {
-                    new File(folder).eachFileRecurse() {
+                if (new File(folder[0]).exists()) {
+                    new File(folder[0]).eachFileRecurse() {
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
                         if (!it.isFile())
-                            filesList += '*** ' + it.name + ': \n'
+                            filesList += '*** ' + it.name
                         else {
                             filesCount++
-                            filesList += it.name + '\n'
+                            filesList += it.name
                         }
                     }
                 }
             }
             //println filesCount
             b.nbFiles = filesCount
-            b.filesList = filesList
+            b.filesList = filesList.join('\n')
         }
+            }
 
-        render '<br/>' + filesCount + ' files: <br/>' + filesList.replace('\n', '<br/>')
+        render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
     }
 
 

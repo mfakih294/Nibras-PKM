@@ -294,6 +294,15 @@ class PageController {
         render(view: '/appMihrab/main', model: [
         ])
     }
+
+    def appCourse() {
+        render(view: '/appCourse/main', model: [ record: mcs.Course.get(params.id)
+        ])
+    }
+
+    def appDaftar(){
+        render(view: '/appMain/daftar', model: [])
+    }
   def appCalendar() {
         render(view: '/appCalendar/main', model: [
         ])

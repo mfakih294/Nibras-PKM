@@ -36,6 +36,9 @@
         </td>
     </g:if>
 
+
+
+
         <td style="padding-right: 3px !important;">
         <a href="${createLink(controller: 'page', action:'appCalendar')}" target="_blank">
             Calendar
@@ -43,12 +46,9 @@
         </a>
         </td>
 
-        <td style="padding-right: 3px !important;">
-            <a href="${createLink(controller: 'page', action:'slides')}" target="_blank">
-                Slides
-            &nearr;
-            </a>
-        </td>
+        %{--<td style="padding-right: 3px !important;">--}%
+
+        %{--</td>--}%
 
         %{--<g:link controller="page" action="main"--}%
         %{--title="">--}%
@@ -184,7 +184,7 @@
 
           </td>
 
-        <g:if test="${1 ==2 }">
+        <g:if test="${1 ==1 }">
         <td style="padding-right: 1px !important;">
 
             <g:remoteLink controller="generics" action="showSelectedRecords"

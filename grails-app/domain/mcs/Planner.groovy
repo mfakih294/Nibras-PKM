@@ -50,6 +50,10 @@ class Planner implements Comparable {  // entity id = 137
     Integer taskIdOld
     Integer goalIdOld
 
+    Integer nbFiles
+    String filesList
+
+
     // Can link to:
     Department department
 //    Front front
@@ -136,6 +140,7 @@ class Planner implements Comparable {  // entity id = 137
         //sort "id":"desc"
         //name (index:'name_index')
         notes(sqlType: 'longtext')
+        filesList(sqlType: 'longtext')
         // null cascade: 'persist,merge,save-update'
     }
 

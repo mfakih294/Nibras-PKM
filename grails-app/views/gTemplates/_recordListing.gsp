@@ -81,7 +81,8 @@
 
 <g:if test="${ssId && searchResultsTotal && params.max}">
 
-
+    %{--th: ${searchResultsTotal}--}%
+    %{--th class: ${searchResultsTotal.class}--}%
    <div class="paginateButtons" style="display:inline !important;">
     <util:remotePaginate controller="generics" action="executeSavedSearch" total="${searchResultsTotal}"
                          maxsteps="10"
@@ -104,8 +105,9 @@
 
 <g:if test="${queryKey}">
 
-
-
+    %{--th: ${totalHits}--}%
+    %{--th: ${totalHits.class}--}%
+    %{--th: ${queryKey}--}%
     <div class="paginateButtons" style="display:inline !important;">
         <util:remotePaginate controller="generics" action="findRecords" total="${totalHits}"
                              maxsteps="10"

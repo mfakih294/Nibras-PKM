@@ -47,24 +47,7 @@
         <span style="color: black;">${record.id}</span>
 &nbsp;
 
-<g:if test="${record.class.declaredFields.name.contains('orderNumber') && record.orderNumber}">
-    # ${record.orderNumber}
-</g:if>
-    <g:remoteLink controller="page" action="panel"
-                  params="${[id: record.id, entityCode: entityCode]}"
-				  style="direction: rtl !important; text-align: right !important;"
-				  class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
-                  update="3rdPanel"
-                  title="Click to refresh">
-				  <g:if test="${record.class.declaredFields.name.contains('summary')}">
-				  <br/>
-				  ${record.summary}
-				  </g:if>
-				  <g:if test="${record.class.declaredFields.name.contains('title')}">
-				  ${record.title}
-				  </g:if>
-				  </span>
-</g:remoteLink>
+           &nbsp;
 
 <g:remoteLink controller="generics" action="fetchQuickAddForm"
               style="padding: 2px; font-size: 12px;"
@@ -76,7 +59,28 @@
               update="3rdPanel"
               before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});jQuery('#3rdPanel').scrollTop(0)"
               title="Edit">
-    Edit</g:remoteLink>
+    <b>    Edit</b>
+</g:remoteLink>
+&nbsp;
+
+<g:if test="${record.class.declaredFields.name.contains('orderNumber') && record.orderNumber}">
+    # ${record.orderNumber}
+</g:if>
+    <g:remoteLink controller="page" action="panel"
+                  params="${[id: record.id, entityCode: entityCode]}"
+				  style="direction: rtl !important; text-align: right !important; line-height: 25px;"
+				  class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
+                  update="3rdPanel"
+                  title="Click to refresh">
+				  <g:if test="${record.class.declaredFields.name.contains('summary')}">
+				  ${record.summary}
+				  </g:if>
+				  <g:if test="${record.class.declaredFields.name.contains('title')}">
+				  ${record.title}
+				  </g:if>
+				  </span>
+</g:remoteLink>
+
 
 
     %{--<% Calendar cal = new GregorianCalendar(); cal.setLenient(false); cal.setMinimalDaysInFirstWeek(4);--}%
@@ -88,20 +92,21 @@
 <br/>
 <br/>
 Open:
+&nbsp;
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode: entityCode, repository: 1]}"
               update="${entityCode}Record${record.id}OpenLog"
               title="Open new folder: ${OperationController.getPath('root.rps1.path')}">
     <b> rps 1</b>
 </g:remoteLink>
-&nbsp;/
+&nbsp;/&nbsp;
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
               update="${entityCode}Record${record.id}OpenLog"
               title="Open rps folder: ${OperationController.getPath('root.rps2.path')}">
     <b> rps 2</b>
 </g:remoteLink>
-
+&nbsp;
 %{--<g:remoteLink controller="generics" action="openLibFolder"--}%
 %{--              params="${[id: record.id, entityCode: entityCode]}"--}%
 %{--              update="${entityCode}Record${record.id}"--}%
@@ -114,20 +119,22 @@ folder.
         <g:if test="${record.class.declaredFields.name.contains('nbFiles')}">
         <g:if test="${record.nbFiles}">
         %{--<g:if test="${record.nbFiles}">--}%
-            <b>Nb files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
+            <br/>
+            <br/>
+            <b> Nb files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
         </g:if>
-        <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}"
+        <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}" params="[entityCode: entityCode]"
                       update="${entityCode}Record${record.id}OpenLog" style=""
                       title="Update files count">
-            &circlearrowright;
+            <b>&circlearrowright;</b>
         </g:remoteLink>
-
+                         &nbsp;
                 <g:remoteLink controller="operation" action="copyToRps1"
                               params="${[id: record.id, entityCode: entityCode]}"
                               update="${entityCode}Record${record.id}OpenLog"
                               title="Copy files from rps2 (${OperationController.getPath('root.rps2.path')}) to rps1 (${OperationController.getPath('root.rps1.path')})">
-                    &darr;
-                    &darr;
+                 <b>   &darr;
+                    &darr;</b>
                 </g:remoteLink>
 
         <br/>
