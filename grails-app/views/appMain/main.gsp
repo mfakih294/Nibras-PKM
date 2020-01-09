@@ -305,7 +305,7 @@ $("#accordionCenter").accordion({
 
 
             jQuery.idleTimeout('#idletimeout', '#idletimeout a', {
-            idleAfter: 10,
+            idleAfter: 1,
             pollingInterval: 10,
             keepAliveURL: '/nibras/page/heartbeat',
             serverResponseEquals: 'ok',
@@ -315,11 +315,12 @@ $("#accordionCenter").accordion({
                     url: '/nibras/page/heartbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
-//                    jQuery('body').append(html);
+                    jQuery('#onlineLog').html('Online');
 //                        console.log('resp idle: ' + html)
                     },
 
                     error: function(xhr, textStatus, errorThrown) {
+                        jQuery('#onlineLog').html('OFFLINE');
                         confirm('Session lost!')
 //                        confirm('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
 //                        alert('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
@@ -334,10 +335,12 @@ $("#accordionCenter").accordion({
                     dataType: 'html',
                     success: function(html, textStatus) {
 //                    jQuery('body').append(html);
+                        jQuery('#onlineLog').html('Online');
 //                        console.log('resp timeout: ' + html)
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         confirm('Session timeout!')
+                        jQuery('#onlineLog').html('OFFLINE');
 //                        alert('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
                     }
                 });
@@ -500,6 +503,13 @@ $("#accordionCenter").accordion({
                 jQuery('#quickAddTextField').removeClass('shiftEnterPressed')
             }
 
+
+            function openNoteTaker()  {
+                window.open('/nibras/page/appDaftar', '',
+                        'height=200,width=400,chrome=yes,scrollbars=yes, titlebar=no, toolbar=no, menubar=no, location=no, status=no, directories=no, resizable=yes');
+
+            }
+
 //            Mousetrap.bindGlobal('f2', function (e) {
 //      jQuery('#quickAddXcdSubmit').click();
 //                jQuery('#addXcdFormDaftarSubmit').click();
@@ -553,7 +563,7 @@ $("#accordionCenter").accordion({
 
 <body>
 
-<g:render template="/appMain/regions" model="[htmlContent: htmlContent]"/>
+<g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips]"/>
 <div id="idletimeout"></div>
 
 

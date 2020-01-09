@@ -20,7 +20,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    %{--<meta name="layout" content="main"/>--}%
+    <meta name="layout" content="main"/>
     <title>${title ?: 'Kanban'}</title>
 
 
@@ -40,7 +40,7 @@
     %{--<r:require modules="jquery-ui"/>--}%
 
 
-    <r:layoutResources/>
+
 
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui-1.8.22.custom.css')}"/>
@@ -104,70 +104,7 @@
 
     <script type=text/javascript>
 
-        /**
-         *    UI Layout Callback: resizePaneAccordions
-         *
-         *    This callback is used when a layout-pane contains 1 or more accordions
-         *    - whether the accordion a child of the pane or is nested within other elements
-         *    Assign this callback to the pane.onresize event:
-         *
-         *    SAMPLE:
-         *    < jQuery UI 1.9: $("#elem").tabs({ show: $.layout.callbacks.resizePaneAccordions });
-         *    > jQuery UI 1.9: $("#elem").tabs({ activate: $.layout.callbacks.resizePaneAccordions });
-         *    $("body").layout({ center__onresize: $.layout.callbacks.resizePaneAccordions });
-         *
-         *    Version:    1.2 - 2013-01-12
-         *    Author:        Kevin Dalman (kevin.dalman@gmail.com)
-         */
-        ;
-        (function ($) {
-            var _ = $.layout;
-
-// make sure the callbacks branch exists
-            if (!_.callbacks) _.callbacks = {};
-
-            _.callbacks.resizePaneAccordions = function (x, ui) {
-                // may be called EITHER from layout-pane.onresize OR tabs.show
-                var $P = ui.jquery ? ui : $(ui.newPanel || ui.panel);
-                // find all VISIBLE accordions inside this pane and resize them
-                $P.find(".ui-accordion:visible").each(function () {
-                    var $E = $(this);
-                    if ($E.data("accordion"))		// jQuery < 1.9
-                        $E.accordion("resize");
-                    if ($E.data("ui-accordion"))	// jQuery >= 1.9
-                        $E.accordion("refresh");
-                });
-            };
-        })(jQuery);
-
-
         jQuery(document).ready(function () {
-
-            var myLayout = $('body').layout({
-                west__size: 310,
-                east__size: 430,
-                // RESIZE Accordion widget when panes resize
-                west__onresize: $.layout.callbacks.resizePaneAccordions,
-                east__onresize: $.layout.callbacks.resizePaneAccordions,
-                onresize: $.layout.callbacks.resizePaneAccordions,
-                north__closable: true,
-                south__closable: true,
-                north__spacing_closed: 5		// big resizer-bar when open (zero height)
-                , north__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
-                , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
-                , south__spacing_open: 5		// no resizer-bar when open (zero height)
-                , south__spacing_closed: 5		// big resizer-bar when open (zero height)
-
-                , east__spacing_open: 5		// no resizer-bar when open (zero height)
-                , east__spacing_closed: 5		// big resizer-bar when open (zero height)
-                , west__spacing_open: 5		// no resizer-bar when open (zero height)
-                , west__spacing_closed: 5		// big resizer-bar when open (zero height)
-//            , west__initClosed: true
-                , west__slideTrigger_open: 'mouseover'
-
-
-            });
-
 
         });
 
@@ -192,13 +129,12 @@
     %{--</tr>--}%
 %{--</table>--}%
 %{--<center>--}%
-<r:layoutResources/>
 
 
-<div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
-     style="">
+%{--<div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"--}%
+     %{--style="">--}%
 
-</div>
+%{--</div>--}%
 
 %{--<div class="ui-layout-west westRegion appBkg"  style="margin-top: 5px !important;margin-bottom: 5px !important;">--}%
     %{--<div class="ui-layout-content ui-widget-content">--}%
@@ -207,25 +143,29 @@
     %{--</div>--}%
 %{--</div>--}%
 
-<div class="ui-layout-south southRegion" style="direction: rtl; text-align: center; font-family: tahoma; padding-bottom: 4px;">
+%{--<div class="ui-layout-south southRegion" style="direction: rtl; text-align: center; font-family: tahoma; padding-bottom: 4px;">--}%
 
-</div>
-
-
-<div class="ui-layout-east eastRegion appBkg" style="margin-top: 5px !important;margin-bottom: 5px !important;">
-
-    <div class="ui-layout-content ui-widget-content">
-        <div id="3rdPanel" ></div>
-    </div>
-</div>
+%{--</div>--}%
 
 
-<div class="ui-layout-center appBkg" style="margin-top: 5px !important; margin-bottom: 5px !important; ">
+%{--<div class="ui-layout-east eastRegion appBkg" style="margin-top: 5px !important;margin-bottom: 5px !important;">--}%
+
+    %{--<div class="ui-layout-content ui-widget-content">--}%
+        %{--<div id="3rdPanel" ></div>--}%
+    %{--</div>--}%
+%{--</div>--}%
+
+
+<div class="ui-layout-center appBkg" style="margin-top: 40px !important; margin-bottom: 5px !important; ">
     %{--ToDo: display none?!--}%
     <div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">
         <div id="notificationArea"></div>
 
-        <g:if test="${ssId}">
+    <g:if test="${items}">
+    <g:render template="/reports/dynamicKanbanTable"
+              model="[items: items, groups: groups, groupBy: groupBy, title:title, ssId: ssId]"/>
+        </g:if>
+    <g:elseif test="${ssId}">
             <g:render template="/gTemplates/recordListing" model="[
                     ssId: ssId,
                     searchResultsTotal: searchResultsTotal,
@@ -233,16 +173,12 @@
                     box: 1,
                     list: list,
                     title: title]"/>
-        </g:if>
+        </g:elseif>
        <g:elseif test="${list}">
             <g:render template="/gTemplates/recordListing" model="[
                     totalHits: totalHits,
                     list: list,
                     title: title]"/>
-        </g:elseif>
-        <g:elseif test="${items}">
-            <g:render template="/reports/dynamicKanbanTable"
-                      model="[items: items, groups: groups, groupBy: groupBy, title:title, ssId: ssId]"/>
         </g:elseif>
         <g:else>
             <g:render template="/reports/kanbanCrs" model="[title: title]"/>
@@ -254,6 +190,6 @@
    </div>
 </body>
 
-%{--<r:layoutResources/>--}%
+<r:layoutResources/>
 
 </html>

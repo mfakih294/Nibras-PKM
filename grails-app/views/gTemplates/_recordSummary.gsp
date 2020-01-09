@@ -25,7 +25,7 @@
 
 
     <div id="${entityCode}Record${record.id}" style="">
-
+        <a onclick="jQuery('#${entityCode}Record${record.id}').html('');" style="float: right; color: darkgray; margin-right: 4px;">x</a>
         %{--${justUpdated ? 'justUpdated' : ''} todo--}%
 
         <div class="recordContainer"
@@ -75,8 +75,8 @@
                                               title="ID ${record.id}. Click to refresh">
 
                                     <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
-                                          style="padding: 3px; margin-right: 3px; color: gray;">
-                                        <b style="color: white;">${entityCode}&nbsp;    </b>
+                                          style="padding: 3px; margin-right: 3px; color: gray; display: inline;">
+                                        <span style="color: lightgray;">${entityCode}</span><b><span style="color: white;">${record.id}</span></b>
                                     </span>
                                 </g:remoteLink>
 

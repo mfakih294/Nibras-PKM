@@ -353,7 +353,8 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
-        for (i in IndexCard.executeQuery("from Book where type.code != ? and type.code != ? and  bookmarked = ? and lastUpdated > ? order by department.orderNumber asc, course.orderNumber asc, orderNumber asc", ['art', 'nws', true, new Date() - 7])) {
+        for (i in IndexCard.executeQuery("from Book where type.code != ? and type.code != ? and  bookmarked = ? order by department.orderNumber asc, course.orderNumber asc, orderNumber asc",
+                ['art', 'nws', true])) {
 //            OperationController.countResourceFiles(i.id)
             records += [type    : 'R', id: i.id,
                         rtype   : i?.type?.code, ecode: 'R',

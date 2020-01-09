@@ -5,3 +5,4 @@ set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_111
 set CATALINA=-server -Xmx780m
 
 grails -disable.auto.recompile=false -Dgrails.gsp.enable.reload=true run-app
+pause

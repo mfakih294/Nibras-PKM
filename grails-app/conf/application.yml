@@ -25,7 +25,7 @@ info:
         grailsVersion: '@info.app.grailsVersion@'
 server:
     contextPath: '/nibras'
-    port: 1440 # The port to listen on
+    port: 443 # The port to listen on
     ssl:
         enabled: true # Activate HTTPS mode on the server port
         key-store: keystore.jks # e.g. /etc/tomcat7/keystore/tomcat.keystore

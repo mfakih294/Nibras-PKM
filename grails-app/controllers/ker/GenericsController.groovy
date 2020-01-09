@@ -43,7 +43,6 @@ import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 
-
 @Secured('ROLE_ADMIN')
 class GenericsController {
 
@@ -182,36 +181,34 @@ class GenericsController {
         if (!input.startsWith(' ')) {
 
 /**
-            def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+ def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
 
-            queryKey = '_' + new Date().format('ddMMyyHHmmss')
-            session[queryKey] = fullquery
-
-
-        params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+ queryKey = '_' + new Date().format('ddMMyyHHmmss')
+ session[queryKey] = fullquery
 
 
+ params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
 
-            input = '%' + input + '%'
-            "TGWNC".each() { entityCode ->
-                def count = Task.executeQuery('select count(*) from ' + entityMapping[entityCode] + ' where summary like ?', [input])[0]
-                def list = Task.executeQuery('from ' + entityMapping[entityCode] + ' where summary  like ? order by lastUpdated desc', [input], params)
 
-                render(template: '/gTemplates/recordListing', model: [
-                        totalHits: count,
-                        list     : list,
-                                totalHits: count,
-                                queryKey : queryKey,
-                        title    : entityCode + ': ' + count + ' results.'
-                ])
-            }
-*/
+
+ input = '%' + input + '%'
+ "TGWNC".each() { entityCode ->
+ def count = Task.executeQuery('select count(*) from ' + entityMapping[entityCode] + ' where summary like ?', [input])[0]
+ def list = Task.executeQuery('from ' + entityMapping[entityCode] + ' where summary  like ? order by lastUpdated desc', [input], params)
+
+ render(template: '/gTemplates/recordListing', model: [
+ totalHits: count,
+ list     : list,
+ totalHits: count,
+ queryKey : queryKey,
+ title    : entityCode + ': ' + count + ' results.'
+ ])}*/
             findRecords('r -- ' + params.input)
             findRecords('c -- ' + params.input)
             findRecords('g -- ' + params.input)
             findRecords('t -- ' + params.input)
             findRecords('j -- ' + params.input)
-			findRecords('p -- ' + params.input)
+            findRecords('p -- ' + params.input)
 
 
             findRecords('w -- ' + params.input)
@@ -226,7 +223,7 @@ class GenericsController {
             findRecords('g :: ' + params.input)
             findRecords('t :: ' + params.input)
             findRecords('j :: ' + params.input)
-			findRecords('p :: ' + params.input)
+            findRecords('p :: ' + params.input)
 
             findRecords('w :: ' + params.input)
             findRecords('n :: ' + params.input)
@@ -240,7 +237,7 @@ class GenericsController {
 
                 if (input == '?')
                     render(template: '/page/help')
-                else if (input == 'col'){
+                else if (input == 'col') {
                     def colors = """AliceBlue;#F0F8FF
 AntiqueWhite;#FAEBD7
 Aqua;#00FFFF
@@ -476,7 +473,7 @@ YellowGreen;#9ACD32"""
     //	  print ' No add log file found'
         }
            f.text += block + '\n***\n\n'
-      */  
+      */
 
         def prefixRecord = CommandPrefix.get(commandPrefix)
         def prefix = params.prefix ?: (prefixRecord.description ?: '')
@@ -484,14 +481,14 @@ YellowGreen;#9ACD32"""
         if (prefixRecord.multiLine || !prefix) {
             block.eachLine() {
                 if (it.trim() != '' && !it.startsWith('//'))
-                batchAdd(prefix + it)
+                    batchAdd(prefix + it)
             }
         } else
             batchAdd(prefix + block.trim())
-  
- // block.split(/\*\*\*/).each() { region ->
-  //              addWithDescription(region?.trim())
-  //          }
+
+        // block.split(/\*\*\*/).each() { region ->
+        //              addWithDescription(region?.trim())
+        //          }
         render ''
     }
 
@@ -1246,6 +1243,9 @@ ll
         } else
             record.bookmarked = false
 
+//        operation/countResourceFiles/15544?entityCode=R
+
+//        operation/copyToRps1/15544?entityCode=R
         record.save(flush: true)
 
         render(template: '/gTemplates/recordSummary', model: [record: record])
@@ -1411,24 +1411,187 @@ ll
         def id = params.id.split('-')[1].toLong()
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-        if (!record.bookmarked) {
-            record.bookmarked = true
+        if (!record.bookmarked || record.bookmarked == false) {
+            if (record.class.declaredFields.name.contains('nbFiles')) {
+//            OperationController.countResourceFiles2(grailsApplication, entityCode, id)
 
 
-            if (entityCode == 'xE') {
+                def r
+                if (entityCode == 'R')
+                    r = Book.findById(id)
+                else
+                    r = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-                supportService.pdfTitleUpdateNewPath(OperationController.getPath('module.sandbox.E.path'), record.id + 'e.pdf',
-                        record.id + 'e_.pdf',
-                        OperationController.getPath('onyx.path'),
-                        record?.book?.course?.numberCode + ' ' + record?.book?.course?.code + ' ' + record.summary + ' ' + (record.book ? (' @ ' + record?.book?.title) : ''))
-                supportService.pdfTitleUpdateNewPath(OperationController.getPath('module.repository.E.path'), record.id + 'e.pdf',
-                        record.id + 'e_.pdf',
-                        OperationController.getPath('onyx.path'),
-                        record?.book?.course?.numberCode + ' ' + record?.book?.course?.code + ' ' + record.summary + ' ' + (record.book ? (' @ ' + record?.book?.title) : ''))
+                def filesList
+                def message = ''
+
+                if (r) {
+//println ' b found'
+                    filesList = []
+
+                    def rps1Folder
+                    def rps2Folder
+                    if (entityCode == 'R') {
+                        rps1Folder =
+                                OperationController.getPath('root.rps1.path') + 'R/' + r.type?.code + '/' + (id / 100).toInteger() + '/' + id
+                        rps2Folder =
+                                OperationController.getPath('root.rps2.path') + '/R/' + r.type?.code + '/' + (id / 100).toInteger() + '/' + id
+//                    println 'rps2 ' + rps2Folder
+
+                    } else {
+                        rps1Folder = OperationController.getPath('root.rps1.path') + '/' + entityCode + '/' + id
+                        rps2Folder = OperationController.getPath('root.rps2.path') + '/' + entityCode + '/' + id
+                    }
+
+                    new File(rps1Folder).mkdirs()
+
+                    if (new File(rps2Folder).exists()) {
+
+                        new File(rps2Folder).eachFile() {//Match(~/[\S\s]*\.[\S\s]*/) {
+//                        println ' file ' + it
+                            if (it.isFile())
+                                filesList.add(it)
+                        }
+                    }
+
+
+                    def ant = new AntBuilder()
+
+                    filesList.each() { f ->
+                        ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
+                    }
+//                    render filesList.size() + ' file(s) copied.'
+
+                            message = filesList.size() + ' file(s) copied.'
+                } else {
+                    render 'Record not found.'
+                }
+
+                if (entityCode == 'xE') {
+
+                    supportService.pdfTitleUpdateNewPath(OperationController.getPath('module.sandbox.E.path'), record.id + 'e.pdf',
+                            record.id + 'e_.pdf',
+                            OperationController.getPath('onyx.path'),
+                            record?.book?.course?.numberCode + ' ' + record?.book?.course?.code + ' ' + record.summary + ' ' + (record.book ? (' @ ' + record?.book?.title) : ''))
+                    supportService.pdfTitleUpdateNewPath(OperationController.getPath('module.repository.E.path'), record.id + 'e.pdf',
+                            record.id + 'e_.pdf',
+                            OperationController.getPath('onyx.path'),
+                            record?.book?.course?.numberCode + ' ' + record?.book?.course?.code + ' ' + record.summary + ' ' + (record.book ? (' @ ' + record?.book?.title) : ''))
+                }
+
+
+                def typeSandboxPath
+                def typeLibraryPath
+                def typeRepositoryPath
+
+                def filesCount
+                filesList = []
+                def folders
+
+                def list
+
+                if (entityCode == 'R') {
+
+                    if (id)
+                        list = [Book.get(id)]
+                    else list = [Book.get(1)] //Todo
+
+                    for (b in list) {
+                        filesCount = 0
+                        folders = []
+                        typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code
+//            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
+                        //ResourceType.findByCode(type).libraryPath
+                        typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code
+                        folders.add(
+                                [typeSandboxPath + '/' + (b.id / 100).toInteger()])
+                        if (!b.bookmarked)
+                            folders.add(
+                                    [typeRepositoryPath + '/' + (b.id / 100).toInteger()])
+//                    typeLibraryPath + '/' + (b.id / 100).toInteger()
+                        //     ]
+                        folders.each() { folder ->
+//                        println 'folder' + folder
+                            if (new File(folder[0]).exists()) {
+                                new File(folder[0]).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
+                                    filesCount++
+                                    filesList += it.name// + '\n'
+                                }
+                            }
+                        }
+                        folders = []
+                        folders.add(
+                                [typeSandboxPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+//                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
+                        if (!b.bookmarked)
+                            folders.add([typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+//                ]
+
+                        folders.each() { folder ->
+//                    println 'fld ' + folder + ' class ' + folder.class
+                            if (new File(folder[0]).exists()) {
+                                new File(folder[0]).eachFile() {
+//Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
+                                    if (!it.isFile())
+                                        filesList += '*** ' + it.name
+                                    else {
+                                        filesCount++
+                                        filesList += it.name
+                                    }
+                                }
+                            }
+                        }
+                        //println filesCount
+                        b.nbFiles = filesCount
+                        b.filesList = filesList.join('\n')
+
+
+                    }
+                } else {
+
+                    list =
+                            [grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)]
+
+                    for (b in list) {
+                        filesCount = 0
+                        folders = []
+                        typeSandboxPath = OperationController.getPath('root.rps1.path') + '/' + entityCode + '/'
+
+                        typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/' + entityCode + '/'
+                        folders.add([typeSandboxPath + '/' + (b.id)])
+                        if (!b.bookmarked)
+                            folders.add([typeRepositoryPath + '/' + (b.id)])
+
+
+
+                        folders.each() { folder ->
+                            if (new File(folder[0]).exists()) {
+                                new File(folder[0]).eachFile() {
+//Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
+                                    if (!it.isFile())
+                                        filesList += '*** ' + it.name
+                                    else {
+                                        filesCount++
+                                        filesList += it.name
+                                    }
+                                }
+                            }
+                        }
+                        //println filesCount
+                        b.nbFiles = filesCount
+                        b.filesList = filesList.join('\n')
+                    }
+                }
+                render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])// + filesList.join('\n').replace('\n', '<br/>')])
+//                render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
+
+//            OperationController.copyToRps21(grailsApplication, entityCode, id)
+
+
             }
-
-
+            record.bookmarked = true
         } else
+
             record.bookmarked = false
 
         record.save(flush: true)
@@ -1914,7 +2077,7 @@ ll
         def t = Tag.get(params.tagId)
         if (t) {
             instance.removeFromTags(t)
-            if(!t.occurrence)
+            if (!t.occurrence)
                 t.occurrence = 0
             else t.occurrence--
 
@@ -1938,8 +2101,8 @@ ll
         def t = Tag.findByName(params.tag?.trim())
         if (t) {
             instance.addToTags(t)
-            if(!t.occurrence)
-            t.occurrence = 1
+            if (!t.occurrence)
+                t.occurrence = 1
             else t.occurrence++
             render(template: '/tag/tags', model: [instance: instance, entity: params.entityCode])
         } else if (params.tag != '') {
@@ -2245,7 +2408,7 @@ ll
 //                 Planner.executeQuery("select count(*), t.course from Goal t group by t.course order by t.course.code asc").each() {
 //                     courses.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
 //                 }
-// 
+//
 //                 Planner.executeQuery("select count(*), t.department from Planner t group by t.department order by t.department.code asc").each() {
 //                     departments.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
 //                 }
@@ -2261,7 +2424,7 @@ ll
 //                 Planner.executeQuery("select count(*), t.course from Goal t group by t.course").each() {
 //                     courses.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
 //                 }
-// 
+//
 //                 Task.executeQuery("select count(*), t.department from Journal t group by t.department order by t.department.code asc").each() {
 //                     departments.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
 //                 }
@@ -2610,28 +2773,28 @@ ll
                     break
 
                 case 'type':
-                    if (input.contains('from mcs.Goal')) {
+                    if (input.contains('from Goal')) {
                         groups = GoalType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Journal')) {
+                    } else if (input.contains('from Journal')) {
                         groups = JournalType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Planner')) {
+                    } else if (input.contains('from Planner')) {
                         groups = PlannerType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Journal')) {
+                    } else if (input.contains('from Journal')) {
                         groups = PlannerType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Writing') || input.contains('from mcs.IndexCard')) {
+                    } else if (input.contains('from Writing') || input.contains('from IndexCard')) {
                         groups = WritingType.list([sort: 'name'])
                     }
                     break
                 case 'status':
-                    if (input.contains('from mcs.Goal')) {
+                    if (input.contains('from Goal')) {
                         groups = WorkStatus.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Journal')) {
+                    } else if (input.contains('from Journal')) {
                         groups = JournalType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Writing') || input.contains('from app.IndexCard')) {
+                    } else if (input.contains('from Writing') || input.contains('from IndexCard')) {
                         groups = WritingStatus.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Book')) {
+                    } else if (input.contains('from Book')) {
                         groups = ResourceStatus.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Goal') || input.contains('from mcs.Task') || input.contains('from mcs.Planner')) {
+                    } else if (input.contains('from Goal') || input.contains('from Task') || input.contains('from Planner')) {
                         groups = WorkStatus.list([sort: 'name'])
                     }
                     break
@@ -2686,19 +2849,17 @@ ll
             s.queryType = 'hql'
             s.save(flush: true)
             render(template: '/gTemplates/recordSummary', model: [record: s])
-        }
-
-        else if (input.endsWith(' +')) {
+        } else if (input.endsWith(' +')) {
             try {
-                     println new Date().format('HH:mm:ss')
+                //println new Date().format('HH:mm:ss')
                 def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
                 def queryHead = 'from ' + entityMapping[entityCode]
                 def queryCriteria = transformMcsNotation(input.substring(0, input.length() - 2))['queryCriteria']
 
                 def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
-                println 'fq ' + fullquery
-                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc',[], params)
+                // println 'fq ' + fullquery
+                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc', [], params)
                 def r
                 def limit = ker.OperationController.getPath('updateResultSet.max-items')?.toInteger() ?: 100
                 if (list.size() < limit) {
@@ -2716,7 +2877,7 @@ ll
                     def queryKey = '_' + new Date().format('ddMMyyHHmmss')
                     session[queryKey] = fullquery
 
-                    println '-> ' + Task.executeQuery(fullquerySort)[0]
+//                    println '-> ' + Task.executeQuery(fullquerySort)[0]
                     params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
                     render(template: '/gTemplates/recordListing', model: [
                             totalHits: Task.executeQuery(fullquerySort)[0].toLong(), //.size(),
@@ -2728,7 +2889,7 @@ ll
                 } else {
                     render 'Result set size is greater than ' + limit + '. Please narrow your search'
                 }
-            } catch(Exception e){
+            } catch (Exception e) {
                 println e.printStackTrace()
             }
 
@@ -2737,6 +2898,8 @@ ll
             if (input.contains(' {')) {
 
                 def groupBy = input.split(/ \{/)[1]
+
+                def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
                 def groups
 
@@ -2752,29 +2915,29 @@ ll
                         break
 
                     case 'type':
-                        if (input.contains('from mcs.Goal')) {
+                        if (entityCode == 'G') {
                             groups = GoalType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Journal')) {
+                        } else if (entityCode == 'J') {
                             groups = JournalType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Planner')) {
+                        } else if (entityCode == 'P') {
                             groups = PlannerType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Journal')) {
+                        } else if (entityCode == 'P') {
                             groups = PlannerType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Writing') || input.contains('from app.IndexCard')) {
+                        } else if (entityCode == 'W' || entityCode == 'N') {
                             groups = WritingType.list([sort: 'name'])
                         }
                         break
                     case 'status':
-                        if (input.contains('from mcs.Goal')) {
+                        //if (input.contains('from mcs.Goal')) {
+
+                        if ("TPG".contains(entityCode)) {
                             groups = WorkStatus.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Journal')) {
+                        } else if (entityCode == 'J') {
                             groups = JournalType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Writing') || input.contains('from app.IndexCard')) {
+                        } else if (entityCode == 'W' || entityCode == 'N') {
                             groups = WritingStatus.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Book')) {
+                        } else if (entityCode == 'R') {
                             groups = ResourceStatus.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Goal') || input.contains('from mcs.Task') || input.contains('from mcs.Planner')) {
-                            groups = WorkStatus.list([sort: 'name'])
                         }
                         break
                     case 'location':
@@ -2791,7 +2954,6 @@ ll
                         groups = [1, 2, 3, 4, 5]
                         break
                 }
-                def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
 //        input = params.input.substring(params.input.indexOf(' '))
 
@@ -2814,8 +2976,7 @@ ll
                     fullquery = session[input]
                     fullquerySort = 'select count(*) ' + fullquery
                     queryKey = input
-                }
-                else {
+                } else {
                     def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
 //        input = params.input.substring(params.input.indexOf(' '))
@@ -2878,28 +3039,28 @@ ll
                     break
 
                 case 'type':
-                    if (input.contains('from mcs.Goal')) {
+                    if (input.contains('from Goal')) {
                         groups = GoalType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Journal')) {
+                    } else if (input.contains('from Journal')) {
                         groups = JournalType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Planner')) {
+                    } else if (input.contains('from Planner')) {
                         groups = PlannerType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Journal')) {
+                    } else if (input.contains('from Journal')) {
                         groups = PlannerType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Writing') || input.contains('from app.IndexCard')) {
+                    } else if (input.contains('from Writing') || input.contains('from IndexCard')) {
                         groups = WritingType.list([sort: 'name'])
                     }
                     break
                 case 'status':
-                    if (input.contains('from mcs.Goal')) {
+                    if (input.contains('from Goal')) {
                         groups = WorkStatus.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Journal')) {
+                    } else if (input.contains('from Journal')) {
                         groups = JournalType.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Writing') || input.contains('from app.IndexCard')) {
+                    } else if (input.contains('from Writing') || input.contains('from app.IndexCard')) {
                         groups = WritingStatus.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Book')) {
+                    } else if (input.contains('from Book')) {
                         groups = ResourceStatus.list([sort: 'name'])
-                    } else if (input.contains('from mcs.Goal') || input.contains('from mcs.Task') || input.contains('from mcs.Planner')) {
+                    } else if (input.contains('from Goal') || input.contains('from Task') || input.contains('from Planner')) {
                         groups = WorkStatus.list([sort: 'name'])
                     }
                     break
@@ -3086,7 +3247,7 @@ ll
         }
         catch (Exception e) {
             //          render 'Exception in quick add' + e
-            print 'Exception in quick add' + e.printStackTrace()
+            println 'Exception in quick add: ' + e.printStackTrace()
         }
 
     }
@@ -3159,7 +3320,7 @@ ll
 
         if (!n.hasErrors() && n.save()) {
 //            render('Saved with id ' + n.id)
-            render(template: '/layouts/achtung', model: [message: 'Payment [' + n.summary + '] saved with id ' + n.id+ '.'])
+            render(template: '/layouts/achtung', model: [message: 'Payment [' + n.summary + '] saved with id ' + n.id + '.'])
         } else {
             render('Problem saving.')
 //            n.errors.each() {
@@ -4011,12 +4172,16 @@ ll
                                     core.matches(/^\d\d\d[\_][0-9]{1,4}$/) ||
                                     core.matches(/^\d\d\d[\_][0-9]{1,4}[\.][0-9]{2}$/)) {
                                 properties[dateField] = OperationController.fromWeekDateAsDateTimeFullSyntax(core)
+                                queryCriteria.add("date(" + dateField + ') = str_to_date("' + OperationController.fromWeekDateAsDateTimeFullSyntax(core).format('dd.MM.yyyy') + '", "%d.%m.%Y")')
+                                // todo: test
                             } else if (core.contains('_')) {
                                 def format = Setting.findByName('datetime.add.format')
-                                properties[dateField] = Date.parse(format ? format.value : 'dd.MM.yyyy_HHmm', core)
+                                properties[dateField] = Date.parse(format ? format.value : 'dd.MM.YYYY_HHmm', core)
+                                queryCriteria.add("date(" + dateField + ") = " + Date.parse(format ? format.value : 'dd.MM.YYYY_HHMM', core)?.format('YYYY-MM-DD'))
                             } else {
                                 def format = Setting.findByName('date.format')
                                 properties[dateField] = Date.parse(format ? format.value : 'dd.MM.yyyy', core)
+                                queryCriteria.add("date(" + dateField + ") =  str_to_date('" + Date.parse(format ? format.value : 'dd.MM.yyyy', core).format('dd.MM.YYYY') + "', '%d.%m.%Y')")
                             }
                         }
                     }
@@ -4032,9 +4197,15 @@ ll
                                     core.matches(/^\d\d\d[\_][0-9]{1,4}$/) ||
                                     core.matches(/^\d\d\d[\_][0-9]{1,4}[\.][0-9]{2}$/)) {
                                 properties[dateField] = OperationController.fromWeekDateAsDateTimeFullSyntax(core)
+                                queryCriteria.add("date(" + dateField + ') = str_to_date("' + OperationController.fromWeekDateAsDateTimeFullSyntax(core).format('dd.MM.yyyy') + '", "%d.%m.%Y")')
+                            } else if (core.contains('_')) {
+                                def format = Setting.findByName('datetime.add.format')
+                                properties[dateField] = Date.parse(format ? format.value : 'dd.MM.YYYY_HHmm', core)
+                                queryCriteria.add("date(" + dateField + ") = " + Date.parse(format ? format.value : 'dd.MM.YYYY_HHMM', core)?.format('YYYY-MM-DD'))
                             } else {
                                 def format = Setting.findByName('date.format')
                                 properties[dateField] = Date.parse(format ? format.value : 'dd.MM.yyyy', core)
+                                queryCriteria.add("date(" + dateField + ') = str_to_date("' + OperationController.fromWeekDateAsDateTimeFullSyntax(core).format('dd.MM.yyyy') + '", "%d.%m.%Y")')
                             }
                         }
                     }
@@ -4146,6 +4317,7 @@ ll
 
             result['queryCriteria'] = queryCriteria.join(' and ')
             result['properties'] = properties
+            // println result['queryCriteria']
 
             return result
         }
@@ -4521,30 +4693,30 @@ def addTagToAll(String input) {
                         groups = Course.list([sort: 'summary'])
                         break
                     case 'type':
-                        if (input.contains('from mcs.Goal')) {
+                        if (input.contains('Goal ')) {
                             groups = GoalType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Journal')) {
+                        } else if (input.contains('Journal ')) {
                             groups = JournalType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Planner')) {
+                        } else if (input.contains('Planner ')) {
                             groups = PlannerType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Journal')) {
+                        } else if (input.contains('Journal ')) {
                             groups = PlannerType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Writing') || input.contains('from mcs.IndexCard')) {
+                        } else if (input.contains('Writing ') || input.contains('IndexCard ')) {
                             groups = WritingType.list([sort: 'name'])
                         }
                         break
                     case 'status':
-                        if (input.contains('from mcs.Goal')) {
+                        if (input.contains('Goal ')) {
                             groups = WorkStatus.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Journal')) {
+                        } else if (input.contains('Journal ')) {
                             groups = JournalType.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Writing')) {
+                        } else if (input.contains('Writing ')) {
                             groups = WritingStatus.list([sort: 'name'])
-                        } else if (input.contains('from app.IndexCard')) {
+                        } else if (input.contains('IndexCard ')) {
                             groups = WritingStatus.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Book')) {
+                        } else if (input.contains('Book ')) {
                             groups = ResourceStatus.list([sort: 'name'])
-                        } else if (input.contains('from mcs.Goal') || input.contains('from mcs.Task') || input.contains('from mcs.Planner')) {
+                        } else if (input.contains('Goal ') || input.contains('Task ') || input.contains('Planner ')) {
                             groups = WorkStatus.list([sort: 'name'])
                         }
                         break
@@ -4664,16 +4836,16 @@ def addTagToAll(String input) {
             record.save(flush: true)
             render(record.description.replace('\n', '<br/>'))
         }
-         if (record.notes) {
+        if (record.notes) {
             record.notes = record.notes?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
                     .replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/^و /, 'و' )
-                    .replaceAll(/\nو / , '\nو' )
+                    .replaceAll(/^و /, 'و')
+                    .replaceAll(/\nو /, '\nو')
                     .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك')
             record.save(flush: true)
             render(record.notes.replace('\n', '<br/>'))
         }
-        if (record.class.declaredFields.name.contains('fullText') && record.fullText){
+        if (record.class.declaredFields.name.contains('fullText') && record.fullText) {
             record.fullText = record.fullText?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
                     .replaceAll(/\nوَ /, ' وَ')
                     .replaceAll(/^و /, ' و')

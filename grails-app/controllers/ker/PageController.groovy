@@ -276,9 +276,30 @@ class PageController {
 //        println 'r ' + resources
 //        println 'e ' + excerpts
 
+        def ips = []
+        def ip
+        def interf
+
+        def interfaces = NetworkInterface.getNetworkInterfaces()
+
+        while (interfaces.hasMoreElements()) {
+
+            interf = interfaces.nextElement()
+            def addresses = interf.getInetAddresses()
+
+            while (addresses.hasMoreElements()) {
+                ip = addresses.nextElement().getHostAddress().toString()
+                if (ip && ip != '' && !ip.contains(':') && !ip.startsWith('127'))
+                    ips.add([name: interf.getName(), title: interf.getDisplayName(), ip: ip])
+//                println (addresses.nextElement().getCanonicalHostName())
+//                println (addresses.nextElement().hostAddress)
+            }
+        }
+
 
         render(view: '/appMain/main', model: [
                 htmlContent: null,
+                ips: ips,
                 selectBasketCount: GenericsController.selectedRecords.size(),
                 editFileCount: c,
                 reviewPileSize: resources.size() + excerpts.size()
@@ -298,6 +319,12 @@ class PageController {
     def appCourse() {
         render(view: '/appCourse/main', model: [ record: mcs.Course.get(params.id)
         ])
+    }
+
+    def appKanban() {
+
+        render(view: '/appKanban/main', model: [])
+
     }
 
     def appDaftar(){
@@ -414,7 +441,7 @@ class PageController {
     }
 
     def kanban() {
-        render(view: '/page/kanban', model: [])
+        render(view: '/page/kanbanCrs', model: [])
     }
 
     def kanbanCrs() {

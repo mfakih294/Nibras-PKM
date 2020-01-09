@@ -155,7 +155,7 @@
     border: 1px solid #a3a3a3;
     /*background: #c1c1c1 url(images/ui-bg_highlight-hard_30_7e6f8b_1x100.png) 50% 50% repeat-x;*/
     font-weight: normal;
-    color: #ffffff;
+    /*color: #111;*/
 }
 
 .ui-state-hover a, .ui-state-hover {

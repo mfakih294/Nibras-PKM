@@ -1,7 +1,8 @@
 <%@ page import="ker.OperationController; java.text.DecimalFormat; mcs.Goal; org.apache.commons.lang.StringUtils; mcs.Writing; mcs.Task; mcs.Planner" %>
 
 
-<div style="margin-bottom: 3px; margin-top: 3px; max-width: 95%; direction: rtl; text-align: right;" class="text${record.language} ">
+<div style="margin-bottom: 3px; margin-top: 3px; max-width: 95%; direction: rtl; text-align: right;"
+     class="text${record.language} ">
     <g:if test="${record}">
         <table width="99%;" border="0"
                class="text${record.language}"
@@ -9,19 +10,22 @@
 
             %{--<!--Id: ${plannerInstance.id} -->--}%
 
-            <tr style="background: #f1f1eb; border:0.5px solid #cccccc; padding: 0px;" class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}">
+            <tr style="background: #f1f1eb; border:0.5px solid #cccccc; padding: 0px;"
+                class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}">
 
-                <td style="font-size: 0.9em; padding: 3px; line-height: 1.1em;" class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
+                <td style="font-size: 0.9em; padding: 3px; line-height: 1.1em;"
+                    class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
 
                     <div class="" style="color: darkgray; display: inline; margin: 2px !important; ">
-                        <g:remoteLink controller="generics" action="showSummary" update="underBox${record.entityCode()}${record.id}"
-                                params="${[id: record.id, entityCode: record.entityCode(),  mobileView:  mobileView]}"
+                        <g:remoteLink controller="generics" action="showSummary"
+                                      update="underBox${record.entityCode()}${record.id}"
+                                      params="${[id: record.id, entityCode: record.entityCode(), mobileView: mobileView]}"
                                       style="color: darkgray;">
                             ${record.entityCode()}
                         </g:remoteLink>
                     </div>
 
-                    %{--<sup>${record.priority}</sup>--}%
+                %{--<sup>${record.priority}</sup>--}%
 
                     <g:if test="${'RE'.contains(record.entityCode())}">
                         <sup>${record.orderInCourse}</sup>
@@ -36,7 +40,7 @@
                             <g:elseif test="${record.priority == 4}">
                                 <b>&gt;&gt;</b>
                             </g:elseif>
-                           <g:elseif test="${record.priority == 5}">
+                            <g:elseif test="${record.priority == 5}">
                                 <b>&gt;&gt;&gt;</b>
                             </g:elseif>
                             <g:elseif test="${record.priority == 1}">
@@ -94,56 +98,58 @@
 
                     <span style="color: #003399;">
 
-                    <g:if test="${'G'.contains(record.entityCode())}">
-                        <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
-                    </g:if>
-                    <g:if test="${'T'.contains(record.entityCode())}">
-                        <i style="font-size: small">${record?.context?.code} ${record?.course?.code} ${record.department?.code}</i>&nbsp;
-                        <sup>${record.plannedDuration ? record.plannedDuration + "''" : ''}</sup>
-                    </g:if>
-                    <g:if test="${'P'.contains(record.entityCode())}">
-                        <i style="font-size: small">${record?.type?.code} ${record.status?.code}</i>&nbsp;
-                    </g:if>
-                    <g:if test="${'J'.contains(record.entityCode())}">
-                        <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
-                    </g:if>
-                    <g:if test="${'W'.contains(record.entityCode())}">
+                        <g:if test="${'G'.contains(record.entityCode())}">
+                            <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
+                        </g:if>
+                        <g:if test="${'T'.contains(record.entityCode())}">
+                            <i style="font-size: small">${record?.context?.code} ${record?.course?.code} ${record.department?.code}</i>&nbsp;
+                            <sup>${record.plannedDuration ? record.plannedDuration + "''" : ''}</sup>
+                        </g:if>
+                        <g:if test="${'P'.contains(record.entityCode())}">
+                            <i style="font-size: small">${record?.type?.code} ${record.status?.code}</i>&nbsp;
+                        </g:if>
+                        <g:if test="${'J'.contains(record.entityCode())}">
+                            <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
+                        </g:if>
+                        <g:if test="${'W'.contains(record.entityCode())}">
 
-                        <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
-                    </g:if>
-                    <g:if test="${'E'.contains(record.entityCode())}">
-                        <i style="font-size: small">
-                            B-${record?.book?.id}
-                            ${record?.book?.author},
-                            ${record?.book?.title ?: record?.book?.legacyTitle} ${record?.book?.edition}
-                            (${record?.book?.publisher},
-                            ${record?.book?.publicationDate})
-                        </i>&nbsp;
+                            <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
+                        </g:if>
+                        <g:if test="${'E'.contains(record.entityCode())}">
+                            <i style="font-size: small">
+                                B-${record?.book?.id}
+                                ${record?.book?.author},
+                                ${record?.book?.title ?: record?.book?.legacyTitle} ${record?.book?.edition}
+                                (${record?.book?.publisher},
+                                ${record?.book?.publicationDate})
+                            </i>&nbsp;
 
-                        <i style="font-size: small">${record.class.declaredFields.name.contains('type') ? record?.type?.code: ''} ${record.class.declaredFields.name.contains('department') ? record.department?.code: ''}</i>&nbsp;
-                    </g:if>
-                </span>
+                            <i style="font-size: small">${record.class.declaredFields.name.contains('type') ? record?.type?.code : ''} ${record.class.declaredFields.name.contains('department') ? record.department?.code : ''}</i>&nbsp;
+                        </g:if>
+                    </span>
 
 
 
-                    <g:remoteLink controller="generics" action="showSummary" update="underBox${record.entityCode()}${record.id}"
+                    <g:remoteLink controller="generics" action="showSummary"
+                                  update="underBox${record.entityCode()}${record.id}"
                                   style="font-family: tahoma; font-size: 0.9em;"
                                   class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};"
-                                  params="${[id: record.id, entityCode: record.entityCode(), mobileView:  mobileView]}" >
+                                  params="${[id: record.id, entityCode: record.entityCode(), mobileView: mobileView]}">
 
-
-                        <span style="" class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
+                        <span style=""
+                              class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
 
                             <g:if test="${'P'.contains(record.entityCode()) && record.task}">
-                                <span title="${record?.summary}">${record.task?.summary}</span>
+                                <br/>  <span title="${record?.summary}">${record.task?.summary}</span>
                             </g:if>
                             <g:elseif test="${'N'.contains(record.entityCode())}">
                                 ${record?.orderInWriting ? '#' + record?.orderInWriting + ' ' : ''}
-                                ${record?.summary}
+                              <br/>  ${record?.summary}
 
 
                                 <g:if test="${record.fileName}">
-                                    <a href="${createLink(controller: 'operation', action: 'downloadNoteFile', id: record.id)}" target="_blank">
+                                    <a href="${createLink(controller: 'operation', action: 'downloadNoteFile', id: record.id)}"
+                                       target="_blank">
                                         <span style="font-size: 12px;">
                                             ${record.fileName}
                                         </span></a>
@@ -151,20 +157,21 @@
 
                             </g:elseif>
                             <g:elseif test="${'R'.contains(record.entityCode())}">
-
+                                <br/>
                                 ${record?.title ?: record?.legacyTitle}
                                 <i>${record?.author}</i>
 
                             </g:elseif>
 
                             <g:elseif test="${'E'.contains(record.entityCode())}">
-
+                                <br/>
                                 <span style="color: gray">${record?.book?.title ?: record?.book?.legacyTitle}</span>
                                 <u>${record.chapters}</u>
                                 <i>${record?.summary}</i>
                             </g:elseif>
 
                             <g:else>
+                                <br/>
                                 ${record?.summary}
                             </g:else>
 
@@ -191,45 +198,45 @@
                         </div>
                     </g:if>
 
-
                 </td>
-        </tr>
-        <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important; ">
-        <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
+            </tr>
+            <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important; display: none;" >
+                <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
+
+                    <span style="color: dimgray">
+                        ${record.class.declaredFields.name.contains('description') && record.description ? StringUtils.abbreviate(record.description?.encodeAsHTML(), 240) : ''}
+                    </span>
+
+                    <g:if test="${record.entityCode() == 'N' && record.recordId}">
+
+                        <g:remoteLink controller="generics" action="showSummary"
+                                      id="${record.recordId}"
+                                      params="[entityCode: record.entityCode]"
+                                      update="belowNRecord${record.id}"
+                                      title="Show parent entity">
+
+                            <b>${record.entityCode}</b>
+                            <i>${record.recordId}</i>
 
 
-            <span style="color: dimgray">${record.class.declaredFields.name.contains('description') && record.description?  StringUtils.abbreviate(record.description?.encodeAsHTML(), 240): ''}</span>
+                            <g:if test="${record.entityCode == 'R'}">
+                                ${Book.get(record.recordId)}
+                            </g:if>
 
-            <g:if test="${record.entityCode() == 'N' && record.recordId}">
+                        </g:remoteLink>
 
-                <g:remoteLink controller="generics" action="showSummary"
-                              id="${record.recordId}"
-                              params="[entityCode: record.entityCode]"
-                              update="belowNRecord${record.id}"
-                              title="Show parent entity">
-
-                    <b>${record.entityCode}</b>
-                    <i>${record.recordId}</i>
-
-
-                <g:if test="${record.entityCode == 'R'}">
-                ${Book.get(record.recordId)}
-                </g:if>
-
-                </g:remoteLink>
-
-            </g:if>
+                    </g:if>
 
                 </td>
 
             </tr>
             %{--<g:if test="${'CGR'.contains(record.entityCode()) && record.percentCompleted}">--}%
             %{--<tr>--}%
-                %{--<td colspan="2"  style="padding: 0; margin: 0" class="text${record.language}">--}%
-                    %{--<br/>--}%
-                        %{--<pkm:progressBar percent="${record.percentCompleted}"/>--}%
+            %{--<td colspan="2"  style="padding: 0; margin: 0" class="text${record.language}">--}%
+            %{--<br/>--}%
+            %{--<pkm:progressBar percent="${record.percentCompleted}"/>--}%
 
-                %{--</td>--}%
+            %{--</td>--}%
             %{--</tr>--}%
             %{--</g:if>--}%
         </table>
@@ -238,6 +245,11 @@
 
 
 <br/>
+
 <p style="page-break-before: always"></p>
 
 <div id="underBox${record.entityCode()}${record.id}"></div>
+
+<div style="margin-left: 20px;" id="below${record.entityCode()}Record${record.id}">
+
+</div>

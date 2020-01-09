@@ -88,7 +88,7 @@
 //          columnHead: false
 
       },
-      defaultView: 'dayGridWeek',
+      defaultView: 'dayGridMonth',
         allDaySlot: true,
         nowIndicator: true,
         timeGridEventMinHeight: true,

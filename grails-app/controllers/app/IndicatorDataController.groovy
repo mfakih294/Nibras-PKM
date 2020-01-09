@@ -9,9 +9,6 @@ package app
 
       import java.text.SimpleDateFormat
     
-import jxl.*
-import jxl.format.*
-import jxl.write.*
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured('ROLE_ADMIN')

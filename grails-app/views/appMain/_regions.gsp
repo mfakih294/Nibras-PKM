@@ -15,8 +15,8 @@
 </div>
 
 <div class="ui-layout-south footerRegion"
-     style="font-size: 11px; margin-top: 9px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
-    <g:render template="/appMain/south"/>
+     style="font-size: 12px; margin-top: 10px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
+    <g:render template="/appMain/south" model="[ips: ips]"/>
 
 </div>
 
@@ -30,7 +30,7 @@
     </div>
 
 
-    <div class="ui-layout-center appBkg" style="margin-top: 2px !important; margin-bottom: 2px !important;"
+    <div class="ui-layout-center appBkg" style="margin-top: 4px !important; margin-bottom: 4px !important;"
          onmouseover="jQuery('#hintArea').html('')">
         %{--ToDo: display none?!--}%
         %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%

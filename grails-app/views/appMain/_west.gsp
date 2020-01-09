@@ -460,8 +460,7 @@
             Order:
             <g:select name="order"
                       from="${['Asc', 'Desc']}"/>
-            <br/>
-            Max:
+           Max:
             <g:select name="max" value="3"
                       from="${['1', '3', '5', '10', '20', '50', '100', '500']}"/>
             <br/>

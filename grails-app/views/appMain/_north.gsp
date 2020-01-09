@@ -37,6 +37,13 @@
     </g:if>
 
 
+        <td style="padding-right: 3px !important;">
+            <a href="${createLink(controller: 'page', action:'appKanban')}" target="_blank">
+                Kanban
+            &nearr;
+            </a>
+        </td>
+
 
 
         <td style="padding-right: 3px !important;">
@@ -346,7 +353,7 @@
         %{--</sec:ifAnyGranted>--}%
 
         %{--</td>--}%
-        <td style="border: 0px dashed darkgray; padding-left: 15px !important;">
+        <td style="border: 0px dashed darkgray; padding-left: 15px !important; padding-top: 0; padding-bottom: 0; background: #8e8e97">
 
             <i style="color: #ebebeb;">Kanbans:</i> &nbsp;
             <g:render template="/layouts/savedSearchesLine" model="[entity: 'F']"/>
@@ -406,14 +413,14 @@
             %{--</a>--}%
         %{--</td>--}%
 
-        <td style="padding: 1px !important; margin-left: 9px; color: white;">
+        %{--<td style="padding: 1px !important; margin-left: 9px; color: white;">--}%
 
-            <a href="http://khuta.org/nibras-doc/index.html"
-               style="" target="_blank">
+            %{--<a href="http://khuta.org/nibras-doc/index.html"--}%
+               %{--style="" target="_blank">--}%
 %{--                <span style="color: white" class="ui-icon ui-icon-help"></span>--}%
-                <g:message code="ui.menu.help"></g:message>
-            </a>
-        </td>
+                %{--<g:message code="ui.menu.help"></g:message>--}%
+            %{--</a>--}%
+        %{--</td>--}%
         %{--<td>--}%
         %{--بالصفحة--}%
 

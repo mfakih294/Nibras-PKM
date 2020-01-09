@@ -362,6 +362,7 @@ class TaskController { // entity id = 127
         def level = params.level
 
         def date = params.date//.substring(0,3).toString()
+        def endDate = params.endDate//.substring(0,3).toString()
         def stime
         def etime
 //        if (params.date.length() > 3){
@@ -377,8 +378,8 @@ class TaskController { // entity id = 127
 
         def startDate = OperationController.fromWeekDateAsDateTimeFullSyntax(date)
         //Date.parse('dd.MM.yyyy HH:mm', supportService.fromWeekDate(date) + stime)
-        def endDate = startDate
-
+        def endDate = OperationController.fromWeekDateAsDateTimeFullSyntax(endDate)
+          /**
         switch (level) {
             case 'i':
                 endDate = startDate
@@ -403,6 +404,7 @@ class TaskController { // entity id = 127
                 break
 
         }
+ */
 
         //Date.parse('dd.MM.yyyy HH:mm', supportService.fromWeekDate(date) + etime)
 

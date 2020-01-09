@@ -1114,7 +1114,7 @@ Authors: ${authors}
             </div>
         </g:if>
 
-<g:if test="${entityCode == 'N' && record.version == 0}">
+<g:if test="${entityCode == 'N'}">
     &nbsp; &nbsp;Convert to &nbsp;
     <g:each in="${['J', 'P', 'T', 'R', 'W']}" var="t">
 

@@ -37,7 +37,7 @@ and <g:textField name="dateB" style="width: 50px;" value=""/>
 
 <br/>
 
-<g:if test="${'GTPJWNR'.contains(entityCode)}">
+<g:if test="${'GPJWNR'.contains(entityCode)}">
 
     <g:select name="type" style="width: 150px;"
               from="${types}" optionKey="id" optionValue="value"
