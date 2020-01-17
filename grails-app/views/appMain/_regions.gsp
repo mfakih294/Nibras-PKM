@@ -1,5 +1,8 @@
 <%@ page import="mcs.parameters.ResourceStatus; mcs.Goal; org.apache.commons.lang.StringUtils; mcs.Book; app.parameters.ResourceType; mcs.Writing; mcs.Department; mcs.parameters.WritingType; app.Tag; cmn.Setting; mcs.Course; mcs.Journal; mcs.Planner; app.IndexCard; mcs.Task; ker.OperationController" %>
 %{--${ker.OperationController.getPath('app.headers.background') ?: '#5b7a59'}--}%
+
+
+
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
      style="">
     %{--<g:render template="/layouts/north" model="[]"/>--}%

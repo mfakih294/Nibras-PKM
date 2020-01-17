@@ -860,7 +860,7 @@ date = "${r.year ?: ''}"
     }
 
 
-     def downloadNoteFile = {
+    def downloadNoteFile = {
         def file = IndexCard.get(params.id)
 
         if (new File(OperationController.getPath('module.sandbox.N.path') + '/' + file.id).exists()) {
@@ -953,7 +953,7 @@ date = "${r.year ?: ''}"
                 responce += [value: it.id,
                              text : it.code]
             }
-        }  else if (field == 'language') {
+        } else if (field == 'language') {
             OperationController.getPath('repository.languages').split(',').each() {
                 responce += [value: it,
                              text : it]
@@ -962,11 +962,11 @@ date = "${r.year ?: ''}"
 //            def n = grailsApplication.classLoader.loadClass(entityMapping[params.entity]).get(params.rid)
 //            if (n.department) {
 //                Course.executeQuery('from Course c where c.department = ? and c.bookmarked = true order by c.orderNumber asc',
-                Course.executeQuery('from Course c where c.bookmarked = true order by c.orderNumber asc',
-                        []).each() {
-                    responce += [value: it.id,
-                                 text : '[' + it.code + '] ' + it.summary]
-                }
+            Course.executeQuery('from Course c where c.bookmarked = true order by c.orderNumber asc',
+                    []).each() {
+                responce += [value: it.id,
+                             text : '[' + it.code + '] ' + it.summary]
+            }
 //            } else
 //                responce += [value: 0,
 //                             text : 'No department set.']
@@ -1109,7 +1109,7 @@ date = "${r.year ?: ''}"
 
         if (field == 'blog')
             record[field] = Blog.get(newValue)
-  if (field == 'language')
+        if (field == 'language')
             record[field] = newValue
 
         else if (field == 'pomegranate')
@@ -1203,11 +1203,11 @@ date = "${r.year ?: ''}"
 
         def outPath
 
-                if (params.module == 'R')
-                    outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.type + '/' +
-                + (params.id.toLong() / 100).toInteger() + '/' + params.id
+        if (params.module == 'R')
+            outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.type + '/' +
+                    +(params.id.toLong() / 100).toInteger() + '/' + params.id
         else
-                    outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.id
+            outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.id
 
 
         try {
@@ -1225,15 +1225,14 @@ date = "${r.year ?: ''}"
     }
 
 
-
-  def checkoutFileOut() {
+    def checkoutFileOut() {
 
         String pdfPath = params.path
-def record = grailsApplication.classLoader.loadClass(entityMapping[params.module]).get(params.id)
+        def record = grailsApplication.classLoader.loadClass(entityMapping[params.module]).get(params.id)
         def outPath
-                    outPath = OperationController.getPath('root.out.path') + '/' + params.name.split(/\./)[1] + '/'  +
-                  '/' + params.id  + ' ' +  clean(record.title) + '-' + params.name.replace(params.id + 'r', '').replace(params.id + 'b', '').trim()
-     
+        outPath = OperationController.getPath('root.out.path') + '/' + params.name.split(/\./)[1] + '/' +
+                '/' + params.id + ' ' + clean(record.title) + '-' + params.name.replace(params.id + 'r', '').replace(params.id + 'b', '').trim()
+
 
         try {
             def ant = new AntBuilder()
@@ -1248,14 +1247,12 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
     }
 
 
-
-
     def copyToRps1() {
 
 
         def b
         if (params.entityCode == 'R')
-        b = Book.findById(params.id)
+            b = Book.findById(params.id)
         else
             b = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
 
@@ -1270,20 +1267,19 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
                 rps1Folder =
                         OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code + '/' + (params.id.toLong() / 100).toInteger() + '/' + params.id
                 rps2Folder =
-                        OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code + '/' + (params.id.toLong()  / 100).toInteger() + '/' + params.id
-            }
-            else {
+                        OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code + '/' + (params.id.toLong() / 100).toInteger() + '/' + params.id
+            } else {
                 rps1Folder = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/' + params.id
                 rps2Folder = OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/' + params.id
             }
 
             new File(rps1Folder).mkdirs()
 
-                if (new File(rps2Folder).exists()) {
-                    new File(rps2Folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
-                        filesList.add(it)
-                    }
+            if (new File(rps2Folder).exists()) {
+                new File(rps2Folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
+                    filesList.add(it)
                 }
+            }
 
             def ant = new AntBuilder()
 
@@ -1291,8 +1287,7 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
                 ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
             }
             render filesList.size() + ' file(s) copied.'
-        }
-        else {
+        } else {
             render 'Record not found.'
         }
     }
@@ -1348,10 +1343,10 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
                 folders.add(
                         [typeSandboxPath + '/' + (b.id / 100).toInteger()])
                 if (!b.bookmarked)
-                folders.add(
-                        [typeRepositoryPath + '/' + (b.id / 100).toInteger()])
+                    folders.add(
+                            [typeRepositoryPath + '/' + (b.id / 100).toInteger()])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger()
-           //     ]
+                //     ]
                 folders.each() { folder ->
 
                     if (new File(folder[0]).exists()) {
@@ -1366,7 +1361,7 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
                         [typeSandboxPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
                 if (!b.bookmarked)
-                        folders.add([typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+                    folders.add([typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
 //                ]
 
                 folders.each() { folder ->
@@ -1389,50 +1384,47 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
 
 
             }
-        }
-            else {
+        } else {
 
             list =
                     [grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)]
 
             for (b in list) {
-                    filesCount = 0
-                    folders = []
-                    typeSandboxPath = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/'
+                filesCount = 0
+                folders = []
+                typeSandboxPath = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/'
 
-                    typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/'
-                    folders.add([typeSandboxPath + '/' + (b.id)])
+                typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/'
+                folders.add([typeSandboxPath + '/' + (b.id)])
                 if (!b.bookmarked)
                     folders.add([typeRepositoryPath + '/' + (b.id)])
 
 
 
-            folders.each() { folder ->
-                if (new File(folder[0]).exists()) {
-                    new File(folder[0]).eachFileRecurse() {
+                folders.each() { folder ->
+                    if (new File(folder[0]).exists()) {
+                        new File(folder[0]).eachFileRecurse() {
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
-                        if (!it.isFile())
-                            filesList += '*** ' + it.name
-                        else {
-                            filesCount++
-                            filesList += it.name
+                            if (!it.isFile())
+                                filesList += '*** ' + it.name
+                            else {
+                                filesCount++
+                                filesList += it.name
+                            }
                         }
                     }
                 }
+                //println filesCount
+                b.nbFiles = filesCount
+                b.filesList = filesList.join('\n')
             }
-            //println filesCount
-            b.nbFiles = filesCount
-            b.filesList = filesList.join('\n')
         }
-            }
 
         render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
     }
 
 
-
-
-  def updateTotalSteps() {
+    def updateTotalSteps() {
 //        println 'id is  ' + params.id
         def issue = mcs.Goal.findById(params.id?.toLong())
         issue.totalSteps = params.text?.toInteger()
@@ -1440,7 +1432,8 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
         issue.save()
         render issue.totalSteps
     }
-  def updateCompletedSteps() {
+
+    def updateCompletedSteps() {
 //        println 'id is  ' + params.id
         def issue = mcs.Goal.findById(params.id?.toLong())
         issue.completedSteps = params.text?.toInteger()
@@ -1461,17 +1454,17 @@ def record = grailsApplication.classLoader.loadClass(entityMapping[params.module
         return 'abc'
     }
 
-    def filterTags(){
+    def filterTags() {
         if (params.value && params.value.length() > 1)
-        render(template: '/reports/tagCloud', model: [filter: params.value])
+            render(template: '/reports/tagCloud', model: [filter: params.value])
         else if (params.value && params.value.length() == 1) {
             render('Please enter at least two characters.')
             render(template: '/reports/tagCloud', model: [])
-        }
-        else// if (params.value == '' || !params.value || params.value == 'null')
+        } else// if (params.value == '' || !params.value || params.value == 'null')
             render(template: '/reports/tagCloud', model: [])
 
     }
+
     def generateCitationsInline() {
 
         def text = new File('d:/t1.tex').text
@@ -1571,12 +1564,11 @@ past.each(){
         render s.encodeAsHTML()
     }
 
-  def updateSettings() {
+    def updateSettings() {
         def s = Setting.get(params.id)
         s.value = params.newValue
         render s.value
-}
-
+    }
 
 // todo: added the ability to update a single setting, but its code name.
     def updateSettingsByName() {
@@ -1586,7 +1578,7 @@ past.each(){
 //        render '>> ' + s.value
 //        println 'pa ' + s.value
         render(template: '/layouts/achtung', model: [message: 'Value set to ' + s.value])
-}
+    }
 
     def addFromCalendar() {
 
@@ -1597,17 +1589,22 @@ past.each(){
         if (!params.title.startsWith('p '))
             j = new mcs.Journal([startDate  : Date.parse('dd.MM.yyyy HH:mm', params.start),
                                  endDate    : Date.parse('dd.MM.yyyy HH:mm', params.end),
-                                 description: '...'])
+                                 description: params.description ?: '...'])
         else if (params.title.startsWith('p '))
             j = new mcs.Planner([startDate  : Date.parse('dd.MM.yyyy HH:mm', params.start),
                                  endDate    : Date.parse('dd.MM.yyyy HH:mm', params.end),
-                                 description: '?'])
+                                 description: params.description ?: '...'])
 //	if (j.startDate == j.endDate)
 //	j.level = 'd'
 //	else
         j.level = 'm'
 
-        j.properties = ker.GenericsController.transformMcsNotation(params.title?.contains('--') ? params.title : 'j -- ' + params.title)['properties']
+        if (params.title?.contains('--'))
+        j.properties = ker.GenericsController.transformMcsNotation(params.title)['properties']
+        else j.summary = params.title
+
+        if (params.description)
+            j.description = params.description
 
         if (params.title.startsWith('p') && !j.type)
             j.type = PlannerType.findByCode('act')
@@ -1619,17 +1616,45 @@ past.each(){
 
         if (!j.hasErrors()) {
             j.save(flash: true)
-            render 'Saved with id: ' + ' ' + j.id + ': ' + j.summary
+//            render 'Saved with id: ' + ' ' + j.id + ': ' + j.summary
+            render(template: '/gTemplates/box', model: [record: j])
         } else {
             render 'Problem saving the entry'
         }
     }
 
-def clean(String name){
-def cleaned = org.apache.commons.lang.WordUtils.abbreviate(name, 20, 30, org.apache.commons.lang.StringUtils.EMPTY)
-",.+-:;!?~_-|/\\".each(){
-cleaned = cleaned.replace(it, ' ')
-}
-return cleaned.trim().replace('  ', ' ')
-}
+    def clean(String name) {
+        def cleaned = org.apache.commons.lang.WordUtils.abbreviate(name, 20, 30, org.apache.commons.lang.StringUtils.EMPTY)
+        ",.+-:;!?~_-|/\\".each() {
+            cleaned = cleaned.replace(it, ' ')
+        }
+        return cleaned.trim().replace('  ', ' ')
+    }
+
+    def pandoc() {
+        def w = Writing.get(params.id)
+        def command = "D:\\app\\pandoc281\\pandoc -f markdown --html-q-tags --toc --metadata rtl=true -i r:/W/W-${w.id}.md -o r:/W/W-${w.id}.md.html"
+        try {
+            println 'command: ' + command
+            println 'exit: ' + command.execute().exitValue()
+            println 'out: ' + command.execute().outputStream
+            println 'err: ' + command.execute().errorStream
+            render 'done'
+        } catch (Exception e) {
+            println e.toString()
+            render 'done'
+        }
+    }
+
+    def htmlPublishedPosts() {
+        def html = "<body style='direction: rtl; text-align: right; margin-left: 20%;margin-right: 20%;'>"
+        Writing.executeQuery('from Writing w where w.blog.code = ? and w.publishedNodeId is not null order by id desc', ['khuta']).each() {
+
+            html += "<h3> i" + it.id + ' =' + it.code + ' ' + it.summary + "</h3>"
+            html += it.descriptionHTML
+        }
+
+        render html
+
+    }
 } // end of class

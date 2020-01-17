@@ -13,7 +13,10 @@
 
 
   <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'jquery.qtip.css')}"/>
+  <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'jquery.modal.css')}"/>
 
+
+  <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.modal.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.qtip.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'moment.min.js')}"></script>
 
@@ -43,6 +46,7 @@
 
   <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main4.js')}"></script>
 
+    %{--<link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main.css')}"/>--}%
 
 
   <script>
@@ -88,7 +92,7 @@
 //          columnHead: false
 
       },
-      defaultView: 'dayGridMonth',
+      defaultView: 'timeGridWeek',
         allDaySlot: true,
         nowIndicator: true,
         timeGridEventMinHeight: true,
@@ -132,18 +136,30 @@
 
       select: function (arg) {
 
-        var title = prompt('Event title or command (e.g. p -- title):');
+//          var title = window.prompt('Event title or command (e.g. p -- title):');
+
+          jQuery('#login-form').modal();
+//
+          jQuery('#title').val('');
+          jQuery('#description').val('');
+          jQuery('#title').focus();
+          jQuery('#title').select();
+          jQuery('#start').val(moment(arg.start).format('DD.MM.YYYY HH:mm'));
+          jQuery('#end').val(moment(arg.end).format('DD.MM.YYYY HH:mm'));
+//          jQuery('#newEventModalField').val(arg.start + ' ' + arg.end);
+//          var title =
+//          console.log('title ' + title)
 
         var eventData;
 
-        if (title) {
+        if (title & 1 == 2) {
           eventData = {
             title: title,
-            start: arg.start,
+            start: moment(arg.start).format('DD.MM.YYYY HH:mm'),
             end: arg.end
           };
           jQuery('#logArea').html(title);
-          jQuery('#logArea2').load('/nibras/operation/addFromCalendar', {
+          jQuery('#logArea2').load('/nibras/operation/addNewFromCalendar', {
             title: title,
             start: moment(arg.start).format('DD.MM.YYYY HH:mm'),//arg.start.getDate() + '.' + arg.start.getMonth() + '.'+ (parseInt(arg.start.getYear()) + 1900),
             end: moment(arg.end).format('DD.MM.YYYY HH:mm')//,//arg.start.getDate() + '.' + arg.start.getMonth() + '.'+ (parseInt(arg.start.getYear()) + 1900),
@@ -257,6 +273,14 @@
     padding-right: 2em;
   }
 
+
+  .prompt  {
+      width: 500px;
+      height: 200px;
+      background: black;
+      color: #FFA500;
+  }
+
   /*.hover-end{padding:0;margin:0;font-size:75%;text-align:center;position:absolute;bottom:0;width:100%;opacity:.8}*/
 
 </style>
@@ -277,6 +301,50 @@
     <div id='calendar' ></div>
   </div>
 
+<div id="login-form" class="modal" style="height: 400px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
+    %{--Event title or command (e.g. p -- title):--}%
+    %{--<br/>--}%
+    %{--<br/>--}%
+    <g:formRemote name="batchAdd2" class="commandBarInPanel"
+                  url="[controller: 'operation', action: 'addFromCalendar']"
+                  update="logAreaModal"
+                  method="post">
+          <table border="0">
+              <tr>
+                  <td style="text-align: left; direction: ltr"> Start time:
+                      <br/><g:textField name="start" value="" id="start"></g:textField></td>
+                  <td style="text-align: left; direction: ltr">End time:
+                      <br/>
+                      <g:textField name="end" value="" id="end"></g:textField></td>
+              </tr>
+          </table>
+
+
+        Summary or Nibras command*:
+        <br/>
+        <g:textField name="title" value="" id="title"
+                     style="width: 400px; direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 100% !important;"
+            placeholder=""
+                     class="commandBarTexFieldTop"/>
+                  <br/>
+                Description:
+       <g:textArea name="description" value="" id="description" rows="5" columns="80"
+                    placeholder=""
+                     style="width: 400px; height: 100px;direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 100% !important;"
+                     class="commandBarTexFieldTop"/>
+                  <br/>
+        <g:submitButton name="batch" value="Save event"
+                        style="height: 20px; margin: 0px; width: 100px !important;"
+                        id="quickAddXcdSubmitTop3"
+                        class="fg-button ui-widget ui-state-default"/>
+    </g:formRemote>
+    <div id="logAreaModal"></div>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+    </div>
 
 
 </body></html>

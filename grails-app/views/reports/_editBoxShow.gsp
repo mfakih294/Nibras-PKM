@@ -1,15 +1,11 @@
 <%@ page import="ker.OperationController; cmn.Setting; app.IndexCard; mcs.Writing" %>
 
 
-<br/>
-
-<br/>
-
-<h4>Changed records</h4>
+<h2>Changed records (${OperationController.getPath('editBox.path')})</h2>
 
 
 <br/>
-Edit folder: ${OperationController.getPath('editBox.path')}.
+%{--Edit folder: .--}%
 
 <g:if test="${!new File(OperationController.getPath('editBox.path')).exists()}">
     Folder does not exist. Set: <g:render template="/forms/updateSetting" model="[settingValue: 'editBox.path']"/>.
@@ -36,6 +32,7 @@ Edit folder: ${OperationController.getPath('editBox.path')}.
 
                     <tr>
                         <td colspan="2" style="text-align: left; padding: 5px; margin-top: 10px;">
+                            <hr/>
                             <b>${f.name}:</b>
                             <g:render template="/gTemplates/recordSummary"
                                       model="[record: f.name?.substring(0, 1) == 'W' ? Writing.get(id) : IndexCard.get(id.toLong())]"></g:render>
@@ -43,11 +40,27 @@ Edit folder: ${OperationController.getPath('editBox.path')}.
                         </td>
                     </tr>
                     <tr>
+                        <td colspan="2" style="text-align: center;">
+                            <g:remoteLink controller="generics" action="commitTextChanges" id="${id}"
+                                          params="[entityCode: f.name?.substring(0, 1), name: f.name]"
+                                          update="summary${f.name.substring(0, 1)}${id}"
+                                style="font-size: big; margin: 2px; padding: 2px"
+                                          title="Commit text changes to database">
+                                Commit changes &crarr;
+                            </g:remoteLink>
+                            <br/>
+                            <br/>
+
+                            <br/>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td style="width: 50%; vertical-align: top; text-align: justify" class="textar">
                             <br/>
                             <g:each in="${description?.split('\n')}" var="l">
                                 <g:if test="${!f?.text?.contains(l)}">
-                                    ${l} <br/>
+                                  +  ${l} <br/> <br/>
                                 </g:if>
                             </g:each>
 
@@ -59,7 +72,7 @@ Edit folder: ${OperationController.getPath('editBox.path')}.
 
                             <g:each in="${f?.text?.split('\n')}" var="l">
                                 <g:if test="${!description?.contains(l)}">
-                                    ${l} <br/>
+                                  +  ${l} <br/><br/>
                                 </g:if>
                             </g:each>
 
@@ -68,19 +81,7 @@ Edit folder: ${OperationController.getPath('editBox.path')}.
                         </td>
 
                     </tr>
-                    <tr>
-                        <td colspan="2">
-                            <g:remoteLink controller="generics" action="commitTextChanges" id="${id}"
-                                          params="[entityCode: f.name?.substring(0, 1), name: f.name]"
-                                          update="summary${f.name.substring(0, 1)}${id}"
-                                          title="Commit text changes to database">
-                                Commit changes &crarr;
-                            </g:remoteLink>
-                            <br/>
-                            <hr/>
-                            <br/>
-                        </td>
-                    </tr>
+
                 </table>
             </div>
         </g:if>

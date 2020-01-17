@@ -76,7 +76,7 @@
 
                                     <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
                                           style="padding: 3px; margin-right: 3px; color: gray; display: inline;">
-                                        <span style="color: lightgray;">${entityCode}</span><b><span style="color: white;">${record.id}</span></b>
+                                        <span style="color: black;">${entityCode}</span><b>&middot;<span style="color: white;">${record.id}</span></b>
                                     </span>
                                 </g:remoteLink>
 
@@ -347,10 +347,17 @@
                                             <g:if test="${entityCode == 'E'}">
                                                 <br/>
                                             </g:if>
-
+                                            <g:if test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code != 'repub'}">
+                                                <span style="font-size: big; color: darkgreen"> &copy; </span>
+                                            </g:if>
+                                            <g:else  test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code == 'repub'}">
+                                                <span style="font-size: big; color: darkred"> &copy; </span>
+                                            </g:else>
                                         %{--<bdi>--}%
                                             <pkm:summarize text="${record.summary ?: ''}"
                                                            length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/>
+
+
                                         %{--</bdi>--}%
                                         %{--<br/>--}%
                                         </span>
@@ -358,6 +365,14 @@
                                 </g:remoteLink>
 
                             </g:if>
+
+                            <g:if test="${entityCode == 'Blog'}">
+                            <a href="${createLink(controller: 'operation', action: 'htmlPublishedPosts')}" style="border: 1px solid darkgray; margin: 3px;"
+                               target="_blank">
+                                Export W ?pub
+                            </a>
+                            </g:if>
+
 
                             <g:if test="${entityCode == 'X' && ker.OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
 

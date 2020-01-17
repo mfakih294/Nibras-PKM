@@ -4,10 +4,35 @@
 
     <h3><a href="#">
         <g:message code="ui.details"></g:message>
-
     </a></h3>
 
     <div id="3rdPanel">
+
+
+        %{--<uploadr:add id="addToRecordFolder"--}%
+                           %{--url="${[controller: 'import', action: 'addToRecordFolder2']}"--}%
+                           %{--params="${[recordId: '12']}">--}%
+            %{--Add to record folder   ============--}%
+        %{--</uploadr:add>--}%
+
+
+        %{--<div >--}%
+
+        %{--</div>--}%
+
+        <br/>
+        <hr/>
+
+        %{--Todo--}%
+        <br/>
+
+
+
+
+
+
+        %{--params="[variableTwo: 'foo', variableThree: 'bar', variableFour: 4, myObject: someObject]"--}%
+        %{--             model="[booleanOne:true, variableTwo: 'foo', variableThree: 'bar', variableFour: 4, myObject: someObject]"--}%
 
     </div>
 
@@ -379,10 +404,10 @@
 
         <br/>
 
-        <a onclick="openNoteTaker()" href="javascript:void(0);"  target="_self">
+        <a onclick="openNoteTaker()" href="javascript:void(0);" target="_self">
         &nearr;
         &nearr;
-        Open in a dedicated window.
+            Open in a dedicated window.
         </a>
 
     </div>
@@ -701,8 +726,8 @@
             <br/>
 
             <h5 class="">
-            <a>Exports</a>
-        </h5>
+                <a>Exports</a>
+            </h5>
 
         %{--<div>--}%
 

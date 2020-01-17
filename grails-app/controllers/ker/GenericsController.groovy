@@ -1462,7 +1462,7 @@ ll
                     }
 //                    render filesList.size() + ' file(s) copied.'
 
-                            message = filesList.size() + ' file(s) copied.'
+                    message = filesList.size() + ' file(s) copied.'
                 } else {
                     render 'Record not found.'
                 }
@@ -1582,7 +1582,8 @@ ll
                         b.filesList = filesList.join('\n')
                     }
                 }
-                render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])// + filesList.join('\n').replace('\n', '<br/>')])
+                render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])
+// + filesList.join('\n').replace('\n', '<br/>')])
 //                render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
 
 //            OperationController.copyToRps21(grailsApplication, entityCode, id)
@@ -4903,6 +4904,7 @@ def addTagToAll(String input) {
         if (r) {
             record.publishedNodeId = r
             record.publishedOn = new Date()
+            record.status = WritingStatus.findByCode('pub')
             record.save(flush: true)
             render 'Published with id : ' + r + ' class ' + r.class
             render(template: '/layouts/achtung', model: [message: "Record published with id " + r])
@@ -5479,12 +5481,36 @@ def addTagToAll(String input) {
             r = IndexCard.get(params.id.replace('.md', '').toLong())
 
         r.description = (f.text != '' ? f.text : '...')
-        def htmlFile = new File(OperationController.getPath('editBox.path') + '/' + params.name.replace('.md', '.md.html'))
-        if (htmlFile.exists())
-            r.descriptionHTML = htmlFile.text
 
-        f.delete()
-        htmlFile.delete()
+        def htmlFile = new File(OperationController.getPath('editBox.path') + '/' + params.name.replace('.md', '.md.html'))
+
+        def command = "D:\\app\\pandoc281\\pandoc -f markdown --metadata rtl=true -i r:/W/W-${r.id}.md -o r:/W/W-${r.id}.md.html"
+//        println 'cmd: ' + command
+        try {
+            println 'command: ' + command
+            println 'exit: ' + command.execute().exitValue()
+
+            println 'out: ' + command.execute().outputStream
+            println 'err: ' + command.execute().errorStream
+            render 'done'
+        } catch (Exception e) {
+            println e.toString()
+            render 'error pandoc...'
+        }
+
+        sleep(2000) // wait for pandoc to finish converting the document
+
+        if (htmlFile.exists()) {
+//            println 'here !!! exists... '
+            r.descriptionHTML = htmlFile.text
+            htmlFile.delete()
+        }
+        // if contents is correctly set in database, delete file to declutter the editing folder
+//        if (r.description == f.text)
+//        f.delete()
+
+        // changes to DB after file editing
+        r.description = r.description?.replace('< ', '«')?.replace(' >', '»')
 
         if (!r.firstReviewed)
             r.firstReviewed = new Date()
@@ -5493,6 +5519,8 @@ def addTagToAll(String input) {
 //                r.firstReviewed = new Date()
 
         r.lastReviewed = new Date()
+
+        r.status = WritingStatus.findByCode('repub')
 
 
         if (!r.reviewCount)
@@ -5527,4 +5555,6 @@ def addTagToAll(String input) {
         }
         return c
     }
+
+
 }

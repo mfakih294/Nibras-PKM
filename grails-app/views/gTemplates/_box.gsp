@@ -200,7 +200,7 @@
 
                 </td>
             </tr>
-            <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important; display: none;" >
+            <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important;" >
                 <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
 
                     <span style="color: dimgray">

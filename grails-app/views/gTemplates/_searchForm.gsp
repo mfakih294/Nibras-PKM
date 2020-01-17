@@ -47,7 +47,7 @@ and <g:textField name="dateB" style="width: 50px;" value=""/>
 
 
 
-<g:if test="${'GTPR'.contains(entityCode)}">
+<g:if test="${'GTPRW'.contains(entityCode)}">
     <g:select name="status" style="width: 150px;"
               from="${statuses}" optionKey="id" optionValue="value"
               noSelection="${['null': 'Any status']}"/>

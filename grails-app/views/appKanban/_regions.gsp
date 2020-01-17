@@ -60,36 +60,24 @@
 
         <h3>T / context</h3>
         <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
-
             <thead>
-
             <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
                     var="d">
                 <th>@<b>${d.code}</b></th>
-
             </g:each>
-
             </thead>
-
-
             <tr>
-
                 <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
                         var="d">
                     <td id="kanban">
-
                         <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.context = ? order by orderInCourse asc',
                                 [d])}"
                                 var="p">
                             <g:render template="/gTemplates/box" model="[record: p]"></g:render>
                         </g:each>
-
                     </td>
-
                 </g:each>
-
             </tr>
-
         </table>
 
         <h3>R G C / dept</h3>

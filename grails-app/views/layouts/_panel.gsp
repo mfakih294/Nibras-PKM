@@ -21,6 +21,18 @@
 <r:layoutResources/>
 
 
+<style>
+    .demo {
+        height: auto !important;
+    }
+    .message {
+        display: none;
+    }
+    .demo-dropable {
+    display: none;
+    }
+
+</style>
 
 %{--tomorrow:--}%
 %{--<prettytime:display date="${new Date() + 1}" />--}%
@@ -66,9 +78,11 @@
 <g:if test="${record.class.declaredFields.name.contains('orderNumber') && record.orderNumber}">
     # ${record.orderNumber}
 </g:if>
+<br/>
+<div style="direction: rtl !important; text-align: right !important; line-height: 25px;" >
     <g:remoteLink controller="page" action="panel"
                   params="${[id: record.id, entityCode: entityCode]}"
-				  style="direction: rtl !important; text-align: right !important; line-height: 25px;"
+
 				  class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
                   update="3rdPanel"
                   title="Click to refresh">
@@ -80,6 +94,8 @@
 				  </g:if>
 				  </span>
 </g:remoteLink>
+</div>
+
 
 
 
@@ -88,6 +104,22 @@
     %{--%>--}%
     %{--<b>أ${cal.get(Calendar.WEEK_OF_YEAR)}</b>--}%
     <td>
+<br/>
+<br/>
+<b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
+<br/>
+<br/>
+<uploadr:add id="uploader" name="uploader" controller="import" action="upload" path="${typeSandboxPath}"
+             placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
+             noSound="true"
+             direction="down" maxVisible="5" unsupported="/nibras/upload/warning" maxConcurrentUploads="1" class="demo">
+    <uploadr:onSuccess>
+        jQuery('#spinner2').hide();
+        jQuery('.info-badge').html('Done uploading files.');
+        </uploadr:onSuccess>
+
+</uploadr:add>
+
 
 <br/>
 <br/>
@@ -162,6 +194,13 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
 </g:if>
     %{--<h4>Files</h4>--}%
 <g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
+
+%{--<uploader:uploader id="addToRecordFolder${record.id}"--}%
+                   %{--url="${[controller: 'import', action: 'addToRecordFolder']}"--}%
+                   %{--params="${[recordId: record.id, entityCode: record.entityCode()]}">--}%
+    %{--Add to record folder--}%
+%{--</uploader:uploader>--}%
+
 %{--ToDo--}%
         <g:if test="${record.entityCode().length() == 120 && mobileView != 'true'}">
             <div style="display: inline; text-align: right;">
@@ -1142,7 +1181,8 @@ Authors: ${authors}
 </g:if>
 
         <g:if test="${record.class.declaredFields.name.contains('blog')}">
-
+                                                                     <br/>
+                                                                     <br/>
             &nbsp;
 
             <g:set value="blog" var="field"></g:set>
@@ -1161,6 +1201,15 @@ Authors: ${authors}
                 jQuery("#${field}${record.id}").editable();
             </script>
 
+            &nbsp;
+            <g:remoteLink controller="operation" action="pandoc" id="${record.id}"
+                          params="[entityCode: entityCode]"
+                          update="postResult${record?.id}"
+                          title="Publish record"
+                          class="fg-button ui-widget ui-state-default ui-corner-all">
+                pandoc
+            </g:remoteLink>
+                            &nbsp;
 
                 <g:if test="${record.blog?.code && record.descriptionHTML}">
                     <g:remoteLink controller="generics" action="publish" id="${record.id}"
@@ -1266,16 +1315,6 @@ x
 
 %{--Working--}%
 %{----}%
-        %{--<uploadr:add name="uploader${entityCode}${record.id}${new Date().format('HHmmssSSS')}" controller="import" action="upload" path="${typeSandboxPath}"--}%
-                     %{--direction="up" maxVisible="5" unsupported="/nibras/upload/warning">--}%
-            %{--Upload--}%
-        %{--</uploadr:add>--}%
-
-
-
-
-        %{--params="[variableTwo: 'foo', variableThree: 'bar', variableFour: 4, myObject: someObject]"--}%
-        %{--             model="[booleanOne:true, variableTwo: 'foo', variableThree: 'bar', variableFour: 4, myObject: someObject]"--}%
 
 
         <br/>
@@ -1286,3 +1325,8 @@ x
 <div id="notificationArea"></div>
 
 <r:layoutResources/>
+
+<script type="text/javascript">
+//jQuery('.uploadr[name=uploader]').data('uploadr').set('path', 'd:/test');
+jQuery('#spinner2').hide();
+</script>

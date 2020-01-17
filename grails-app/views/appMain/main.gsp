@@ -27,7 +27,9 @@
     %{--<b style="color: white">--}%
 
 
-    <title style="direction: rtl; text-align: right;">${OperationController.getPath('app.name') ?: 'Nibras PKM'}
+    <title style="direction: rtl; text-align: right;">
+
+    ${OperationController.getPath('app.name') ?: 'Nibras PKM'}
     %{--<g:meta name="app.version"/>--}%
 
 

@@ -516,4 +516,8 @@ class ImportController {
     def editBox() {
         render(template: '/reports/editBoxShow', model: [])
     }
+
+    def addToRecordFolder2(){
+        println params.dump()
+    }
 } // end of class

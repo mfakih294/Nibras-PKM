@@ -10,7 +10,7 @@
 + '<div class="notice-body">'
 //+ '<img src="../static/images/icons/info.png"/>'
 //+ '<h3></h3>'
-+ '<p>${message}</p>'
++ '<p>${event}</p>'
 + '</div>'
 + '<div class="notice-bottom">'
 + '</div>'
@@ -23,7 +23,7 @@
   //         }
   // );
 
-  jQuery.achtung({message: "${message}", timeout: 2, animateClassSwitch: true, showEffectDuration: 500, hideEffectDuration: 700});
+  jQuery.achtung({message: "${event}", timeout: 2, animateClassSwitch: true, showEffectDuration: 500, hideEffectDuration: 700});
 
 
 
