@@ -164,7 +164,7 @@
             myLayout = $('body').layout({
                 west__size: 300,
                 east__size: 380,
-                // east__initClosed: true,
+                 west__initClosed: true,
                 east__togglerContent_closed: '<<',
                 // RESIZE Accordion widget when panes resize
                 west__onresize: $.layout.callbacks.resizePaneAccordions,
@@ -181,10 +181,10 @@
 
                 , east__spacing_open: 5		// no resizer-bar when open (zero height)
                 , east__spacing_closed: 25		// big resizer-bar when open (zero height)
-                , west__spacing_open: 0		// no resizer-bar when open (zero height)
+                , west__spacing_open: 5		// no resizer-bar when open (zero height)
                 , west__spacing_closed: 15		// big resizer-bar when open (zero height)
 //            , west__initClosed: true
-                , west__slideTrigger_open: 'mouseover'
+                , west__slideTrigger_open: 'click'
                 , east__slideTrigger_open: 'mouseover'
 
 
@@ -506,11 +506,7 @@ $("#accordionCenter").accordion({
             }
 
 
-            function openNoteTaker()  {
-                window.open('/nibras/page/appDaftar', '',
-                        'height=200,width=400,chrome=yes,scrollbars=yes, titlebar=no, toolbar=no, menubar=no, location=no, status=no, directories=no, resizable=yes');
 
-            }
 
 //            Mousetrap.bindGlobal('f2', function (e) {
 //      jQuery('#quickAddXcdSubmit').click();

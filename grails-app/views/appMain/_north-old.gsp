@@ -114,7 +114,7 @@
 
         <g:textField name="input" id="quickAddTextFieldBottomTop" value=""
                      autocomplete="off"
-                     style="display: inline;  width: 600px !important; ${org.codehaus.groovy.grails.commons.ConfigurationHolder.config.production.data == 'no' ? 'background: rgba(255, 59, 0, 0.78); color: white' : ''}"
+                     style="display: inline;  width: 600px !important; background: #E5F6FE; color: white; border: 1px solid #003a69"
                      placeholder="Command bar"
                      onkeyup="if (jQuery('#quickAddTextFieldBottomTop').val().search(';')== -1){jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))}"
                      onfocus="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))"

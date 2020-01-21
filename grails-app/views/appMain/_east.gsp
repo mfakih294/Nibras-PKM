@@ -847,4 +847,11 @@
             'writing.id': {loadingMessage: ''}
         }
     });
+
+    function openNoteTaker()  {
+        window.open('/nibras/page/appDaftar', '',
+                'height=200,width=400,chrome=yes,scrollbars=yes, titlebar=no, toolbar=no, menubar=no, location=no, status=no, directories=no, resizable=yes');
+
+    }
+
 </script>

@@ -5,8 +5,6 @@
                          class="ui-corner-all">
 
                 <i>${t?.summary}</i>
-
-
             <g:remoteLink controller="generics" action="removeContactFromRecord" id="${instance.id}"
                           update="contacts${entity}${instance.id}"
                           params="[tagId: t.id, recordId: instance.id, entityCode: entity]"

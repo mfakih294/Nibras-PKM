@@ -18,7 +18,7 @@
 </div>
 
 <div class="ui-layout-south footerRegion"
-     style="font-size: 12px; margin-top: 10px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
+     style="font-size: 12px; margin-top: 10px; margin-left: 20px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
     <g:render template="/appMain/south" model="[ips: ips]"/>
 
 </div>
@@ -73,7 +73,7 @@
 %{--                <span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
 %{--                title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
                 %{--<h5>Last plan</h5>--}%
-                <g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>
+                %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
                 <g:render template='/reports/homepageSavedSearches'/>
                 %{--</span>--}%
 
@@ -116,7 +116,7 @@
 
                     <g:textField name="input" value="" id="testField2"
                                  autocomplete="off"
-                                 style="display: inline;  font-family: tahoma ; width: 100% !important;"
+                                 style="display: inline;  font-family: tahoma ; width: 100% !important; border: 1px solid #003a69"
                                  placeholder=""
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
@@ -143,7 +143,7 @@
 
                     <g:textField name="input" value="" id="testField3"
                                  autocomplete="off"
-                                 style="display: inline;  font-family: tahoma ; width: 100% !important;"
+                                 style="display: inline;  font-family: tahoma ; width: 100% !important;  border: 1px solid #003a69"
                                  placeholder=""
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
@@ -267,7 +267,7 @@
 
             <g:textField name="input" id="quickAddTextFieldBottomTop" value=""
                          autocomplete="off"
-                         style="display: inline; margin-top: 4px; width: 100% !important;"
+                         style="display: inline; margin-top: 4px; width: 100% !important;  border: 1px solid #003a69"
                          placeholder="Command prompt..."
                          onkeyup="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))"
                          onkeypress="jQuery('#notificationAreaHidden').load('/nibras/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"

@@ -102,36 +102,36 @@
                                     </script>
 
                                 </g:if>
-                            </td>
-                            <td>
 
                             %{--<g:if test="${session['showFullCard'] == 'on'  || showFull}">--}%
 
                             %{--<g:if test="${session['showFullCard'] == 'on'  || showFull}">--}%
                                 <g:if test="${record.class.declaredFields.name.contains('status')}">
-                                %{--<div style=" margin-top: 3px; padding-right: 1px;">--}%
-                                    <br/>
+                                <div style=" margin-top: 3px; padding-right: 1px;">
+                                    %{--<br/>--}%
                                     <g:set value="status" var="field"></g:set>
-
+                                     %{--<div style="margin-top: 6px !important;">--}%
                                     <a href="#" id="${field}${record.id}" class="${field}"
                                        data-type="select"
                                        data-value="${record[field]?.id}"
                                        data-name="${field}-${entityCode}"
                                        class="${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
-                                       style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px; float: right;"
+                                       style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 11px; font-style: italic; padding-left: 1px; padding-right: 1px; "
                                        data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                        data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
                                        data-title="Edit ${field}">
                                         ${record[field] ? '?' + record[field]?.code : '?'}
                                     </a>
-                                %{--</div>--}%
+                                </div>
                                     <script type="text/javascript">
                                         jQuery("#${field}${record.id}").editable();
                                     </script>
 
                                 </g:if>
 
+
                             </td>
+
 
 
                         </tr>
@@ -145,7 +145,7 @@
 
                     <td class="record-summary text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
-                        style="width: 98%; font-family: Arial; font-size: 14px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
+                        style="width: 98%; font-size: 14px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
 
                     %{--<g:remoteLink controller="generics" action="showDetails"--}%
                     %{--params="${[id: record.id, entityCode: entityCode]}"--}%
@@ -343,16 +343,16 @@
                                         ...
                                     </g:if>
                                     <g:if test="${record.summary}">
-                                        <span title="${record.summary}">
+                                        <span title="${record.summary}" style="font-family: Lato-Light !important;">
                                             <g:if test="${entityCode == 'E'}">
                                                 <br/>
                                             </g:if>
                                             <g:if test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code != 'repub'}">
                                                 <span style="font-size: big; color: darkgreen"> &copy; </span>
                                             </g:if>
-                                            <g:else  test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code == 'repub'}">
+                                            <g:elseif  test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code == 'repub'}">
                                                 <span style="font-size: big; color: darkred"> &copy; </span>
-                                            </g:else>
+                                            </g:elseif>
                                         %{--<bdi>--}%
                                             <pkm:summarize text="${record.summary ?: ''}"
                                                            length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/>
@@ -579,7 +579,7 @@
 
                                     <pkm:summarize text="${(record.title ?: '...')}"
                                                    length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/>
-                                    <i style="font-size: 12px; font-family: tahoma; color: #2d2d2d"><pkm:summarize
+                                    <i style="font-size: 12px; color: #2d2d2d"><pkm:summarize
                                             text="${record.author ?: ''}"
                                             length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/></i>
                                     ${record.publisher ?: ''}
@@ -663,6 +663,7 @@
 
 
                             <g:if test="${record.class.declaredFields.name.contains('description') && record.description}">
+                                <br/>
                                 <g:if test="${record.class.declaredFields.name.contains('language') && record.language}">
                                     <span class="${OperationController.getPath('repository.languages.RTL').contains(record.language) ? 'RTLText' : 'LRTText'}">
                                 </g:if>
@@ -841,11 +842,12 @@
                             </g:remoteLink>
                         </span>
 
-                        <g:if test="${record.class.declaredFields.name.contains('tags')}">
-                            &nbsp; <g:render template="/tag/tags" model="[instance: record, entity: entityCode]"/>
+                        <g:if test="${record.class.declaredFields.name.contains('tags') && record.tags}">
+                            <br/> &nbsp;
+                            <g:render template="/tag/tags" model="[instance: record, entity: entityCode]"/>
 
                         </g:if>
-                        <g:if test="${record.class.declaredFields.name.contains('contacts')}">
+                        <g:if test="${record.class.declaredFields.name.contains('contacts') && record.contacts}">
                             &nbsp; <g:render template="/tag/contacts" model="[instance: record, entity: entityCode]"/>
                         </g:if>
 

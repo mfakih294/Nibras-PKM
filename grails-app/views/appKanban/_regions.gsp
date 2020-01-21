@@ -58,199 +58,196 @@
 
         <div id="centralArea" class="common kanbanTables">
 
-        <h3>T / context</h3>
-        <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
-            <thead>
-            <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
-                    var="d">
-                <th>@<b>${d.code}</b></th>
-            </g:each>
-            </thead>
-            <tr>
+            <h3>T / context</h3>
+            <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
+                <thead>
                 <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
                         var="d">
-                    <td id="kanban">
-                        <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.context = ? order by orderInCourse asc',
-                                [d])}"
-                                var="p">
-                            <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                        </g:each>
-                    </td>
+                    <th>@<b>${d.code}</b></th>
                 </g:each>
-            </tr>
-        </table>
+                </thead>
+                <tr>
+                    <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
+                            var="d">
+                        <td id="kanban">
+                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.context = ? order by orderInCourse asc',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
+                        </td>
+                    </g:each>
+                </tr>
+            </table>
 
-        <h3>R G C / dept</h3>
+            <h3>R G C / dept</h3>
 
-        <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
+            <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
 
-            <thead>
-           <th></th>
-            <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                <th>d<b> ${d.code}</b></th>
-
-            </g:each>
-
-            </thead>
-
-
-            <tr>
-                <td>R*</td>
+                <thead>
+                <th></th>
                 <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                    <td style="background: #d4edda">
-                        <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.type.code = ? and p.course.department = ? order by orderInCourse asc',
-                                ["ebk", d])}"
-                                var="p">
-                            <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                        </g:each>
-                    </td>
+                    <th>d<b>${d.code}</b></th>
                 </g:each>
-            </tr>
-            <tr>
-                <td>G*</td>
-                <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                    <td style="background: #fff3cd">
-                        <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ? order by orderInCourse asc',
-                                [d])}"
-                                var="p">
-                            <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                        </g:each>
-                    </td>
-                </g:each>
-            </tr>
-            <tr>
-                <td>C*</td>
-                <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                    <td style="background: #d3e0d3">
-                        <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? and p.priority = 4 order by orderNumber asc',
-                                [d])}"
-                                var="p">
+                </thead>
 
-                            <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                        </g:each>
+                <tr>
+                    <td>R*</td>
+                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                        <td style="background: #d4edda">
+                            <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.type.code = ? and p.course.department = ? order by orderInCourse asc',
+                                    ["ebk", d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
+                        </td>
+                    </g:each>
+                </tr>
+                <tr>
+                    <td>G*</td>
+                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                        <td style="background: #fff3cd">
+                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ? order by orderInCourse asc',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
+                        </td>
+                    </g:each>
+                </tr>
+                <tr>
+                    <td>C*</td>
+                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                        <td style="background: #d3e0d3">
+                            <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? and p.priority = 4 order by orderNumber asc',
+                                    [d])}"
+                                    var="p">
 
-                    </td>
-                </g:each>
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
 
-            </tr>
+                        </td>
+                    </g:each>
 
-        </table>
+                </tr>
 
-
-        %{--<span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
-        %{--title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
-        %{--<h5>Last plan</h5>--}%
-        %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
-
-        %{--</span>--}%
-
-        %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
-        %{--<br/>--}%
-        %{--<br/>--}%
-        %{--Repository folder not found. Please choose an existing folder:--}%
-        %{--<br/>--}%
-        %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
-        %{--</g:if>--}%
+            </table>
 
 
-        %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
-        %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
-        %{--</g:if>--}%
+            %{--<span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
+            %{--title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
+            %{--<h5>Last plan</h5>--}%
+            %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
+
+            %{--</span>--}%
+
+            %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
+            %{--<br/>--}%
+            %{--<br/>--}%
+            %{--Repository folder not found. Please choose an existing folder:--}%
+            %{--<br/>--}%
+            %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
+            %{--</g:if>--}%
+
+
+            %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
+            %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
+            %{--</g:if>--}%
+        </div>
+
     </div>
 
-</div>
+
+
+
+    %{--<br/>--}%
+
+    %{--first commented one below was in action 14.03.2019 --}%
+    %{--<g:formRemote name="batchAdd2"  class="commandBarInPanel"--}%
+    %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+    %{--update="centralArea" style="display: inline"--}%
+    %{--before="jQuery('#testTitle4').text('[4]: ' + jQuery('#testField4').val());"--}%
+    %{--method="post">--}%
+    %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+    %{--<g:submitButton name="batch" value="Execute"--}%
+    %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
+    %{--id="quickAddXcdSubmitTop5"--}%
+    %{--class="fg-button ui-widget ui-state-default"/>--}%
+
+    %{--<g:textField name="input"  value="" id="testField4"--}%
+    %{--autocomplete="off"--}%
+    %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+    %{--placeholder=""--}%
+    %{--class="commandBarTexFieldTop"/>--}%
+    %{--</g:formRemote>--}%
 
 
 
 
-%{--<br/>--}%
+    %{--<g:formRemote name="batchAdd2"--}%
+    %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+    %{--update="centralArea" style="display: inline"--}%
+    %{--method="post">--}%
+    %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+    %{--<g:submitButton name="batch" value="Execute"--}%
+    %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
+    %{--id="quickAddXcdSubmitTop6"--}%
+    %{--class="fg-button ui-widget ui-state-default"/>--}%
 
-%{--first commented one below was in action 14.03.2019 --}%
-%{--<g:formRemote name="batchAdd2"  class="commandBarInPanel"--}%
-%{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-%{--update="centralArea" style="display: inline"--}%
-%{--before="jQuery('#testTitle4').text('[4]: ' + jQuery('#testField4').val());"--}%
-%{--method="post">--}%
-%{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-%{--<g:submitButton name="batch" value="Execute"--}%
-%{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
-%{--id="quickAddXcdSubmitTop5"--}%
-%{--class="fg-button ui-widget ui-state-default"/>--}%
+    %{--<g:textField name="input"  value=""--}%
+    %{--autocomplete="off"--}%
+    %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+    %{--placeholder=""--}%
+    %{--class="commandBarTexFieldTop"/>--}%
+    %{--</g:formRemote>--}%
 
-%{--<g:textField name="input"  value="" id="testField4"--}%
-%{--autocomplete="off"--}%
-%{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-%{--placeholder=""--}%
-%{--class="commandBarTexFieldTop"/>--}%
-%{--</g:formRemote>--}%
+    %{--<g:formRemote name="batchAdd2"--}%
+    %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+    %{--update="centralArea" style="display: inline"--}%
+    %{--method="post">--}%
+    %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+    %{--<g:submitButton name="batch" value="Execute"--}%
+    %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
+    %{--id="quickAddXcdSubmitTop7"--}%
+    %{--class="fg-button ui-widget ui-state-default"/>--}%
 
-
-
-
-%{--<g:formRemote name="batchAdd2"--}%
-%{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-%{--update="centralArea" style="display: inline"--}%
-%{--method="post">--}%
-%{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-%{--<g:submitButton name="batch" value="Execute"--}%
-%{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
-%{--id="quickAddXcdSubmitTop6"--}%
-%{--class="fg-button ui-widget ui-state-default"/>--}%
-
-%{--<g:textField name="input"  value=""--}%
-%{--autocomplete="off"--}%
-%{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-%{--placeholder=""--}%
-%{--class="commandBarTexFieldTop"/>--}%
-%{--</g:formRemote>--}%
-
-%{--<g:formRemote name="batchAdd2"--}%
-%{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-%{--update="centralArea" style="display: inline"--}%
-%{--method="post">--}%
-%{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-%{--<g:submitButton name="batch" value="Execute"--}%
-%{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
-%{--id="quickAddXcdSubmitTop7"--}%
-%{--class="fg-button ui-widget ui-state-default"/>--}%
-
-%{--<g:textField name="input" value=""--}%
-%{--autocomplete="off"--}%
-%{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-%{--placeholder=""--}%
-%{--class="commandBarTexFieldTop"/>--}%
-%{--</g:formRemote>--}%
+    %{--<g:textField name="input" value=""--}%
+    %{--autocomplete="off"--}%
+    %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+    %{--placeholder=""--}%
+    %{--class="commandBarTexFieldTop"/>--}%
+    %{--</g:formRemote>--}%
 
 
-%{--<h6 style="text-aling: center"><a href="#" id="testTitle5">--}%
-%{--5--}%
-%{--</a></h6>--}%
+    %{--<h6 style="text-aling: center"><a href="#" id="testTitle5">--}%
+    %{--5--}%
+    %{--</a></h6>--}%
 
-%{--<div id=5 class="common" style="">--}%
-%{--<div id="inner5" class="common" style="">--}%
-%{--</div>--}%
+    %{--<div id=5 class="common" style="">--}%
+    %{--<div id="inner5" class="common" style="">--}%
+    %{--</div>--}%
 
-%{--<g:formRemote name="batchAdd5"  class="commandBarInPanel"--}%
-%{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-%{--update="centralArea" style="display: inline"--}%
-%{--before="jQuery('#testTitle5').text('[5]: ' + jQuery('#testField5').val());"--}%
-%{--method="post">--}%
-%{--<g:hiddenField name="sth5" value="${new java.util.Date()}"/>--}%
-%{--<g:submitButton name="batch" value="Execute"--}%
-%{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
+    %{--<g:formRemote name="batchAdd5"  class="commandBarInPanel"--}%
+    %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+    %{--update="centralArea" style="display: inline"--}%
+    %{--before="jQuery('#testTitle5').text('[5]: ' + jQuery('#testField5').val());"--}%
+    %{--method="post">--}%
+    %{--<g:hiddenField name="sth5" value="${new java.util.Date()}"/>--}%
+    %{--<g:submitButton name="batch" value="Execute"--}%
+    %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
 
-%{--id="quickAddXcdSubmitTop8"--}%
-%{--class="fg-button ui-widget ui-state-default"/>--}%
+    %{--id="quickAddXcdSubmitTop8"--}%
+    %{--class="fg-button ui-widget ui-state-default"/>--}%
 
-%{--<g:textField name="input"  value=""--}%
-%{--autocomplete="off"--}%
-%{--id="testField5"--}%
-%{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-%{--placeholder=""--}%
-%{--class="commandBarTexFieldTop"/>--}%
-%{--</g:formRemote>--}%
+    %{--<g:textField name="input"  value=""--}%
+    %{--autocomplete="off"--}%
+    %{--id="testField5"--}%
+    %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+    %{--placeholder=""--}%
+    %{--class="commandBarTexFieldTop"/>--}%
+    %{--</g:formRemote>--}%
 
-%{--</div>--}%
+    %{--</div>--}%
 
 </div>
 %{--<hr/>--}%

@@ -109,7 +109,7 @@
 <b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
 <br/>
 <br/>
-<uploadr:add id="uploader" name="uploader" controller="import" action="upload" path="${typeSandboxPath}"
+<uploadr:add id="uploader${typeSandboxPath}${new Date()?.format('ddMMyyyyHHmmss')}" name="uploader${typeSandboxPath}${new Date()?.format('ddMMyyyyHHmmss')}" controller="import" action="upload" path="${typeSandboxPath}"
              placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
              noSound="true"
              direction="down" maxVisible="5" unsupported="/nibras/upload/warning" maxConcurrentUploads="1" class="demo">
