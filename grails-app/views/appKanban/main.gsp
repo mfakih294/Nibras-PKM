@@ -160,8 +160,8 @@
                 west__onresize: $.layout.callbacks.resizePaneAccordions,
                 east__onresize: $.layout.callbacks.resizePaneAccordions,
                 onresize: $.layout.callbacks.resizePaneAccordions,
-                north__closable: false,
-                south__closable: false,
+                north__closable: true,
+                south__closable: true,
                 north__spacing_closed: 5		// big resizer-bar when open (zero height)
                 , north__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
                 , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
@@ -173,7 +173,10 @@
                 , east__spacing_closed: 25		// big resizer-bar when open (zero height)
                 , west__spacing_open: 0		// no resizer-bar when open (zero height)
                 , west__spacing_closed: 15		// big resizer-bar when open (zero height)
-//            , west__initClosed: true
+            , north__initClosed: true
+            , south__initClosed: true
+            , west__initClosed: true
+                , east__initClosed: true
                 , west__slideTrigger_open: 'mouseover'
                 , east__slideTrigger_open: 'mouseover'
 
@@ -418,9 +421,9 @@ $("#accordionCenter").accordion({
             // document.forms.quickAddForm['submit'].disabled = true;
 
 
-            jQuery(window).bind('beforeunload', function () {
-                return 'Are you sure you want to leave the application?';
-            });
+//            jQuery(window).bind('beforeunload', function () {
+//                return 'Are you sure you want to leave the application?';
+//            });
 
 
             jQuery.ajaxSetup({

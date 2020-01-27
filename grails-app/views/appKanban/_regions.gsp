@@ -15,21 +15,18 @@
 
 <div class="ui-layout-south footerRegion"
      style="font-size: 11px; margin-top: 9px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
-
     <g:render template="/appMain/south"/>
 </div>
 
 
 <div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
-
     %{--<div class="ui-layout-content ui-widget-content">--}%
-
     <g:render template="/appKanban/east"/>
 </div>
 
 
 <div class="ui-layout-center appBkg"
-     style="margin-top: 2px !important; margin-bottom: 2px !important; background: white; overflow-y: scroll; width: 96% !important;"
+     style="margin-top: 2px !important; margin-bottom: 2px !important; background: white; overflow-y: scroll; width: 98% !important;"
      onmouseover="jQuery('#hintArea').html('')">
     %{--ToDo: display none?!--}%
     %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%
@@ -41,7 +38,6 @@
 
 
     <div id="searchArea" class="nonPrintable">
-
     </div>
 
     <div id="spinner2" style="display:none; z-index: 10000 !important">
@@ -57,16 +53,17 @@
     <div id="inner1" class="common" style="">
 
         <div id="centralArea" class="common kanbanTables">
-
-            <h3>T / context</h3>
+            %{--<h3>T / context</h3>--}%
             <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
                 <thead>
+                <th></th>
                 <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
                         var="d">
                     <th>@<b>${d.code}</b></th>
                 </g:each>
                 </thead>
                 <tr>
+                   <td style="background: darkgreen"></td>
                     <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
                             var="d">
                         <td id="kanban">
@@ -79,9 +76,7 @@
                     </g:each>
                 </tr>
             </table>
-
-            <h3>R G C / dept</h3>
-
+            %{--<h3>R G C / dept</h3>--}%
             <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
 
                 <thead>
@@ -92,9 +87,9 @@
                 </thead>
 
                 <tr>
-                    <td>R*</td>
+                    <td style="background: #d4edda">R*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td style="background: #d4edda">
+                        <td>
                             <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.type.code = ? and p.course.department = ? order by orderInCourse asc',
                                     ["ebk", d])}"
                                     var="p">
@@ -104,9 +99,9 @@
                     </g:each>
                 </tr>
                 <tr>
-                    <td>G*</td>
+                    <td style="background: #fff3cd">G*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td style="background: #fff3cd">
+                        <td >
                             <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ? order by orderInCourse asc',
                                     [d])}"
                                     var="p">
@@ -116,13 +111,12 @@
                     </g:each>
                 </tr>
                 <tr>
-                    <td>C*</td>
+                    <td style="background: #d3e0d3">C*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td style="background: #d3e0d3">
+                        <td >
                             <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? and p.priority = 4 order by orderNumber asc',
                                     [d])}"
                                     var="p">
-
                                 <g:render template="/gTemplates/box" model="[record: p]"></g:render>
                             </g:each>
 
@@ -320,5 +314,9 @@
 
     });
 
+//    setTimeout(location.reload(), 300000);  // executed once
+    setTimeout(function() {
+        window.location.href = window.location;
+    }, 300000);
 
 </script>

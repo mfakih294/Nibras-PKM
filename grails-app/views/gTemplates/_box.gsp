@@ -6,12 +6,12 @@
     <g:if test="${record}">
         <table width="99%;" border="0"
                class="text${record.language}"
-               style="border-collapse: collapse; -moz-border-radius: 6px; margin: 1px;; padding-bottom: 1px;">
+               style="border-collapse: collapse; border: ${record.priority ? record.priority - 1 : 1}px darkslategray solid; -moz-border-radius: 6px; margin: 1px; padding-bottom: 1px;">
 
             %{--<!--Id: ${plannerInstance.id} -->--}%
 
-            <tr style="background: #f1f1eb; border:0.5px solid #cccccc; padding: 0px;"
-                class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}">
+            <tr style="${!'GTP'.contains(record.entityCode()) ? 'background: #f1f1eb; border:0.5px solid #cccccc;' : '' } padding: 0px;"
+                class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''} ${'GTP'.contains(record.entityCode()) ? record.status?.style : ''}">
 
                 <td style="font-size: 0.9em; padding: 3px; line-height: 1.1em;"
                     class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
@@ -200,6 +200,7 @@
 
                 </td>
             </tr>
+            <g:if test="${expanded}">
             <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important;" >
                 <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
 
@@ -230,6 +231,7 @@
                 </td>
 
             </tr>
+            </g:if>
             %{--<g:if test="${'CGR'.contains(record.entityCode()) && record.percentCompleted}">--}%
             %{--<tr>--}%
             %{--<td colspan="2"  style="padding: 0; margin: 0" class="text${record.language}">--}%
