@@ -1617,6 +1617,7 @@ past.each(){
         if (!j.hasErrors()) {
             j.save(flash: true)
 //            render 'Saved with id: ' + ' ' + j.id + ': ' + j.summary
+            //render (template: '/layouts/addToCalendar', model: [record: j])
             render(template: '/gTemplates/box', model: [record: j])
         } else {
             render 'Problem saving the entry'

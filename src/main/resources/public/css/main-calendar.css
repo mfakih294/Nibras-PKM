@@ -1,0 +1,13 @@
+
+
+.fc-event-container
+.fc-content
+.fc-title {
+    display: inline  !important;;
+}
+.fc-event-container
+.fc-content .fc-time {
+    display: inline  !important;;
+    font-weight: bold !important;
+    text-decoration: underline;
+}

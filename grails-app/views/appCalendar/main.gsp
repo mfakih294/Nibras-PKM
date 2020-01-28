@@ -46,7 +46,7 @@
 
   <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main4.js')}"></script>
 
-    %{--<link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main.css')}"/>--}%
+    <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main-calendar.css')}"/>
 
 
   <script>
@@ -138,7 +138,11 @@
 
 //          var title = window.prompt('Event title or command (e.g. p -- title):');
 
-          jQuery('#login-form').modal();
+          var modal = jQuery('#login-form').modal();
+          $('#login-form').on($.modal.AFTER_CLOSE, function(event, modal) {
+              window.location.href = window.location;
+          });
+
 //
           jQuery('#title').val('');
           jQuery('#description').val('');
@@ -308,6 +312,7 @@
     <g:formRemote name="batchAdd2" class="commandBarInPanel"
                   url="[controller: 'operation', action: 'addFromCalendar']"
                   update="logAreaModal"
+
                   method="post">
           <table border="0">
               <tr>

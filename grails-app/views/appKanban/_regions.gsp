@@ -84,6 +84,7 @@
                 <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
                     <th>d<b>${d.code}</b></th>
                 </g:each>
+
                 </thead>
 
                 <tr>

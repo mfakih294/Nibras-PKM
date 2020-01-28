@@ -267,7 +267,7 @@
 
             <g:textField name="input" id="quickAddTextFieldBottomTop" value=""
                          autocomplete="off"
-                         style="display: inline; margin-top: 4px; width: 100% !important;  border: 1px solid #003a69"
+                         style="display: inline; margin-top: 4px; width: 100% !important;  border: 1px solid darkgray"
                          placeholder="Command prompt..."
                          onkeyup="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))"
                          onkeypress="jQuery('#notificationAreaHidden').load('/nibras/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"

@@ -233,7 +233,7 @@ class ExportController {
                             start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.startDate),
                             end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate ?: it.startDate),
                             //it.type?.name +
-                            title          : StringUtils.abbreviate(title, 40),
+                            title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
                             backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
                             borderColor    : 'darkgreen',
@@ -256,7 +256,7 @@ class ExportController {
                             start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.startDate),
                             end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate ?: it.startDate),
                             //it.type?.name +
-                            title          : StringUtils.abbreviate(title, 40),
+                            title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
                             backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
                             borderColor    : 'darkred',
