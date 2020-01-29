@@ -236,7 +236,7 @@ class ExportController {
                             title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
                             backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'darkgreen',
+                            borderColor    : 'darkgrey',
                             textColor      : 'black',//it.type?.style ?: '#515150',
 
                             url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=J',
@@ -259,7 +259,7 @@ class ExportController {
                             title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
                             backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'darkred',
+                            borderColor    : 'darkgreen',
                             textColor      : 'black',//it.type?.style ?: '#515150',
 
                             url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=P',

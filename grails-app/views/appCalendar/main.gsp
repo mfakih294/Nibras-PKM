@@ -58,10 +58,11 @@
       isRTL: false,
     //  locale: 'ar',
       plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
-
-        height: 'parent',
+        aspectRatio: 1,
+        contentHeight: 800,
+        height: 700,
       fixedWeekCount: false,
-      // shouldRedistribute: true,
+//       shouldRedistribute: true,
       header: {
         left: 'prev,next today',
         center: 'title',
@@ -72,10 +73,10 @@
           buttonText: 'Month',
           columnHead: true
         },timeGridWeek: {
-          buttonText: 'Week (grid)',
+          buttonText: 'Grid Week',
           columnHead: true
         },dayGridWeek: {
-          buttonText: 'Week (list)',
+          buttonText: 'List Week',
           columnHead: true
         }
 //        ,listWeek: {
@@ -121,10 +122,10 @@
         // day:''  // Monday 19.07
       // },
       // lazyFetching: true,
-      // firstHour: 5,
+       firstHour: '09:00',
       // minTime: 5,
       minTime: '05:00',
-      slotDuration: '00:30',
+      slotDuration: '00:60',
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,
@@ -140,7 +141,9 @@
 
           var modal = jQuery('#login-form').modal();
           $('#login-form').on($.modal.AFTER_CLOSE, function(event, modal) {
-              window.location.href = window.location;
+//              window.location.href = window.location;
+              calendar.refetchEvents()
+
           });
 
 //
@@ -255,7 +258,7 @@
 
   }
   td{
-    direction: rtl;
+    /*direction: rtl;*/
     text-align: right;
   }
 
@@ -278,12 +281,12 @@
   }
 
 
-  .prompt  {
-      width: 500px;
-      height: 200px;
-      background: black;
-      color: #FFA500;
-  }
+  /*.prompt  {*/
+      /*width: 500px;*/
+      /*height: 200px;*/
+      /*background: black;*/
+      /*color: #FFA500;*/
+  /*}*/
 
   /*.hover-end{padding:0;margin:0;font-size:75%;text-align:center;position:absolute;bottom:0;width:100%;opacity:.8}*/
 
@@ -301,7 +304,7 @@
 
 </div>
 
-  <div id="calendar-container" style="margin: 10px; text-align: right;">
+  <div id="calendar-container" style="margin: 10px; text-align: left; height: 99%">
     <div id='calendar' ></div>
   </div>
 

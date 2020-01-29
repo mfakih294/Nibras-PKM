@@ -26,6 +26,17 @@
                       noSelection="${['null': 'No book']}"/>
         </td>
     </g:if>
+
+            <g:if test="${fields.contains('contact')}">
+                <td>
+                    <label>Contact</label>
+                    <g:select name="contact.id" class="ui-corner-all"
+                              from="${sources}" optionKey="id"
+                              value="${record?.contact?.id}"
+                              noSelection="${['null': 'No person']}"/>
+                </td>
+            </g:if>
+
     <g:if test="${fields.contains('department')}">
         <td>
             <label>Department</label>
@@ -108,6 +119,27 @@
                 })
             </script>
 
+        </g:if>
+
+
+        <g:if test="${fields.contains('writing')}">
+            <td>
+                <label>Writing</label>
+                <g:select name="writing.id" from="${writings}" style="width: 150px;"
+                          optionKey="id" optionValue="summary"
+                          id="chosenWriting${record?.id}"
+                          value="${record?.writing?.id ?: (session['writingId'] ?: null)}"
+                          noSelection="['null': 'No writing']"/>
+
+
+                <script type="text/javascript">
+                    jQuery("#chosenWriting${record?.id}").chosen({
+                        allow_single_deselect: true,
+                        no_results_text: "None found"
+                    })
+                </script>
+
+            </td>
         </g:if>
 
 
@@ -241,14 +273,34 @@
     </tr>
     <tr>
 
-    <g:if test="${ker.OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
-        <g:if test="${fields.contains('legacyTitle')}">
-            <td colspan="1">
-                <g:textField placeholder="Legacy title" name="legacyTitle" title="Legacy title"
-                             value="${record?.legacyTitle}" style="width: 95%;"/>
+
+        <g:if test="${fields.contains('title')}">
+            <td colspan="2">
+                <label>Title</label>
+                <g:textField placeholder="Title" name="title" title="title" value="${record?.title}"
+                             style="width: 95%;"/>
+
+                <g:if test="${fields.contains('authorInfo')}">
+                    <label>Author info</label>
+                    <g:textField placeholder="Author infor" name="authorInfo" title="Author info"
+                                 value="${record?.authorInfo}"
+                                 style="width: 95%;"/>
+                </g:if>
+
+
+                <g:if test="${ker.OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                    <g:if test="${fields.contains('legacyTitle')}">
+                        <br/>
+                        <label>Legacy title</label>
+                        <g:textField placeholder="Legacy title" name="legacyTitle" title="Legacy title"
+                                     value="${record?.legacyTitle}" style="width: 95%;"/>
+
+                    </g:if>
+                </g:if>
+
             </td>
         </g:if>
-        </g:if>
+
 
         <g:if test="${fields.contains('isbn')}">
             <td colspan="1">
@@ -289,15 +341,7 @@
         %{--</tr>--}%
 
         %{--<tr>--}%
-            <g:if test="${fields.contains('contact')}">
-                <td>
-                    <label>Contact</label>
-                    <g:select name="contact.id" class="ui-corner-all"
-                              from="${sources}" optionKey="id"
-                              value="${record?.contact?.id}"
-                              noSelection="${['null': 'No person']}"/>
-                </td>
-            </g:if>
+
 
             <g:if test="${fields.contains('author')}">
                 <td>
@@ -325,20 +369,7 @@
 
 
 
-            <g:if test="${fields.contains('title')}">
-                <td colspan="2">
-                    <label>Title</label>
-                    <g:textField placeholder="Title" name="title" title="title" value="${record?.title}"
-                                 style="width: 95%;"/>
 
-                    <g:if test="${fields.contains('authorInfo')}">
-                        <label>Author info</label>
-                        <g:textField placeholder="Author infor" name="authorInfo" title="Author info"
-                                     value="${record?.authorInfo}"
-                                     style="width: 95%;"/>
-                    </g:if>
-                </td>
-            </g:if>
         </tr>
         <tr>
             <g:if test="${fields.contains('publisher')}">
@@ -422,25 +453,6 @@
         %{--</td>--}%
         %{--</g:if>--}%
 
-            <g:if test="${fields.contains('writing')}">
-                <td>
-                    <label>Writing</label>
-                    <g:select name="writing.id" from="${writings}" style="width: 150px;"
-                              optionKey="id" optionValue="summary"
-                              id="chosenWriting${record?.id}"
-                              value="${record?.writing?.id ?: (session['writingId'] ?: null)}"
-                              noSelection="['null': 'No writing']"/>
-
-
-                    <script type="text/javascript">
-                        jQuery("#chosenWriting${record?.id}").chosen({
-                            allow_single_deselect: true,
-                            no_results_text: "None found"
-                        })
-                    </script>
-
-                </td>
-            </g:if>
 
         </tr>
 
@@ -499,42 +511,54 @@
 
 
 
-            <g:if test="${fields.contains('completedOn')}">
-                <td>
 
-                    <label>Comp. on</label>
-                    <pkm:datePicker name="completedOn" placeholder="Completed on"
-                                    value="${record?.completedOn}"/>
-                </td>
-            </g:if>
         </tr>
         <tr>
 
             <g:if test="${fields.contains('startDate')}">
                 <td>
+              <table>
+                  <tr>
+                      <td>   <label>Start date</label>
+                          <pkm:datePicker placeholder="Start date" name="startDate" value="${record?.startDate}"/>
+                      </td>
+                      <td> <label>time</label>
 
-                    <label>Start date</label>
-                    <pkm:datePicker placeholder="Start date" name="startDate" value="${record?.startDate}"/>
+                          <g:textField name="startTime" style="width:60px;" placeholder="Start time" title="Start time"
+                                       value="${record?.startDate ? record?.startDate?.format('HH.mm') : '00.00'}"/></td>
+                  </tr>
+              </table>
 
-                    <label>time</label>
 
-                    <g:textField name="startTime" style="width:60px;" placeholder="Start time" title="Start time"
-                                 value="${record?.startDate ? record?.startDate?.format('HH.mm') : '00.00'}"/>
                 </td>
             </g:if>
 
             <g:if test="${fields.contains('endDate')}">
                 <td>
 
-                    <label>End date</label>
-                    <pkm:datePicker name="endDate" placeholder="End date" id="asdfasdf"
-                                    value="${record?.endDate}"/>
-                    <label>time</label>
-                    <g:textField name="endTime" style="width:60px;" placeholder="Time" title="End time"
-                                 value="${record?.endDate ? record?.endDate?.format('HH.mm') : '00.00'}"/>
+                    <table>
+                        <tr>
+                            <td> <label>End date</label>
+                                <pkm:datePicker name="endDate" placeholder="End date" id="asdfasdf"
+                                                value="${record?.endDate}"/></td>
+                            <td> <label>time</label>
+                                <g:textField name="endTime" style="width:60px;" placeholder="Time" title="End time"
+                                             value="${record?.endDate ? record?.endDate?.format('HH.mm') : '00.00'}"/></td>
+                        </tr>
+                    </table>
+
+
                 </td>
             </g:if>
 
+            <g:if test="${fields.contains('completedOn')}">
+                <td>
+
+                    <label>Completed on</label>
+                    <pkm:datePicker name="completedOn" placeholder="Completed on"
+                                    value="${record?.completedOn}"/>
+                </td>
+            </g:if>
         %{--<g:if test="${fields.contains('actualEndDate')}">--}%
         %{--<td>--}%
         %{--Actual end date<pkm:datePicker name="actualEndDate" placeholder="Actual end date" id="234rsdfsdf"--}%

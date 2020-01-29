@@ -10,8 +10,8 @@
 
             %{--<!--Id: ${plannerInstance.id} -->--}%
 
-            <tr style="${!'GTP'.contains(record.entityCode()) ? 'background: #f1f1eb; border:0.5px solid #cccccc;' : '' } padding: 0px;"
-                class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''} ${'GTP'.contains(record.entityCode()) ? record.status?.style : ''}">
+            <tr style="${!'GTP'.contains(record.entityCode()) ? 'background: #f1f1eb; border:0.5px solid #cccccc;' : record.status?.style} padding: 0px;"
+                class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}">
 
                 <td style="font-size: 0.9em; padding: 3px; line-height: 1.1em;"
                     class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
@@ -96,13 +96,16 @@
                         <div class="text${record.language}" style="display: inline; width: 100%">
                     </g:if>
 
-                    <span style="color: #003399;">
+                    <span style="color: #003399; direction: ltr; text-align: left;">
 
                         <g:if test="${'G'.contains(record.entityCode())}">
                             <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
                         </g:if>
                         <g:if test="${'T'.contains(record.entityCode())}">
-                            <i style="font-size: small">${record?.context?.code} ${record?.course?.code} ${record.department?.code}</i>&nbsp;
+                            <i style="font-size: small; ">
+                                %{--@${record?.context?.code} --}%
+                                c${record?.course?.code} d${record.department?.code}</i>&nbsp;
+                            ?${record.status?.code}
                             <sup>${record.plannedDuration ? record.plannedDuration + "''" : ''}</sup>
                         </g:if>
                         <g:if test="${'P'.contains(record.entityCode())}">

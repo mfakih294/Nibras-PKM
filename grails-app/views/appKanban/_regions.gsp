@@ -87,7 +87,7 @@
 
                 </thead>
 
-                <tr>
+           %{--     <tr>
                     <td style="background: #d4edda">R*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
                         <td>
@@ -98,7 +98,7 @@
                             </g:each>
                         </td>
                     </g:each>
-                </tr>
+                </tr>--}%
                 <tr>
                     <td style="background: #fff3cd">G*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
