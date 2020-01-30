@@ -48,7 +48,7 @@
 
 
                                 <script>
-                                    jQuery("#notificationAreaHidden").load('/nibras/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
+                                    jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
                                         jQuery("#${i.name.encodeAsMD5()}").attr('class', response);
                                     })
                                 </script>
@@ -91,7 +91,7 @@
 
 
                                 <script>
-                                    jQuery("#notificationAreaHidden").load('/nibras/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
+                                    jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
                                         jQuery("#${i.name.encodeAsMD5()}").attr('class', response);
                                     })
 

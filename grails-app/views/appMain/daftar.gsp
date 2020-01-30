@@ -91,7 +91,7 @@
 
     <script type="text/javascript">
 
-        //    $.address.state('/nibras/')
+        //    $.address.state('${request.contextPath}/')
         $.address.externalChange(function (event) {
             // do something depending on the event.value property, e.g.
             // $('#content').load(event.value + '.xml');
@@ -163,12 +163,12 @@
             jQuery.idleTimeout('#idletimeout', '#idletimeout a', {
             idleAfter: 10,
             pollingInterval: 10,
-            keepAliveURL: '/nibras/page/heartbeat',
+            keepAliveURL: '${request.contextPath}/page/heartbeat',
             serverResponseEquals: 'ok',
             onIdle: function () {
                 jQuery.ajax({
                     type: 'GET',
-                    url: '/nibras/page/heartbeat',
+                    url: '${request.contextPath}/page/heartbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
 //                    jQuery('body').append(html);
@@ -186,7 +186,7 @@
 //                confirm('Your session has timeout.');
                 jQuery.ajax({
                     type: 'GET',
-                    url: '/nibras/page/heartbeat',
+                    url: '${request.contextPath}/page/heartbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
 //                    jQuery('body').append(html);
@@ -203,14 +203,14 @@
  jQuery.idleTimeout('#importFileCount','#importFileCount', {
             idleAfter: 10,
             pollingInterval: 15,
-            keepAliveURL: '/nibras/page/importbeat',
+            keepAliveURL: '${request.contextPath}/page/importbeat',
             serverResponseEquals: 'ok',
      AJAXTimeout: 5,
      onTimeout: function () {
 //                confirm('Your session has timeout.');
                 jQuery.ajax({
                     type: 'GET',
-                    url: '/nibras/page/importbeat',
+                    url: '${request.contextPath}/page/importbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
                     jQuery('#importFileCount').text(html);
@@ -404,7 +404,7 @@
                   onComplete="jQuery('#descriptionDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
                   method="post">
 
-    %{--onkeyup="jQuery('#topDaftarArea').load('/nibras/indexCard/extractTitle/', {'typing': this.value})"--}%
+    %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
         <g:textArea cols="80" rows="12" placeholder="title (line 1) / details (line 2 - end)" name="description" id="descriptionDaftar"
 
                     value=""

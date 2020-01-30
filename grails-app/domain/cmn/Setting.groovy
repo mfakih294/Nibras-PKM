@@ -39,6 +39,7 @@ class Setting {  // entity id = 51
     }
 
     static mapping = {
+     //   table "SETTINGS"
         value(sqlType: 'longtext')
         summary(sqlType: 'longtext')
         description(sqlType: 'longtext')

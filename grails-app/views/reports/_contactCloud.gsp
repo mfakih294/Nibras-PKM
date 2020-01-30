@@ -8,7 +8,7 @@
     $.fn.editable.defaults.showbuttons = false;
     $('#tags').editable({
         type: 'select2',
-        url: '/nibras/operation/quickSave2',
+        url: '${request.contextPath}/operation/quickSave2',
                         pk: 123,
         onblur: 'ignore',
         emptytext: 'Tag...',
@@ -33,7 +33,7 @@
 //                return e.value;
 //            },
             ajax: {
-                url: '/nibras/operation/autoCompleteTagsJSON',
+                url: '${request.contextPath}/operation/autoCompleteTagsJSON',
                 dataType: 'json',
                 quietMillis: 0,
                 data: function (term, page) {

@@ -56,12 +56,12 @@
 
 
 &nbsp;
-    <a href="/nibras/generics/executeSavedSearch/65?reportType=cal" style="color: white !important" target="_blank">
+    <a href="${request.contextPath}/generics/executeSavedSearch/65?reportType=cal" style="color: white !important" target="_blank">
         <g:message code="ui.planner"></g:message>
 
     </a>
     &nbsp;
-    <a href="/nibras/generics/executeSavedSearch/79?reportType=cal" style="color: white !important" target="_blank">
+    <a href="${request.contextPath}/generics/executeSavedSearch/79?reportType=cal" style="color: white !important" target="_blank">
     <g:message code="ui.journal"></g:message>
 
     </a>

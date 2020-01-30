@@ -24,8 +24,8 @@
 						   data-value="${record[field]?.id}"
 						   data-name="${field}-${entityCode}"
 						   style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-						   data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-						   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+						   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+						   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 							${record[field] ? record[field]?.code : 'No dept.'}
 						</a>
 						<script type="text/javascript">
@@ -54,8 +54,8 @@
 			   data-name="${field}-${entityCode}"
 			   style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: bold; padding-left: 1px; padding-right: 1px;"
 
-			   data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-			   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+			   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+			   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 				${record.type?.code}
 			</a>
 
@@ -76,8 +76,8 @@
 					   data-name="${field}-${entityCode}"
 					   class="${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 					   style="${record.status ? record.status?.style : ''}; border: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-					   data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-					   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+					   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+					   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 						${record[field] ? record[field]?.code : 'No status'}
 					</a>
 					<script type="text/javascript">
@@ -98,8 +98,8 @@
 				   data-value="${record.recordId ?: null}"
 				   data-name="${field}-${entityCode}"
 				   style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-				   data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-				   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+				   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+				   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 					${record.recordId ? Writing.get(record.recordId): 'No wrt'}
 				</a>
 				<script type="text/javascript">
@@ -121,8 +121,8 @@
 					   data-value="${record[field]?.id}"
 					   data-name="${field}-${entityCode}"
 					   style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-					   data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-					   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+					   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+					   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 						${record[field] ? record[field] : 'No course'}
 					</a>
 					<script type="text/javascript">
@@ -158,8 +158,8 @@
 					<a href="#" id="${field}${record.id}" class="${field}" data-type="select"
 					   data-value="${record[field]?.id}"
 					   data-name="${field}-${record.entityCode()}"
-					   data-source="/nibras/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-					   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+					   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+					   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 						${record[field]?.code ?: 'No context'}
 					</a>
 					<script>
@@ -179,8 +179,8 @@
 					<a href="#" id="${field}${recordId}" class="${field}" data-type="select"
 					   data-value="${record[field] ?: 0}"
 					   data-name="${field}-${record.entityCode()}"
-					   data-source="/nibras/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-					   data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">
+					   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+					   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">
 						+${record[field] ?: ''}
 					</a>
 					<script>
@@ -345,11 +345,11 @@
 
 			<td class="record-selection">
 
-				%{--onchange="jQuery('#logRegion').load('/nibras/generics/select/${entityCode}${record.id}')"--}%
+				%{--onchange="jQuery('#logRegion').load('${request.contextPath}/generics/select/${entityCode}${record.id}')"--}%
 				<g:checkBox name="select-${record.id}-${entityCode}" title="Select record"
 							value="${session[entityCode + record.id] == 1}"
 
-							onclick="jQuery('#logRegion').load('/nibras/generics/select/${entityCode}${record.id}')"/>
+							onclick="jQuery('#logRegion').load('${request.contextPath}/generics/select/${entityCode}${record.id}')"/>
 				<!--a style="width: 10px; color: #000000"
            onclick="jQuery('#below${entityCode}Record${record.id}').html('')">&chi;</a-->
 
@@ -363,7 +363,7 @@
 					<g:if test="${!record.bookmarked}">
 						<a name="bookmark${record.id}${entityCode}" title="Toggle bookmark"
 						   value="${record.bookmarked}"
-						   onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/quickBookmark/${entityCode}-${record.id}')">
+						   onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}')">
 							<span class="icon-star-gm"></span>
 						</a>
 					</g:if>
@@ -371,7 +371,7 @@
 					<g:if test="${record.bookmarked}">
 						<a name="bookmark${record.id}${entityCode}" title="Toggle bookmark"
 						   value="${record.bookmarked}"
-						   onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/quickBookmark/${entityCode}-${record.id}')">
+						   onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}')">
 							<span class="icon-starred-gm"></span>
 						</a>
 

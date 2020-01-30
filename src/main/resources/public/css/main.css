@@ -90,13 +90,13 @@ html * {
 }
 
 .ui-layout-resizer-west {
-    background: #b1ada5 !important;
+    /*background: #b1ada5 !important;*/
     /*background: #fdfdfd !important;*/
     z-index: 200000 !important;
     padding: 1px !important;
     /*margin-right: 4px !important;*/
     border-radius: 2px;
-    width: 10px !important;
+    /*width: 10px !important;*/
 }
 
 .ui-layout-toggler-east{

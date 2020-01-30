@@ -267,11 +267,11 @@
 
             <g:textField name="input" id="quickAddTextFieldBottomTop" value=""
                          autocomplete="off"
-                         style="display: inline; margin-top: 4px; width: 100% !important;  border: 1px solid darkgray"
+                         style="display: inline; margin-top: 4px; margin-left: 0px !important; padding-left: 0px !important; width: 100% !important;  border: 1px solid darkgray"
                          placeholder="Command prompt..."
                          onkeyup="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))"
-                         onkeypress="jQuery('#notificationAreaHidden').load('/nibras/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"
-                         onfocus="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()));jQuery('#notificationAreaHidden').load('/nibras/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"
+                         onkeypress="jQuery('#notificationAreaHidden').load('${request.contextPath}/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"
+                         onfocus="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()));jQuery('#notificationAreaHidden').load('${request.contextPath}/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"
                          onblur="jQuery('#hintArea').html('')"
                          class=""/>
 
@@ -289,7 +289,7 @@
     jQuery("#chosenTagsArt").chosen({allow_single_deselect: true, no_results_text: "None found"});
 
     //    jQuery("#addXcdFormNgs").relatedSelects({
-    //        onChangeLoad: '/nibras/generics/fetchCoursesForDepartment',
+    //        onChangeLoad: '${request.contextPath}/generics/fetchCoursesForDepartment',
     //        defaultOptionText: '',
     //        selects: {
     //            'department.id': {loadingMessage: ''},

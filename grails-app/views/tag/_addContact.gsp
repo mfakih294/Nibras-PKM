@@ -15,8 +15,8 @@
     var bestPictures = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace
-        ,prefetch: '/nibras/operation/autoCompleteContactsJSON?date=${new Date().format('ddMMyyyHHMMss')}'
-       , remote: '/nibras/operation/autoCompleteContactsJSON2'
+        ,prefetch: '${request.contextPath}/operation/autoCompleteContactsJSON?date=${new Date().format('ddMMyyyHHMMss')}'
+       , remote: '${request.contextPath}/operation/autoCompleteContactsJSON2'
     });
 
     bestPictures.initialize();

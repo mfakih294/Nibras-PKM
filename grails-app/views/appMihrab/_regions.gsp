@@ -284,7 +284,7 @@
     jQuery("#chosenTagsArt").chosen({allow_single_deselect: true, no_results_text: "None found"});
 
     //    jQuery("#addXcdFormNgs").relatedSelects({
-    //        onChangeLoad: '/nibras/generics/fetchCoursesForDepartment',
+    //        onChangeLoad: '${request.contextPath}/generics/fetchCoursesForDepartment',
     //        defaultOptionText: '',
     //        selects: {
     //            'department.id': {loadingMessage: ''},
@@ -293,7 +293,7 @@
     //    });
 
     jQuery("#addArticleFormNgs").relatedSelects({
-        onChangeLoad: '/nibras/generics/fetchCoursesForDepartment',
+        onChangeLoad: '${request.contextPath}/generics/fetchCoursesForDepartment',
         defaultOptionText: '',
         selects: {
             'department.id': {loadingMessage: ''},
@@ -301,7 +301,7 @@
         }
     });
     jQuery("#addXcdFormNgs").relatedSelects({
-        onChangeLoad: '/nibras/generics/fetchWritingsForCourse',
+        onChangeLoad: '${request.contextPath}/generics/fetchWritingsForCourse',
         defaultOptionText: '',
         selects: {
             'course.id': {loadingMessage: ''},

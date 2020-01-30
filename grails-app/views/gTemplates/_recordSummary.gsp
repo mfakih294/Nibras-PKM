@@ -91,8 +91,8 @@
                                        data-name="${field}-${entityCode}"
                                        style="font-size: 12px; font-weight: normal;"
 
-                                       data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                       data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                       data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                       data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                        data-title="Edit ${field}">
                                         ${record?.type?.code ?'#' + record?.type?.code : '#'}
                                     </a>
@@ -117,8 +117,8 @@
                                        data-name="${field}-${entityCode}"
                                        class="${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
                                        style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 11px; font-style: italic; padding-left: 1px; padding-right: 1px; "
-                                       data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                       data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                       data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                       data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                        data-title="Edit ${field}">
                                         ${record[field] ? '?' + record[field]?.code : '?'}
                                     </a>
@@ -170,8 +170,8 @@
                     %{--<a href="#" id="${field}${record.id}" class="${field}" data-type="select" data-value="${record[field]?.id}"--}%
                     %{--style="${record.type ? record.type?.style : ''};font-size: 11px; font-weight: bold;margin-left: 5px;"--}%
                     %{--data-name="${field}-${entityCode}"--}%
-                    %{--data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"--}%
-                    %{--data-pk="${record.id}" data-url="/nibras/operation/quickSave2" data-title="Edit ${field}">--}%
+                    %{--data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"--}%
+                    %{--data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">--}%
                     %{--<br/>  ${record[field]?.code ?: ''}--}%
                     %{--</a>--}%
                     %{--</span>--}%
@@ -455,8 +455,8 @@
                                    data-type="select"
                                    data-value="${record[field]?.id}"
                                    data-name="${field}-${record.entityCode()}"
-                                   data-source="/nibras/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                   data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                    data-title="Edit ${field}">
                                     ${record[field]?.code ? '@' + record[field]?.code : '@'}
                                 </a>
@@ -1036,8 +1036,8 @@
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
                                            style=" border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 3px; padding-right: 3px;"
-                                           data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                           data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
                                             ${record[field] ? (record[field].code ? 'C' + record[field].code : 'C' + record.course) : 'c'}
                                         </a>
@@ -1055,8 +1055,8 @@
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
                                            style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 11px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-                                           data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                           data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
                                             ${record[field] ? (record[field].code ?: record.book?.title) : 'r'}
                                         </a>
@@ -1105,8 +1105,8 @@
                                            data-value="${record.recordId ?: null}"
                                            data-name="${field}-${entityCode}"
                                            style=" border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-                                           data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&recordId=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                           data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&recordId=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
                                             ${record.recordId && record.recordId != 'null' && record.entityCode == 'W' ? Writing.get(record.recordId.toLong()) : 'w'}
                                         </a>
@@ -1128,8 +1128,8 @@
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
                                            style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-                                           data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                           data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
                                             ${record[field] ? (record[field]) : 'g'}
                                         </a>
@@ -1163,8 +1163,8 @@
                                            data-value="${record[field]}"
                                            data-name="${field}-${entityCode}"
                                            style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-                                           data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                           data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
                                             ${record[field] ? (record[field]) : "'"}
                                         </a>
@@ -1179,42 +1179,6 @@
                                     </g:if>
 
                                 </span>
-
-                                <span id="${entityCode}CheckoutLog${record.id}"></span>
-
-
-
-                                <g:if test="${(entityCode == 'W') || entityCode == 'N'}">
-                                %{--|| entityCode == 'N'--}%
-                                %{--<g:remoteLink--}%
-                                %{--url="[controller: 'generics', action: 'convertMarkupToHtml', id: record.id, params: [entityCode: entityCode]]"--}%
-                                %{--update="3rdPanel"--}%
-                                %{--before="jQuery('#accordionEast').accordion({ active: 0});"--}%
-                                %{--class="actionLink"--}%
-                                %{--title="Convert to HTML">--}%
-                                %{--==--}%
-                                %{--</g:remoteLink>--}%
-
-                                    <g:remoteLink controller="generics" action="checkoutRecordText"
-                                                  id="${record.id}"
-                                                  params="[entityCode: entityCode]"
-                                                  update="${entityCode}CheckoutLog${record.id}"
-                                                  title="Checkout record">
-                                        out &crarr;
-                                    </g:remoteLink>
-
-                                </g:if>
-                                <g:if test="${entityCode == 'W'}">
-
-                                    <g:remoteLink controller="export" action="combineWritingNotes"
-                                                  id="${record.id}"
-                                                  params="[entityCode: entityCode]"
-                                                  update="${entityCode}CheckoutLog${record.id}"
-                                                  title="Compile writing with its notes">
-                                        cmp &crarr;
-                                    </g:remoteLink>
-
-                                </g:if>
 
 
 
@@ -1240,7 +1204,7 @@
                                     &nbsp;          <a name="bookmark${record.id}${entityCode}" title="priority++"
                                        value="${record.priority}"
                                        style="background: lightgrey"
-                                       onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/increasePriority/${entityCode}${record.id}')">
+                                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')">
                                         <b>p+</b>
                                     </a>
                                 %{--</g:if>--}%
@@ -1248,7 +1212,7 @@
                                 %{--<g:if test="${record.class.declaredFields.name.contains('priority')}">--}%
                                     <a name="bookmark${record.id}${entityCode}" title="priority--"
                                        value="${record.priority}"
-                                       onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/decreasePriority/${entityCode}${record.id}')">
+                                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')">
                                         <b>-</b>
                                     </a>
                                 </g:if>
@@ -1258,28 +1222,28 @@
                                        value="${record.endDate}"
                                        style="background: lightgrey"
                                        title="Increase end date and, if not set, set it to tomorrow"
-                                       onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/increaseEndDate/${entityCode}${record.id}')">
+                                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increaseEndDate/${entityCode}${record.id}')">
                                         e+
                                     </a>
                                     <a name="bookmark${record.id}${entityCode}"
                                        value="${record.endDate}"
                                        style="background: lightgrey"
                                        title="Set due date to today"
-                                       onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/makeEndDateToday/${entityCode}${record.id}')">
+                                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/makeEndDateToday/${entityCode}${record.id}')">
                                         0
                                     </a>        &nbsp;
                                     <a name="bookmark${record.id}${entityCode}"
                                        value="${record.endDate}"
                                        style="background: lightgrey"
                                        title="Decrease end date and, if not set, set it to yesterday"
-                                       onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/decreaseEndDate/${entityCode}${record.id}')">
+                                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreaseEndDate/${entityCode}${record.id}')">
                                         --
                                     </a>
                                     <a name="bookmark${record.id}${entityCode}"
                                              value="${record.endDate}"
                                              style="background: lightgrey"
                                              title="Clear end date"
-                                             onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/clearEndDate/${entityCode}${record.id}')">
+                                             onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/clearEndDate/${entityCode}${record.id}')">
                                     -
                                 </a>
                                 </g:if>
@@ -1393,8 +1357,8 @@
                                    data-type="select"
                                    data-value="${record[field] ?: 0}"
                                    data-name="${field}-${record.entityCode()}"
-                                   data-source="/nibras/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                   data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                                   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                    data-title="Edit ${field}">
                                     +${record[field] ?: ''}
                                 </a>
@@ -1522,8 +1486,8 @@
                                data-value="${record[field]?.id}"
                                data-name="${field}-${entityCode}"
                                style=" border-radius: 3px; font-size: 12px; font-weight: bold;font-style: italic; padding-left: 1px; padding-right: 1px;"
-                               data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                               data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+                               data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                               data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                data-title="Edit ${field}">
                                 ${record[field] ? record[field]?.code : '?'}
                             </a>
@@ -1550,7 +1514,7 @@
                                 <a name="bookmark${record.id}${entityCode}"
                                    title="Toggle bookmark"
                                    value="${record.bookmarked}"
-                                   onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/quickBookmark/${entityCode}-${record.id}')">
+                                   onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}')">
                                     <span class="icon-star-gm"></span>
                                 </a>
                             </g:if>
@@ -1559,7 +1523,7 @@
                                 <a name="bookmark${record.id}${entityCode}"
                                    title="Toggle bookmark"
                                    value="${record.bookmarked}"
-                                   onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/quickBookmark/${entityCode}-${record.id}')">
+                                   onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}')">
                                     <span class="icon-starred-gm"></span>
                                 </a>
 
@@ -1575,7 +1539,7 @@
                                         title="Select record"
                                         value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes().getSession()[entityCode + record.id] == 1}"
                                 style="height: 14px !important;"
-                                        onclick="jQuery('#selectBasketRegion').load('/nibras/generics/select/${entityCode}${record.id}')"
+                                        onclick="jQuery('#selectBasketRegion').load('${request.contextPath}/generics/select/${entityCode}${record.id}')"
                                         />
                         %{--</g:if>--}%
                     </td>

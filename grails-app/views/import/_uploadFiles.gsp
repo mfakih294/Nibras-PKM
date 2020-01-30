@@ -25,7 +25,7 @@
                    url="${[controller: 'import', action: 'importSmartFilesAjax']}">
     Upload smart files for import
     <uploader:onComplete>
-        jQuery('#centralArea').load('/nibras/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
+        jQuery('#centralArea').load('${request.contextPath}/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
     </uploader:onComplete>
 </uploader:uploader>
 
@@ -34,7 +34,7 @@
                    %{--url="${[controller: 'import', action: 'importSmartFilesAjaxUpdate']}">--}%
     %{--Upload smart files for import--}%
     %{--<uploader:onComplete>--}%
-        %{--jQuery('#centralArea').load('/nibras/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)--}%
+        %{--jQuery('#centralArea').load('${request.contextPath}/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)--}%
     %{--</uploader:onComplete>--}%
 %{--</uploader:uploader>--}%
 

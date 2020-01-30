@@ -378,7 +378,7 @@
                       onComplete="jQuery('#descriptionDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
                       method="post">
 
-        %{--onkeyup="jQuery('#topDaftarArea').load('/nibras/indexCard/extractTitle/', {'typing': this.value})"--}%
+        %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
             <g:textArea cols="80" rows="12" placeholder="title (line 1) - details (from line 2 till the end)"
                         name="description" id="descriptionDaftar"
                         value=""
@@ -552,7 +552,7 @@
                                   from="${[1, 2, 3, 4, 5, 7, 10, 15, 20, 30, 40, 50, 100, 250]}"
                                   style="direction: ltr; text-align: left; padding: 0; margin: 0;  height: 24px;"
                                   noSelection="${['null': '']}"
-                                  onchange="jQuery('#notificationArea').load('/nibras/generics/setPageMax/' + this.value);"
+                                  onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
                                   value="${Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
                         <span id="notificationArea" style=""></span>
                         <span style="display: none" id="notificationAreaHidden"></span>
@@ -832,7 +832,7 @@
 
 
     jQuery("#addArticleFormNgs").relatedSelects({
-        onChangeLoad: '/nibras/generics/fetchCoursesForDepartment',
+        onChangeLoad: '${request.contextPath}/generics/fetchCoursesForDepartment',
         defaultOptionText: '',
         selects: {
             'department.id': {loadingMessage: ''},
@@ -840,7 +840,7 @@
         }
     });
     jQuery("#addXcdFormNgs").relatedSelects({
-        onChangeLoad: '/nibras/generics/fetchWritingsForCourse',
+        onChangeLoad: '${request.contextPath}/generics/fetchWritingsForCourse',
         defaultOptionText: '',
         selects: {
             'course.id': {loadingMessage: ''},
@@ -849,7 +849,7 @@
     });
 
     function openNoteTaker()  {
-        window.open('/nibras/page/appDaftar', '',
+        window.open('${request.contextPath}/page/appDaftar', '',
                 'height=200,width=400,chrome=yes,scrollbars=yes, titlebar=no, toolbar=no, menubar=no, location=no, status=no, directories=no, resizable=yes');
 
     }

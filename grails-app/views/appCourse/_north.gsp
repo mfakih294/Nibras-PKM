@@ -86,7 +86,7 @@
 
         %{--<td style="padding: 1px !important; margin-left: 9px; color: white;">--}%
 
-            %{--<a href="/nibras/sync/rssPile"--}%
+            %{--<a href="${request.contextPath}/sync/rssPile"--}%
                %{--class="fg-button-icon-left"--}%
                %{--style="" target="_blank">--}%
                 %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
@@ -147,7 +147,7 @@
 //        this['value'] = 'on'
             this['checked'] = true
 //        console.log(this.attr('value'));
-            jQuery('#logRegion').load('/nibras/generics/selectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
+            jQuery('#logRegion').load('${request.contextPath}/generics/selectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
         });
     })
 
@@ -155,7 +155,7 @@
         $("input[name^='select-']").each(function () {
             this['checked'] = false
 //        console.log(this.attr('value'));
-            jQuery('#logRegion').load('/nibras/generics/deselectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
+            jQuery('#logRegion').load('${request.contextPath}/generics/deselectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
         });
     })
 </script>

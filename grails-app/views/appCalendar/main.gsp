@@ -131,7 +131,7 @@
       weekNumbers: true,
       weekNumbersWithinDays: true,
       weekNumberCalculation: 'ISO',
-      events:"/nibras/export/allCalendarEvents",
+      events:"${request.contextPath}/export/allCalendarEvents",
       selectable: true,
       selectHelper: true,
 
@@ -166,7 +166,7 @@
             end: arg.end
           };
           jQuery('#logArea').html(title);
-          jQuery('#logArea2').load('/nibras/operation/addNewFromCalendar', {
+          jQuery('#logArea2').load('${request.contextPath}/operation/addNewFromCalendar', {
             title: title,
             start: moment(arg.start).format('DD.MM.YYYY HH:mm'),//arg.start.getDate() + '.' + arg.start.getMonth() + '.'+ (parseInt(arg.start.getYear()) + 1900),
             end: moment(arg.end).format('DD.MM.YYYY HH:mm')//,//arg.start.getDate() + '.' + arg.start.getMonth() + '.'+ (parseInt(arg.start.getYear()) + 1900),

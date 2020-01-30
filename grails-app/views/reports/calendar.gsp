@@ -33,7 +33,7 @@
                 eventDrop: function (event, delta, reverFunc) {
                     alert(event.title + ' - ' + event.id + ' drop : ' + delta);
 
-                    $('#logArea2').load('/nibras/task/addFromCalendar',
+                    $('#logArea2').load('${request.contextPath}/task/addFromCalendar',
 
                             {
                                 title: title, start: start.format('DD.MM.YYYY HH:mm'),
@@ -87,7 +87,7 @@
                             end: end
                         };
                         $('#logArea').html(title);
-                        $('#logArea2').load('/nibras/task/addFromCalendar', {
+                        $('#logArea2').load('${request.contextPath}/task/addFromCalendar', {
                             title: title,
                             start: start.format('DD.MM.YYYY HH:mm'),
                             end: end.format('DD.MM.YYYY HH:mm')

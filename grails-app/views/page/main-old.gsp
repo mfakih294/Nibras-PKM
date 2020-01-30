@@ -214,7 +214,7 @@
 //            increaseArea: '-20%' // optional
 //        });
 
-//        jQuery('#searchForm').load('/nibras/generics/hqlSearchForm/T')
+//        jQuery('#searchForm').load('${request.contextPath}/generics/hqlSearchForm/T')
 
 //        jQuery('#quickAddTextField').select();
 //        jQuery('#quickAddTextField').focus();

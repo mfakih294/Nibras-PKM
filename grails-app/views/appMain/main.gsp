@@ -93,7 +93,7 @@
 
     <script type="text/javascript">
 
-        //    $.address.state('/nibras/')
+        //    $.address.state('${request.contextPath}/')
         $.address.externalChange(function (event) {
             // do something depending on the event.value property, e.g.
             // $('#content').load(event.value + '.xml');
@@ -164,7 +164,7 @@
             myLayout = $('body').layout({
                 west__size: 300,
                 east__size: 380,
-                 west__initClosed: true,
+                 west__initClosed: false,
                 east__togglerContent_closed: '<<',
                 // RESIZE Accordion widget when panes resize
                 west__onresize: $.layout.callbacks.resizePaneAccordions,
@@ -247,10 +247,10 @@
 //            increaseArea: '-20%' // optional
 //        });
 
-//        jQuery('#searchForm').load('/nibras/generics/hqlSearchForm/T')
-        jQuery('#tagCloud').load('/nibras/report/tagCloud')
+//        jQuery('#searchForm').load('${request.contextPath}/generics/hqlSearchForm/T')
+        jQuery('#tagCloud').load('${request.contextPath}/report/tagCloud')
 
-// jQuery('#centralArea').load('/nibras/generics/recentRecords')
+// jQuery('#centralArea').load('${request.contextPath}/generics/recentRecords')
 
 //        jQuery('#quickAddTextField').select();
 //        jQuery('#quickAddTextField').focus();
@@ -309,12 +309,12 @@ $("#accordionCenter").accordion({
             jQuery.idleTimeout('#idletimeout', '#idletimeout a', {
             idleAfter: 1,
             pollingInterval: 10,
-            keepAliveURL: '/nibras/page/heartbeat',
+            keepAliveURL: '${request.contextPath}/page/heartbeat',
             serverResponseEquals: 'ok',
             onIdle: function () {
                 jQuery.ajax({
                     type: 'GET',
-                    url: '/nibras/page/heartbeat',
+                    url: '${request.contextPath}/page/heartbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
                     jQuery('#onlineLog').html('Online');
@@ -333,7 +333,7 @@ $("#accordionCenter").accordion({
 //                confirm('Your session has timeout.');
                 jQuery.ajax({
                     type: 'GET',
-                    url: '/nibras/page/heartbeat',
+                    url: '${request.contextPath}/page/heartbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
 //                    jQuery('body').append(html);
@@ -352,14 +352,14 @@ $("#accordionCenter").accordion({
  jQuery.idleTimeout('#importFileCount','#importFileCount', {
             idleAfter: 10,
             pollingInterval: 15,
-            keepAliveURL: '/nibras/page/importbeat',
+            keepAliveURL: '${request.contextPath}/page/importbeat',
             serverResponseEquals: 'ok',
      AJAXTimeout: 5,
      onTimeout: function () {
 //                confirm('Your session has timeout.');
                 jQuery.ajax({
                     type: 'GET',
-                    url: '/nibras/page/importbeat',
+                    url: '${request.contextPath}/page/importbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
                     jQuery('#importFileCount').text(html);
@@ -369,11 +369,11 @@ $("#accordionCenter").accordion({
             }
         });
 
-            jQuery('#contactPanel').load('/nibras/generics/contactCloud');
-            jQuery('#tagsPanel').load('/nibras/generics/tagCloud');
-            jQuery('#importFileCount').load('/nibras/page/importbeat');
-            jQuery('#recentRecordsCount').load('/nibras/generics/countRecentRecords');
-//            jQuery('#centralArea').load('/nibras/generics/recentRecords');
+            jQuery('#contactPanel').load('${request.contextPath}/generics/contactCloud');
+            jQuery('#tagsPanel').load('${request.contextPath}/generics/tagCloud');
+            jQuery('#importFileCount').load('${request.contextPath}/page/importbeat');
+            jQuery('#recentRecordsCount').load('${request.contextPath}/generics/countRecentRecords');
+//            jQuery('#centralArea').load('${request.contextPath}/generics/recentRecords');
 
         Mousetrap.bindGlobal('ctrl+1', function (e) {
                 jQuery('#accordionCenter').accordion({ active: 0});

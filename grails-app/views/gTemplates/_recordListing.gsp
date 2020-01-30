@@ -223,9 +223,9 @@
 
 
 <script type="text/javascript">
-jQuery('#selectBasketRegion').load('/nibras/generics/countSelection');
-jQuery('#importFileCount').load('/nibras/page/importbeat');
-jQuery('#editFileCount').load('/nibras/page/editHeartbeat');
-jQuery('#recentRecordsCount').load('/nibras/generics/countRecentRecords');
+jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelection');
+jQuery('#importFileCount').load('${request.contextPath}/page/importbeat');
+jQuery('#editFileCount').load('${request.contextPath}/page/editHeartbeat');
+jQuery('#recentRecordsCount').load('${request.contextPath}/generics/countRecentRecords');
 
 </script>

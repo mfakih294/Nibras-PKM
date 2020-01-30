@@ -85,7 +85,7 @@
 
     <script type="text/javascript">
 
-        //    $.address.state('/nibras/')
+        //    $.address.state('${request.contextPath}/')
         $.address.externalChange(function (event) {
             // do something depending on the event.value property, e.g.
             // $('#content').load(event.value + '.xml');
@@ -240,10 +240,10 @@
 //            increaseArea: '-20%' // optional
 //        });
 
-//        jQuery('#searchForm').load('/nibras/generics/hqlSearchForm/T')
-        jQuery('#tagCloud').load('/nibras/report/tagCloud')
+//        jQuery('#searchForm').load('${request.contextPath}/generics/hqlSearchForm/T')
+        jQuery('#tagCloud').load('${request.contextPath}/report/tagCloud')
 
-// jQuery('#centralArea').load('/nibras/generics/recentRecords')
+// jQuery('#centralArea').load('${request.contextPath}/generics/recentRecords')
 
 //        jQuery('#quickAddTextField').select();
 //        jQuery('#quickAddTextField').focus();

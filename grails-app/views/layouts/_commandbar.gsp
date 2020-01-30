@@ -22,7 +22,7 @@
                     <g:select name="commandPrefix"
                               from="${CommandPrefix.list([sort: 'orderNumber'])}" optionKey="id" optionValue="summary"
                               style="direction: ltr; text-align: left; display: inline; width: 160px;"
-                              onchange="jQuery.getJSON('/nibras/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextField').val(jsdata.info);jQuery('#prefixField').val(jsdata.prefix);if (jsdata.info  == null ||  jsdata.info  == 'null' || !jsdata.info) jQuery('#quickAddTextField').addClass('commandMode'); else  jQuery('#quickAddTextField').removeClass('commandMode') })"
+                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextField').val(jsdata.info);jQuery('#prefixField').val(jsdata.prefix);if (jsdata.info  == null ||  jsdata.info  == 'null' || !jsdata.info) jQuery('#quickAddTextField').addClass('commandMode'); else  jQuery('#quickAddTextField').removeClass('commandMode') })"
                               value=""/>
 
                     Prefix: <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"

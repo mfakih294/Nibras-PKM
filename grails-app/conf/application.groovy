@@ -10,7 +10,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'security.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'security.UserRole'
 grails.plugin.springsecurity.authority.className = 'security.Role'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	[pattern: '/',               access: ['permitAll']],
+//	[pattern: '/',               access: ['permitAll']],
 //	[pattern: '/**',               access: ['permitAll']],
 	[pattern: '/error',          access: ['permitAll']],
 	[pattern: '/index',          access: ['permitAll']],
@@ -20,12 +20,13 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/assets/**',      access: ['permitAll']],
 	[pattern: '/**/js/**',       access: ['permitAll']],
 	[pattern: '/**/plugins/**',       access: ['permitAll']],
-	[pattern: '/**/console/**',       access: ['permitAll']],
-	[pattern: '/**/static/console/**',       access: ['permitAll']],	  
+//	[pattern: '/**/console/**',       access: ['permitAll']],
+//	[pattern: '/**/static/console/**',       access: ['permitAll']],
 	[pattern: '/**/page/heartbeat/**',       access: ['permitAll']],
 	[pattern: '/**/sync/**',       access: ['permitAll']],
 	[pattern: '/**/css/**',      access: ['permitAll']],
 //	[pattern: '/**/slides/**',      access: ['permitAll']],
+	[pattern: '/**/fonts/**',   access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
 	[pattern: '/**/favicon.ico', access: ['permitAll']]
 ]
@@ -38,9 +39,19 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/js/**',       filters: 'none'],
 	[pattern: '/**/css/**',      filters: 'none'],
 	[pattern: '/**/images/**',   filters: 'none'],
-	[pattern: '/**/favicon.ico', filters: 'none']
-//	[pattern: '/**',             filters: 'JOINED_FILTERS']
+	[pattern: '/**/fonts/**',   filters: 'none'],
+	[pattern: '/**/favicon.ico', filters: 'none'],
+//		[pattern: '/**',             filters: 'none']
+	[pattern: '/**',             filters: 'JOINED_FILTERS'] // comment the line above and uncomment this line to enable security
 ]
 
 // todo: war file
 grails.project.war.file = "/dev/${appName}.war"
+
+grails.config.locations = [
+		"classpath:myconfig.properties",
+		"file:///nbr/myconfig.properties",
+		"file:${catalina.base}/myconfig.properties",
+		"~//myconfig.properties"
+]
+

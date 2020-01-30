@@ -33,11 +33,11 @@
         <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
             <h4>Export:</h4>
             <ul>
-                <li><a href="/nibras/task/expotTodotxt"
+                <li><a href="${request.contextPath}/task/expotTodotxt"
                        style="" target="_blank">
                     G/T to Todo.txt
                 </a></li>
-                <li><a href="/nibras/expot/exportToIcal"
+                <li><a href="${request.contextPath}/expot/exportToIcal"
                        style="" target="_blank">
                     Export J/T/P to ics calendar
                 </a></li>
@@ -51,7 +51,7 @@
         <ul>
             <g:each in="${mcs.parameters.SavedSearch.findAllByCalendarEnabled(true, [sort: 'code'])}" var="s">
                 <li>
-                    <a href="/nibras/generics/showCalendar/${s.id}"
+                    <a href="${request.contextPath}/generics/showCalendar/${s.id}"
                        style="" target="_blank">
                         %{--<span class="ui-icon ui-icon-calendar"></span>--}%
                         <b>${s.code}</b>
@@ -64,7 +64,7 @@
         </ul>
         %{--<ul>--}%
         %{--<li>--}%
-        %{--<a href="/nibras/generics/showCalendar/Tcal"--}%
+        %{--<a href="${request.contextPath}/generics/showCalendar/Tcal"--}%
         %{--style="" target="_blank">--}%
         %{--<span class="ui-icon ui-icon-calendar"></span>--}%
         %{--<g:message code="ui.tasksCalendar"></g:message>--}%
@@ -72,27 +72,27 @@
 
         %{--</li>--}%
         %{--<li>--}%
-        %{--<a href="/nibras/generics/showCalendar/Pcal"--}%
+        %{--<a href="${request.contextPath}/generics/showCalendar/Pcal"--}%
         %{--style="" target="_blank">--}%
         %{--<span class="ui-icon ui-icon-calendar"></span>--}%
         %{--<g:message code="ui.plannerCalendar"></g:message>--}%
         %{--</a>--}%
         %{--</li>--}%
         %{--<li>--}%
-        %{--<a href="/nibras/generics/showCalendar/Jcal" style="" target="_blank">--}%
+        %{--<a href="${request.contextPath}/generics/showCalendar/Jcal" style="" target="_blank">--}%
         %{--<g:message code="ui.journalCalendar"></g:message>--}%
         %{--</a>--}%
 
         %{--</li>--}%
 
         %{--<li>--}%
-        %{--<a href="/nibras/generics/showCalendar/Rcal" style="" target="_blank">--}%
+        %{--<a href="${request.contextPath}/generics/showCalendar/Rcal" style="" target="_blank">--}%
         %{--<g:message code="ui.resourceCalendar"></g:message>--}%
         %{--</a>--}%
 
         %{--</li>--}%
         %{--<li>--}%
-        %{--<a href="/nibras/generics/showCalendar/Ncal" style="" target="_blank">--}%
+        %{--<a href="${request.contextPath}/generics/showCalendar/Ncal" style="" target="_blank">--}%
         %{--<g:message code="ui.notesCalendar"></g:message>--}%
         %{--</a>--}%
 
@@ -438,7 +438,7 @@
                                     }" optionKey="code" optionValue="name"
                                     style="direction: ltr; text-align: left; width: 185px !important"
                                     noSelection="${['null': 'Choose type']}"
-                                    onchange="jQuery('#searchForm').load('/nibras/generics/hqlSearchForm/' + this.value);"
+                                    onchange="jQuery('#searchForm').load('${request.contextPath}/generics/hqlSearchForm/' + this.value);"
                                     value=""/>
 
 

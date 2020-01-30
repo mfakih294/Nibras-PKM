@@ -126,7 +126,7 @@
 //        this['value'] = 'on'
         this['checked'] = true
 //        console.log(this.attr('value'));
-        jQuery('#logRegion').load('/nibras/generics/selectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
+        jQuery('#logRegion').load('${request.contextPath}/generics/selectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
     });
     })
 
@@ -134,7 +134,7 @@
     $("input[name^='select-']").each(function () {
         this['checked'] = false
 //        console.log(this.attr('value'));
-        jQuery('#logRegion').load('/nibras/generics/deselectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
+        jQuery('#logRegion').load('${request.contextPath}/generics/deselectOnly/' + this['name'].split('-')[2] + this['name'].split('-')[1]);
     });
     })
 

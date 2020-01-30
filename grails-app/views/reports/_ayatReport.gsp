@@ -136,7 +136,7 @@
                                &nbsp;
                                <a title="Set priority" style="font-size: 14px !important; text-decoration: none;"
                                   value="${r.priority}"
-                                  onclick="jQuery('#AyaRecord${r.id}').load('/nibras/generics/setPriority/N${r.id}?p=' + ${p})">
+                                  onclick="jQuery('#AyaRecord${r.id}').load('${request.contextPath}/generics/setPriority/N${r.id}?p=' + ${p})">
                                    &nbsp;
                                    <g:if test="${r.priority == p && p != 2}">
                                        <b style='font-size: 12px; color: blue'>${p}
@@ -150,7 +150,7 @@
                                     &nbsp;&nbsp;
                            <a title="Mark as new section" style="font-size: 17px"
                               value=""
-                              onclick="jQuery('#AyaRecord${r.id}').load('/nibras/indexCard/toggleAsNewSection/N${r.id}')">
+                              onclick="jQuery('#AyaRecord${r.id}').load('${request.contextPath}/indexCard/toggleAsNewSection/N${r.id}')">
                                ${r.isNewSection == true ? raw('<b style="font-size: 14px; color: blue">&crarr;</b>') : raw('&crarr;')}
                            </a>
                            &nbsp;&nbsp;

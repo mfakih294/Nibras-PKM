@@ -109,10 +109,13 @@
 <b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
 <br/>
 <br/>
-<uploadr:add id="uploader${typeSandboxPath}${new Date()?.format('ddMMyyyyHHmmss')}" name="uploader${typeSandboxPath}${new Date()?.format('ddMMyyyyHHmmss')}" controller="import" action="upload" path="${typeSandboxPath}"
+%{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
+<uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
+             name="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
+             controller="import" action="upload" path="d:/"
              placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
              noSound="true"
-             direction="down" maxVisible="5" unsupported="/nibras/upload/warning" maxConcurrentUploads="1" class="demo">
+             direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1" class="demo">
     <uploadr:onSuccess>
         jQuery('#spinner2').hide();
         jQuery('.info-badge').html('Done uploading files.');
@@ -212,7 +215,7 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
                         url="${[controller: 'import', action: 'uploadCover']}"
                         params="${[recordId: record.id, entityCode: record.entityCode()]}">
                         <uploader:onComplete>
-                        jQuery('#subUploadInPanel').load('/nibras/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
+                        jQuery('#subUploadInPanel').load('${request.contextPath}/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
                         </uploader:onComplete>
                         Upload...
                         </uploader:uploader>
@@ -257,8 +260,8 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
        data-type="select"
        data-value="${record[field]}"
        data-name="${field}-${record.entityCode()}"
-       data-source="/nibras/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-       data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+       data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+       data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
        data-title="Edit ${field}">
         ${record[field] ? 'rci-' + record[field] : 'rci-'}
     </a>
@@ -492,7 +495,7 @@ Authors: ${authors}
     %{--<g:if test="${record.class.declaredFields.name.contains('percentCompleted')}">--}%
     %{--<a name="bookmark${record.id}${entityCode}" title="percent++"--}%
     %{--value="${record.percentCompleted}"--}%
-    %{--onclick="jQuery('#displayTotalSteps').load('/nibras/generics/increasePercentCompleted/${entityCode}${record.id}')">--}%
+    %{--onclick="jQuery('#displayTotalSteps').load('${request.contextPath}/generics/increasePercentCompleted/${entityCode}${record.id}')">--}%
     %{--Step++--}%
     %{--</a>--}%
         %{--<br/>--}%
@@ -1063,7 +1066,7 @@ Authors: ${authors}
 <br/>
                     <a name="bookmark${record.id}${entityCode}" title="Toggle privacy"
                        value="${record.keepSecret}"
-                       onclick="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/togglePrivacy/${entityCode}-${record.id}')">
+                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/togglePrivacy/${entityCode}-${record.id}')">
                         Make private &nbsp;
                     </a>
                 </g:if>
@@ -1079,7 +1082,7 @@ Authors: ${authors}
 %{--                Language:--}%
 %{--                <g:select name="language" from="${OperationController.getPath('repository.languages').split(',')}"--}%
 %{--                    value="${record.language}"--}%
-%{--     onchange="jQuery('#${entityCode}Record${record.id}').load('/nibras/generics/setLanguage/' + '${record.id}-${entityCode}-' + this.value)"--}%
+%{--     onchange="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/setLanguage/' + '${record.id}-${entityCode}-' + this.value)"--}%
 %{--  style="overflow: visible; z-index: 200; background: lightgrey" noSelection="${['': '']}"/>--}%
 
 
@@ -1192,14 +1195,52 @@ Authors: ${authors}
                data-value="${record[field]?.id}"
                data-name="${field}-${entityCode}"
                style=" border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
-               data-source="/nibras/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-               data-pk="${record.id}" data-url="/nibras/operation/quickSave2"
+               data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+               data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                data-title="Edit ${field}">
                 ${record[field] ? (record[field].code ? 'blog-' + record[field].code : 'blog' + record.blog) : 'blog-'}
             </a>
             <script type="text/javascript">
                 jQuery("#${field}${record.id}").editable();
             </script>
+
+
+            <span id="${entityCode}CheckoutLog${record.id}"></span>
+
+
+
+            <g:if test="${(entityCode == 'W') || entityCode == 'N'}">
+            %{--|| entityCode == 'N'--}%
+            %{--<g:remoteLink--}%
+            %{--url="[controller: 'generics', action: 'convertMarkupToHtml', id: record.id, params: [entityCode: entityCode]]"--}%
+            %{--update="3rdPanel"--}%
+            %{--before="jQuery('#accordionEast').accordion({ active: 0});"--}%
+            %{--class="actionLink"--}%
+            %{--title="Convert to HTML">--}%
+            %{--==--}%
+            %{--</g:remoteLink>--}%
+
+                <g:remoteLink controller="generics" action="checkoutRecordText"
+                              id="${record.id}"
+                              params="[entityCode: entityCode]"
+                              update="${entityCode}CheckoutLog${record.id}"
+                              title="Checkout record">
+                    out &crarr;
+                </g:remoteLink>
+
+            </g:if>
+            <g:if test="${entityCode == 'W'}">
+
+                <g:remoteLink controller="export" action="combineWritingNotes"
+                              id="${record.id}"
+                              params="[entityCode: entityCode]"
+                              update="${entityCode}CheckoutLog${record.id}"
+                              title="Compile writing with its notes">
+                    cmp &crarr;
+                </g:remoteLink>
+
+            </g:if>
+
 
             &nbsp;
             <g:remoteLink controller="operation" action="pandoc" id="${record.id}"

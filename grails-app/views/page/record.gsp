@@ -368,7 +368,7 @@
                 </g:each>
             </table>
             <input type="button" id="sortButton" value="Save sort"
-                   onclick='jQuery("#OrderTheFields").load("http://localhost:2008/nibras/operation/orderIcdInWrt?type=W&child=N&tableId=1", jQuery("#table1").tableDnDSerialize())'/>
+                   onclick='jQuery("#OrderTheFields").load("http://localhost:2008${request.contextPath}/operation/orderIcdInWrt?type=W&child=N&tableId=1", jQuery("#table1").tableDnDSerialize())'/>
 
             <script type="text/javascript">
                 jQuery("#table1").tableDnD();
