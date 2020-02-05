@@ -30,9 +30,7 @@
     <title style="direction: rtl; text-align: right;">
 
     ${OperationController.getPath('app.name') ?: 'Nibras PKM'}
-    %{--<g:meta name="app.version"/>--}%
-
-
+    <g:meta name="app.version"/>
 
     </title>
 

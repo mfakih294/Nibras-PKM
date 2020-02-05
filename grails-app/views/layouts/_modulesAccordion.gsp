@@ -32,7 +32,9 @@
         </ul>
     </div>
 
-
+        <br/>
+    <hr/>
+    <br/>
 
 <g:if test="${OperationController.getPath('goals.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <h4>
@@ -98,7 +100,6 @@
 
 
 <g:if test="${OperationController.getPath('journal.enabled')?.toLowerCase() == 'yes' ? true : false}">
-    <br/>
     <h4>
         <span class="J-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">J</span>
@@ -238,24 +239,23 @@
     <div>
         <ul>
 
-            <li>
+            %{--<li>--}%
+                    %{--<g:remoteLink controller="report" action="wordsForReview"--}%
+                                  %{--update="centralArea"--}%
+                                  %{--style=""--}%
+                                  %{--title="Review words">--}%
+                        %{--<g:message code="ui.anki"></g:message>--}%
+
+                    %{--</g:remoteLink>--}%
+
+            %{--</li>--}%
 
 
-                    <g:remoteLink controller="report" action="wordsForReview"
-                                  update="centralArea"
-                                  style=""
-                                  title="Review words">
-                        <g:message code="ui.anki"></g:message>
-
-                    </g:remoteLink>
-
-            </li>
             <g:render template="/layouts/savedSearches" model="[entity: 'N']"/>
         </ul>
 
     </div>
 %{--</g:if>--}%
-<br/>
 
 %{--<g:if test="${OperationController.getPath('resources.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
     <h4>

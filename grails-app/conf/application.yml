@@ -21,7 +21,7 @@ grails:
 info:
     app:
         name: nibras
-        version: 1.2.0
+        version: 1.2.1
         grailsVersion: '@info.app.grailsVersion@'
 server:
     contextPath: '/nibras'
@@ -110,10 +110,10 @@ hibernate:
     flush:
         mode: AUTO
 environments:
-    h2:
+    development:
         dataSource:
             dbCreate: update
-            url: jdbc:h2:../db/nibras;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:h2:./db/nibras;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
             properties:
                 jmxEnabled: true
                 initialSize: 5
@@ -132,7 +132,7 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
-    development:
+    later:
         dataSource:
             dbCreate: update
             url: jdbc:mysql://localhost:3306/db_nibras

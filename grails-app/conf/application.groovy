@@ -6,6 +6,10 @@ grails.gorm.default.constraints = {
 grails.plugin.console.enabled = true
 
 // Added by the Spring Security Core plugin:
+
+grails.plugin.springsecurity.password.algorithm = 'bcrypt'
+
+
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'security.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'security.UserRole'
 grails.plugin.springsecurity.authority.className = 'security.Role'
@@ -17,12 +21,14 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/index.gsp',      access: ['permitAll']],
 	[pattern: '/shutdown',       access: ['permitAll']],
 	[pattern: '/json/**',      access: ['permitAll']], // working! 19.07.2019
+	[pattern: '**/json/**',      access: ['permitAll']], // working! 19.07.2019
 	[pattern: '/assets/**',      access: ['permitAll']],
 	[pattern: '/**/js/**',       access: ['permitAll']],
 	[pattern: '/**/plugins/**',       access: ['permitAll']],
-//	[pattern: '/**/console/**',       access: ['permitAll']],
-//	[pattern: '/**/static/console/**',       access: ['permitAll']],
-	[pattern: '/**/page/heartbeat/**',       access: ['permitAll']],
+	[pattern: '/**/console/**',       access: ['permitAll']],
+	[pattern: '/**/static/console/**',       access: ['permitAll']],
+	[pattern: '/**/page/heartbeat*/**',       access: ['permitAll']],
+
 	[pattern: '/**/sync/**',       access: ['permitAll']],
 	[pattern: '/**/css/**',      access: ['permitAll']],
 //	[pattern: '/**/slides/**',      access: ['permitAll']],
@@ -33,8 +39,9 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 
 grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/assets/**',      filters: 'none'],
-	[pattern: '/page/heartbeat/**',      filters: 'none'],
+	[pattern: '/page/heartbeat*/**',      filters: 'none'],
 	[pattern: '/sync/**',      filters: 'none'],
+	[pattern: '**/sync/**',      filters: 'none'],
 	[pattern: '/json/**',      filters: 'none'],
 	[pattern: '/**/js/**',       filters: 'none'],
 	[pattern: '/**/css/**',      filters: 'none'],

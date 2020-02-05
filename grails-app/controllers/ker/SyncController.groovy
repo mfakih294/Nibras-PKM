@@ -250,7 +250,8 @@ class SyncController {
         def builder = new JSONBuilder()
 
         def records = []
-        for (i in mcs.Planner.executeQuery("from Planner where date(startDate) >= ? and date(startDate) <= ? order by startDate desc ", [new Date() - 3, new Date() + 4])) {
+        for (i in mcs.Planner.executeQuery("from Planner where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
+                [new Date() - 3, new Date() + 7, true])) {
             records += [type    : 'P', id: i.id, ecode: 'P',
                         meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
                         color   : 'darkblue',

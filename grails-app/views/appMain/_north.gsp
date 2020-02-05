@@ -14,14 +14,13 @@
                           update="centralArea" title="Homepage saved searches">
             %{--<span class="ui-icon ui-icon-calendar"></span>--}%
 
-
-
                 <span style="margin-right: 1px;">
                     <b style="font-size: 12px; font-family: tahoma, sans-serif;">
                         ${OperationController.getPath('app.name') ?: 'Nibras'}</b>
                     <i>
-                        ${grailsApplication.metadata.getApplicationVersion()}
-                        <g:meta name="app.version"/>
+                        &nbsp;
+                        v${grailsApplication.metadata.getApplicationVersion()}
+                        %{--<g:meta name="app.version"/>--}%
                     </i>
                 </span>
             </g:remoteLink>
@@ -192,7 +191,7 @@
           </td>
 
         <g:if test="${1 ==1 }">
-        <td style="padding-right: 1px !important;">
+        <td style="padding-right: 1px !important; background: #8e8e97">
 
             <g:remoteLink controller="generics" action="showSelectedRecords"
                           update="centralArea"
@@ -202,8 +201,8 @@
                 <g:message code="ui.selected"></g:message>
                 (<span id="selectBasketRegion" style="color: white">${selectBasketCount ?: 0}</span>)
             </g:remoteLink>
-          </td>
-          <td>
+         &nbsp;
+         &nbsp;
             <g:remoteLink controller="generics" action="deselectAll"
                           update="selectBasketRegion"
                           style="padding-left: 0px !important; padding-right: 2px !important"
@@ -403,24 +402,28 @@
 
         </td>
 
-        %{--<td style="padding: 1px !important; margin-left: 9px; color: white;">--}%
-
-            %{--<a href="${request.contextPath}/sync/rssPile"--}%
-               %{--class="fg-button-icon-left"--}%
+        <td style="padding: 1px !important; margin-left: 4px; color: white;">
+            Logged in as:
+            <g:remoteLink controller="page" action="manageUser"
+              update="centralArea"
+              title="Manager user account">
+    ${username}
+%{--دقات--}%
+%{--</g:remoteLink>--}%
                %{--style="" target="_blank">--}%
                 %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
                 %{--<g:message code="ui.menu.RSS"></g:message>--}%
-            %{--</a>--}%
-        %{--</td>--}%
+            </g:remoteLink>
+        </td>
 
-        %{--<td style="padding: 1px !important; margin-left: 9px; color: white;">--}%
+        <td style="padding: 1px !important; margin-left: 9px; color: white;">
 
-            %{--<a href="http://khuta.org/nibras-doc/index.html"--}%
-               %{--style="" target="_blank">--}%
-%{--                <span style="color: white" class="ui-icon ui-icon-help"></span>--}%
+            <a href="${request.contextPath}/logoff"
+               style="">
+                Logout
                 %{--<g:message code="ui.menu.help"></g:message>--}%
-            %{--</a>--}%
-        %{--</td>--}%
+            </a>
+        </td>
         %{--<td>--}%
         %{--بالصفحة--}%
 

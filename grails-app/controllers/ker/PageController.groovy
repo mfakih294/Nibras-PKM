@@ -21,11 +21,11 @@ package ker
 import grails.util.Environment
 import mcs.Book
 import grails.web.JSONBuilder
+
 //import org.eclipse.mylyn.wikitext.core.parser.MarkupParser
 //import org.eclipse.mylyn.wikitext.markdown.core.MarkdownLanguage
 
 import grails.plugin.springsecurity.annotation.Secured
-
 
 
 @Secured('ROLE_ADMIN')
@@ -75,6 +75,9 @@ class PageController {
 // def main2() {
 //        render(view: '/page/main2')
 //    }
+
+
+    def springSecurityService
 
 
     def main() {
@@ -160,7 +163,7 @@ class PageController {
              ['recordPage.text.style', "color: black; padding: 30px; font-size: 17px !important; font-family: 'tahoma,Georgia,serif'; font-weight: normal; margin: 60px; line-height: 1.9; max-width: 700px;text-align: justify;"],
              ['root.rps1.path', 'D:/Nibras/Repository/'],
              ['root.rps2.path', ''],
-             ['root.rps3.path', ''],
+//             ['root.rps3.path', ''],
              ['tmp.path', 'd:/Nibras/Temporary'],
              ['planner.enabled', 'no'],
              ['journal.enabled', 'yes'],
@@ -238,8 +241,6 @@ class PageController {
         session['showLine1Only'] = 'on'
         session['showFullCard'] = 'off'
 
-
-
 //        MarkupParser markupParser = new MarkupParser();
 //        markupParser.setMarkupLanguage(new MarkdownLanguage());
 //        String htmlContent = markupParser.parseToHtml(text);
@@ -265,13 +266,13 @@ class PageController {
                         ' order by r.orderNumber asc, r.reviewCount asc',
                         [true, 3, new Date() + 7, 5])
         def excerpts =
-        Book.executeQuery('from Excerpt r where r.book.course.bookmarked = ? ' +
+                Book.executeQuery('from Excerpt r where r.book.course.bookmarked = ? ' +
 //                ' in' +
 //                ' (select course from Planner p where p.startDate < current_date and p.endDate > current_date and p.course is not null)' +
-                ' and r.priority >= ? and r.readOn is not null' +
-                ' and (r.lastReviewed < ? or r.lastReviewed is null) and r.reviewCount < ?' +
-                ' order by r.orderNumber asc, r.reviewCount asc',
-                [true, 3, new Date() + 7, 5])
+                        ' and r.priority >= ? and r.readOn is not null' +
+                        ' and (r.lastReviewed < ? or r.lastReviewed is null) and r.reviewCount < ?' +
+                        ' order by r.orderNumber asc, r.reviewCount asc',
+                        [true, 3, new Date() + 7, 5])
 
 //        println 'r ' + resources
 //        println 'e ' + excerpts
@@ -297,12 +298,14 @@ class PageController {
         }
 
 
+        def user = springSecurityService.currentUser
         render(view: '/appMain/main', model: [
-                htmlContent: null,
-                ips: ips,
+                htmlContent      : null,
+                ips              : ips,
                 selectBasketCount: GenericsController.selectedRecords.size(),
-                editFileCount: c,
-                reviewPileSize: resources.size() + excerpts.size()
+                editFileCount    : c,
+                username         : user.username,
+                reviewPileSize   : resources.size() + excerpts.size()
 //                environment: environment
                 //,
 //                filledInDates: filledInDates?.trim(),
@@ -311,13 +314,29 @@ class PageController {
         ])
     }
 
+    def manageUser() {
+        render(template: '/page/userInfo', model: [username: springSecurityService.currentUser.username])
+
+    }
+
+    def changePassword() {
+        def userInstance = springSecurityService.currentUser
+        userInstance.password = params.password//springSecurityService.encodePassword(
+        //'12345', userInstance.username)
+
+        if (userInstance.save(flush: true)) {
+            render 'Password changed to ' + params.password
+        }
+        else render 'problem updating password. '
+    }
+
     def appMihrab() {
         render(view: '/appMihrab/main', model: [
         ])
     }
 
     def appCourse() {
-        render(view: '/appCourse/main', model: [ record: mcs.Course.get(params.id)
+        render(view: '/appCourse/main', model: [record: mcs.Course.get(params.id)
         ])
     }
 
@@ -327,10 +346,11 @@ class PageController {
 
     }
 
-    def appDaftar(){
+    def appDaftar() {
         render(view: '/appMain/daftar', model: [])
     }
-  def appCalendar() {
+
+    def appCalendar() {
         render(view: '/appCalendar/main', model: [
         ])
     }
@@ -354,11 +374,11 @@ class PageController {
         def source = ''
         def authors = ''
         if (record) {
-            if (record.entityCode() == 'N' ||  record.entityCode() == 'W') {
+            if (record.entityCode() == 'N' || record.entityCode() == 'W') {
                 java.util.regex.Matcher matcher = record.description =~ /@([\S_-]*) /
 
                 matcher.eachWithIndex() { match, i ->
-                    source += mcs.Book.findByCode(match[1]?.replace(']','')) ?
+                    source += mcs.Book.findByCode(match[1]?.replace(']', '')) ?
                             ''//('Source found: ' + mcs.Book.findByCode(match[1]) + '<br/>')
                             :
                             ('Source not found: ' + match[1]) + '<br/>'
@@ -385,7 +405,7 @@ class PageController {
             */
 
             render(template: '/layouts/panel', model: [entityCode: params.entityCode, record: record, mobileView: params.mobileView, typeSandboxPath: typeSandboxPath,
-                                                    source    : source, authors: authors
+                                                       source    : source, authors: authors
             ])
         } else render 'Record not found'
     }
@@ -415,7 +435,7 @@ class PageController {
 //    ResourceLocator grailsResourceLocator // injected during initialization
 
 
-        def slides() {
+    def slides() {
 
 //            def resource = grailsResourceLocator.findResourceForURI('/css/chosen.css')
 //            def path = resource.file.path // absolute file path
@@ -424,20 +444,19 @@ class PageController {
 //            def inputStream = resource.inputStream // input stream for the file
 //                             println 'chosen path'  + path + '\n'// + new File(path).text
 
-            if (ker.OperationController.getPath('slides.path') && new File(ker.OperationController.getPath('slides.path')).exists() ) {
-                def f = new File(ker.OperationController.getPath('slides.path') + '/contents.md')
-                def t = ''
-                app.IndexCard.findAllByMainHighlightsIsNotNull().each() {
-                    t += it.mainHighlights + '\n---\n'
-                }
-                f.write(t, 'UTF-8')
-                render("Contents file saved. Please open 'index.html' in " + ker.OperationController.getPath('slides.path') + " to see the slides.")
+        if (ker.OperationController.getPath('slides.path') && new File(ker.OperationController.getPath('slides.path')).exists()) {
+            def f = new File(ker.OperationController.getPath('slides.path') + '/contents.md')
+            def t = ''
+            app.IndexCard.findAllByMainHighlightsIsNotNull().each() {
+                t += it.mainHighlights + '\n---\n'
+            }
+            f.write(t, 'UTF-8')
+            render("Contents file saved. Please open 'index.html' in " + ker.OperationController.getPath('slides.path') + " to see the slides.")
 //                redirect(url: 'file://' + ker.OperationController.getPath('slides.path') + '/index.html')
 //                redirect(url: "file:///D:/mhi/rps1/slides/index.html/")
-            }
-            else {
-                render 'Setting slides.path is not set or path does not exists.'
-            }
+        } else {
+            render 'Setting slides.path is not set or path does not exists.'
+        }
     }
 
     def kanban() {
@@ -456,37 +475,39 @@ class PageController {
 
     }
 
-    def settingsMain(){
+    def settingsMain() {
         render(template: '/page/settings', model: [full: false])
 
     }
-    def settingsFull(){
+
+    def settingsFull() {
         render(template: '/page/settings', model: [full: true])
 
     }
-    def heartbeat(){
+
+    def heartbeat() {
         render 'ok'
     }
-	
-	   def heartbeatJson(){
-	     def builder = new JSONBuilder()
-  def json = builder.build {
+
+    def heartbeatJson() {
+        def builder = new JSONBuilder()
+        def json = builder.build {
             result = "ok"
-            
+
         }
         render(status: 200, contentType: 'application/json', text: json)
     }
-	
-	
-    def importbeat(){
+
+
+    def importbeat() {
 
         def r = ''
         def c = 0
         def f = ker.OperationController.getPath('root.rps1.path')
         if (f) {
-            new File(f)?.listFiles().each(){
-                 if (it.isFile())
-                     c++
+            new File(f)?.listFiles().each() {
+                if (it.isFile())
+                    c++
                 if (it.isDirectory() && it.name.length() > 1)
                     c++
             }
@@ -494,19 +515,20 @@ class PageController {
         render '(' + c.toString() + ')'
 
     }
-  def editHeartbeat(){
+
+    def editHeartbeat() {
 
         def r = ''
         def c = 0
-      def f = ker.OperationController.getPath('editBox.path')
-      if (f) {
-          new File(f)?.listFiles().each(){
-              if (it.isFile() && it.name?.endsWith('.md'))
-                 c++
+        def f = ker.OperationController.getPath('editBox.path')
+        if (f) {
+            new File(f)?.listFiles().each() {
+                if (it.isFile() && it.name?.endsWith('.md'))
+                    c++
 //               if (it.isDirectory() && it.name.length() > 1)
 //                    c++
-          }
-      }
+            }
+        }
         render c.toString()
 
     }

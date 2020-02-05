@@ -255,8 +255,8 @@ input, select, textarea {
     background-color: #fcfcfc;
     border: 1px solid #ccc;
     font: 11px Lato, tahoma, verdana, arial, helvetica, sans-serif;
-    margin: 2px 2px;
-    padding: 2px 2px;
+    margin: 2px 2px !important;
+    padding: 2px 2px !important;
     min-width: 20px !important;
     border-radius: 2px !important;
     text-align: start  !important;
@@ -1905,6 +1905,7 @@ ul.ui-autocomplete.ui-menu {
     height: 160px;
     background: #dce5e5;
     margin: 0px !important;
+    border: 1px solid darkgray;
 }
 
 .dis {

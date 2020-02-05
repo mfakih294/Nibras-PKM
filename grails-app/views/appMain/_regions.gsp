@@ -116,7 +116,7 @@
 
                     <g:textField name="input" value="" id="testField2"
                                  autocomplete="off"
-                                 style="display: inline;  font-family: tahoma ; width: 100% !important; border: 1px solid #003a69"
+                                 style="display: inline; padding-left: 5px; font-family: tahoma ; width: 100% !important; border: 1px solid darkgray"
                                  placeholder=""
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
@@ -143,7 +143,7 @@
 
                     <g:textField name="input" value="" id="testField3"
                                  autocomplete="off"
-                                 style="display: inline;  font-family: tahoma ; width: 100% !important;  border: 1px solid #003a69"
+                                 style="display: inline; padding-left: 5px;  font-family: tahoma ; width: 100% !important;  border: 1px solid darkgray"
                                  placeholder=""
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
@@ -267,7 +267,7 @@
 
             <g:textField name="input" id="quickAddTextFieldBottomTop" value=""
                          autocomplete="off"
-                         style="display: inline; margin-top: 4px; margin-left: 0px !important; padding-left: 0px !important; width: 100% !important;  border: 1px solid darkgray"
+                         style="display: inline; margin-top: 4px; margin-left: 0px !important; padding-left: 5px !important; width: 100% !important;  border: 1px solid darkgray"
                          placeholder="Command prompt..."
                          onkeyup="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))"
                          onkeypress="jQuery('#notificationAreaHidden').load('${request.contextPath}/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"

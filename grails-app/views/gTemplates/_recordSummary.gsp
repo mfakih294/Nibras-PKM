@@ -1489,7 +1489,7 @@
                                data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                data-title="Edit ${field}">
-                                ${record[field] ? record[field]?.code : '?'}
+                                ${record[field] ? record[field]?.code : 'd'}
                             </a>
                             &nbsp;
                             <script type="text/javascript">
