@@ -139,7 +139,7 @@ environments:
             driverClassName: com.mysql.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             username: nibras
-            password: password
+            password: nibras
             properties:
                 jmxEnabled: true
                 initialSize: 5

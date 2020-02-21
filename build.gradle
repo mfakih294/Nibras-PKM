@@ -52,7 +52,7 @@ dependencies {
 //    compile files("lib/org.eclipse.mylyn.wikitext.textile.core_2.8.0.v20160111-1930.jar")
 //    compile files("lib/org.springframework.util.jar")
 //    compile files("lib/pdfbox-app-1.8.9.jar")
-//    compile files("lib/slf4j-api-1.7.12.jar")
+    compile files("lib/slf4j-api-1.7.12.jar")
 //    compile files("lib/xmlrpc-1.1.1.jar")
 //    compile files("lib/groovy-ant-2.4.15.jar")
 //    compile files("lib/ajax-tags-1.0.0.jar")

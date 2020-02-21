@@ -357,15 +357,18 @@ class SyncController {
         for (i in IndexCard.executeQuery("from Book where type.code != ? and type.code != ? and  bookmarked = ? order by department.orderNumber asc, course.orderNumber asc, orderNumber asc",
                 ['art', 'nws', true])) {
 //            OperationController.countResourceFiles(i.id)
-            records += [type    : 'R', id: i.id,
-                        rtype   : i?.type?.code, ecode: 'R',
+            records += [type    : 'R',
+                        id: i.id,
+                        rtype   : i?.type?.code,
+                        ecode: 'R',
                         meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
                         color   : 'DarkSlateBlue',
                         language: i.language,
                         files   : i.filesList,
                         nbFiles : i.nbFiles,
-                        title   : i.title, body: (i.fullText?.replaceAll(/http[\S\.]*/, '')
-                    ?.replaceAll(/www[\S\.]*/, '') ?: ' >> ') + (i.description ?: '')]
+                        title   : i.title,
+                        body: (i.fullText?.replaceAll(/http[\S\.]*/, '')
+                    ?.replaceAll(/www[\S\.]*/, '') ?: '') + (i.description ?: '')]
         }
 
         def json = builder.build {
@@ -412,11 +415,17 @@ class SyncController {
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
         for (i in IndexCard.executeQuery("from Book where type.code = ? and bookmarked = ? and fullText is not null order by priority desc, lastUpdated desc", ['art', true])) {
-            records += [type    : 'Art', id: i.id, ecode: 'R',
+            records += [
+                    type    : 'Art',
+                    rtype    : 'art',
+                    id: i.id,
+                        ecode: 'R',
+
                         meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
                         color   : 'DarkSlateBlue',
                         language: i.language,
-                        title   : i.title, body: i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
+                        title   : i.title,
+                    body: i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
                     ?.replaceAll(/www[\S\.]*/, '') ?: '']
         }
 
@@ -434,7 +443,10 @@ class SyncController {
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
         for (i in IndexCard.executeQuery("from Book where type.code = ? and bookmarked = ? order by priority desc, lastUpdated desc", ['nws', true])) {
-            records += [type    : 'Nws', id: i.id, ecode: 'R',
+            records += [type    : 'Nws',
+                        rtype    : 'nws',
+                        id: i.id,
+                        ecode: 'R',
                         meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
                         color   : 'DarkSlateBlue',
                         language: i.language,
@@ -554,7 +566,7 @@ class SyncController {
 
     def mobilePush() {
         def c = 0
-        params.tosync.split(',').each() { r ->
+        params.tosyncText.split(',').each() { r ->
             if (r.trim() != '' && r != 'null') {
                 //println 'r ' + r
                 c++
@@ -631,7 +643,7 @@ class SyncController {
             def n = new app.IndexCard()
             n.summary = new Date().format('dd.MM.yyyy HH:mm') + ' k'
             n.description = data?.replace('::', ':\n')
-            n.type = WritingType.findByCode('k')
+//            n.type = WritingType.findByCode('k')
             n.save(flush: true)
 
             json = builder.build {
