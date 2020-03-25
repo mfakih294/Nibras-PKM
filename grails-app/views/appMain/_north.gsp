@@ -192,7 +192,7 @@
 
         <g:if test="${1 ==1 }">
         <td style="padding-right: 1px !important; background: #8e8e97">
-
+             &nbsp;
             <g:remoteLink controller="generics" action="showSelectedRecords"
                           update="centralArea"
                           style="padding-right: 0px !important"
@@ -352,11 +352,10 @@
         %{--</sec:ifAnyGranted>--}%
 
         %{--</td>--}%
-        <td style="border: 0px dashed darkgray; padding-left: 15px !important; padding-top: 0; padding-bottom: 0; background: #8e8e97">
+%{--        <td style="border: 0px dashed darkgray; padding-left: 15px !important; padding-top: 0; padding-bottom: 0; background: #8e8e97">--}%
 
-            <i style="color: #ebebeb;">Kanbans:</i> &nbsp;
-            <g:render template="/layouts/savedSearchesLine" model="[entity: 'F']"/>
-        </td>
+
+%{--        </td>--}%
         %{--<td>--}%
         %{--<g:formRemote name="batchAdd3"--}%
         %{--url="[controller: 'generics', action: 'actionDispatcherPreset']"--}%
@@ -395,7 +394,7 @@
                 <g:textField name="input" value="" id="speedsearch"
                              autocomplete="off"
                              style="float: right; display: inline;  width: 220px !important; height: 24px; padding: 3px; margin: 1px; font-size: 11px;"
-                             placeholder="Search..."
+                             placeholder="Search (Esc)..."
                              class=""/>
 
             </g:formRemote>

@@ -316,8 +316,8 @@
     });
 
 //    setTimeout(location.reload(), 300000);  // executed once
-    setTimeout(function() {
-        window.location.href = window.location;
-    }, 300000);
+//    setTimeout(function() {
+//        window.location.href = window.location;
+//    }, 300000);
 
 </script>

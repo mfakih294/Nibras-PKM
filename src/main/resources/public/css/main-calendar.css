@@ -1,3 +1,17 @@
+.fc th, .fc td {
+    padding: 3px 6px;
+}
+
+.fc-event-container .fc-content .fc-time {
+    float: left;
+}
+
+
+.fc-event {
+    font-size: .9em;
+    line-height: 1.5;
+}
+
 
 
 .fc-event-container
@@ -14,4 +28,11 @@
 
 .fc-time-grid .fc-slats td {
     height: 1.9em !important;
+}
+
+.container-calendar {
+
+    overflow-x:auto;
+    overflow-y:auto;
+
 }

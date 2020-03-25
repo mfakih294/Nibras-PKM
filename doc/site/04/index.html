@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Repository and Files - Nibras System</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Repository and Files";
+    var mkdocs_page_input_path = "04.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Nibras System</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../01/">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../02/">Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../03/">Records and Data Model</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Repository and Files</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#repository-and-files">Repository and Files</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../05/">Adding</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../06/">Search</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../07/">Commands</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../08/">Reports</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../09/">Backup and restore</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../10/">Installation and Configuration</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../11/">Nibras Reader</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../12/">License</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Nibras System</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Repository and Files</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="repository-and-files">Repository and Files</h1>
+<p>Nibras can have one or two (file) repositories. The user can choose how many to choose (1-2), and the usage of each repository. For example, repository 1 is the main repository for all records while repository 2 is for recent records only. So newly imported files goes to repository 2 first. And each record can have a single unique folder in each repository.</p>
+<p>The location of the folder is <strong>(repository path)/(module type)/(record id)</strong>, e.g. c:/rps1/T/123, for all types except resources, which has a special location <strong>(reposity path)/R/(type)/(record id/100)/record id</strong>, e.g. c:/rps1/R/doc/125/12532.</p>
+<p><img alt="open rps folders" src="../images/open-rps-folders.jpg" /></p>
+<p>Note: The reason for the special location for resources is that they can be large in number, and so putting them in one folder can cause performance issues.</p>
+<p>In the folder, you can put any file you want. You can see the folder files inside the record's panel (east region), after clicking on the record title or description. </p>
+<p><img alt="record file listing" src="../images/record-file-listing.jpg" /></p>
+<!-- 
+keep new files aside, review and organize them. import them. they become ready to be copied to their final location in the repository. the repository should not contain at any time files that were not well reviewed and with good metadata. /new can be chaotic but repository should not.
+
+weekly copying imported data to repository.
+backup before import
+natural way to make incremental backups. and review what is new. for super safe mind, have the rps acccessed read only for all the time excpet when copying the new and processing sandbox files to it.
+
+
+PKM read from both the sandbox and repository when you see the details e.g. of a resource. Even when its files are still in the sandbox, you can access them from PKM (sns, location of file - green for files in the sandbox)
+
+
+ -->
+
+<!-- model: folder with unchanging names, best with just IDs. what it contains is left for PKM to handle via a record e.g. documentary "sample1" has ID 153. In the file system you will have a folder name 153 under the documentaries folder. This way you will not change the name, have the same folder in another place with a different name, even worse, have it with different contents.
+very good for backups. help you avoid renaming folder ad hoc. But force you to add metadata in PKM instead.
+ -->
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../05/" class="btn btn-neutral float-right" title="Adding">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../03/" class="btn btn-neutral" title="Records and Data Model"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../03/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../05/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

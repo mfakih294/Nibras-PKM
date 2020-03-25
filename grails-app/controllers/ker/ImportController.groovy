@@ -1,5 +1,6 @@
 //
 
+
 /*
  * Copyright (c) 2018. Mohamad F. Fakih (mail@khuta.org)
  *
@@ -32,6 +33,9 @@ import org.springframework.util.FileCopyUtils
 
 import grails.plugin.springsecurity.annotation.Secured
 
+//import com.gravity.goose.Article
+//import com.gravity.goose.Configuration
+//import com.gravity.goose.Goose
 
 
 @Secured('ROLE_ADMIN')
@@ -312,8 +316,7 @@ class ImportController {
             }
 
             render(template: '/import/importLocalFiles', model: [files: files, rootPath: rootPath])
-        }
-        else {
+        } else {
             render(template: '/import/importLocalFiles', model: [files: files, rootPath: rootPath])
             render "Folder " + rootPath + " does not exist."
         }
@@ -321,7 +324,7 @@ class ImportController {
 
 
     def upload() {
-    println 'params ' + params.dump()
+        println 'params ' + params.dump()
 
         String contentType = request.getHeader("Content-Type")
         String fileName = URLDecoder.decode(request.getHeader('X-File-Name'), 'UTF-8')
@@ -414,6 +417,7 @@ class ImportController {
         response.setStatus(status)
         render([written: (status == 200), fileName: file.name, status: status, statusText: statusText] as JSON)
     }
+
     def upload0() {
 
 //        if (new File(CH.config.data.location + '/' + params.name).exists())
@@ -483,7 +487,7 @@ class ImportController {
 
     }
 
-  def uploadCover() {
+    def uploadCover() {
 
         def status = ''
         try {
@@ -517,7 +521,83 @@ class ImportController {
         render(template: '/reports/editBoxShow', model: [])
     }
 
-    def addToRecordFolder2(){
+    def addToRecordFolder2() {
         println params.dump()
     }
-} // end of class
+
+   /*
+    def scrapHtmlPage() {
+        def r = Book.get(params.id)
+        String url = r.url
+
+        Configuration configuration = new Configuration()
+        configuration.setMinBytesForImages(4500)
+        configuration.setLocalStoragePath("/tmp/goose")
+        // i don't care about the image, just want text, this is much faster!
+        configuration.setEnableImageFetching(false);
+        //   configuration.setImagemagickConvertPath("/opt/local/bin/convert");
+        Goose goose = new Goose(configuration);
+
+        Article article = goose.extractContent(url)
+        r.fullText = article.cleanedArticleText()
+        //r.publishedOn = article.publishDate()
+        r.title = article.title()
+        r.notes = article.metaDescription()
+        r.textTags = article.metaKeywords()
+        r.imageUrl = article.topImage().getImageSrc()
+
+
+        if (r.imageUrl) {
+
+            def path = OperationController.getPath('covers.sandbox.path')// + '/' + r.type?.code
+
+            def t = new File(path + '/' + r.id + '.jpg')
+            if (t.exists()) t.renameTo(new File(path + '/' + r.id + '-old.jpg'))
+            try {
+                t << new URL(r.imageUrl.substring(0, r.imageUrl.length() - 6)).openStream()
+            }
+            catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
+        render(template: '/gTemplates/recordSummary', model: [record: r, expandedView: true])
+    }
+
+    def scrapHtmlAll() {
+        def url
+
+        Configuration configuration = new Configuration()
+        configuration.setMinBytesForImages(4500)
+        configuration.setLocalStoragePath("/tmp/goose")
+        // i don't care about the image, just want text, this is much faster!
+        configuration.setEnableImageFetching(false);
+        //   configuration.setImagemagickConvertPath("/opt/local/bin/convert");
+        Goose goose = new Goose(configuration);
+
+
+        for (r in Book.findAllByType(ResourceType.findByCode('link'))) {
+            if (r.url && !r.fullText) {
+                try {
+                    url = r.url
+                    Article article = goose.extractContent(url)
+                    r.fullText = article.cleanedArticleText()
+                    //r.publishedOn = article.publishDate()
+
+//                    if (article.title() && article.title()?.trim() != '')
+                        r.title = article.title()
+
+                    r.notes = article.metaDescription()
+                    r.textTags = article.metaKeywords()
+                    println 'scrapping ' + r.id + '>> ' + url
+                    r.save(flush: true)
+                    // r.imageUrl = article.topImage().getImageSrc()
+                }
+                catch (Exception e) {
+                    println 'ERROR scrapping ' + r.id + '>> ' + url + '\n' + e.toString() + '\n\n'
+                    //   render(template: '/gTemplates/recordSummary', model: [record: r, expandedView: true])
+                }
+            }
+        }
+    }
+    */
+    } // end of class

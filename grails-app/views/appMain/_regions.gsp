@@ -65,12 +65,49 @@
             </a></h6>
 
             <div id="inner1" class="common" style="">
+                <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
+                              url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
+                              update="centralArea"
+                              onComplete="jQuery('#descriptionDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
+                              method="post">
+
+                %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
+                %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
+                %{--</code>--}%
+
+                    <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
+                              id="typeField"
+                              value="N"/>
+                    <g:textField name="title" value="" id="title"
+
+                                 style=" padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 77% !important;"
+                                 placeholder="Summary * "
+                                 class=""/>
+
+                    <g:submitButton name="save" value="Add"
+                                    style="text-align: center; padding-left: 4px;padding-right: 4px;"
+                                    id="addXcdFormDaftarSubmit"
+                                    class="fg-button ui-widget ui-state-default"/>
+
+                    <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                                name="description" id="descriptionDaftar"
+                                value=""
+                                style="font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
+                </g:formRemote>
+                %{--<div id="subDaftarArea">--}%
+%{----}%
+                %{--</div>--}%
+
+                <br/>
+                <hr style="color: darkgray; background: darkgray"/>
+                <br/>
 
                 <div id="centralArea" class="common" style="">
 
 
 
-%{--                <span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
+
+                    %{--                <span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
 %{--                title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
                 %{--<h5>Last plan</h5>--}%
                 %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
@@ -150,7 +187,7 @@
 
             </div>
         <h6 id="h64"><a href="#" id="testTitle4">
-            Script panel
+            Advanced panel
         </a></h6>
 
             <div id="4d" class="common" style="">

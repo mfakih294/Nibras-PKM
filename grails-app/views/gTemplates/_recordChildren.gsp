@@ -77,35 +77,38 @@
 </g:elseif>
 <g:elseif test="${entityCode == 'C'}">
 
-    %{--<g:if test="${childType == 'P'}">--}%
+    <g:if test="${childType == 'P'}">
         <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByCourse(record)]"/>
-    %{--</g:if>--}%
-    %{--<g:if test="${childType == 'J'}">--}%
+    </g:if>
+    <g:if test="${childType == 'J'}">
         <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByCourse(record)]"/>
-    %{--</g:if>--}%
-    %{--<g:if test="${childType == 'W'}">--}%
+    </g:if>
+    <g:if test="${childType == 'W'}">
         <g:render template="/gTemplates/recordListing" model="[list: Writing.findAllByCourse(record, [sort: 'orderNumber'])]"/>
-    %{--</g:if>--}%
-    %{--<g:if test="${childType == 'G'}">--}%
+    </g:if>
+    <g:if test="${childType == 'G'}">
         <g:render template="/gTemplates/recordListing" model="[list: mcs.Goal.findAllByCourse(record)]"/>
-    %{--</g:if>--}%
-    %{--<g:if test="${childType == 'T'}">--}%
+    </g:if>
+    <g:if test="${childType == 'T'}">
         <g:render template="/gTemplates/recordListing" model="[list: mcs.Task.findAllByCourse(record)]"/>
-    %{--</g:if>--}%
-    %{--<g:if test="${childType == 'N'}">--}%
+    </g:if>
+    <g:if test="${childType == 'N'}">
         <g:render template="/gTemplates/recordListing"
                   model="[list: IndexCard.findAllByCourse(record, [sort: 'orderNumber', order: 'asc'])]"/>
-    %{--</g:if>--}%
-    %{--<g:if test="${childType == 'B'}">--}%
+    </g:if>
+    <g:if test="${childType == 'R'}">
+        <h4>Core resources</h4>
         <g:render template="/gTemplates/recordListing"
                   model="[list: Book.findAllByCourseAndStatus(record, ResourceStatus.findByCode('core'), [sort: 'orderNumber', order: 'asc'])]"/>
     %{--</g:if>--}%
     %{--<g:if test="${childType == 'R'}">--}%
+        <h4>Non-core resources</h4>
         <g:render template="/gTemplates/recordListing"
                   model="[list: Book.findAllByCourseAndStatusNot(record, ResourceStatus.findByCode('core'), [sort: 'orderNumber', order: 'asc'])]"/>
+        <h4>Resources without status</h4>
         <g:render template="/gTemplates/recordListing"
                   model="[list: Book.findAllByCourseAndStatusIsNull(record, [sort: 'orderNumber', order: 'asc'])]"/>
-    %{--</g:if>--}%
+    </g:if>
 </g:elseif>
 
 <g:elseif test="${entityCode == 'R'}">

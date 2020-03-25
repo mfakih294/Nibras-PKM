@@ -20,7 +20,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    %{--<meta name="layout" content="main"/>--}%
+    <meta name="layout" content="main"/>
     <title>${record.entityCode()} ${record?.toString()}</title>
     %{--${record.id}--}%
 
@@ -32,22 +32,23 @@
 
     <r:require modules="application"/>
     %{--<r:require module="fileuploader"/>--}%
-    %{--<r:require modules="jquery"/>--}%
-    %{--<r:require modules="jquery-ui"/>--}%
+    <r:require modules="jquery"/>
+    <r:require modules="jquery-ui"/>
 %{----}%
 
-    %{--<r:layoutResources/>--}%
+    <r:layoutResources/>
 
 
 <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-ui-1.10.4.custom.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jqueryui-editable.min.js')}"></script>
 
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui-1.8.22.custom.css')}"/>
 
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
-
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'jqueryui-editable.css')}"/>
 
 
 %{----}%
@@ -55,7 +56,8 @@
 
 <body style="margin-left:100px;margin-right:100px; background: lightgray">
 
-<g:if test="${record.entityCode().length() == 1}">
+%{--todo--}%
+<g:if test="${record.entityCode().length() == 1999}">
     <div style="float: right; display: inline">
         <uploader:uploader id="yourUploaderId${record.id}"
                            url="${[controller: 'attachment', action: 'upload']}"

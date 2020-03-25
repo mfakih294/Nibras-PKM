@@ -12,6 +12,7 @@
 %{--</script>--}%
 %{--Todo--}%
 
+<g:if test="${totalHits != 0}">
 <g:if test="${title && !ssId}">
     <h2 style="font-family: Georgia; font-size: 14px; font-weight: bold; line-height: 20px;">
        ${title} ${totalHits != null ? ' (' + totalHits + ')' : ''}
@@ -206,6 +207,11 @@
 </g:else>
 
 
+    </g:if>
+<g:else>
+    <br/>
+    <i style="color: darkgray">No matching ${entity?.toLowerCase()?.split(/\./)[1]} records found.</i>
+</g:else>
 
 <sec:ifLoggedIn>
     <sec:ifAnyGranted roles="ROLE_ADMIN">
@@ -224,8 +230,8 @@
 
 <script type="text/javascript">
 jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelection');
-jQuery('#importFileCount').load('${request.contextPath}/page/importbeat');
-jQuery('#editFileCount').load('${request.contextPath}/page/editHeartbeat');
-jQuery('#recentRecordsCount').load('${request.contextPath}/generics/countRecentRecords');
+%{--jQuery('#importFileCount').load('${request.contextPath}/page/importbeat');--}%
+%{--jQuery('#editFileCount').load('${request.contextPath}/page/editHeartbeat');--}%
+%{--jQuery('#recentRecordsCount').load('${request.contextPath}/generics/countRecentRecords');--}%
 
 </script>

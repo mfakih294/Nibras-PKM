@@ -447,7 +447,9 @@ YellowGreen;#9ACD32"""
 //                            break
                         case 'x': batchPhysicallyDeleteRecords(commandBody)
                             break
-                        case '.': executeSavedSearch(SavedSearch.findByCode(commandBody)?.id)
+                        case 'e': executeSavedSearch(
+                                SavedSearch.findByCode(commandBody.substring(1))?.id ?:
+                                        (commandBody.substring(1).isInteger() ? SavedSearch.get(commandBody.substring(1))?.id : null))
                             break
                         case '+': appendToScratch(commandBody)
                             break
@@ -475,16 +477,17 @@ YellowGreen;#9ACD32"""
            f.text += block + '\n***\n\n'
       */
 
-        def prefixRecord = CommandPrefix.get(commandPrefix)
-        def prefix = params.prefix ?: (prefixRecord.description ?: '')
-
-        if (prefixRecord.multiLine || !prefix) {
-            block.eachLine() {
+//        def prefixRecord = CommandPrefix.get(commandPrefix)
+        def prefix = params.prefix //?: (prefixRecord.description ?: '')
+//        println ' params.forEachLine ' + (params.forEachLine != 'null' ? 'on' : 'off')
+//        println ' params.prefix ' + params.prefix
+        if (!prefix.startsWith('A')){//.forEachLine != 'null') {
+            block?.replace('--', ' -- ')?.eachLine() {
                 if (it.trim() != '' && !it.startsWith('//'))
-                    batchAdd(prefix + it)
+                    batchAdd(prefix?.replace('--', ' -- ') + it)
             }
         } else
-            batchAdd(prefix + block.trim())
+            batchAdd(prefix?.replace('--', ' -- ') + block.trim())
 
         // block.split(/\*\*\*/).each() { region ->
         //              addWithDescription(region?.trim())
@@ -499,7 +502,6 @@ YellowGreen;#9ACD32"""
                 addWithDescription(region?.trim())
             }
         } else {
-
             block.eachLine { input ->
                 input = input.trim()
                 if (input && input != '') {
@@ -658,7 +660,20 @@ r (resource)
                             break
                         case 'x': hintResponce = 'x entity_code [selected records]'
                             break
-                        case '.': hintResponce = '. saved_search_code ' + SavedSearch.findAllByCodeIsNotNull()?.join('<br/>')
+                        case 'e': hintResponce = '. saved search id or code <br/>'
+
+if (input.length() < 3){
+                            SavedSearch.findAll().each(){
+                                hintResponce+= it.id + (it.code ? ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '<br/>'
+                            }
+} else {
+//    println 'hhhhhhhhhhhhhhh' + input
+    SavedSearch.findAllByCodeLike(input.substring(1) + '%', [sort: 'code']).each() {
+//        responce += (it.toString() + '|' + finalPart + ' =' + it.code + ' -- \n')
+//        println 'eeeeeeeeeeeeeeeeeeee' + it.id
+        hintResponce += (it.id + (it.code ?  ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '\n')
+    }
+}
                             break
                     }
                 }
@@ -900,11 +915,21 @@ ll
                             hintResponce += (it.toString() + '|' + finalPart + ' d' + it.code + ' -- \n')
                         }
                             break
-//                        case '.': SavedSearch.findAll([sort: 'code']).each() {
-//                            responce += (it.toString() + '|' + finalPart + ' d' + it.code + ' -- \n')
-//                            hintResponce += (it.toString() + '|' + finalPart + ' d' + it.code + ' -- \n')
-//                        }
-//                            break
+                        case '.':
+
+
+//                            SavedSearch.findAllByCodeLike(input.substring(1) + '%', [sort: 'code']).each() {
+//        responce += (it.toString() + '|' + finalPart + ' =' + it.code + ' -- \n')
+//        println 'eeeeeeeeeeeeeeeeeeee' + it.id
+//                                hintResponce += (it.id + (it.code ? ' =' + it.code : '') + ' - ' + it.summary + '\n')
+//                            }
+
+                            SavedSearch.findAllByCodeLike(filter + '%', [sort: 'code']).each() {
+                            responce += (it.toString() + '|' + finalPart + ' =' + it.code + ' -- \n')
+//                            hintResponce += (it.id + ' =' + it.code + ' - ' + it.summary + '\n')
+                                hintResponce += (it.id + (it.code ? ' =' + it.code : '') + ' - ' + it.summary + '\n')
+                        }
+                            break
 
                     }
                 }
@@ -948,6 +973,7 @@ ll
 */
 
         if (hint) {
+
             render(template: '/layouts/hints', model: [hints: hintResponce?.replaceAll('\n', '<br/>')])
         } else
             render(responce)
@@ -2850,7 +2876,8 @@ ll
             s.queryType = 'hql'
             s.save(flush: true)
             render(template: '/gTemplates/recordSummary', model: [record: s])
-        } else if (input.endsWith(' +')) {
+        }
+        else if (input.endsWith(' +')) {
             try {
                 //println new Date().format('HH:mm:ss')
                 def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
@@ -2894,7 +2921,8 @@ ll
                 println e.printStackTrace()
             }
 
-        } else {
+        }
+        else {
             params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
             if (input.contains(' {')) {
 
@@ -2989,7 +3017,7 @@ ll
 
                     fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
                     fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
-                    queryKey = '_' + new Date().format('ddMMyyHHmmss')
+                    queryKey = '_' + entityCode + '-' + new Date().format('ddMMyyHHmmss')
                     session[queryKey] = fullquery
 
                 }
@@ -3010,6 +3038,7 @@ ll
                 render(template: '/gTemplates/recordListing', model: [
                         totalHits: Task.executeQuery(fullquerySort)[0], //.size(),
                         list     : list,
+                        entity: fullquery?.split('where')[0]?.replace('from', '').trim(),
                         queryKey : queryKey,
                         fullquery: fullquery,
                         title    : fullquery.split(' ')[1]?.split(/\./).last() + ': ' + transformMcsNotation(input)['properties']// + ' ('+ Task.executeQuery(fullquerySort)[0] + ' result(s))'
@@ -4656,103 +4685,103 @@ def addTagToAll(String input) {
 
     def executeSavedSearch(Long id) {
 
-
-        def savedSearch = SavedSearch.get(id)
-
-
-        if (params.reportType != 'tab') {
-            render(template: '/gTemplates/recordSummary', model: [record: savedSearch])
-            render('<br/>')
-        }
+         if (id != null) {
+             def savedSearch = SavedSearch.get(id)
 
 
-        if (savedSearch.queryType == 'random' || params.reportType == 'random') {
-
-            randomGet(savedSearch.query, savedSearch.summary)
-
-        } else if (savedSearch.queryType == 'hql') {
-            //queryRecords(savedSearch.query)
-            params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+             if (params.reportType != 'tab') {
+                 render(template: '/gTemplates/recordSummary', model: [record: savedSearch])
+                 render('<br/>')
+             }
 
 
-            if (savedSearch.query?.contains('{')) {
+             if (savedSearch.queryType == 'random' || params.reportType == 'random') {
 
-                def groups
+                 randomGet(savedSearch.query, savedSearch.summary)
 
-                def input = savedSearch.query.split(/ \{/)[0]
-
-                def groupBy = savedSearch.query.split(/ \{/)[1]
-
-                switch (groupBy) {
-                    case 'department':
-                        groups = Department.list([sort: 'code'])
-                        break
-                //   case 'course':
-                //       groups = Course.list([sort: 'summary'])
-                //     break
-                    case 'course':
-                        groups = Course.list([sort: 'summary'])
-                        break
-                    case 'type':
-                        if (input.contains('Goal ')) {
-                            groups = GoalType.list([sort: 'name'])
-                        } else if (input.contains('Journal ')) {
-                            groups = JournalType.list([sort: 'name'])
-                        } else if (input.contains('Planner ')) {
-                            groups = PlannerType.list([sort: 'name'])
-                        } else if (input.contains('Journal ')) {
-                            groups = PlannerType.list([sort: 'name'])
-                        } else if (input.contains('Writing ') || input.contains('IndexCard ')) {
-                            groups = WritingType.list([sort: 'name'])
-                        }
-                        break
-                    case 'status':
-                        if (input.contains('Goal ')) {
-                            groups = WorkStatus.list([sort: 'name'])
-                        } else if (input.contains('Journal ')) {
-                            groups = JournalType.list([sort: 'name'])
-                        } else if (input.contains('Writing ')) {
-                            groups = WritingStatus.list([sort: 'name'])
-                        } else if (input.contains('IndexCard ')) {
-                            groups = WritingStatus.list([sort: 'name'])
-                        } else if (input.contains('Book ')) {
-                            groups = ResourceStatus.list([sort: 'name'])
-                        } else if (input.contains('Goal ') || input.contains('Task ') || input.contains('Planner ')) {
-                            groups = WorkStatus.list([sort: 'name'])
-                        }
-                        break
-                    case 'location':
-                        groups = Location.list([sort: 'name'])
-                        break
-                    case 'context':
-                        groups = Context.list([sort: 'name'])
-                        break
-                    case 'goal':
-                        groups = Goal.findAllByBookmarked([true], [sort: 'summary'])
-                        break
-                }
-                params.max = 100
+             } else if (savedSearch.queryType == 'hql') {
+                 //queryRecords(savedSearch.query)
+                 params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
 
 
-                def list2 = Task.executeQuery(input, [], params)
+                 if (savedSearch.query?.contains('{')) {
+
+                     def groups
+
+                     def input = savedSearch.query.split(/ \{/)[0]
+
+                     def groupBy = savedSearch.query.split(/ \{/)[1]
+
+                     switch (groupBy) {
+                         case 'department':
+                             groups = Department.list([sort: 'code'])
+                             break
+                     //   case 'course':
+                     //       groups = Course.list([sort: 'summary'])
+                     //     break
+                         case 'course':
+                             groups = Course.list([sort: 'summary'])
+                             break
+                         case 'type':
+                             if (input.contains('Goal ')) {
+                                 groups = GoalType.list([sort: 'name'])
+                             } else if (input.contains('Journal ')) {
+                                 groups = JournalType.list([sort: 'name'])
+                             } else if (input.contains('Planner ')) {
+                                 groups = PlannerType.list([sort: 'name'])
+                             } else if (input.contains('Journal ')) {
+                                 groups = PlannerType.list([sort: 'name'])
+                             } else if (input.contains('Writing ') || input.contains('IndexCard ')) {
+                                 groups = WritingType.list([sort: 'name'])
+                             }
+                             break
+                         case 'status':
+                             if (input.contains('Goal ')) {
+                                 groups = WorkStatus.list([sort: 'name'])
+                             } else if (input.contains('Journal ')) {
+                                 groups = JournalType.list([sort: 'name'])
+                             } else if (input.contains('Writing ')) {
+                                 groups = WritingStatus.list([sort: 'name'])
+                             } else if (input.contains('IndexCard ')) {
+                                 groups = WritingStatus.list([sort: 'name'])
+                             } else if (input.contains('Book ')) {
+                                 groups = ResourceStatus.list([sort: 'name'])
+                             } else if (input.contains('Goal ') || input.contains('Task ') || input.contains('Planner ')) {
+                                 groups = WorkStatus.list([sort: 'name'])
+                             }
+                             break
+                         case 'location':
+                             groups = Location.list([sort: 'name'])
+                             break
+                         case 'context':
+                             groups = Context.list([sort: 'name'])
+                             break
+                         case 'goal':
+                             groups = Goal.findAllByBookmarked([true], [sort: 'summary'])
+                             break
+                     }
+                     params.max = 100
 
 
-                if (params.reportType == 'tab') {
-                    params.max = null
-                    render(view: '/page/kanbanCrs', model: [groups: groups, groupBy: groupBy,
-                                                            title : savedSearch.summary,
-                                                            ssId  : savedSearch.id,
-                                                            items : Task.executeQuery(input, [])])
-                } else {
-                    render(template: '/reports/genericGrouping', model: [groups: groups, groupBy: groupBy,
-                                                                         title : savedSearch.summary,
-                                                                         ssId  : savedSearch.id,
-                                                                         items : list2])
-                }
+                     def list2 = Task.executeQuery(input, [], params)
 
-            } else {
 
-                /*
+                     if (params.reportType == 'tab') {
+                         params.max = null
+                         render(view: '/page/kanbanCrs', model: [groups: groups, groupBy: groupBy,
+                                                                 title : savedSearch.summary,
+                                                                 ssId  : savedSearch.id,
+                                                                 items : Task.executeQuery(input, [])])
+                     } else {
+                         render(template: '/reports/genericGrouping', model: [groups: groups, groupBy: groupBy,
+                                                                              title : savedSearch.summary,
+                                                                              ssId  : savedSearch.id,
+                                                                              items : list2])
+                     }
+
+                 } else {
+
+                     /*
 
                if (OperationController.getPath('enable.autoselectResults') == 'yes'){
                    selectedRecords.keySet().each() {
@@ -4767,52 +4796,55 @@ def addTagToAll(String input) {
                }
                */
 
-                if (params.reportType == 'cal')
-                    render(view: '/reports/calendar', model: [
-                            id           : id,
-                            savedSearchId: id,
-                            title        : savedSearch.summary])
-                else if (params.reportType == 'tab') {
-                    params.max = null
-                    render(view: '/page/kanbanCrs', model: [
-                            ssId              : id,
-                            searchResultsTotal: savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
-                            totalHits         : savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
-                            list              : Task.executeQuery(savedSearch.query, []),
-                            title             : savedSearch.summary + (savedSearch.countQuery ? ' (' + Task.executeQuery(savedSearch.countQuery)[0] + ')' : '')]
-                    )
-                } else {
-                    def list = Task.executeQuery(savedSearch.query, [], params)
+                     if (params.reportType == 'cal')
+                         render(view: '/reports/calendar', model: [
+                                 id           : id,
+                                 savedSearchId: id,
+                                 title        : savedSearch.summary])
+                     else if (params.reportType == 'tab') {
+                         params.max = null
+                         render(view: '/page/kanbanCrs', model: [
+                                 ssId              : id,
+                                 searchResultsTotal: savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
+                                 totalHits         : savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
+                                 list              : Task.executeQuery(savedSearch.query, []),
+                                 title             : savedSearch.summary + (savedSearch.countQuery ? ' (' + Task.executeQuery(savedSearch.countQuery)[0] + ')' : '')]
+                         )
+                     } else {
+                         def list = Task.executeQuery(savedSearch.query, [], params)
 
-                    render(template: '/gTemplates/recordListing', model: [
-                            ssId              : id,
-                            searchResultsTotal: savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
-                            totalHits         : savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
-                            list              : list,
-                            title             : savedSearch.summary
-                    ])
-                }
-            }
+                         render(template: '/gTemplates/recordListing', model: [
+                                 ssId              : id,
+                                 searchResultsTotal: savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
+                                 totalHits         : savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
+                                 list              : list,
+                                 title             : savedSearch.summary
+                         ])
+                     }
+                 }
 
-            //  + (! savedSearch.query.contains('select') ? '(' + Task.executeQuery('select count(*) ' +  savedSearch.query)[0] + ')' : '') + ' : ' +  savedSearch.query
+                 //  + (! savedSearch.query.contains('select') ? '(' + Task.executeQuery('select count(*) ' +  savedSearch.query)[0] + ')' : '') + ' : ' +  savedSearch.query
 
 //            render(template: '/gTemplates/recordListing', model: [
 //                    list: Task.executeQuery(savedSearch.query, [max: 100]),
 //                    title: savedSearch.summary + " (" + savedSearch.query + ")"
 //            ])
-        } else if (savedSearch.queryType == 'lucene') {
-            render(template: '/gTemplates/recordListing', model: [
-                    list : searchableService.search(savedSearch.query, [max: 100]),
-                    title: savedSearch.summary + " (" + savedSearch.query + ")"])
-        } else if (savedSearch.queryType == 'adhoc') {
-            render(template: '/reports/adHocQueryResults', model: [
-                    list : mcs.Task.executeQuery(savedSearch.query),
-                    ssId : savedSearch.id,
-                    title: '' + savedSearch.summary + " (" + savedSearch.query + ")"
-            ])
-        } else
-            render(template: '/layouts/achtung', model: [message: 'Unknown query type'])
-
+             } else if (savedSearch.queryType == 'lucene') {
+                 render(template: '/gTemplates/recordListing', model: [
+                         list : searchableService.search(savedSearch.query, [max: 100]),
+                         title: savedSearch.summary + " (" + savedSearch.query + ")"])
+             } else if (savedSearch.queryType == 'adhoc') {
+                 render(template: '/reports/adHocQueryResults', model: [
+                         list : mcs.Task.executeQuery(savedSearch.query),
+                         ssId : savedSearch.id,
+                         title: '' + savedSearch.summary + " (" + savedSearch.query + ")"
+                 ])
+             } else
+                 render(template: '/layouts/achtung', model: [message: 'Unknown query type'])
+         }
+        else {
+             render(template: '/layouts/achtung', model: [message: 'Saved search not found.'])
+         }
     }
 
     def showCalendar() {
@@ -4868,7 +4900,7 @@ def addTagToAll(String input) {
             if (!it.bookmarked)
                 tags += it.name + ','
         }
-        println 'tags: ' + tags + '.'
+//        println 'tags: ' + tags + '.'
         def categories = ''
         record.tags.each() {
             if (it.bookmarked == true)
@@ -5250,6 +5282,8 @@ def addTagToAll(String input) {
     def commandNotes() {
         def r = [
                 'prefix': CommandPrefix.get(params.q)?.description,
+                'isForEachLine': CommandPrefix.get(params.q)?.multiLine,
+
                 'info'  : CommandPrefix.get(params.q)?.notes?.replaceAll(/\?date/, ker.OperationController.toWeekDate(new Date() - 1))]
 
         render(r as JSON)

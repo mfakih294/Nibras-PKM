@@ -5,7 +5,9 @@
 <head>
 
     <title>
-        <g:layoutTitle default="Nibras PKM"/>
+%{--        <g:layoutTitle default="Nibras PKM"/>--}%
+        ${ker.OperationController.getPath('app.name') ?: 'Nibras PKM'}
+        <g:meta name="app.version"/>
     </title>
 
 %{--    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.png')}" type="image/png"/>--}%

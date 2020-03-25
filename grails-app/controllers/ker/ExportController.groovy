@@ -129,7 +129,7 @@ class ExportController {
                             borderColor    : 'darkgray',
                             textColor      : it.type?.style ?: '#515150',
 
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
                             allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
             }
 
@@ -155,7 +155,7 @@ class ExportController {
                             borderColor    : 'darkgray',
                             textColor      : it.context?.style ?: '#515150',
 
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
                             allDay         : true   ])
             }
 
@@ -180,7 +180,7 @@ class ExportController {
                             backgroundColor: '#F7F9EE',
                             borderColor    : 'darkgray',
                             textColor      : 'black',//it.context?.style ?: '#515150',
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
                             allDay         : true   ])
             }
 
@@ -204,7 +204,7 @@ class ExportController {
                             backgroundColor: '#F7F9EE',
                             borderColor    : 'darkgray',
                             textColor      : 'black',//it.context?.style ?: '#515150',
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
                             allDay         : true   ])
             }
 
@@ -219,9 +219,32 @@ class ExportController {
         def events = []
 
 
-            Task.executeQuery("from Journal t where t.startDate between ? and ?",
+            Task.executeQuery("from Journal t where t.startDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
-                    [Date.parse('yyyy-MM-dd', params.start) - 20, Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
+                    [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
+
+                def title =  '' + (it.type?.code ? '#' + it.type?.code : '') + '' +
+                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' ' : '') +
+                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' ' : '') + //it.goal?.code + ' '
+                        (it.course ? '(' + it.course?.code + ') ' : '') +
+                        (it.summary ? it.summary + '  ' : '')
+//                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
+                events.add([id             : it.id,
+                            start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.startDate),
+                            end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate ?: it.startDate),
+                            //it.type?.name +
+                            title          : StringUtils.abbreviate(title, 80),
+                            description    : it.summary + '|' + it.description,
+                            backgroundColor: 'CadetBlue',//it.type?.color ?: '#F7F9EE',
+                            borderColor    : 'CadetBlue',
+                            textColor      : 'white',//it.type?.style ?: '#515150',
+
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=J',
+                            allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
+            }
+      Task.executeQuery("from Planner t where t.startDate between :start and :end",
+                    //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
+                    [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
                 def title = '' + (it.type?.code ? '#' + it.type?.code : '') + ' ' +
                     (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' ' : '') +
@@ -235,43 +258,20 @@ class ExportController {
                             //it.type?.name +
                             title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
-                            backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'darkgrey',
-                            textColor      : 'black',//it.type?.style ?: '#515150',
+                            backgroundColor: 'Chocolate',//it.type?.color ?: '#F7F9EE',
+                            borderColor    : 'Chocolate',
+                            textColor      : 'white',//it.type?.style ?: '#515150',
 
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=J',
-                            allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
-            }
-      Task.executeQuery("from Planner t where t.startDate between ? and ?",
-                    //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
-                    [Date.parse('yyyy-MM-dd', params.start) - 20, Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
-
-                def title = '' + (it.type?.code ? '#' + it.type?.code : '') + ' ' +
-                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' ' : '') +
-                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' ' : '') + //it.goal?.code + ' '
-                        (it.course ? '(' + it.course?.code + ') ' : '') +
-                        (it.summary ? it.summary + '  ' : '')
-//                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
-                events.add([id             : it.id,
-                            start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.startDate),
-                            end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate ?: it.startDate),
-                            //it.type?.name +
-                            title          : StringUtils.abbreviate(title, 80),
-                            description    : it.summary + '|' + it.description,
-                            backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'darkgreen',
-                            textColor      : 'black',//it.type?.style ?: '#515150',
-
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=P',
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=P',
                             allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
             }
 
-            Task.executeQuery("from Task t where t.endDate between ? and ?",
+            Task.executeQuery("from Task t where t.endDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
-                    [Date.parse('yyyy-MM-dd', params.start) - 20, Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
+                    [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
                 def title = '' +
-                        (it.context ? '@' + it.context?.code + ' ' : '') +
+                        (it.context ? '@' + it.context?.code + ' ' : '') + '' +
                         (it.summary ? it.summary + '  ' : '')
 //                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
                 events.add([id             : it.id,
@@ -280,19 +280,41 @@ class ExportController {
                             //it.type?.name +
                             title          : StringUtils.abbreviate(title, 50),
                             description    : it.summary + '|' + it.description,
-                            backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'darkblue',
-                            textColor      : 'black',//it.type?.style ?: '#515150',
+                            backgroundColor: 'MediumSeaGreen',//it.type?.color ?: '#F7F9EE',
+                            borderColor    : 'MediumSeaGreen',
+                            textColor      : 'white',//it.type?.style ?: '#515150',
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=T',
+                            allDay         : true   ])
+            }
 
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=T',
+
+    Task.executeQuery("from Goal t where t.endDate between  :start and :end",
+                    //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
+                    [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
+
+                def title = '' +
+                        (it.type ? '#' + it.type?.code + ' ' : '') +
+                        (it.summary ? it.summary + '  ' : '')
+//                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
+                events.add([id             : it.id,
+                            start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate),
+                            end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate),
+                            //it.type?.name +
+                            title          : StringUtils.abbreviate(title, 50),
+                            description    : it.summary + '|' + it.description,
+                            backgroundColor: 'LightSlateGray',//it.type?.color ?: '#F7F9EE',
+                            borderColor    : 'LightSlateGray',
+                            textColor      : 'white',//it.type?.style ?: '#515150',
+
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=T',
                             allDay         : true   ])
             }
 
 
 
-            Task.executeQuery("from Book t where t.readOn between ? and ?",
+            Task.executeQuery("from Book t where t.readOn between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
-                    [Date.parse('yyyy-MM-dd', params.start) - 20, Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
+                    [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
                 def title = '' +
                         (it.title ? it.title + ' ' : '')+
@@ -304,10 +326,10 @@ class ExportController {
                             //it.type?.name +
                             title          : title,
                             description    : title +'|' + StringUtils.abbreviate(it.description, 600),
-                            backgroundColor: '#fff',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'darkbgray',
-                            textColor      : 'black',//it.type?.style ?: '#515150',
-                            url            : OperationController.getPath('app.URL') + '/page/record/' + it.id + '?entityCode=R',
+                            backgroundColor: 'DarkKhaki',//it.type?.color ?: '#F7F9EE',
+                            borderColor    : 'DarkKhaki',
+                            textColor      : 'white',//it.type?.style ?: '#515150',
+                            url            : request.contextPath + '/page/record/' + it.id + '?entityCode=R',
                             allDay         : true   ])
             }
 

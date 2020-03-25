@@ -27,7 +27,7 @@
     outline: 0;
     line-height: 1.2;
     text-decoration: none;
-    font-size: 97%;
+    font-size: 100%;
     list-style: none;
 }
 
@@ -1152,7 +1152,7 @@
 }
 .ui-accordion .ui-accordion-header a {
     display: block;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: normal;
     /*direction: ltr;*/
     text-align: start;

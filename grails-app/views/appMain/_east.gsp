@@ -57,10 +57,10 @@
     </a></h3>
 
     <div id=''>
+        <div class="panelCard">
+        <h4>Using sheet:</h4>
 
-        <b>Using sheet:</b>
-
-        <ul>
+        <ul style="list-style: square; column-count: 2">
             <g:if test="${ker.OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 <li><g:remoteLink controller="report" action="indicatorPanorama"
                                   update="centralArea"
@@ -95,14 +95,17 @@
             </li>
 
         </ul>
-        <br/>
-        <hr/>
-        <br/>
-        <b>Using forms:</b>
+
+          </div>
 
 
-        <span style="-moz-column-count: 2">
-            <ul style="list-style: square">
+        <div class="panelCard">
+
+        <h4>Using forms:</h4>
+
+
+        <span style="column-count: 2">
+            <ul style="list-style: square; column-count: 2">
 
                 <g:each in="${
                     [
@@ -136,11 +139,11 @@
 
         </span>
 
+            </div>
 
-        <br/><hr/>
-        <br/>
+        <div class="panelCard">
 
-        <b>By importing files named in Nibras format:</b>
+        <h4>By importing files named in Nibras format:</h4>
 
         <ul>
 
@@ -156,10 +159,7 @@
                 </g:if>
             </li>
         </ul>
-        <br/><hr/>
-        <br/>
-        <br/>
-
+</div>
     </div>
 
     <h3 class="accordionPanelAdd"><a href="#">
@@ -361,56 +361,27 @@
     </div>
 
 
-    <h3 class="accordionPanelAdd"><a href="#">
-        <g:message code="ar.daftar"></g:message>
-    </a></h3>
+    %{--<h3 class="accordionPanelAdd"><a href="#">--}%
+        %{--<g:message code="ar.daftar"></g:message>--}%
+    %{--</a></h3>--}%
 
-    <div id='daftarDiv'>
+    %{--<div id='daftarDiv'>--}%
 
-        <span id="topDaftarArea"
-              style="font-style: italic; padding-right: 15px; text-align: right; font-size: small; color: darkgreen">
+        %{--<span id="topDaftarArea"--}%
+              %{--style="font-style: italic; padding-right: 15px; text-align: right; font-size: small; color: darkgreen">--}%
 
-        </span>
-
-        <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
-                      url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
-                      update="subDaftarArea"
-                      onComplete="jQuery('#descriptionDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
-                      method="post">
-
-        %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
-            <g:textArea cols="80" rows="12" placeholder="title (line 1) - details (from line 2 till the end)"
-                        name="description" id="descriptionDaftar"
-                        value=""
-                        style="font-family: tahoma; font-size: small; background: #f7fff6; width: 100%; height: 120px !important;"/>
-
-            <br/>
-
-            <g:submitButton name="save" value="Save"
-                            style="text-align: center; margin: 0px; width: 84% !important; background: #efece0"
-                            id="addXcdFormDaftarSubmit"
-                            class="fg-button ui-widget ui-state-default"/>
-            <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
-                      id="typeField"
-                      value="N"/>
-
-        </g:formRemote>
+        %{--</span>--}%
 
 
+        %{--<br/>--}%
 
-        <span id="subDaftarArea">
+        %{--<a onclick="openNoteTaker()" href="javascript:void(0);" target="_self">--}%
+        %{--&nearr;--}%
+        %{--&nearr;--}%
+            %{--Open in a dedicated window.--}%
+        %{--</a>--}%
 
-        </span>
-
-        <br/>
-
-        <a onclick="openNoteTaker()" href="javascript:void(0);" target="_self">
-        &nearr;
-        &nearr;
-            Open in a dedicated window.
-        </a>
-
-    </div>
+    %{--</div>--}%
 
 
     %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
@@ -580,6 +551,22 @@
 
         %{--</li>--}%
         <br/>
+
+        <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
+            <h4>Export:</h4>
+            <ul>
+                <li><a href="${request.contextPath}/task/expotTodotxt"
+                       style="" target="_blank">
+                    G/T to Todo.txt
+                </a></li>
+                <li><a href="${request.contextPath}/expot/exportToIcal"
+                       style="" target="_blank">
+                    Export J/T/P to ics calendar
+                </a></li>
+            </ul>
+
+        </g:if>
+
     </div>
 
 

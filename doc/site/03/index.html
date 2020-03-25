@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Records and Data Model - Nibras System</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Records and Data Model";
+    var mkdocs_page_input_path = "03.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Nibras System</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../01/">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../02/">Interface</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Records and Data Model</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#records-and-data-model">Records and Data Model</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#comments-and-tags">Comments and tags</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../04/">Repository and Files</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../05/">Adding</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../06/">Search</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../07/">Commands</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../08/">Reports</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../09/">Backup and restore</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../10/">Installation and Configuration</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../11/">Nibras Reader</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../12/">License</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Nibras System</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Records and Data Model</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="records-and-data-model">Records and Data Model</h1>
+<!--
+ Each module has a one-letter code, e.g. G for goals, and a color code e.g. dark green for goals. You can see the letter and color codes from accordion in the west region.
+
+Often the module code is the first letter of the module name
+
+G (goals), T (tasks), C (notes, historically index '''c'''ards), W (writings), ...
+
+diagram
+sns
+
+
+To group tasks, Pomegranate supports up to 3 levels of parents. Goals, Courses and Department.
+
+ -->
+
+<!-- **Fields** -->
+
+<!-- . Definitions of typical types. -->
+
+<p>Certain fields are common to all module records:
+* Summary
+* Description
+* Priority
+* Type
+* Bookmarked
+* Date created and last updated</p>
+<p>Other fields are particular to certain modules:
+* Start and end dates (journal and planner).
+* Completed date, planned and actual duration, percent completed  (for tasks and goals).
+* Author, ISBN, published on, publication city, etc. (for resources).
+* Blog (for writings and notes).</p>
+<p><strong>Departments and courses</strong></p>
+<p>Department and course can assign any record.</p>
+<p><img alt="courses-entry" src="../images/courses-entry.jpg" /></p>
+<!-- 
+One of the goals of a system is show us our progress in quantitative ways and immediate way.
+
+Explanation of each journal, planner, goal type
+
+Pomegranate balance between flexible hierarchy, unlimited nesting and flexbile query to the user and simpler implementation to the developer -->
+
+<!--
+
+notes:
+
+contact integration @contact
+
+
+
+
+task, goal, notes can be linked to the person defined in the People module. the person need not be a user of the application. It can be the person with whom you got the notes, heard a piece of advice, or seen him/her doing things differently than your way.
+
+
+
+GTP
+JI
+RES
+WN
+
+so 
+planning,
+journaling, progress tracking,
+study and research,
+writing and publishing
+
+decomposition,
+GT
+WN
+RE
+ -->
+
+<h2 id="comments-and-tags">Comments and tags</h2>
+<p>A comment can be added to any module record.</p>
+<p><img alt="comments" src="../images/comments.jpg" /></p>
+<p>And any module record can have one or more tags.
+<!-- <img alt="tag-results" src="./images/tag-results.jpg" /> --></p>
+<p><img alt="multiple-tags" src="../images/multiple-tags.jpg" /></p>
+<p>You can see all records tagged with a certain tag from the Tags panel in the west region.</p>
+<p><img alt="tags" src="../images/tags.jpg" /></p>
+<!-- 
+Arbitrary relationships
+In addition to the relationships among the different modules set by the data model structure, one can link any two records from any module by ad hoc relationships. The relationship has a parametric type.
+
+If you link A to B, then when you see B, you will see it linked in reverse order to A. For example if A is a prerequisite for B, then B follows after A. You need to defines the name of the reverse relationship in the parameters too. -->
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../04/" class="btn btn-neutral float-right" title="Repository and Files">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../02/" class="btn btn-neutral" title="Interface"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../02/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../04/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

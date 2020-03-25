@@ -62,6 +62,9 @@ class Task implements Comparable {  // entity id = 127
     String deliverable
 
     String recurringText
+
+    String recurringCron
+
     Boolean isRecurring
     Boolean isRecycable
     Boolean permissiveRecurring

@@ -248,20 +248,21 @@ ul {
 }
 
 .accordion ul li {
-    line-height: 14px;
+    line-height: 15px;
+    padding-bottom: 9px;
 }
 
-input, select, textarea {
+input,select, textarea {
     background-color: #fcfcfc;
     border: 1px solid #ccc;
-    font: 11px Lato, tahoma, verdana, arial, helvetica, sans-serif;
+    font: 0.9em Lato, tahoma, verdana, arial, helvetica, sans-serif;
     margin: 2px 2px !important;
-    padding: 2px 2px !important;
+    padding: 4px 8px !important;
     min-width: 20px !important;
     border-radius: 2px !important;
     text-align: start  !important;
     unicode-bidi: plaintext !important;
-    height: 25px;
+    height: 27px;
 }
 
 select, textarea {
@@ -316,8 +317,8 @@ textarea {
 
 /*select:focus,*/
 input:focus, textarea:focus {
-    border: 1px solid #9c9c9c;
-    /*background: #f1f3f5;*/
+    border: 0.5px solid #6d94a8;
+    /*background: #f1f5ed;*/
 }
 
 /* NAVIGATION MENU */
@@ -1673,9 +1674,9 @@ h3, h4 {
     /* Headers & Footer in Center & East panes */
     font-size: 0.9em;
     /*background: #D8D4C9;*/
-    border-bottom: 1px solid #BBB;
+    /*border-bottom: 1px solid #BBB;*/
     border-width: 0 0 1px;
-    padding: 5px 5px;
+    padding: 5px 4px;
     margin: 0;
 }
 
@@ -1694,8 +1695,7 @@ h2 {
 }
 
 .ui-helper-reset {
-    font-size: 12px !important;
-    /*0.99em !important;*/
+    font-size: 0.9em !important;
 }
 
 ul.ui-autocomplete.ui-menu {
@@ -1794,11 +1794,11 @@ ul.ui-autocomplete.ui-menu {
 .actionsButtons a {
     color: #0b202f !important;
     font-style: normal !important;
-    font-size: 10px !important;
+    font-size: 1em !important;
     text-decoration: none !important;
     border: 0.5px solid darkgray !important;
     border-radius: 3px !important;
-    padding: 2px;
+    padding: 1px 2px;
     margin-left: 2px;
     margin-right: 2px;
 }
@@ -1902,7 +1902,7 @@ ul.ui-autocomplete.ui-menu {
     font-family: Lato, tahoma !important;
     font-size: 1.1em;
     width: 98% !important;
-    height: 160px;
+    height: 100px;
     background: #dce5e5;
     margin: 0px !important;
     border: 1px solid darkgray;
@@ -1938,6 +1938,7 @@ ul.ui-autocomplete.ui-menu {
 .commandBarTexFieldTop {
     background: #eeeeee;
     /*direction: ltr;*/
+    font-size: normal !important;
     text-align: start;
 }
 
@@ -2011,6 +2012,9 @@ ul.ui-autocomplete.ui-menu {
     padding-left: 3px;
 }
 
+#accordionModules h4 {
+    margin-top: 5px;
+}
 #accordionModules div ul {
     padding-left: 25px;
 }
@@ -2044,3 +2048,11 @@ a :hover {
     border: 1px solid #a3a3a3;
 }
 
+.offline {
+    background: darkred;
+
+}
+
+.panelCard{
+    border: 1px solid lightgrey; padding: 5px; margin: 12px 3px; border-radius: 4px;
+}

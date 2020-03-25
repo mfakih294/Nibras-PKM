@@ -17,6 +17,10 @@
 
 <%@ page import="java.time.format.DateTimeFormatter; mcs.Department;  cmn.DataChangeAudit; ker.OperationController; app.Indicator; mcs.Goal; mcs.Task; mcs.Planner; mcs.Journal; mcs.Writing; app.IndexCard; mcs.Excerpt; mcs.Book; mcs.Course;" %>
 
+<script type="text/javascript" src="${resource(dir: 'plugins/uploader', file: 'jquery.uploadr.js')}"></script>
+<link rel="stylesheet" href="${resource(dir: 'plugins/uploader', file: 'jquery.uploadr.css')}"/>
+
+
 %{--<r:require module="fileuploader"/>--}%
 <r:layoutResources/>
 
@@ -376,8 +380,9 @@ Authors: ${authors}
         <g:if test="${record.url}">
             <span style="">
                 <b>URL :</b>
-                <span id="linkBloc${record.id}"
                 ${record.url}
+                <span id="linkBloc${record.id}"
+
             </span>
             <br/>
         %{--${record.author},${record.title ?: record.legacyTitle} ${record.edition} ed--}%
@@ -390,18 +395,25 @@ Authors: ${authors}
 
 
 
-    %{--<g:if test="${record?.type?.code == 'link'}">--}%
-    %{--<g:if test="${record?.url}">--}%
-    %{--<br/>--}%
-    %{--<g:remoteLink controller="import" action="scrapHtmlPage" id="${record.id}"--}%
-    %{--update="RRecord${record.id}"--}%
-    %{--class="actionLink"--}%
-    %{--title="Scrap HTML">--}%
-    %{--Scrape HTML page--}%
-    %{--</g:remoteLink>--}%
-    %{--<br/>--}%
-    %{--<br/>--}%
-    %{--</g:if>--}%
+    <g:if test="${record?.type?.code == 'link' && record?.url}">
+    <br/>
+    <g:remoteLink controller="import" action="scrapHtmlPage" id="${record.id}"
+    update="RRecord${record.id}"
+    class="actionLink"
+    title="Scrap HTML">
+    Scrape HTML page
+    </g:remoteLink>
+
+        <g:remoteLink controller="import" action="scrapHtmlAll"
+    update="RRecord${record.id}"
+    class="actionLink"
+    title="Scrap HTML">
+    Scrape ALL pages
+    </g:remoteLink>
+    <br/>
+    <br/>
+    </g:if>
+
 
 
 

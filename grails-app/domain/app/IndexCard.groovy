@@ -104,6 +104,10 @@ class IndexCard implements Comparable {  // entity id = 16
     Integer orderInArticle
     Integer orderNumber
 
+    String wbsNumber
+    IndexCard wbsParent
+
+
     Integer orderInWriting
 
     Integer orderInBook
@@ -147,7 +151,7 @@ class IndexCard implements Comparable {  // entity id = 16
         type(nullable: true)
         summary()//blank: false, nullable: false)
         contents()
-        description(nullable: false, blank: false)
+        description()
         mainHighlights()
         sideHighlights()
         reaction()

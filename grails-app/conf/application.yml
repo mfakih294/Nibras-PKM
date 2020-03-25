@@ -26,6 +26,8 @@ info:
 server:
     contextPath: '/nibras'
     port: 443 # The port to listen on
+    session:
+        timeout: 720000  # 20 hours (in ms)
     ssl:
         enabled: true # Activate HTTPS mode on the server port
         key-store: keystore.jks # e.g. /etc/tomcat7/keystore/tomcat.keystore
@@ -110,7 +112,7 @@ hibernate:
     flush:
         mode: AUTO
 environments:
-    development:
+    h2:
         dataSource:
             dbCreate: update
             url: jdbc:h2:./db/nibras;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
@@ -132,11 +134,11 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
-    later:
+    development:
         dataSource:
             dbCreate: update
             url: jdbc:mysql://localhost:3306/db_nibras
-            driverClassName: com.mysql.jdbc.Driver
+            driverClassName: com.mysql.cj.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             username: nibras
             password: nibras
@@ -192,7 +194,7 @@ environments:
             dbCreate: update
             jndiName: java:comp/env/jdbc/db_nibras
             pooled: true
-            driverClassName: com.mysql.jdbc.Driver
+            driverClassName: com.mysql.cj.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             properties:
                 jmxEnabled: true

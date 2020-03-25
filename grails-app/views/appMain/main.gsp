@@ -293,7 +293,7 @@ $("#accordionCenter").accordion({
                 header: "h3",
                 fillSpace: true,
                 event: "click",
-                active: ${ker.OperationController.getPath('accordion.east.default.panel')?: '0'},
+                active: ${ker.OperationController.getPath('accordion.east.default.panel')?: '1'},
                 collapsible: true,
                 icons: {
                     header: "ui-icon-circle-arrow-e",
@@ -302,11 +302,15 @@ $("#accordionCenter").accordion({
 
             });
 
+//            setTimeout(function() {
+//                window.location.href = window.location;
+//            }, 300000);
 
+              /*
 
             jQuery.idleTimeout('#idletimeout', '#idletimeout a', {
-            idleAfter: 1,
-            pollingInterval: 10,
+            idleAfter: -1,
+            pollingInterval: 2,
             keepAliveURL: '${request.contextPath}/page/heartbeat',
             serverResponseEquals: 'ok',
             onIdle: function () {
@@ -315,15 +319,24 @@ $("#accordionCenter").accordion({
                     url: '${request.contextPath}/page/heartbeat',
                     dataType: 'html',
                     success: function(html, textStatus) {
-                    jQuery('#onlineLog').html('Online');
+                    jQuery('#onlineLog').html("<span style='background: darkgray; color: darkgreen'>Online</span>");
 //                        console.log('resp idle: ' + html)
+                        if (html == 'ok')
+                        alert('still online '  + html + ' ' + textStatus);
+                        else {
+//                            confirm('Session lost!')
+//                        confirm('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
+//                            alert('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
+                            alert('now offline '  + html + ' ' + textStatus);
+                        }
+
                     },
 
                     error: function(xhr, textStatus, errorThrown) {
-                        jQuery('#onlineLog').html('OFFLINE');
-                        confirm('Session lost!')
+                        jQuery('#onlineLog').html("<span style='background: darkgray; color: darkred'>OFFLINE</span>");
+//                        confirm('Session lost!')
 //                        confirm('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
-//                        alert('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
+                        alert('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
                     }
                 });
             },
@@ -346,6 +359,7 @@ $("#accordionCenter").accordion({
                 });
             }
         });
+            */
 
  jQuery.idleTimeout('#importFileCount','#importFileCount', {
             idleAfter: 10,
@@ -359,6 +373,7 @@ $("#accordionCenter").accordion({
                     type: 'GET',
                     url: '${request.contextPath}/page/importbeat',
                     dataType: 'html',
+
                     success: function(html, textStatus) {
                     jQuery('#importFileCount').text(html);
 //                        console.log('resp timeout: ' + html)
@@ -503,6 +518,27 @@ $("#accordionCenter").accordion({
                 jQuery('#quickAddTextField').removeClass('shiftEnterPressed')
             }
 
+
+
+            setInterval(function() {
+                jQuery.ajax({
+                    type: 'GET',
+                    url: '${request.contextPath}/page/heartbeat',
+                    dataType: 'html',
+                    success: function(html, textStatus) {
+                        if (html == 'ok'){
+                            jQuery('body').removeClass("offline");
+                            jQuery('#onlineLog').html("<span style='padding: 1px 3px; background: darkgreen; color: white'>Online</span>");
+                        }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        jQuery('#onlineLog').html("<span style='padding: 1px 3px; background: darkred; color: white'>OFFLINE</span>");
+                        jQuery('body').addClass("offline");
+                        alert('Nibras PKM is offline now!')
+//                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
+                    }
+                });
+            }, 30000);
 
 
 

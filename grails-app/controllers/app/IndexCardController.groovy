@@ -303,7 +303,7 @@ class IndexCardController { // entity id = 16
     }
 
     def addXcdFormDaftar() {
-        if (params.description) {
+        if (params.title) {
 
             /*
 
@@ -317,24 +317,24 @@ class IndexCardController { // entity id = 16
                  def n
             if (params.type == 'N'){
                n = new IndexCard()
-            n.summary = extractTitleReturn(params.description)
-            n.description = extractDescriptionReturn(params.description)
-            n.type = mcs.parameters.WritingType.findByCode('daftar')
+            n.summary = params.title//extractTitleReturn(params.description)
+            n.description = params.description //extractDescriptionReturn(params.description)
+//            n.type = mcs.parameters.WritingType.findByCode('daftar')
             n.writtenOn = new Date()
 
             n.save()
         } else  if (params.type == 'W'){
                n = new Writing()
-            n.summary = extractTitleReturn(params.description)
-            n.description = extractDescriptionReturn(params.description)
+                n.summary = params.title//extractTitleReturn(params.description)
+                n.description = params.description //extractDescriptionReturn(params.description)
             n.type = mcs.parameters.WritingType.findByCode('art')
 //            n.writtenOn = new Date()
             n.save()
         }
             else if (params.type == 'Jy'){
                 n = new Journal()
-                n.summary = extractTitleReturn(params.description)
-                n.description = extractDescriptionReturn(params.description)
+                n.summary = params.title//extractTitleReturn(params.description)
+                n.description = params.description //extractDescriptionReturn(params.description)
                 n.startDate = new Date() - 1
                 n.level = 'i'
                 n.type = JournalType.findByCode('act')
@@ -342,8 +342,8 @@ class IndexCardController { // entity id = 16
             }
             else if (params.type == 'Jt'){
                 n = new Journal()
-                n.summary = extractTitleReturn(params.description)
-                n.description = extractDescriptionReturn(params.description)
+                n.summary = params.title//extractTitleReturn(params.description)
+                n.description = params.description //extractDescriptionReturn(params.description)
                 n.startDate = new Date()
                 n.level = 'i'
                 n.type = JournalType.findByCode('act')
@@ -351,21 +351,29 @@ class IndexCardController { // entity id = 16
             }
            else if (params.type == 'T'){
                 n = new mcs.Task()
-                n.summary = extractTitleReturn(params.description)
-                n.description = extractDescriptionReturn(params.description)
+                n.summary = params.title//extractTitleReturn(params.description)
+                n.description = params.description //extractDescriptionReturn(params.description)
                 n.status = WorkStatus.findByCode('pending')
                 n.save()
             }
              else if (params.type == 'G'){
                 n = new mcs.Goal()
-                n.summary = extractTitleReturn(params.description)
-                n.description = extractDescriptionReturn(params.description)
+                n.summary = params.title//extractTitleReturn(params.description)
+                n.description = params.description //extractDescriptionReturn(params.description)
                 n.type = GoalType.findByCode('goal')
                 n.status = WorkStatus.findByCode('pending')
                 n.save()
             }
+          else if (params.type == 'R'){
+                n = new mcs.Book()
+                n.title = params.title//extractTitleReturn(params.description)
+                n.fullText = params.description //extractDescriptionReturn(params.description)
+                n.type = ResourceType.findByCode('nws')
+//                n.status = WorkStatus.findByCode('pending')
+                n.save()
+            }
             render(template: "/gTemplates/recordSummary", model: [record: n])
-            render('<i style="font-size: tiny">' + params.description + '</i>')
+//            render('<i style="font-size: tiny">' + params.description + '</i>')
         } else {
             render 'No description entered'
         }
@@ -482,4 +490,11 @@ class IndexCardController { // entity id = 16
     }
 
 
+    def generateWritingsBook(){
+        render(template: "/appCourse/writingsBook", model: [record: mcs.Course.get(params.id)])
+    }
+
+    def sortNotes(){
+        render(template: "/appCourse/sortNotes", model: [record: mcs.Course.get(params.id)])
+    }
 } // end of class

@@ -12,6 +12,7 @@
     <g:render template="/appCourse/west"/>
 
 </div>
+
 <div class="ui-layout-south footerRegion"
      style="font-size: 11px; margin-top: 9px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
 
@@ -23,15 +24,15 @@
 
 
 
-    &nbsp;
-    &nbsp;
+&nbsp;
+&nbsp;
 &nbsp;&nbsp;&nbsp;
     <i>${java.time.chrono.HijrahDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy"))}</i>
     &nbsp;&nbsp;&nbsp;
     <b>Repository 1</b>: ${OperationController.getPath('root.rps1.path')}
 
-  &nbsp;&nbsp;&nbsp;
-    &copy; khuta.org/nibras
+&nbsp;&nbsp;&nbsp;
+&copy; khuta.org/nibras
 
 
 %{--    ${java.time.chrono.HijrahDate.now().get(java.time.temporal.ChronoField.DAY_OF_MONTH)}/--}%
@@ -47,9 +48,9 @@
 
 
 
-    %{--<div class="ui-layout-content ui-widget-content">--}line-height: 1px;%
+%{--<div class="ui-layout-content ui-widget-content">--}line-height: 1px;%
 
-    %{--</div>--}%
+%{--</div>--}%
 </div>
 
 
@@ -58,74 +59,60 @@
     %{--<div class="ui-layout-content ui-widget-content">--}%
 
     <g:render template="/appCourse/east"/>
+</div>
+
+
+<div class="ui-layout-center appBkg" style="margin-top: 2px !important; margin-bottom: 2px !important;"
+     onmouseover="jQuery('#hintArea').html('')">
+    %{--ToDo: display none?!--}%
+    %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%
+
+
+    <div id="logRegion"></div>
+
+    <div id="logArea"></div>
+
+
+    <div id="searchArea" class="nonPrintable">
+
     </div>
 
+    <div id="spinner2" style="display:none; z-index: 10000 !important">
+        <img src="${resource(dir: '/images', file: 'pmg-grain.gif')}" alt="Spinner2"
+             style="z-index: 10000 !important"/>
+    </div>
+    %{--<sec:ifNotGranted roles="ROLE_ADMIN">--}%
+    %{--<g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+    %{--<g:render template="/layouts/commandbar" model="[]"/>--}%
+    %{--</g:if>--}%
+    %{--</sec:ifNotGranted>--}%
+    <div id="accordionCenter"
+         style="margin: 0px !important; width: 100% !important; padding-bottom: 0px !important;">
 
-    <div class="ui-layout-center appBkg" style="margin-top: 2px !important; margin-bottom: 2px !important;"
-         onmouseover="jQuery('#hintArea').html('')">
-        %{--ToDo: display none?!--}%
-        %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%
+        <h6 style="text-aling: center"><a href="#" id="testTitle1">
+            Main panel
+        </a></h6>
+
+        <div id="inner1" class="common" style="">
+
+            <div id="centralArea" class="common" style="">
+
+                <h4>Notes</h4>
+                <g:each in="${IndexCard.findAllByCourseAndWbsParentIsNull(record, [sort: 'orderNumber', order: 'asc'])}"
+                        var="n">
+                    <g:render template="/gTemplates/box" model="[record: n]"/>
+                    <div style="padding-left: 14px">
+                        <g:render template="/appCourse/childrenofNotesBox" model="[record: record, parent: n]"/>
+                    </div>
+                </g:each>
 
 
-        <div id="logRegion"></div>
+                <g:render template="/gTemplates/recordSummary" model="[record: record]"/>
 
-        <div id="logArea"></div>
+                %{--<h2>Notes (${IndexCard.countByCourse(record)})</h2>--}%
 
-
-        <div id="searchArea" class="nonPrintable">
-
-        </div>
-
-        <div id="spinner2" style="display:none; z-index: 10000 !important">
-            <img src="${resource(dir: '/images', file: 'pmg-grain.gif')}" alt="Spinner2"
-                 style="z-index: 10000 !important"/>
-        </div>
-        %{--<sec:ifNotGranted roles="ROLE_ADMIN">--}%
-        %{--<g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
-        %{--<g:render template="/layouts/commandbar" model="[]"/>--}%
-        %{--</g:if>--}%
-        %{--</sec:ifNotGranted>--}%
-        <div id="accordionCenter"
-             style="margin: 0px !important; width: 100% !important; padding-bottom: 0px !important;">
-
-            <h6 style="text-aling: center"><a href="#" id="testTitle1">
-                Main panel
-            </a></h6>
-
-            <div id="inner1" class="common" style="">
-
-                <div id="centralArea" class="common" style="">
-
-                    %{--<ol class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">--}%
-                        %{--<li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_2">--}%
-                            %{--<div>Some content 2</div>--}%
-                        %{--</li>--}%
-                        %{--<li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_3">--}%
-                            %{--<div>Some content3</div>--}%
-                            %{--<ol>--}%
-                                %{--<li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_4">--}%
-                                    %{--<div>Some sub-item content 4</div>--}%
-                                %{--</li>--}%
-                                %{--<li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_5">--}%
-                                    %{--<div>Some sub-item content 5</div>--}%
-                                %{--</li>--}%
-                            %{--</ol>--}%
-                        %{--</li>--}%
-                        %{--<li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_6">--}%
-                            %{--<div>Some content6</div>--}%
-                        %{--</li>--}%
-                    %{--</ol>--}%
-
-                    %{--<input id="serialize" name="serialize" type="submit" value=--}%
-                    %{--"Serialize"></p>--}%
-                    %{--<pre id="serializeOutput">--}%
-                    %{--</pre>--}%
-
-                    <g:render template="/gTemplates/recordSummary" model="[record: record]"/>
-
-                    <h2>Notes (${IndexCard.countByCourse(record)})</h2>
-
-                    <g:render template="/gTemplates/recordListingBox" model="[list: IndexCard.findAllByCourse(record, [max: 10])]"/>
+                %{--<g:render template="/gTemplates/recordListingBox"--}%
+                          %{--model="[list: IndexCard.findAllByCourse(record, [max: 10])]"/>--}%
                 %{--<span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
                 %{--title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
                 %{--<h5>Last plan</h5>--}%
@@ -133,179 +120,184 @@
 
                 %{--</span>--}%
 
-                    %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
-                        %{--<br/>--}%
-                        %{--<br/>--}%
-                        %{--Repository folder not found. Please choose an existing folder:--}%
-                        %{--<br/>--}%
-                        %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
-                    %{--</g:if>--}%
-
-
-                    %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
-                        %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
-                    %{--</g:if>--}%
-                </div>
-
-            </div>
-
-            <h6 style="text-aling: center"><a href="#" id="testTitle2">
-                Panel 2
-            </a></h6>
-
-            <div id="2" class="common" style="">
-                <div id="inner2" class="common" style="">
-                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%
-                    <g:render template='/reports/homepageSavedSearches'/>
-                </div>
-                %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
-                <g:formRemote name="batchAdd2" class="commandBarInPanel"
-                              url="[controller: 'generics', action: 'actionDispatcher']"
-                              update="centralArea" style="display: inline"
-
-                              method="post">
-                    <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
-                    <g:submitButton name="batch" value="Execute"
-                                    style="height: 30px; margin: 0px; width: 100px !important; display: none"
-                                    id="quickAddXcdSubmitTop3"
-                                    class="fg-button ui-widget ui-state-default"/>
-
-                    <g:textField name="input" value="" id="testField2"
-                                 autocomplete="off"
-                                 style="display: inline;  font-family: tahoma ; width: 100% !important;"
-                                 placeholder=""
-                                 class="commandBarTexFieldTop"/>
-                </g:formRemote>
-
-            </div>
-            <h6><a href="#" id="testTitle3">
-                Panel 3
-            </a></h6>
-
-            <div id="3" class="common" style="">
-                <div id="inner3" class="common" style="">
-                </div>
-                %{--before="jQuery('#testTitle3').text('[3]: ' + jQuery('#testField3').val());"--}%
-                <g:formRemote name="batchAdd2" class="commandBarInPanel"
-                              url="[controller: 'generics', action: 'actionDispatcher']"
-
-                              update="centralArea" style="display: inline"
-                              method="post">
-                    <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
-                    <g:submitButton name="batch" value="Execute"
-                                    style="height: 30px; margin: 0px; width: 100px !important; display: none"
-                                    id="quickAddXcdSubmitTop4"
-                                    class="fg-button ui-widget ui-state-default"/>
-
-                    <g:textField name="input" value="" id="testField3"
-                                 autocomplete="off"
-                                 style="display: inline;  font-family: tahoma ; width: 100% !important;"
-                                 placeholder=""
-                                 class="commandBarTexFieldTop"/>
-                </g:formRemote>
-
-            </div>
-
-
-
+                %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
                 %{--<br/>--}%
-
-                %{--first commented one below was in action 14.03.2019 --}%
-                %{--<g:formRemote name="batchAdd2"  class="commandBarInPanel"--}%
-                %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-                %{--update="centralArea" style="display: inline"--}%
-                %{--before="jQuery('#testTitle4').text('[4]: ' + jQuery('#testField4').val());"--}%
-                %{--method="post">--}%
-                %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-                %{--<g:submitButton name="batch" value="Execute"--}%
-                %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
-                %{--id="quickAddXcdSubmitTop5"--}%
-                %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-                %{--<g:textField name="input"  value="" id="testField4"--}%
-                %{--autocomplete="off"--}%
-                %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-                %{--placeholder=""--}%
-                %{--class="commandBarTexFieldTop"/>--}%
-                %{--</g:formRemote>--}%
+                %{--<br/>--}%
+                %{--Repository folder not found. Please choose an existing folder:--}%
+                %{--<br/>--}%
+                %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
+                %{--</g:if>--}%
 
 
-
-
-                %{--<g:formRemote name="batchAdd2"--}%
-                %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-                %{--update="centralArea" style="display: inline"--}%
-                %{--method="post">--}%
-                %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-                %{--<g:submitButton name="batch" value="Execute"--}%
-                %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
-                %{--id="quickAddXcdSubmitTop6"--}%
-                %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-                %{--<g:textField name="input"  value=""--}%
-                %{--autocomplete="off"--}%
-                %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-                %{--placeholder=""--}%
-                %{--class="commandBarTexFieldTop"/>--}%
-                %{--</g:formRemote>--}%
-
-                %{--<g:formRemote name="batchAdd2"--}%
-                %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-                %{--update="centralArea" style="display: inline"--}%
-                %{--method="post">--}%
-                %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-                %{--<g:submitButton name="batch" value="Execute"--}%
-                %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
-                %{--id="quickAddXcdSubmitTop7"--}%
-                %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-                %{--<g:textField name="input" value=""--}%
-                %{--autocomplete="off"--}%
-                %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-                %{--placeholder=""--}%
-                %{--class="commandBarTexFieldTop"/>--}%
-                %{--</g:formRemote>--}%
-
-
-            %{--<h6 style="text-aling: center"><a href="#" id="testTitle5">--}%
-            %{--5--}%
-            %{--</a></h6>--}%
-
-            %{--<div id=5 class="common" style="">--}%
-            %{--<div id="inner5" class="common" style="">--}%
-            %{--</div>--}%
-
-            %{--<g:formRemote name="batchAdd5"  class="commandBarInPanel"--}%
-            %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-            %{--update="centralArea" style="display: inline"--}%
-            %{--before="jQuery('#testTitle5').text('[5]: ' + jQuery('#testField5').val());"--}%
-            %{--method="post">--}%
-            %{--<g:hiddenField name="sth5" value="${new java.util.Date()}"/>--}%
-            %{--<g:submitButton name="batch" value="Execute"--}%
-            %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
-
-            %{--id="quickAddXcdSubmitTop8"--}%
-            %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-            %{--<g:textField name="input"  value=""--}%
-            %{--autocomplete="off"--}%
-            %{--id="testField5"--}%
-            %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-            %{--placeholder=""--}%
-            %{--class="commandBarTexFieldTop"/>--}%
-            %{--</g:formRemote>--}%
-
-            %{--</div>--}%
+                %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
+                %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
+                %{--</g:if>--}%
+            </div>
 
         </div>
-        %{--<hr/>--}%
-        %{--before="jQuery('#testTitle1').text('[1]: ' + jQuery('#quickAddTextFieldBottomTop').val());"--}%
-        %{--if (jQuery('#quickAddTextFieldBottomTop').val().search('--')== -1){--}%
-        %{--<div style="-moz-column-count: 3; -webkit-column-count:3">--}%
-        <div id="hintArea" style="font-size: 12px; padding: 0px; margin: 0px; "></div>
+
+        <h6 style="text-aling: center"><a href="#" id="testTitle2">
+            Panel 2
+        </a></h6>
+
+        <div id="2" class="common" style="">
+            <div id="inner2" class="common" style="">
+                %{--<g:render template='/reports/homepageSavedSearches'/>--}%
+                %{--<g:render template='/reports/homepageSavedSearches'/>--}%
+
+
+
+            </div>
+            %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
+            <g:formRemote name="batchAdd2" class="commandBarInPanel"
+                          url="[controller: 'generics', action: 'actionDispatcher']"
+                          update="centralArea" style="display: inline"
+
+                          method="post">
+                <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
+                <g:submitButton name="batch" value="Execute"
+                                style="height: 30px; margin: 0px; width: 100px !important; display: none"
+                                id="quickAddXcdSubmitTop3"
+                                class="fg-button ui-widget ui-state-default"/>
+
+                <g:textField name="input" value="" id="testField2"
+                             autocomplete="off"
+                             style="display: inline;  font-family: tahoma ; width: 100% !important;"
+                             placeholder=""
+                             class="commandBarTexFieldTop"/>
+            </g:formRemote>
+
+
+
+    </div>
+        <h6><a href="#" id="testTitle3">
+            Panel 3
+        </a></h6>
+
+        <div id="3" class="common" style="">
+            <div id="inner3" class="common" style="">
+            </div>
+            %{--before="jQuery('#testTitle3').text('[3]: ' + jQuery('#testField3').val());"--}%
+            <g:formRemote name="batchAdd2" class="commandBarInPanel"
+                          url="[controller: 'generics', action: 'actionDispatcher']"
+
+                          update="centralArea" style="display: inline"
+                          method="post">
+                <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
+                <g:submitButton name="batch" value="Execute"
+                                style="height: 30px; margin: 0px; width: 100px !important; display: none"
+                                id="quickAddXcdSubmitTop4"
+                                class="fg-button ui-widget ui-state-default"/>
+
+                <g:textField name="input" value="" id="testField3"
+                             autocomplete="off"
+                             style="display: inline;  font-family: tahoma ; width: 100% !important;"
+                             placeholder=""
+                             class="commandBarTexFieldTop"/>
+            </g:formRemote>
+
+        </div>
+
+
+
+        %{--<br/>--}%
+
+        %{--first commented one below was in action 14.03.2019 --}%
+        %{--<g:formRemote name="batchAdd2"  class="commandBarInPanel"--}%
+        %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+        %{--update="centralArea" style="display: inline"--}%
+        %{--before="jQuery('#testTitle4').text('[4]: ' + jQuery('#testField4').val());"--}%
+        %{--method="post">--}%
+        %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+        %{--<g:submitButton name="batch" value="Execute"--}%
+        %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
+        %{--id="quickAddXcdSubmitTop5"--}%
+        %{--class="fg-button ui-widget ui-state-default"/>--}%
+
+        %{--<g:textField name="input"  value="" id="testField4"--}%
+        %{--autocomplete="off"--}%
+        %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+        %{--placeholder=""--}%
+        %{--class="commandBarTexFieldTop"/>--}%
+        %{--</g:formRemote>--}%
+
+
+
+
+        %{--<g:formRemote name="batchAdd2"--}%
+        %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+        %{--update="centralArea" style="display: inline"--}%
+        %{--method="post">--}%
+        %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+        %{--<g:submitButton name="batch" value="Execute"--}%
+        %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
+        %{--id="quickAddXcdSubmitTop6"--}%
+        %{--class="fg-button ui-widget ui-state-default"/>--}%
+
+        %{--<g:textField name="input"  value=""--}%
+        %{--autocomplete="off"--}%
+        %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+        %{--placeholder=""--}%
+        %{--class="commandBarTexFieldTop"/>--}%
+        %{--</g:formRemote>--}%
+
+        %{--<g:formRemote name="batchAdd2"--}%
+        %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+        %{--update="centralArea" style="display: inline"--}%
+        %{--method="post">--}%
+        %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+        %{--<g:submitButton name="batch" value="Execute"--}%
+        %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
+        %{--id="quickAddXcdSubmitTop7"--}%
+        %{--class="fg-button ui-widget ui-state-default"/>--}%
+
+        %{--<g:textField name="input" value=""--}%
+        %{--autocomplete="off"--}%
+        %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+        %{--placeholder=""--}%
+        %{--class="commandBarTexFieldTop"/>--}%
+        %{--</g:formRemote>--}%
+
+
+        %{--<h6 style="text-aling: center"><a href="#" id="testTitle5">--}%
+        %{--5--}%
+        %{--</a></h6>--}%
+
+        %{--<div id=5 class="common" style="">--}%
+        %{--<div id="inner5" class="common" style="">--}%
+        %{--</div>--}%
+
+        %{--<g:formRemote name="batchAdd5"  class="commandBarInPanel"--}%
+        %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
+        %{--update="centralArea" style="display: inline"--}%
+        %{--before="jQuery('#testTitle5').text('[5]: ' + jQuery('#testField5').val());"--}%
+        %{--method="post">--}%
+        %{--<g:hiddenField name="sth5" value="${new java.util.Date()}"/>--}%
+        %{--<g:submitButton name="batch" value="Execute"--}%
+        %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
+
+        %{--id="quickAddXcdSubmitTop8"--}%
+        %{--class="fg-button ui-widget ui-state-default"/>--}%
+
+        %{--<g:textField name="input"  value=""--}%
+        %{--autocomplete="off"--}%
+        %{--id="testField5"--}%
+        %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
+        %{--placeholder=""--}%
+        %{--class="commandBarTexFieldTop"/>--}%
+        %{--</g:formRemote>--}%
+
         %{--</div>--}%
 
     </div>
+    %{--<hr/>--}%
+    %{--before="jQuery('#testTitle1').text('[1]: ' + jQuery('#quickAddTextFieldBottomTop').val());"--}%
+    %{--if (jQuery('#quickAddTextFieldBottomTop').val().search('--')== -1){--}%
+    %{--<div style="-moz-column-count: 3; -webkit-column-count:3">--}%
+    <div id="hintArea" style="font-size: 12px; padding: 0px; margin: 0px; "></div>
+    %{--</div>--}%
+
+</div>
 <script type="text/javascript">
     jQuery(".chosen").chosen({allow_single_deselect: true, no_results_text: "None found"});
     jQuery("#chosenTags").chosen({allow_single_deselect: true, no_results_text: "None found"});
@@ -368,16 +360,5 @@
 
     });
 
-
-    $('.sortable').nestedSortable({
-        handle: 'div',
-        items: 'li',
-        toleranceElement: '> div'
-    });
-
-    $('#serialize').click(function(){
-        serialized = $('ol.sortable').nestedSortable('serialize');
-        $('#serializeOutput').text(serialized+'\n\n');
-    })
 
 </script>

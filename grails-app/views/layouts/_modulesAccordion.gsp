@@ -2,7 +2,7 @@
 
 <div id="accordionModules"
      style="width: 95%; padding-left: 4px;">
-
+    <div class="panelCard">
         <h4>
         <span class="D-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">D</span>
@@ -17,6 +17,9 @@
             <g:render template="/layouts/savedSearches" model="[entity: 'D']"/>
         </ul>
     </div>
+    </div>
+
+<div class="panelCard">
      <h4>
         <span class="C-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">C</span>
@@ -31,12 +34,12 @@
             <g:render template="/layouts/savedSearches" model="[entity: 'C']"/>
         </ul>
     </div>
+    </div>
 
-        <br/>
-    <hr/>
-    <br/>
+
 
 <g:if test="${OperationController.getPath('goals.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <div class="panelCard">
     <h4>
         <span class="G-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">G</span>
@@ -52,13 +55,14 @@
             <g:render template="/layouts/savedSearches" model="[entity: 'G']"/>
         </ul>
     </div>
+    </div>
 </g:if>
 
 <g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
-
-    <h4>
-        <span class="T-bkg"
-              style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;">T</span>
+    <div class="panelCard">
+ <h4>
+     <span class="T-bkg"
+           style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;">T</span>
         ${OperationController.getPath('tasks.label') ?: 'Tasks'}<span
                 class="moduleCount">${Task.count()}</span></h4>
 
@@ -74,10 +78,12 @@
             <g:render template="/layouts/savedSearches" model="[entity: 'T']"/>
     </ul>
     </div>
+    </div>
 </g:if>
 
 <g:if test="${OperationController.getPath('planner.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
+    <div class="panelCard">
     <h4>
         <span class="P-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">P</span>
@@ -95,11 +101,13 @@
         </ul>
 
     </div>
+    </div>
 
 </g:if>
 
 
 <g:if test="${OperationController.getPath('journal.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <div class="panelCard">
     <h4>
         <span class="J-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">J</span>
@@ -123,14 +131,13 @@
         </ul>
 
     </div>
+    </div>
 
 </g:if>
 
 <g:if test="${OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <div class="panelCard">
     <h4>
-
-
-
             <span class="K-bkg"
                   style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">I</span>
             ${OperationController.getPath('indicators.label') ?: 'Indicators'}<span
@@ -151,10 +158,13 @@
             <g:render template="/layouts/savedSearches" model="[entity: 'K']"/>
         </ul>
     </div>
+    </div>
 </g:if>
 
 
 <g:if test="${OperationController.getPath('payments.enabled')?.toLowerCase() == 'yes' ? true : false}">
+
+    <div class="panelCard">
     <h4><span class="Q-bkg"
                  style="font-family:  'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">Q</span>
         ${OperationController.getPath('payments.label') ?: 'Payments'}
@@ -176,14 +186,18 @@
         </ul>
 
     </div>
+    </div>
 </g:if>
 
 
 <g:if test="${OperationController.getPath('writings.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <br/>
-    <h4>
-        <span class="W-bkg"
-              style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">W</span>
+
+    <div class="panelCard">
+
+     <h4>
+         <span class="W-bkg"
+               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">W</span>
         ${OperationController.getPath('writings.label') ?: 'Writings'}<span
                 class="moduleCount">${Writing.count()}</span>
     </h4>
@@ -224,9 +238,12 @@
         </ul>
 
     </div>
+    </div>
 </g:if>
 
 %{--<g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+<div class="panelCard">
+
     <h4>
 
             <span class="N-bkg"
@@ -255,9 +272,12 @@
         </ul>
 
     </div>
+    </div>
 %{--</g:if>--}%
 
 %{--<g:if test="${OperationController.getPath('resources.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+<div class="panelCard">
+
     <h4>
         <span class="R-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">R</span>
@@ -279,12 +299,14 @@
 
            </ul>
     </div>
+    </div>
 %{--</g:if>--}%
 
 <g:if test="${OperationController.getPath('excerpts.enabled')?.toLowerCase() == 'yes' ? true : false}">
-    <h4>
-        <span class="E-bkg"
-              style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">E</span>
+    <div class="panelCard">
+     <h4>
+         <span class="E-bkg"
+               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">E</span>
         ${OperationController.getPath('excerpts.label') ?: 'Excerpts'} <span class="moduleCount">${mcs.Excerpt.countByDeletedOnIsNull()}
         </span>
     </a>
@@ -296,14 +318,16 @@
           </ul>
         
     </div>
+    </div>
 
 </g:if>
 
 <g:if test="${OperationController.getPath('contacts.enabled')?.toLowerCase() == 'yes' ? true : false}">
-    <h4>
+    <div class="panelCard">
+      <h4>
 
-            <span class="S-bkg"
-                  style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">S</span>
+              <span class="S-bkg"
+                    style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">S</span>
             ${OperationController.getPath('contacts.label') ?: 'Contacts'}<span
                 class="moduleCount">${app.Contact.countByDeletedOnIsNull()}</span>
 
@@ -315,6 +339,7 @@
             <g:render template="/layouts/savedSearches" model="[entity: 'S']"/>
         </ul>
 
+    </div>
     </div>
     <br/>
 </g:if>

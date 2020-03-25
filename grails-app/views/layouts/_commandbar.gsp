@@ -18,16 +18,23 @@
              %{--</td>--}%
             <tr>
                 <td style=" padding: 0px; margin: 0px; width: 60%">
-                    Choose action:
+                    Prefix: <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"
+                                         rows="5"
+                                         style="width:30%; display: inline; " value=""/>
+                    %{--For each line?--}%
+                    %{--<input type="text" name="forEachLine" id="forEachLine"--}%
+                %{--/>--}%
+
+                    <span style="float: right">
+
+                    Template:
                     <g:select name="commandPrefix"
                               from="${CommandPrefix.list([sort: 'orderNumber'])}" optionKey="id" optionValue="summary"
                               style="direction: ltr; text-align: left; display: inline; width: 160px;"
-                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextField').val(jsdata.info);jQuery('#prefixField').val(jsdata.prefix);if (jsdata.info  == null ||  jsdata.info  == 'null' || !jsdata.info) jQuery('#quickAddTextField').addClass('commandMode'); else  jQuery('#quickAddTextField').removeClass('commandMode') })"
+                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextField').val(jsdata.info);jQuery('#prefixField').val(jsdata.prefix); })"
                               value=""/>
-
-                    Prefix: <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"
-                                 rows="5"
-                                 style="width:30%; display: inline; " value=""/>
+                    %{--if (jsdata.info  == null ||  jsdata.info  == 'null' || !jsdata.info) jQuery('#quickAddTextField').addClass('commandMode'); else  jQuery('#quickAddTextField').removeClass('commandMode')--}%
+                </span>
 
 
 
@@ -35,13 +42,17 @@
                                     %{--onchange="jQuery('#quickAddTextField').val(this.options[this.selectedIndex].text)">--}%
                     %{--<option></option>--}%
                 %{--</select>--}%
+
+
                     <g:submitButton name="batch" value="Execute"
                                     style="margin: 0px; width: 60px !important;"
                                     id="quickAddXcdSubmitExecute"
                                     class="fg-button ui-widget ui-state-default"/>
 
                 </td>
-            </tr>   <tr>
+            </tr>
+
+            <tr>
             <td colspan="2">
                 %{--(Add, update, search, assign records...) Type ? for more info--}%
                 <g:textArea cols="120" rows="5" name="block" id="quickAddTextField" value="${OperationController.getPath('commandBar.initialText')?.replace('+', '\n')?.replaceAll(/\?date/, ker.OperationController.toWeekDate(new Date() -1))}"

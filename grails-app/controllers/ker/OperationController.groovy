@@ -1582,37 +1582,38 @@ past.each(){
 
     def addFromCalendar() {
 
-        //   println 'params' +  params.dump()
+//           println 'title ' +  params.title
 
         def j
 
-        if (!params.title.startsWith('p '))
+        if (params.type == 'J')
             j = new mcs.Journal([startDate  : Date.parse('dd.MM.yyyy HH:mm', params.start),
                                  endDate    : Date.parse('dd.MM.yyyy HH:mm', params.end),
                                  description: params.description ?: '...'])
-        else if (params.title.startsWith('p '))
+        else if (params.type == 'P') {//(params.title.startsWith('p ') ||  params.title.startsWith('م ')) {
             j = new mcs.Planner([startDate  : Date.parse('dd.MM.yyyy HH:mm', params.start),
                                  endDate    : Date.parse('dd.MM.yyyy HH:mm', params.end),
                                  description: params.description ?: '...'])
+        }
 //	if (j.startDate == j.endDate)
 //	j.level = 'd'
 //	else
         j.level = 'm'
 
         if (params.title?.contains('--'))
-        j.properties = ker.GenericsController.transformMcsNotation(params.title)['properties']
-        else j.summary = params.title
+            j.properties = ker.GenericsController.transformMcsNotation(params.title?.replace('--', ' -- '))['properties']
+        else j.summary = params.title//?.substring(2)
 
         if (params.description)
             j.description = params.description
 
-        if (params.title.startsWith('p') && !j.type)
+        if (params.type == 'P' && !j.type)
             j.type = PlannerType.findByCode('act')
         else if (!j.type)
             j.type = JournalType.findByCode('act')
 
-        if (j.level == 'd')
-            j.endDate = null
+//        if (j.level == 'd')
+//            j.endDate = null
 
         if (!j.hasErrors()) {
             j.save(flash: true)
@@ -1658,4 +1659,61 @@ past.each(){
         render html
 
     }
+
+    def sortNotes2() {
+
+        println 'id = ' + params.id
+        def sub = 1
+        def roots = 1
+        params.id?.split('_').eachWithIndex() { i, j ->
+
+            def id = i.split('=')[0].replace('menuItem[', '').replace(']', '')
+            def n = IndexCard.get(id)//.orderNumber
+            def parent = i.split('=')[1]
+
+            //            println (j++) +': ' + id +   " --- " + parent
+
+            if (parent != 'null') {
+                def p = IndexCard.get(parent)
+                n.wbsParent = p// + '.' + sub
+                n.orderNumber = j+1
+                n.wbsNumber = j+1
+//                sub++
+                n.save(flush: true)
+            //    println 'found a child with id ' + n.id // + +'.' + (sub++) + '\n'
+            } else {
+//                sub = 1
+                n.wbsParent = null
+                n.orderNumber = roots
+                n.wbsNumber = roots
+                n.save(flush: true)
+                roots++
+             //   println 'found a root with id ' + n.orderNumber// + +'.' + (sub++) + '\n'
+            }
+        }
+
+        IndexCard.findAllByCourseAndWbsParentIsNull(mcs.Course.get(params.crs), [sort: 'orderNumber', order: 'asc'] ).eachWithIndex() { n, i ->
+            n.wbsNumber = i+1
+            n.orderNumber = i+1
+            n.wbsParent = null
+            orderChildren(n.id)
+            n.save(flush: true)
+        }
+
+
+//        println params.dump()
+        render 'ok?? ' + new Date().format('HH:mm:ss')
+    }
+
+    def orderChildren(Long id) {
+        def parent = IndexCard.get(id)
+        IndexCard.findAllByWbsParent(parent, [sort: 'orderNumber', order: 'asc']).eachWithIndex() {
+            n, i ->
+                n.wbsNumber = parent.wbsNumber + '.' + (i + 1)
+                n.orderNumber = (i + 1)
+                orderChildren(n.id)
+        }
+    }
+
+
 } // end of class

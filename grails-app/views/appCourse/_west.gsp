@@ -8,6 +8,27 @@
             </a></h3>
 
                 <div style="">
+
+
+                    <g:remoteLink controller="indexCard" action="generateWritingsBook"
+                                  id="${record.id}"
+                                  update="centralArea"
+                                  title="">
+                        generate book
+                    </g:remoteLink>
+
+
+                                                                          <br/>
+                                                                          <br/>
+                    <g:remoteLink controller="indexCard" action="sortNotes"
+                                  id="${record.id}"
+                                  update="centralArea"
+                                  title="">
+                        sort notes
+                    </g:remoteLink>
+
+
+
                     <g:render template="/gTemplates/recordListingBox" model="[list: Goal.findAllByCourse(record)]"/>
 
                 </div>

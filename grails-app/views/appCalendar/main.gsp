@@ -58,11 +58,14 @@
       isRTL: false,
     //  locale: 'ar',
       plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
-        aspectRatio: 1,
-        contentHeight: 800,
-        height: 700,
-      fixedWeekCount: false,
-//       shouldRedistribute: true,
+      //  aspectRatio: 1,
+     //   contentHeight: 800,
+    //    height: 'auto',
+        contentHeight:"auto",
+        handleWindowResize:true,
+   //     themeSystem:'bootstrap3',
+   //   fixedWeekCount: false,
+       shouldRedistribute: true,
       header: {
         left: 'prev,next today',
         center: 'title',
@@ -93,7 +96,7 @@
 //          columnHead: false
 
       },
-      defaultView: 'timeGridWeek',
+      defaultView: 'dayGridWeek',
         allDaySlot: true,
         nowIndicator: true,
         timeGridEventMinHeight: true,
@@ -129,7 +132,7 @@
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,
-      weekNumbersWithinDays: true,
+      weekNumbersWithinDays: false,
       weekNumberCalculation: 'ISO',
       events:"${request.contextPath}/export/allCalendarEvents",
       selectable: true,
@@ -247,7 +250,29 @@
     calendar.render();
   });
 
-</script>
+
+
+
+  setInterval(function() {
+      jQuery.ajax({
+          type: 'GET',
+          url: '${request.contextPath}/page/heartbeat',
+          dataType: 'html',
+          success: function(html, textStatus) {
+              if (html == 'ok') {
+                  window.location.href = window.location;
+                  jQuery('#logArea2').html("<span style='background: darkgray; color: darkgreen'>Online</span>");
+              }
+          },
+          error: function(xhr, textStatus, errorThrown) {
+              jQuery('#logArea2').html("<span style='background: darkgray; color: darkred'>Offline</span>");
+//                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
+          }
+      });
+  }, 600000);
+
+
+  </script>
 <style>
 
   html, body {
@@ -263,7 +288,7 @@
   }
 
   #calendar-container {
-    position: fixed;
+    /*position: fixed;*/
     top: 1px;
     left: 5px;
     right: 5px;
@@ -297,7 +322,8 @@
 <div id="logArea" style="background: lightgoldenrodyellow; font-size: 14px;">
 </div>
 
-<div id="logArea2" style="display: none">
+<div id="logArea2" style="">
+
 </div>
 
 <div class="body">
@@ -319,26 +345,31 @@
                   method="post">
           <table border="0">
               <tr>
-                  <td style="text-align: left; direction: ltr"> Start time:
+                  <td style="text-align: left; margin: 3px; direction: ltr">Type:
+                      <br/>
+                      <g:select name="type" from="${['J', 'P']}" id="typeField" value="P"/>
+                  </td> <td style="text-align: left; margin: 3px; direction: ltr"> Start time:
                       <br/><g:textField name="start" value="" id="start"></g:textField></td>
-                  <td style="text-align: left; direction: ltr">End time:
+                  <td style="text-align: left; direction: ltr; margin: 3px;">End time:
                       <br/>
                       <g:textField name="end" value="" id="end"></g:textField></td>
+
               </tr>
           </table>
+
 
 
         Summary or Nibras command*:
         <br/>
         <g:textField name="title" value="" id="title"
-                     style="width: 400px; direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 100% !important;"
+                     style=" direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 90% !important;"
             placeholder=""
                      class="commandBarTexFieldTop"/>
                   <br/>
                 Description:
        <g:textArea name="description" value="" id="description" rows="5" columns="80"
                     placeholder=""
-                     style="width: 400px; height: 100px;direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 100% !important;"
+                     style="width: 90% !important; height: 100px;direction: rtl; text-align: right; display: inline;  font-family: tahoma ; "
                      class="commandBarTexFieldTop"/>
                   <br/>
         <g:submitButton name="batch" value="Save event"
@@ -349,9 +380,7 @@
     <div id="logAreaModal"></div>
               <br/>
               <br/>
-              <br/>
-              <br/>
-              <br/>
+
     </div>
 
 

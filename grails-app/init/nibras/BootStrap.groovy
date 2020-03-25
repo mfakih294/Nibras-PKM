@@ -27,15 +27,19 @@ class BootStrap {
             assert UserRole.count() == 1
         }
 
-        println '************************************************************'
-        println '*                                                          *'
-
-        println '* Nibras has launched. In the standard configuration,      *'
-        println '* you can access it from:                                  *'
-        println '*                                                          *'
-        println '* https://localhost/nibras                                 *'
-        println '*                                                          *'
-        println '************************************************************'
+        println ''
+        println ''
+        println ' ************************************************************'
+        println ' *                                                          *'
+        println ' * Nibras has launched.                                     *'
+        println ' * In the standard configuration, you can access it from:   *'
+        println ' *                                                          *'
+        println ' * http://localhost/nibras       (on Windows)               *'
+        println ' * http://localhost:2020/nibras  (on Linux)                 *'
+        println ' *                                                          *'
+        println ' ************************************************************'
+        println ''
+        println ''
 
     }
     def destroy = {
