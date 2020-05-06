@@ -26,6 +26,10 @@ import grails.web.JSONBuilder
 //import org.eclipse.mylyn.wikitext.markdown.core.MarkdownLanguage
 
 import grails.plugin.springsecurity.annotation.Secured
+import newpackage.PrayTime
+
+import java.time.Duration
+import java.time.Instant
 
 
 @Secured('ROLE_ADMIN')
@@ -373,6 +377,47 @@ class PageController {
 
     }
 
+ def appDashboard() {
+
+     double latitude = 33.8933182;
+     double longitude = 35.5015717;
+     double timezone = 3;
+     // Test Prayer times here
+     PrayTime prayers = new newpackage.PrayTime();
+
+     prayers.setTimeFormat(prayers.Time12NS);
+     prayers.setCalcMethod(prayers.Jafari);
+     prayers.setAsrJuristic(prayers.Shafii);
+     prayers.setAdjustHighLats(prayers.AngleBased);
+     int[] offsets = [0, 1, 0, 0, 0, 3, 5]; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+     prayers.tune(offsets);
+
+     Date now = new Date();
+     Calendar cal = Calendar.getInstance();
+     cal.setTime(now);
+
+     ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal,
+             latitude, longitude, timezone);
+     ArrayList<String> prayerNames = prayers.getTimeNames();
+
+     def prayersText = ''
+//     for (int i = 0; i < prayerTimes.size(); i++) {
+         prayersText += (prayerNames.get(0) + ": " + prayerTimes.get(0) + '\n')
+         prayersText += (prayerNames.get(1) + ": " + prayerTimes.get(1) + '\n<br/>')
+         prayersText += (prayerNames.get(2) + ": " + prayerTimes.get(2) + '\n')
+         prayersText += (prayerNames.get(3) + ": " + prayerTimes.get(3) + '\n<br/>')
+         prayersText += (prayerNames.get(4) + ": " + prayerTimes.get(4) + '\n')
+         prayersText += (prayerNames.get(5) + ": " + prayerTimes.get(5) + '\n')
+         prayersText += (prayerNames.get(6) + ": " + prayerTimes.get(6) + '\n')
+//     }
+
+
+    render(view: '/appDashboard/main', model: [prayersText: prayersText])
+
+    }
+
+
+
     def appDaftar() {
         render(view: '/appMain/daftar', model: [])
     }
@@ -495,7 +540,7 @@ class PageController {
     }
 
     def mobile() {
-        render(view: '/page/mobile', model: [mobileView: true])
+        render(view: '/appMobile/mobile', model: [mobileView: true])
     }
 
     def colors() {

@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils
 
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.Instant
 
 class PkmTagLib {
 
@@ -225,6 +227,171 @@ ${i.name}
         output += "</ul>"
 
 
+
+        out << output.decodeHTML()
+//            }
+//    out << ''
+    }
+def listRecordFiles2 = { attrs ->
+        def module = attrs.module
+        def fileClass = attrs.fileClass
+        def recordId = attrs.recordId
+        def type = attrs.type
+        def isStatic = attrs.static
+        def filesList = []
+        try {
+            def folders = [
+                    OperationController.getPath('root.rps1.path') + '/' + module,
+                    OperationController.getPath('root.rps2.path') + '/' + module
+            ]
+            folders.each() { folder ->
+                if (folder && new File(folder).exists()) {
+                    new File(folder).eachFileMatch(~/${recordId}[a-z][\S\s]*\.[\S\s]*/) {
+                        filesList.add(it)
+                    }
+                }
+            }
+             folders = [
+                    OperationController.getPath('root.rps1.path')+ '/' + module + '/' + recordId,
+                    OperationController.getPath('root.rps2.path')+ '/' + module + '/' + recordId
+//                   , OperationController.getPath('pictures.repository.path') + '/' + module + '/' + recordId
+            ]
+            folders.each() { folder ->
+                if (folder && new File(folder).exists()) {
+                    new File(folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
+                        filesList.add(it)
+                    }
+                }
+            }
+            if (module == 'R'){
+                        def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R/' + type
+                        //def typeLibraryPath = OperationController.getPath('root.rps3.path')+ '/R/' + type
+                        //ResourceType.findByCode(type).libraryPath
+                        def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + type
+                folders = [
+                        typeSandboxPath  + '/' + (recordId / 100).toInteger(),
+                        typeRepositoryPath + '/' + (recordId / 100).toInteger()
+                      //  typeLibraryPath + '/' + (recordId / 100).toInteger()
+                ]
+                folders.each() { folder ->
+
+                    if (new File(folder).exists()) {
+                        new File(folder).eachFileMatch(~/${recordId}[a-z][\S\s]*\.[\S\s]*/) {
+                            filesList.add(it)
+                        }
+                    }
+                }
+                folders = [
+          typeSandboxPath +  '/' + (recordId / 100).toInteger() + '/' + recordId,
+      //    typeLibraryPath + '/' + (recordId / 100).toInteger() + '/' + recordId,
+          typeRepositoryPath + '/' + (recordId / 100).toInteger() + '/' + recordId
+                ]
+
+                def b = Book.get(recordId)
+//                if (b.code){
+//                    folders.add(typeSandboxPath + '/' + b.code)
+//                    folders.add(typeRepositoryPath + '/' + b.code)
+//                }
+
+                folders.each() { folder ->
+                    if (new File(folder).exists()) {
+                        new File(folder).eachFileRecurse(){//Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
+                        //    if (it.isFile())
+                            filesList.add(it)
+                        }
+                    }
+                }
+          //      folders = [
+//                        OperationController.getPath('excerpts.repository.path')  + '/' + type + '/' + recordId
+           //               OperationController.getPath('root.rps2.path') + '/E/' + type + '/' + recordId
+//                        OperationController.getPath('video.excerpts.repository.path')  + '/' + type  + '/' + recordId,
+//                        OperationController.getPath('video.snapshots.repository.path')   + '/' + type + '/' + recordId
+              //  ]
+            //    folders.each() { folder ->
+            //        if (new File(folder).exists()) {
+            //            new File(folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
+            //                filesList.add(it)
+            //            }
+            //        }
+            //    }
+
+
+
+
+            }
+        }
+        catch (Exception e) {
+            out << ''
+            print 'Problem in listing record folder: ' + e.printStackTrace()
+        }
+        def output = filesList.size() > 0 ? "" : '' //<ul style='margin: 2px; border-bottom: 1px darkgray solid;list-style: square; font-weight: normal; text-decoration: none;'>" : ''
+        def c = 1
+        for (i in filesList) {
+            def fileId = new Date().format('HHmmssSSS') + c //Math.floor(Math.random()*1000)
+            c++
+
+            if (isStatic == 'yes') {
+                output += """<li>
+			<div class="showhim">
+			<a href="${i.path?.replace('\\' + (OperationController.getPath('rootFolder') ?: 'mhi') + '\\mcd', '.')}" class="${fileClass}"
+                          target="_blank"
+                          title="${i.path}">
+  ${i.name} <span style="font-size: small; color: gray;">
+&nbsp;&nbsp;&nbsp;${i.isFile() ? ' ('+ prettySizeMethod(i.size()) + ')' : ''}
+</span>
+            </a>
+
+
+			</span>
+			</div>
+</li>"""
+            }
+            else {
+                session[fileId] = i.path
+                session[fileId + '.jpg'] = i.path + '.jpg'
+              if (i.isFile() && !i.name.endsWith('.jpg')){  output += """
+			<div style="font-size: 1em; font-family: ubuntu, Lato; columns-count: 3; margin: 7px; padding: 5px; border: 1px solid darkgray; border-radius: 4px;" id="file${fileId}">
+<img src="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId + '.jpg'): '#'}"/>
+
+<a href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
+                          target="_blank"
+                          title="${i.path}">
+${i.name}
+<span style="font-size: small; color: gray;" title="${i.path?.replace(i.name, '')}">
+${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
+</span>
+            </a>
+			</div>
+"""  }
+                else if (!i.isFile()){
+                  output += """
+
+			<div style="font-size: 1.1em; font-family: ubuntu, Lato; margin: 7px; padding: 5px; border: 1px solid darkgray; border-radius: 4px;" id="file${fileId}">
+<h3>
+${i.name}
+</h3>
+
+			</div>
+"""
+              }
+              }
+
+
+                // removed 28.11.2019
+//                &nbsp;
+//                <a onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFileOut', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
+//                        &nbsp;    out
+//                </a>
+
+
+                //${i.path ? i.path?.replaceAll('/mhi', 'Z:')?.replaceAll('/host', 'D:') : ''}
+            }
+
+
+
+        //output += "</ul>"
+
+ 
 
         out << output.decodeHTML()
 //            }
@@ -506,6 +673,32 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
                 def week = c.get(java.util.Calendar.WEEK_OF_YEAR)
                 def year = c.get(java.util.Calendar.YEAR)
                 out << '' + (week < 10 ? '0' + week.toString() : week) + '' + (tmp == 1 ? 7 : tmp - 1) + '.' + year.toString().substring(2, 4) + ''
+            } catch(Exception e){
+                out << 'WD error!'
+            }
+        } else
+            out << ''
+    }
+
+
+    def prettyDuration = { attrs ->
+
+//        out << supportService.toWeekDate(attrs.date)
+
+        if (attrs.date1) {
+            try {
+                Instant start = attrs.date1.toInstant()
+                Instant end = (new Date()).toInstant();//
+                Duration dur = Duration.between(start, end);
+                long years = dur.toDays() / 365;
+                long months = (dur.toDays() % 365 ) / 30;
+                long days = ((dur.toDays() % 365 ) % 30) ;
+//     long hours = dur.toDays();
+//     long minutes = dur.toHours();
+
+
+
+                out <<  years + 'y ' + months + 'm '// + days + 'd'
             } catch(Exception e){
                 out << 'WD error!'
             }

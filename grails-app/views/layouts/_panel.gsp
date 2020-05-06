@@ -224,7 +224,6 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
                         Upload...
                         </uploader:uploader>
                         </td>
-
                         <td>
                             Add to wrk folder ('${OperationController.getPath('root.rps1.path')}'):
                             <g:if test="${new File(OperationController.getPath('root.rps1.path')).exists()}">

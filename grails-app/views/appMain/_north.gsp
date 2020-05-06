@@ -35,6 +35,14 @@
         </td>
     </g:if>
 
+   <td style="padding-right: 3px !important;">
+            <a href="${createLink(controller: 'page', action:'appLight')}" target="_blank">
+                Light
+            &nearr;
+            </a>
+        </td>
+
+
 
         <td style="padding-right: 3px !important;">
             <a href="${createLink(controller: 'page', action:'appKanban')}" target="_blank">
@@ -402,11 +410,10 @@
         </td>
 
         <td style="padding: 1px !important; margin-left: 4px; color: white;">
-            Logged in as:
-            <g:remoteLink controller="page" action="manageUser"
+                        <g:remoteLink controller="page" action="manageUser"
               update="centralArea"
               title="Manager user account">
-    ${username}
+                            User: <b>${username}</b>
 %{--دقات--}%
 %{--</g:remoteLink>--}%
                %{--style="" target="_blank">--}%

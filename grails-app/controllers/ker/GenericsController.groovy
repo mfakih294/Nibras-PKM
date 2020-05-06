@@ -2495,10 +2495,10 @@ ll
                 case 'R': ResourceStatus.list([sort: 'name']).each() {
                     statuses.add([id: it.id, value: it.name + ' (' + Book.countByStatus(it) + ')'])
                 }
-                    Book.executeQuery("select count(*), t.course from Book t where t.course is not null group by t.course order by t.course.code asc").each() {
+                    Book.executeQuery("select count(*), t.course from Book t where t.course is not null group by t.course order by t.course asc").each() {
                         courses.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
                     }
-                    Book.executeQuery("select count(*), t.course.department from Book t group by t.course.department order by t.department.code asc").each() {
+                    Book.executeQuery("select count(*), t.course.department from Book t group by t.course.department order by t.course.department asc").each() {
                         departments.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
                     }
 

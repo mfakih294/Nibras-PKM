@@ -21,11 +21,11 @@ grails:
 info:
     app:
         name: nibras
-        version: 1.2.1
+        version: 1.4.1
         grailsVersion: '@info.app.grailsVersion@'
 server:
     contextPath: '/nibras'
-    port: 443 # The port to listen on
+    port: 1441 # The port to listen on
     session:
         timeout: 720000  # 20 hours (in ms)
     ssl:

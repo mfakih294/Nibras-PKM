@@ -43,9 +43,10 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     }
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 }
+
 root(ERROR, ['STDOUT'])
-root(INFO, ['STDOUT'])
-root(WARN, ['STDOUT'])
+//root(INFO, ['STDOUT'])
+//root(WARN, ['STDOUT'])
 
 
 
@@ -104,10 +105,11 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 //root(WARN, ["StackTrace"])
-root(ERROR, ["CONSOLE", "STDOUT", "FULL_STACKTRACE"])
+
 
 
 */
+
 
 //logger('nibras', INFO, ['STDOUT'], false)
 logger('nibras', ERROR, ['STDOUT'], false)

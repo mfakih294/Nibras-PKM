@@ -23,7 +23,8 @@
 
 
     %{--<meta name="layout" content="main"/>--}%
-    <title>Nibras PKM Mobile</title>
+    <title>Nibras
+    Media Server</title>
 
 
     <!-- To make the page refresh every 120 seconds -->
@@ -58,7 +59,17 @@
     %{--<uploader:head/>--}%
 
 
-    %{--<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery/jquery-1.3.2.min.js')}"></script>--}%
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-ui-1.10.4.custom.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'chosen.jquery.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'am2_SimpleSlider.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.address-1.5.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.continuousCalendar-latest.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.layout-latest_min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.purr.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.relatedselects.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.tablednd_0_5.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jqueryui-editable.min.js')}"></script>
 
 
 
@@ -110,8 +121,19 @@
 <div id="notificationArea"></div>
 %{--<r:layoutResources/>--}%
 
-<h1>Nibras PKM Mobile</h1>
-<g:render template='/reports/mobileSavedSearches' model="[mobileView: true]"/>
+<h3>Nibras Media Server</h3>
+
+
+%{--<g:render template='/reports/mobileSavedSearches' model="[mobileView: true]"/>--}%
+
+<g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.status.code = ? order by p.id desc',
+        ['board'])}"
+        var="p">
+    <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+
+    <g:render template="/gTemplates/filesListing2" model="[record: p, entityCode: p.entityCode()]"></g:render>
+
+</g:each>
 
 
 </body>

@@ -336,14 +336,14 @@
                                 <g:remoteLink controller="page" action="panel"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                              style="padding: 2px; font-size: 12px;"
+                                              style="padding: 2px; font-size: 1em;"
                                               before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0)">
                                 %{--class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"--}%
                                     <g:if test="${!record.summary}">
                                         ...
                                     </g:if>
                                     <g:if test="${record.summary}">
-                                        <span title="${record.summary}" style="font-family: Lato-Light !important;">
+                                        <span title="${record.summary}" style="font-family: Ubuntu !important;">
                                             <g:if test="${entityCode == 'E'}">
                                                 <br/>
                                             </g:if>
@@ -351,7 +351,7 @@
                                                 <span style="font-size: big; color: darkgreen"> &copy; </span>
                                             </g:if>
                                             <g:elseif  test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code == 'repub'}">
-                                                <span style="font-size: big; color: darkred"> &copy; </span>
+                                                <span style="font-size: 1em; color: darkred"> &copy; </span>
                                             </g:elseif>
                                         %{--<bdi>--}%
                                             <pkm:summarize text="${record.summary ?: ''}"
@@ -415,7 +415,7 @@
                             </g:if>
 
                             <g:if test="${record.class.declaredFields.name.contains('priority')}">
-                                <span style="font-size: 12px; color: #003366">
+                                <span style="font-size: 1em; color: #003366">
                                     <g:if test="${record.priority == 3}">
                                         %{--&loz;--}%
                                         <i style='color: darkorange'>p3</i>
@@ -451,7 +451,7 @@
                                 <g:set value="context" var="field"></g:set>
 
                                 <a href="#" id="${field}${record.id}" class="${field}"
-                                   style="font-style: italic !important; color: darkgreen !important; font-size: 11px;"
+                                   style="font-style: italic !important; color: darkgreen !important; font-size: 0.9em;"
                                    data-type="select"
                                    data-value="${record[field]?.id}"
                                    data-name="${field}-${record.entityCode()}"
@@ -574,7 +574,7 @@
                                 <g:remoteLink controller="page" action="panel"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                              style="padding: 4px; font-size: 12px;"
+                                              style="padding: 4px; font-size: 1em;"
                                               before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                     <pkm:summarize text="${(record.title ?: '...')}"
@@ -684,7 +684,7 @@
                                             <g:remoteLink controller="page" action="panel"
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                                          style="padding: 2px; font-size: 11px; font-style: italic"
+                                                          style="padding: 2px; font-size: 1em; font-style: italic"
                                                           before=" myLayout.open('east'); jQuery('#3rdPanel').html(''); jQuery('#accordionEast').accordion({ active: 0});">
                                                 ${record?.description?.replaceAll("\\<.*?>", "")?.replaceAll('\n', '..')?.decodeHTML()?.replaceAll('\n', '..')?.replace('Product Description', '')}
                                             </g:remoteLink>
@@ -714,7 +714,7 @@
                                             <g:remoteLink controller="page" action="panel"
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                                          style="padding: 4px; font-size: 12px;"
+                                                          style="padding: 4px; font-size: 1em;"
                                                           before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                                 <pkm:summarize

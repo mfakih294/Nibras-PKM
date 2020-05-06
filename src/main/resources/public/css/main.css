@@ -426,7 +426,7 @@ tr {
 }
 
 td, th {
-    font: 12px tahoma, verdana, arial, helvetica, sans-serif;
+    font: 1em Lato, verdana, arial, helvetica, sans-serif;
     line-height: 15px;
     padding: 2px;
     /*text-align: left;*/
@@ -434,7 +434,7 @@ td, th {
 }
 
 th {
-    font: 11px tahoma, verdana, arial, helvetica, sans-serif !important;
+    font: 0.9 Lato, tahoma, verdana, arial, helvetica, sans-serif !important;
     /*font-weight:normal !important;*/
     background: #fff url(../images/skin/shadow.jpg);
     color: #666;
