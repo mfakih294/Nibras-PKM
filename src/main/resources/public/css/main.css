@@ -143,7 +143,7 @@ body {
     /*background: #fdfdfd;*/
     color: #333;
     /*line-height: 1.4;*/
-    font-size: 1em;
+    font-size: 0.95em;
     font-family:  Lato !important;
 
     background: #D8D4C9 url(../images/bg-main.gif) repeat-x;
@@ -253,7 +253,7 @@ ul {
 }
 
 input,select, textarea {
-    background-color: #fcfcfc;
+    background-color: #fafafa;
     border: 1px solid #ccc;
     font: 0.9em Lato, tahoma, verdana, arial, helvetica, sans-serif;
     margin: 2px 2px !important;
@@ -426,7 +426,7 @@ tr {
 }
 
 td, th {
-    font: 1em Lato, verdana, arial, helvetica, sans-serif;
+    font: 0.95em Lato, verdana, arial, helvetica, sans-serif;
     line-height: 15px;
     padding: 2px;
     /*text-align: left;*/
@@ -1794,7 +1794,7 @@ ul.ui-autocomplete.ui-menu {
 .actionsButtons a {
     color: #0b202f !important;
     font-style: normal !important;
-    font-size: 1em !important;
+    font-size: 0.95em !important;
     text-decoration: none !important;
     border: 0.5px solid darkgray !important;
     border-radius: 3px !important;
@@ -1804,7 +1804,7 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .actionsButtonsStyle a {
-    font-size: 10px !important;
+    font-size: 0.95em !important;
     color: #0b1336 !important;
     font-style: normal !important;
     text-decoration: underline !important;
@@ -1900,7 +1900,7 @@ ul.ui-autocomplete.ui-menu {
 
 .commandBarTexField {
     font-family: Lato, tahoma !important;
-    font-size: 1.1em;
+    font-size: 0.95em;
     width: 98% !important;
     height: 100px;
     background: #dce5e5;
@@ -1938,7 +1938,7 @@ ul.ui-autocomplete.ui-menu {
 .commandBarTexFieldTop {
     background: #eeeeee;
     /*direction: ltr;*/
-    font-size: normal !important;
+    font-size: 0.95em !important;
     text-align: start;
 }
 
@@ -1965,7 +1965,7 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .footerRegion a {
-    font-size: 12px !important;
+    font-size: 0.8em !important;
     font-family: Lato, "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif;
     color: white !important;
 }

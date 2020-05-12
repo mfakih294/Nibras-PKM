@@ -116,7 +116,7 @@
 %{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
 <uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
              name="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
-             controller="import" action="upload" path="d:/"
+             controller="import" action="upload" path="${typeSandboxPath}"
              placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
              noSound="true"
              direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1" class="demo">
@@ -146,12 +146,12 @@ Open:
     <b> rps 2</b>
 </g:remoteLink>
 &nbsp;
-%{--<g:remoteLink controller="generics" action="openLibFolder"--}%
-%{--              params="${[id: record.id, entityCode: entityCode]}"--}%
-%{--              update="${entityCode}Record${record.id}"--}%
-%{--              title="Open lib folder: ${OperationController.getPath('root.rps3.path')}">--}%
-%{--    <b> rps 3 </b>--}%
-%{--</g:remoteLink>--}%
+<g:remoteLink controller="generics" action="openLibFolder"
+              params="${[id: record.id, entityCode: entityCode]}"
+              update="${entityCode}Record${record.id}"
+              title="Open lib folder: ${OperationController.getPath('root.rps3.path')}">
+    <b> rps 3 </b>
+</g:remoteLink>
 
 folder.
 

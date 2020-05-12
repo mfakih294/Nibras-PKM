@@ -2,7 +2,7 @@
 
 <div class="filesRegion">
 %{--<g:if test="${record.entityCode() != 'R'}">--}%
-    <pkm:listRecordFiles module="${entityCode}" fileClass="himFile"  recordId="${record.id}" type="${entityCode == 'R' ? record.type?.code : ''}"/>
+    <pkm:listRecordFiles2 module="${entityCode}" fileClass="himFile"  recordId="${record.id}" type="${entityCode == 'R' ? record.type?.code : ''}"/>
     %{--</g:if>--}%
 %{--<g:else>--}%
     %{--<pkm:listRecordFiles module="${entityCode}" resource="yes" fileClass="himFile"  recordId="${record.id}"/>--}%

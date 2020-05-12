@@ -303,7 +303,7 @@ class IndexCardController { // entity id = 16
     }
 
     def addXcdFormDaftar() {
-        if (params.title) {
+//        if (params.title) {
 
             /*
 
@@ -317,7 +317,7 @@ class IndexCardController { // entity id = 16
                  def n
             if (params.type == 'N'){
                n = new IndexCard()
-            n.summary = params.title//extractTitleReturn(params.description)
+            n.summary = params.title ?: '...'//extractTitleReturn(params.description)
             n.description = params.description //extractDescriptionReturn(params.description)
 //            n.type = mcs.parameters.WritingType.findByCode('daftar')
             n.writtenOn = new Date()
@@ -374,9 +374,9 @@ class IndexCardController { // entity id = 16
             }
             render(template: "/gTemplates/recordSummary", model: [record: n])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
-        } else {
-            render 'No description entered'
-        }
+//        } else {
+//            render 'No description entered'
+//        }
     }
 
     def addArticleFormNgs() {

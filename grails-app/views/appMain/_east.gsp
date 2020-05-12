@@ -551,6 +551,12 @@
 
         %{--</li>--}%
         <br/>
+  rps3.path: <g:render template="/forms/updateSetting" model="[settingValue: 'root.rps3.path']"/>
+        %{--</li>--}%
+        %{--</ul>--}%
+
+        %{--</li>--}%
+        <br/>
 
         <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
             <h4>Export:</h4>

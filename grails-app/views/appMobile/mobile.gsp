@@ -129,7 +129,8 @@
 <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.status.code = ? order by p.id desc',
         ['board'])}"
         var="p">
-    <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+%{--    <g:render template="/gTemplates/box" model="[record: p]"></g:render>--}%
+    <h3>${p.toString()}</h3>
 
     <g:render template="/gTemplates/filesListing2" model="[record: p, entityCode: p.entityCode()]"></g:render>
 

@@ -96,7 +96,7 @@
 //          columnHead: false
 
       },
-      defaultView: 'dayGridWeek',
+      defaultView: 'timeGridWeek',
         allDaySlot: true,
         nowIndicator: true,
         timeGridEventMinHeight: true,
@@ -125,9 +125,9 @@
         // day:''  // Monday 19.07
       // },
       // lazyFetching: true,
-       firstHour: '09:00',
+       firstHour: '00:00',
       // minTime: 5,
-      minTime: '05:00',
+      minTime: '00:00',
       slotDuration: '00:60',
       // showNonCurrentDates: false,
       // dayCount: 31,
