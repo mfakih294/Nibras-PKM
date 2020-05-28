@@ -1,0 +1,15 @@
+site_name: Nibras System
+nav:
+  - Home : 01.md
+  - Interface: 02.md
+  - Records and Data Model: 03.md
+  - Repository and Files: 04.md
+  - Adding: 05.md
+  - Search: 06.md
+  - Commands: 07.md
+  - Reports: 08.md
+  - Backup and restore: 09.md
+  - Installation and Configuration: 10.md
+  - Nibras Reader: 11.md
+  - License: 12.md  
+theme: readthedocs

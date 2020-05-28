@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Search - Nibras System</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Search";
+    var mkdocs_page_input_path = "06.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Nibras System</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../01/">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../02/">Interface</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../03/">Records and Data Model</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../04/">Repository and Files</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../05/">Adding</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Search</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#search">Search</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#quick-search">Quick search</a></li>
+        
+            <li><a class="toctree-l3" href="#forms">Forms</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../07/">Commands</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../08/">Reports</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../09/">Backup and restore</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../10/">Installation and Configuration</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../11/">Nibras Reader</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../12/">License</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Nibras System</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Search</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="search">Search</h1>
+<p>There are 3 types of searches in Nibras: quick search (top right search box), forms, and commands.</p>
+<!-- Pomegranate gives the user 4 options to query or search the records:
+
+What is HQL query. 
+Visit the gallery of saved searches on this link.
+
+
+Most databases in use today are relational. The standard language to query them is SQL. When tables are mapped to class objects in certain frameworks as in Grails, you can use a language that is more powerful than SQL. You can write shorter code in it, over SQL.
+
+
+'''Nibras command''': available from the command bar, it uses Nibras syntax and it is internally translated to HQL query. It is a shorthand notation used for fast queries. The translated HQL query is shown on the screen and can then be stored permanently as saved search. Example 'f t p3 ?pending #bug', will find all tasks that are of priority 3, of status 'pending' and type 'bug'. More about this syntax in a later section.
+'''Full text search''': backed by Lucene library, it gives full text seach of the text fields of the main information types. It is available from the command line and can be stored as saved search. Lucene syntax is presented on ?. Example 's b information overload' to search all resources (books, articles etc) about the occurrance of the terms information overload
+
+'''Direct HQL query''': available from the command bar and can be stored as saved search. Example 'q from Task where priority # 3'
+
+'''Ad hoc query''': Similar to direct HQL query but here the user specific what fields he/she wants to be. The results are display in table instead of the long card representation of direct HQL query. Example 'h select id, summary, status from Task', to display a table with 3 columns id, summary and status of all tasks. Ad hoc query can be stored as saved search.
+ -->
+
+<h2 id="quick-search">Quick search</h2>
+<p>Quick search field in the top right corner: it does full text seach over all the module records</p>
+<p><img alt="quick-search" src="../images/quick-search.jpg" /></p>
+<h2 id="forms">Forms</h2>
+<p>Form-based search: available on left-hand side of the screen, gives the user the most straightforward way to query the main information types (all except the parameters).</p>
+<p><img alt="search" src="../images/search.jpg" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../07/" class="btn btn-neutral float-right" title="Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../05/" class="btn btn-neutral" title="Adding"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../05/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../07/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

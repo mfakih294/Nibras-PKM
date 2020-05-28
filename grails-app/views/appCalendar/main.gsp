@@ -347,7 +347,7 @@
               <tr>
                   <td style="text-align: left; margin: 3px; direction: ltr">Type:
                       <br/>
-                      <g:select name="type" from="${['J', 'P']}" id="typeField" value="P"/>
+                      <g:select name="type" from="${['J', 'P']}" id="typeField" value="J"/>
                   </td> <td style="text-align: left; margin: 3px; direction: ltr"> Start time:
                       <br/><g:textField name="start" value="" id="start"></g:textField></td>
                   <td style="text-align: left; direction: ltr; margin: 3px;">End time:

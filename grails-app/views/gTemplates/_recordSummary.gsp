@@ -89,7 +89,7 @@
                                        data-type="select"
                                        data-value="${record.type?.id}"
                                        data-name="${field}-${entityCode}"
-                                       style="font-size: 12px; font-weight: normal;"
+                                       style="font-size: 0.95em; font-weight: normal;"
 
                                        data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                        data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
@@ -116,7 +116,7 @@
                                        data-value="${record[field]?.id}"
                                        data-name="${field}-${entityCode}"
                                        class="${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
-                                       style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 11px; font-style: italic; padding-left: 1px; padding-right: 1px; "
+                                       style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px; "
                                        data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                        data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                        data-title="Edit ${field}">
@@ -145,7 +145,7 @@
 
                     <td class="record-summary text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
-                        style="width: 98%; font-size: 14px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
+                        style="width: 98%; font-size: 0.95px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
 
                     %{--<g:remoteLink controller="generics" action="showDetails"--}%
                     %{--params="${[id: record.id, entityCode: entityCode]}"--}%
@@ -168,7 +168,7 @@
                     %{--<g:set value="type" var="field"></g:set>--}%
                     %{--<span style="min-width: 60px;">--}%
                     %{--<a href="#" id="${field}${record.id}" class="${field}" data-type="select" data-value="${record[field]?.id}"--}%
-                    %{--style="${record.type ? record.type?.style : ''};font-size: 11px; font-weight: bold;margin-left: 5px;"--}%
+                    %{--style="${record.type ? record.type?.style : ''};font-size: 0.9em; font-weight: bold;margin-left: 5px;"--}%
                     %{--data-name="${field}-${entityCode}"--}%
                     %{--data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"--}%
                     %{--data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2" data-title="Edit ${field}">--}%
@@ -212,7 +212,7 @@
 
                     %{--<td  colspan="10" class="record-summary text${record.class.declaredFields.name.contains('language') ? record.language : ''} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code: ''}"--}%
                     %{--onmouseover="jQuery('.temp44').addClass('actionsButtons'); jQuery('#actionsButtons${record.id}').removeClass('actionsButtons')"--}%
-                    %{--style="font-family: Arial; font-size: 13px; color: #105CB6; padding-right: 3px; padding-left: 3px; padding-bottom: 3px; padding-top: 2px;">--}%
+                    %{--style="font-family: Arial; font-size: 0.95em; color: #105CB6; padding-right: 3px; padding-left: 3px; padding-bottom: 3px; padding-top: 2px;">--}%
 
 
                     %{--<g:render template="/gTemplates/summaryField" model="[record: record, entityCode: entityCode]"/>--}%
@@ -319,7 +319,7 @@
                             <g:if test="${record.class.declaredFields.name.contains('summary')}">
 
                             %{--<g:remoteLink controller="generics" action="fetchQuickAddForm"--}%
-                            %{--style="padding: 2px; font-size: 12px;"--}%
+                            %{--style="padding: 2px; font-size: 0.95em;"--}%
                             %{--class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"--}%
                             %{--id="${record.id}"--}%
                             %{--params="[entityController: record.class.name,--}%
@@ -511,7 +511,7 @@
                             %{--<g:if test="${record.fileName}">--}%
                             %{--<a href="${createLink(controller: 'operation', action: 'downloadNoteFile', id: record.id)}"--}%
                             %{--target="_blank">--}%
-                            %{--<span style="font-size: 10px; font-style: italic; text-decoration: underline">--}%
+                            %{--<span style="font-size: 0.9em; font-style: italic; text-decoration: underline">--}%
                             %{--${record.fileName}--}%
                             %{--</span>--}%
                             %{--</a>--}%
@@ -574,12 +574,12 @@
                                 <g:remoteLink controller="page" action="panel"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                              style="padding: 4px; font-size: 1em;"
+                                              style="padding: 4px; font-size: 0.95em;"
                                               before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                     <pkm:summarize text="${(record.title ?: '...')}"
                                                    length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/>
-                                    <i style="font-size: 12px; color: #2d2d2d"><pkm:summarize
+                                    <i style="font-size: 0.95em; color: #2d2d2d"><pkm:summarize
                                             text="${record.author ?: ''}"
                                             length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/></i>
                                     ${record.publisher ?: ''}
@@ -597,12 +597,12 @@
 
 
                                     <g:if test="${record.class.declaredFields.name.contains('publicationDate') && record.publicationDate}">
-                                        <span style="font-size: 11px; text-weight: bold;">
+                                        <span style="font-size: 0.9em; text-weight: bold;">
                                             &nbsp;    ${record.publicationDate}
                                         </span>
                                     </g:if>
                                     <g:if test="${record.class.declaredFields.name.contains('year') && record.year}">
-                                        <span style="font-size: 11px; text-weight: bold;">
+                                        <span style="font-size: 0.9em; text-weight: bold;">
                                             &nbsp;    ${record.year}
                                         </span>
                                     </g:if>
@@ -667,7 +667,7 @@
                                 <g:if test="${record.class.declaredFields.name.contains('language') && record.language}">
                                     <span class="${OperationController.getPath('repository.languages.RTL').contains(record.language) ? 'RTLText' : 'LRTText'}">
                                 </g:if>
-                                <span style="font-size: 11px !important; color: #272727 !important; padding: 3px; line-height: 1.4;">
+                                <span style="font-size: 0.9em !important; color: #272727 !important; padding: 3px; line-height: 1.4;">
                                     <g:if test="${entityCode == 'N' && record?.type?.code == 'word'}">
                                         <span id="descriptionArea${record.id}">
                                             <g:remoteLink controller="generics" action="showAnswer"
@@ -684,7 +684,7 @@
                                             <g:remoteLink controller="page" action="panel"
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                                          style="padding: 2px; font-size: 1em; font-style: italic"
+                                                          style="padding: 2px; font-size: 0.95em; font-style: italic"
                                                           before=" myLayout.open('east'); jQuery('#3rdPanel').html(''); jQuery('#accordionEast').accordion({ active: 0});">
                                                 ${record?.description?.replaceAll("\\<.*?>", "")?.replaceAll('\n', '..')?.decodeHTML()?.replaceAll('\n', '..')?.replace('Product Description', '')}
                                             </g:remoteLink>
@@ -714,7 +714,7 @@
                                             <g:remoteLink controller="page" action="panel"
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                                          style="padding: 4px; font-size: 1em;"
+                                                          style="padding: 4px; font-size: 0.95em;"
                                                           before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                                 <pkm:summarize
@@ -739,10 +739,10 @@
                                 <g:remoteLink controller="page" action="panel"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                              style="padding: 4px; font-size: 13px;"
+                                              style="padding: 4px; font-size: 0.95em;"
                                               before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
-                                    <span style="font-size: 11px; font-style: italic; color: #435d59">
+                                    <span style="font-size: 0.9em; font-style: italic; color: #435d59">
                                         <pkm:summarize text="${record.fullText}"
                                                        length="${OperationController.getPath('description.summarize.threshold')?.toInteger()}"/>
                                         (${record.fullText?.count(' ')})
@@ -752,7 +752,7 @@
 
 
                             <g:if test="${record.class.declaredFields.name.contains('password')}">
-                                <span style="font-size: 12px; color: #8A5C69">
+                                <span style="font-size: 0.9em; color: #8A5C69">
                                     ${record.password}
                                 </span>
                             </g:if>
@@ -784,7 +784,7 @@
 %{--                            <span style="">--}%
 %{--                                <g:if test="${record.class.declaredFields.name.contains('orderInBook')}">--}%
 %{--                                    <g:if test="${record.orderInBook}">--}%
-%{--                                        <span style="font-size: 12px;">ib ${record.orderInBook}</span>--}%
+%{--                                        <span style="font-size: 0.95em;">ib ${record.orderInBook}</span>--}%
 %{--                                    </g:if>--}%
 %{--                                </g:if>--}%
 %{--                            </span>--}%
@@ -796,7 +796,7 @@
                             <g:remoteLink controller="page" action="panel"
                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                          style="padding: 1px; font-size: 12px;"
+                                          style="padding: 1px; font-size: 0.9em;"
                                           before="jQuery('#3rdPanel').html(''); myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});"
                                           title="Created ${record?.dateCreated?.format('dd.MM.yyyy')}">
 
@@ -804,7 +804,7 @@
 
                                     <span
                                             title="${record.completedOn?.format(OperationController.getPath('datetime.format'))}"
-                                            style="font-size: 10px; font-style: italic;">
+                                            style="font-size: 0.9em; font-style: italic;">
 
                                         c<pkm:weekDate date="${record?.completedOn}"/>
                                     </span>
@@ -997,7 +997,7 @@
                             %{-- class += hiddenActions--}%
                             <div id="actionsButtons${entityCode}${record.id}"
                                  class="temp44 hiddenActions actionsButtons"
-                                 style="text-align: left; direction: ltr; line-height: 20px;font-size: 11px !important; color: darkgray !important">
+                                 style="text-align: left; direction: ltr; line-height: 20px;font-size: 0.9em !important; color: darkgray !important">
 
                                 <g:remoteLink controller="generics" action="fetchAddForm"
                                               id="${record.id}"
@@ -1006,12 +1006,12 @@
                                                        finalRegion     : entityCode + 'Record' + record.id]"
                                               update="${entityCode}Record${record.id}"
                                               title="Edit">
-                                %{--<i style="font-size: 10px;">--}%
+                                %{--<i style="font-size: 0.9em;">--}%
                                     Edit
                                 %{--</i>--}%
                                 </g:remoteLink>
                                 <g:remoteLink controller="generics" action="fetchQuickAddForm"
-                                              style="padding: 2px; font-size: 13px;"
+                                              style="padding: 2px; font-size: 0.95em;"
                                               class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"
                                               id="${record.id}"
                                               params="[entityController: record.class.name,
@@ -1035,7 +1035,7 @@
                                            data-type="select"
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
-                                           style=" border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 3px; padding-right: 3px;"
+                                           style=" border-radius: 3px; font-size: 0.95em; font-style: italic; padding-left: 3px; padding-right: 3px;"
                                            data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1054,7 +1054,7 @@
                                            data-type="select"
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
-                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 11px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1070,7 +1070,7 @@
                                                           id="${record.book?.id}"
                                                           params="[entityCode: 'R']"
                                                           update="below${entityCode}Record${record.id}"
-                                                          style="font-style: italic; font-size: 12px;"
+                                                          style="font-style: italic; font-size: 0.95em;"
                                                           title="Show book">
                                                 &larr;
                                             </g:remoteLink>
@@ -1104,7 +1104,7 @@
                                            data-type="select"
                                            data-value="${record.recordId ?: null}"
                                            data-name="${field}-${entityCode}"
-                                           style=" border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style=" border-radius: 3px; font-size: 0.95em; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&recordId=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1127,7 +1127,7 @@
                                            data-type="select"
                                            data-value="${record[field]?.id}"
                                            data-name="${field}-${entityCode}"
-                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 0.95em; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1162,7 +1162,7 @@
                                            data-type="select"
                                            data-value="${record[field]}"
                                            data-name="${field}-${entityCode}"
-                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 12px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                                           style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"
                                            data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                            data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                            data-title="Edit ${field}">
@@ -1409,7 +1409,7 @@
 
                             <g:if test="${record.class.declaredFields.name.contains('--writtenOn') && record.writtenOn}">
 
-                                <span style="font-size: 12px; font-weight: bold;  padding-right: 4px;"
+                                <span style="font-size: 0.9em; font-weight: bold;  padding-right: 4px;"
                                       title="${record.writtenOn?.format(OperationController.getPath('datetime.format'))}">
                                     <g:if test="${record.class.declaredFields.name.contains('approximateDate') && record.approximateDate}">
                                         ~
@@ -1485,7 +1485,7 @@
                                data-type="select"
                                data-value="${record[field]?.id}"
                                data-name="${field}-${entityCode}"
-                               style=" border-radius: 3px; font-size: 12px; font-weight: bold;font-style: italic; padding-left: 1px; padding-right: 1px;"
+                               style=" border-radius: 3px; font-size: 0.95em; font-weight: bold;font-style: italic; padding-left: 1px; padding-right: 1px;"
                                data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                data-title="Edit ${field}">

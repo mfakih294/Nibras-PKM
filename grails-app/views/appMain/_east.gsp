@@ -551,7 +551,7 @@
 
         %{--</li>--}%
         <br/>
-  rps3.path: <g:render template="/forms/updateSetting" model="[settingValue: 'root.rps3.path']"/>
+ rps3.path: <g:render template="/forms/updateSetting" model="[settingValue: 'root.rps3.path']"/>
         %{--</li>--}%
         %{--</ul>--}%
 
