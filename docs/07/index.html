@@ -87,30 +87,6 @@
     
         <ul>
         
-            <li><a class="toctree-l3" href="#import">Import</a></li>
-        
-        </ul>
-    
-
-    <li class="toctree-l2"><a href="#search">Search</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#quick-search">Quick search</a></li>
-        
-            <li><a class="toctree-l3" href="#forms">Forms</a></li>
-        
-            <li><a class="toctree-l3" href="#commands_1">Commands</a></li>
-        
-            <li><a class="toctree-l3" href="#saved-searches">Saved searches</a></li>
-        
-        </ul>
-    
-
-    <li class="toctree-l2"><a href="#commands_2">Commands</a></li>
-    
-        <ul>
-        
             <li><a class="toctree-l3" href="#options">Options</a></li>
         
             <li><a class="toctree-l3" href="#examples">Examples</a></li>
@@ -179,65 +155,6 @@
             <div class="section">
               
                 <h1 id="commands">Commands</h1>
-<p>Adding through commands will be explained in the Commands section.</p>
-<h2 id="import">Import</h2>
-<!-- [import-menu.jpg](./images/import-menu.jpg) -->
-
-<p>To import files, you need to rename them as if they are <em>add commands</em>, without the command type <strong>a</strong>. So a file named <code>t p3 -- Paper to read</code> create the same record that the command 'a t p3 -- Paper to read` creates. The next 3 screenshot illustrate this process.</p>
-<p><strong>1 - Sample files to import</strong></p>
-<p><img alt="files" src="../images/files.jpg" /></p>
-<p><strong>2- The files as seen inside Nibras import screen</strong></p>
-<p><img alt="files-to-import" src="../images/files-to-import.jpg" /></p>
-<p><strong>3 - The result of importing</strong></p>
-<p><img alt="import-result" src="../images/import-result.jpg" /></p>
-<!-- 
-Import options
-
-![import-options](./images/import-options.jpg) -->
-
-<h1 id="search">Search</h1>
-<p>There are 3 types of searches in Nibras: quick search (top right search box), forms, and commands.</p>
-<!-- Pomegranate gives the user 4 options to query or search the records:
-
-What is HQL query. 
-Visit the gallery of saved searches on this link.
-
-
-Most databases in use today are relational. The standard language to query them is SQL. When tables are mapped to class objects in certain frameworks as in Grails, you can use a language that is more powerful than SQL. You can write shorter code in it, over SQL.
-
-
-'''Nibras command''': available from the command bar, it uses Nibras syntax and it is internally translated to HQL query. It is a shorthand notation used for fast queries. The translated HQL query is shown on the screen and can then be stored permanently as saved search. Example 'f t p3 ?pending #bug', will find all tasks that are of priority 3, of status 'pending' and type 'bug'. More about this syntax in a later section.
-'''Full text search''': backed by Lucene library, it gives full text seach of the text fields of the main information types. It is available from the command line and can be stored as saved search. Lucene syntax is presented on ?. Example 's b information overload' to search all resources (books, articles etc) about the occurrance of the terms information overload
-
-'''Direct HQL query''': available from the command bar and can be stored as saved search. Example 'q from Task where priority # 3'
-
-'''Ad hoc query''': Similar to direct HQL query but here the user specific what fields he/she wants to be. The results are display in table instead of the long card representation of direct HQL query. Example 'h select id, summary, status from Task', to display a table with 3 columns id, summary and status of all tasks. Ad hoc query can be stored as saved search.
- -->
-
-<h2 id="quick-search">Quick search</h2>
-<p>Quick search field in the top right corner: it does full text seach over all the module records</p>
-<p><img alt="quick-search" src="../images/quick-search.jpg" /></p>
-<h2 id="forms">Forms</h2>
-<p>Form-based search: available on left-hand side of the screen, gives the user the most straightforward way to query the main information types (all except the parameters).</p>
-<p><img alt="search" src="../images/search.jpg" /></p>
-<h2 id="commands_1">Commands</h2>
-<p>This part will be explained in the commands section.</p>
-<h2 id="saved-searches">Saved searches</h2>
-<p>Saved searches are one of the main features of Nibras system. They are used to build most of the navigation menu and reports.</p>
-<p>For example, you can use saved query to:</p>
-<ul>
-<li>Get a list of results e.g. all high priority tasks.</li>
-<li>Get a table where columns maps to record fields e.g. get all dates and summary of journal records of type 'external event'.</li>
-<li>Get a random record or records from the list.</li>
-<li>Display the results in a table grouped by a certain field e.g. course.</li>
-<li>Display the results in a calendar or timeline.</li>
-</ul>
-<p><strong>Sample command</strong></p>
-<p><img alt="pkm2hql-query" src="../images/pkm2hql-query.jpg" /></p>
-<p><strong>Saved search record</strong>
-A saved search contains a query and a title, with optionally the query to count the total number.</p>
-<p><img alt="saved-search-record" src="../images/saved-search-record.jpg" /></p>
-<h1 id="commands_2">Commands</h1>
 <p><strong>Syntax</strong></p>
 <p>The general form of the commad is as follows:</p>
 <p><code>&lt;type&gt; &lt;module&gt;     (options)  -- &lt;summary&gt;    (::  description)</code></p>
