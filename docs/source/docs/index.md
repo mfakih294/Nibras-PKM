@@ -1,12 +1,18 @@
-# Welcome to Nibras System Documentation
+<!-- # Welcome to Nibras System Documentation -->
 
-Nibras system consists of Nibras PKM and Nibras Reader.
+# Nibras System
 
-## Nibras PKM 
+__An oasis for concentration in the age of distractions and information overload__
 
-**Nibras PKM** is an __offline open source system__ for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.
+Nibras is a local open source system for the long-term management of personal information. It is a combination of a web-based application (Nibras PKM) intended for desktop use, and an Android mobile application (Nibras Reader).
 
-**Why offline?** The user has full control over his/her data, without the need for (fast) internet connection, and without all the distractions and information overload that the internet can cause.
+<!-- Nibras system consists of Nibras PKM and Nibras Reader.-->
+
+<!-- ## Nibras PKM -->
+
+<!-- **Nibras PKM** is an __offline open source system__ for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.-->
+
+**Why offline?** The user has full control over his/her data, without the need for a (fast) internet connection, and without all the distractions and information overload that the internet can cause.
 
 **Why open source?** The user has control over the system itself too, especially when using it on the long term to manage the important personal information and files.
 
