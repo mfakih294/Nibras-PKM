@@ -25,3 +25,7 @@
 * Grails applications run on any platform that can run Java 8 and later, so practically all platforms, including Windows, Linux, Mac.
 * For production use, Nibras uses MySQL 5 for its database, and the file system to store the files of the records. To testing and demonstration, you can run it with h2 database, with no need to configure it.
 * Apache Tomcat 8+ is the recommended application server to run it for production use.
+
+
+* Documentation: [https://mfakih294.github.io/Nibras-PKM/](https://mfakih294.github.io/Nibras-PKM/).
+* Code, releases and issues: [https://github.com/mfakih294/Nibras-PKM](https://github.com/mfakih294/Nibras-PKM).
