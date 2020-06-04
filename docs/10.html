@@ -161,12 +161,24 @@
                 <h1 id="installation-and-configuration">Installation and Configuration</h1>
 <h2 id="installation">Installation</h2>
 <p>To install Nibras, you have one of three options:</p>
-<h3 id="quick-demonstration-installation">Quick demonstration installation</h3>
-<p>It requires two steps. First, you need to install JRE (Java runtime environment) 8 or later. Second, download the latest jar file from the releases section on Nibras PKM github page and execute the command:</p>
-<p><code>java -Dgrails.env=h2 -jar nibras.jar</code></p>
-<p>This will instruct Nibras to use h2 as its database, which requires no extra installation or configuration.</p>
-<h3 id="standard-production-installation">Standard production installation</h3>
-<p>As before, you need to install JRE (Java runtime environment) 8 or later. Then download and install MySQL 5.5 or later, and finally download, extract and run the Nibras-Tomcat bundle as detailed below.</p>
+<h3 id="quick-installation">Quick installation</h3>
+<p>The quick installation consists of three steps:</p>
+<ul>
+<li>Download the bundle file corresponding to your platform, e.g. nibras-bundle-windows.zip.</li>
+<li>Extract the zipped file to a location of your choice on your local disk.</li>
+<li>Launch Nibras by double clicking on ./scripts/start file.</li>
+</ul>
+<p>Once Nibras has finished launching, a text message like the one below will appear.</p>
+<p><code>************************************************************</code></p>
+<p><code>* Nibras has launched. You can access it from: *</code></p>
+<p><code>* https://localhost:1441/nibras *</code></p>
+<p><code>************************************************************</code></p>
+<p>Note: To stop Nibras, you can close this window, or press ctrl+c in it, or run ./scripts/stop script.</p>
+<p>and finally download, extract and run the Nibras-Tomcat bundle as detailed below.</p>
+<p>To launch the application server, simply download and extract the file Nibras-Tomcat.zip from the releases section on Nibras PKM GitHub page to your hard disk on <strong>C:/</strong>, and run the batch file "Start-Nibras.bat" found on the /Nibras-Tomcat folder.</p>
+<p>This is the straightforward way to install Nibras on a typical computer. However, you may have other cases that needs changing Nibras configuration files, or its Nibras settings after launching it.</p>
+<h3 id="production-installation">Production installation</h3>
+<p>In addition to the steps of the quick installation, you need to download and install MySQL 5.5 or later.</p>
 <p><strong>MySQL</strong></p>
 <p>To install MySQL, simply download, install it, and then configure it. You can download from the official website, or, for convenience, from <a href="http://www.khuta.org/mysql-5.5.62-win32.msi">this location</a> (for Windows).</p>
 <p>After installation, you need to run the configuration wizard, accepting the default options, and making the two below changes:</p>
@@ -175,10 +187,7 @@
 <li>Set the root password as "root". So you need to type the word "root" (without quotes) two times.</li>
 </ul>
 <p>Then you are ready to run the batch file "create-database.bat" found in /Nibras/Database folder.</p>
-<p><strong>Application server</strong></p>
-<p>To launch the application server, simply download and extract the file Nibras-Tomcat.zip from the releases section on Nibras PKM GitHub page to your hard disk on <strong>C:/</strong>, and run the batch file "Start-Nibras.bat" found on the /Nibras-Tomcat folder.</p>
-<p>This is the straightforward way to install Nibras on a typical computer. However, you may have other cases that needs changing Nibras configuration files, or its Nibras settings after launching it.</p>
-<p><strong>Other cases</strong></p>
+<h4 id="other-cases">Other cases</h4>
 <p>Your environment may not match or allow the above installation, and so you may want to customize it.</p>
 <p><strong>1 - MySQL already installed:</strong></p>
 <p>Need to change the parameters of MySQL connection in /Nibras/Application/Tomcat/conf/context.xml; specifically changing the hostname, port, username and password.</p>

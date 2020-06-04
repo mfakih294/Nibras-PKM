@@ -7,6 +7,7 @@ export JAVA_OPTS="-server"
 
 #grails clean
 #grails war
+cd ..
 grails -https -disable.auto.recompile=false -Dgrails.gsp.enable.reload=true run-app
 #		cp ./build/libs/nibras.war /home/alef/tomcat9/webapps/nibras.war
 

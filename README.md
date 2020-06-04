@@ -1,6 +1,9 @@
 # Nibras PKM
 
-**Nibras PKM** is an __offline open source system__ for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.
+**Nibras PKM** is a __local open source__ system for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.
+
+![](https://raw.githubusercontent.com/mfakih294/Nibras-PKM/master/docs/images/screenshot.jpg)
+
 
 **Open source**
 
@@ -13,9 +16,6 @@ It manages resources (articles, books, documents), notes, writings, tasks, goals
 **Powerful**
 
 It was designed with large amounts of information in mind. In current usage, it manages dozens of thousands of records. With its commands and saved searches, it makes easy to navigate through all the information.
-
-
-![Screenshots](http://khuta.org/nibras-doc/images/nibras-1.2.4.jpg)
 
 ## Main Features
 
@@ -51,10 +51,12 @@ Once Nibras has finished launching, a text message like the one below will appea
 
 `************************************************************`
 
-Go to * https://localhost:1441/nibras* using Firefox or Chrome. On the login page, enter *nibras* for username and *nibras* for the password.
+Go to **https://localhost:1441/nibras** using Firefox or Chrome. On the login page, enter *nibras* for username and *nibras* for the password.
 
-Note: To stop Nibras, you can close this window, or press ctrl+c in it, or run ./scripts/stop script.
-
+Notes: 
+- As it has a self-signed certificate, you need to accept and bypass the security warning that shows up at the beginning.
+- On Linux, you need to make the files inside ./scripts and ./tomcat/bin folders executable (chmod +x *).
+- To stop Nibras, you can close this window, or press ctrl+c in it, or run ./scripts/stop script.
 
 ## Technical details
 

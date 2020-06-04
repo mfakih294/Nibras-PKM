@@ -13,10 +13,7 @@ Nibras is a local open source system for the long-term management of personal in
 <!-- **Nibras PKM** is an __offline open source system__ for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.-->
 
 
-
-
-![nibras-mainpage](./images/nibras-main.jpg)
-
+![](./images/screenshot.jpg)
 
 
 **Local**
