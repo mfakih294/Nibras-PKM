@@ -12,18 +12,38 @@ Nibras is a local open source system for the long-term management of personal in
 
 <!-- **Nibras PKM** is an __offline open source system__ for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.-->
 
-**Why offline?** The user has full control over his/her data, without the need for a (fast) internet connection, and without all the distractions and information overload that the internet can cause.
-
-**Why open source?** The user has control over the system itself too, especially when using it on the long term to manage the important personal information and files.
 
 
-**It manages**: resources (articles, books, documents), notes, writings, tasks, goals, journal, planner, payments, indicators, and (study) courses and departments.
-
-
-* Documentation: [https://mfakih294.github.io/Nibras-PKM/](https://mfakih294.github.io/Nibras-PKM/).
-* Code, releases and issues: [https://github.com/mfakih294/Nibras-PKM](https://github.com/mfakih294/Nibras-PKM).
 
 ![nibras-mainpage](./images/nibras-main.jpg)
+
+
+
+**Local**
+
+The user has full control over his/her data, without the need for a (fast) internet connection, and without all the distractions and information overload that the internet can cause.
+
+**Open source**
+
+The user has control over the system itself too, especially when using it on the long term to manage the important personal information and files.
+
+**Comprehensize**
+
+It manages resources (articles, books, documents), notes, writings, tasks, goals, journal, planner, payments, indicators, and (study) courses and departments.
+
+**Powerful**
+
+It was designed with large amounts of information in mind. In current usage, it manages dozens of thousands of records. With its commands and saved searches, it makes easy to navigate through all the information.
+
+
+## Documentation
+
+User's guide is available online at [https://mfakih294.github.io/Nibras-PKM/](https://mfakih294.github.io/Nibras-PKM/).
+
+## Code, releases and issues
+
+Nibras PKM is hosted on GitHub [https://github.com/mfakih294/Nibras-PKM](https://github.com/mfakih294/Nibras-PKM).
+
 
 
 ## Nibras Reader
