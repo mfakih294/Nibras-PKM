@@ -130,30 +130,28 @@
 
 <br/>
 <br/>
-Open:
+Open record's folder in repository:
 &nbsp;
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode: entityCode, repository: 1]}"
               update="${entityCode}Record${record.id}OpenLog"
               title="Open new folder: ${OperationController.getPath('root.rps1.path')}">
-    <b> rps 1</b>
+    <u><b>&nbsp;1&nbsp;</b></u>
 </g:remoteLink>
-&nbsp;/&nbsp;
+/
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
               update="${entityCode}Record${record.id}OpenLog"
               title="Open rps folder: ${OperationController.getPath('root.rps2.path')}">
-    <b> rps 2</b>
+    <u><b>&nbsp;2&nbsp;</b></u>
 </g:remoteLink>
-&nbsp;
+/
 <g:remoteLink controller="generics" action="openLibFolder"
               params="${[id: record.id, entityCode: entityCode]}"
               update="${entityCode}Record${record.id}"
               title="Open lib folder: ${OperationController.getPath('root.rps3.path')}">
-    <b> rps 3 </b>
-</g:remoteLink>
-
-folder.
+    <u><b>&nbsp;3&nbsp;</b></u>
+</g:remoteLink>.
 
         <g:if test="${record.class.declaredFields.name.contains('nbFiles')}">
         <g:if test="${record.nbFiles}">

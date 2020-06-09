@@ -132,6 +132,19 @@ class ImportController {
         def finalName = ''
 
 
+
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
+
         java.util.regex.Matcher matcher2 = name =~ /(?i)([\S\s ;-_]*)\.([\S]*)/
 //                def id = matcher[0][1]
 
@@ -223,11 +236,15 @@ class ImportController {
             render(template: '/gTemplates/recordSummary', model: [record: b])
             def ant = new AntBuilder()
             if (entityCode == 'R') {
-                type = b.type
+
+
+                        type = b.type
                 //  ant.move(file: path, tofile: type.newFilesPath + '/' + (b.id / 100).toInteger() + '/' + b.id + '' + finalName)
                 // inline move 22.10.2016
-                ant.move(file: path, tofile: rootPath + '/' + entityCode + '/' + type.code +
-                        '/' + (b.id / 100).toInteger() + '/' + b.id + '/' + b.id + '' + finalName)
+                ant.move(file: path, tofile: rootPath + '/' + entityCode +
+                        (resourceNestedByType ?  '/' +  type.code : '') +
+                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
+                        '/' + b.id + '/' + b.id + '' + finalName)
             } else
             //ant.move(file: path, tofile: OperationController.getPath('module.sandbox.' + entityCode + '.path') + '/' + b.id + '' + finalName)
             // inline move 22.10.2016
@@ -277,13 +294,28 @@ class ImportController {
 
         //b.notes = 'Imported on ' + new Date().format(OperationController.getPath('date.format') ?: 'dd.MM.yyyy')
 
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+
+         if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
+
+
         if (!b.hasErrors() && b.save(flush: true)) {
             render(template: '/gTemplates/recordSummary', model: [record: b])
             def ant = new AntBuilder()
             if (entityCode == 'R') {
                 type = b.type
                 //    ant.move(file: path, tofile: type.newFilesPath + '/' + (b.id / 100).toInteger() + '/' + b.id + '' + finalName)
-                ant.move(file: path, tofile: rootPath + '/' + entityCode + '/' + type.code + '/' + (b.id / 100).toInteger() + '/' + b.id + '' + finalName)
+                ant.move(file: path, tofile: rootPath + '/' + entityCode +
+                        (resourceNestedByType ?  '/' +  type.code : '') +
+                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
+                        '/' + b.id + '' + finalName)
             } else
             //ant.move(file: path, tofile: OperationController.getPath('module.sandbox.' + entityCode + '.path') + '/' + b.id + '' + finalName)
 
@@ -460,6 +492,20 @@ class ImportController {
 
     def addToRecordFolder() {
 
+
+
+        def resourceNestedById = false
+
+        def resourceNestedByType = false
+
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
         def status = ''
         try {
 
@@ -470,7 +516,15 @@ class ImportController {
 
             if (params.entityCode == 'R') {
                 def b = Book.get(params.recordId)
-                path = OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code + '/' + (b.id / 100).toInteger() + '/' + b.id + '/' + params.qqfile
+                path = OperationController.getPath('root.rps1.path') + '/R' +
+
+
+                        (resourceNestedByType ?  '/' +  b.type.code : '') +
+                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
+
+
+
+                        '/' + b.id + '/' + params.qqfile
             } else {
                 path = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/' +
                         params.recordId + '/' + params.qqfile

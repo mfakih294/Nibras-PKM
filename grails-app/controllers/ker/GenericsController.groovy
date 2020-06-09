@@ -1101,10 +1101,28 @@ ll
     }
 
     def openRpsFolder() {
+
+
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
         def typeSandboxPath, folder
+
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
+
+
         if (params.entityCode == 'R') {
-            typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + 'R/' + record.type.code + '/' + (record.id / 100).toInteger() + '/' + record.id
+            typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + 'R' +
+                    (resourceNestedByType ?  '/' +  record.type.code : '') +
+                    (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
+                    '/' + record.id
         } else {
             typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + '' + params.entityCode + '/' + record.id
         }
@@ -1147,10 +1165,16 @@ ll
     }
 
     def openLibFolder() {
+
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
         def typeSandboxPath, folder
+
+
         if (params.entityCode == 'R') {
-            typeSandboxPath = OperationController.getPath('root.rps3.path') + 'R/' + record.type.code + '/' + (record.id / 100).toInteger() + '/' + record.id
+            typeSandboxPath = OperationController.getPath('root.rps3.path') + 'R' +
+                    record.type.code + '/' +
+                    (record.id / 100).toInteger() +
+                    '/' + record.id
         } else {
             typeSandboxPath = OperationController.getPath('root.rps3.path') + '' + record.entityCode() + '/' + record.id
         }
@@ -1437,6 +1461,15 @@ ll
         def id = params.id.split('-')[1].toLong()
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
+
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
         if (!record.bookmarked || record.bookmarked == false) {
             if (record.class.declaredFields.name.contains('nbFiles')) {
 //            OperationController.countResourceFiles2(grailsApplication, entityCode, id)
@@ -1459,9 +1492,15 @@ ll
                     def rps2Folder
                     if (entityCode == 'R') {
                         rps1Folder =
-                                OperationController.getPath('root.rps1.path') + 'R/' + r.type?.code + '/' + (id / 100).toInteger() + '/' + id
+                                OperationController.getPath('root.rps1.path') + 'R' +
+                                        (resourceNestedByType ?  '/' +  r.type.code : '') +
+                                        (resourceNestedById ?  '/' +   (id / 100).toInteger() : '') +
+                                        '/' + id
                         rps2Folder =
-                                OperationController.getPath('root.rps2.path') + '/R/' + r.type?.code + '/' + (id / 100).toInteger() + '/' + id
+                                OperationController.getPath('root.rps2.path') + '/R' +
+                                        (resourceNestedByType ?  '/' +  r.type.code : '') +
+                                        (resourceNestedById ?  '/' +   (id / 100).toInteger() : '') +
+                                        '/' + id
 //                    println 'rps2 ' + rps2Folder
 
                     } else {
@@ -1481,14 +1520,14 @@ ll
                     }
 
 
-                    def ant = new AntBuilder()
+            //        def ant = new AntBuilder()
 
-                    filesList.each() { f ->
-                        ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
-                    }
+            //        filesList.each() { f ->
+           //             ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
+           //         }
 //                    render filesList.size() + ' file(s) copied.'
 
-                    message = filesList.size() + ' file(s) copied.'
+              //      message = filesList.size() + ' file(s) copied.'
                 } else {
                     render 'Record not found.'
                 }
@@ -1525,15 +1564,16 @@ ll
                     for (b in list) {
                         filesCount = 0
                         folders = []
-                        typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code
+                        typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R' +
+                                (resourceNestedByType ?  '/' +  b.type.code : '')
 //            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
                         //ResourceType.findByCode(type).libraryPath
-                        typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code
+                        typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' + (resourceNestedByType ?  '/' +  b.type.code : '')
                         folders.add(
-                                [typeSandboxPath + '/' + (b.id / 100).toInteger()])
+                                [typeSandboxPath + '' + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
                         if (!b.bookmarked)
                             folders.add(
-                                    [typeRepositoryPath + '/' + (b.id / 100).toInteger()])
+                                    [typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger()
                         //     ]
                         folders.each() { folder ->
@@ -1547,10 +1587,10 @@ ll
                         }
                         folders = []
                         folders.add(
-                                [typeSandboxPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+                                [typeSandboxPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') + '/' + b.id])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
                         if (!b.bookmarked)
-                            folders.add([typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+                            folders.add([typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') + '/' + b.id])
 //                ]
 
                         folders.each() { folder ->
@@ -1608,7 +1648,7 @@ ll
                         b.filesList = filesList.join('\n')
                     }
                 }
-                render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])
+              //  render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])
 // + filesList.join('\n').replace('\n', '<br/>')])
 //                render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
 

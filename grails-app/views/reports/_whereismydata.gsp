@@ -1,6 +1,33 @@
 <%@ page import="ker.OperationController; cmn.Setting; app.parameters.ResourceType" %>
 
 
+<h2>Database</h2>
+
+
+${grailsApplication.config.dataSource.url}
+
+
+<br/>
+<br/>
+
+<h2>Files</h2>
+
+
+<b>Repository 1</b>: ${ker.OperationController.getPath('root.rps1.path')}
+
+<br/>
+<br/>
+
+<b>Repository 2</b>: ${ker.OperationController.getPath('root.rps2.path')}
+
+<br/>
+<br/>
+
+
+<b>Repository 3</b>: ${ker.OperationController.getPath('root.rps3.path')}
+
+
+<g:if test="${1==2}">
 <table border="1" style="border-collapse: collapse; padding: 6px;" cellpadding=6>
     <thead>
         <th>Type</th>
@@ -73,3 +100,5 @@
 
 
 </table>
+
+</g:if>

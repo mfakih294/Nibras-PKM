@@ -35,8 +35,16 @@
         </td>
     </g:if>
 
+   <td style="padding-right: 1px !important;">
+            <a href="${createLink(controller: 'page', action:'appMain')}" target="_blank">
+                Main
+            &nearr;
+            </a>
+        </td>
 
-        <td style="padding-right: 3px !important;">
+
+
+        <td style="padding-right: 1px !important;">
             <a href="${createLink(controller: 'page', action:'appKanban')}" target="_blank">
                 Kanban
             &nearr;
@@ -45,7 +53,7 @@
 
 
 
-        <td style="padding-right: 3px !important;">
+        <td style="padding-right: 1px !important;">
         <a href="${createLink(controller: 'page', action:'appCalendar')}" target="_blank">
             Calendar
             &nearr;
@@ -69,7 +77,7 @@
         %{--</a>--}%
         %{--</sub>--}%
         %{--</g:if>--}%
-        <td style="padding-right: 3px !important;">
+        <td style="padding-right: 1px !important;">
             %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
             <% Calendar c = new GregorianCalendar(); c.setLenient(false); c.setMinimalDaysInFirstWeek(4);
             c.setFirstDayOfWeek(java.util.Calendar.MONDAY) %>
@@ -190,30 +198,7 @@
 
           </td>
 
-        <g:if test="${1 ==1 }">
-        <td style="padding-right: 1px !important; background: #8e8e97">
-             &nbsp;
-            <g:remoteLink controller="generics" action="showSelectedRecords"
-                          update="centralArea"
-                          style="padding-right: 0px !important"
-                          before="jQuery.address.value(jQuery(this).attr('href'));"
-                          title="Selected records">
-                <g:message code="ui.selected"></g:message>
-                (<span id="selectBasketRegion" style="color: white">${selectBasketCount ?: 0}</span>)
-            </g:remoteLink>
-         &nbsp;
-         &nbsp;
-            <g:remoteLink controller="generics" action="deselectAll"
-                          update="selectBasketRegion"
-                          style="padding-left: 0px !important; padding-right: 2px !important"
-                          before="if(!confirm('Are you sure you want to deselect all selected records?')) return false"
-                          title="Clear selection">
-            %{--<g:message code="ui.clearAllSelection"></g:message> |--}%
-                Clear
-            </g:remoteLink>
 
-            </td>
-        </g:if>
         %{--<a id="selectAll"--}%
         %{--title="Select all shown records">--}%
         %{--<g:message code="ui.selectAll"></g:message>--}%
@@ -394,7 +379,7 @@
                 <g:textField name="input" value="" id="speedsearch"
                              autocomplete="off"
                              style="float: right; display: inline;  width: 220px !important; height: 24px; padding: 3px; margin: 1px; font-size: 11px;"
-                             placeholder="Search..."
+                             placeholder="Search (Esc)..."
                              class=""/>
 
             </g:formRemote>
@@ -402,11 +387,10 @@
         </td>
 
         <td style="padding: 1px !important; margin-left: 4px; color: white;">
-            Logged in as:
-            <g:remoteLink controller="page" action="manageUser"
+         <g:remoteLink controller="page" action="manageUser"
               update="centralArea"
               title="Manager user account">
-    ${username}
+                            User: <b>${username}</b>
 %{--دقات--}%
 %{--</g:remoteLink>--}%
                %{--style="" target="_blank">--}%

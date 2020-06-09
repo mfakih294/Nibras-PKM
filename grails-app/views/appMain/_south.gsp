@@ -9,18 +9,58 @@
     ${new Date().format("E dd MMM yyyy")}
 
 &nbsp; &nbsp;   |
-&nbsp; &nbsp; 
+&nbsp; &nbsp;
 
+<g:if test="${OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <b>${java.time.chrono.HijrahDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy"))}</b>
 
 
 &nbsp; &nbsp;   |
-&nbsp; &nbsp; 
-    <b>Repository 1</b>: ${ker.OperationController.getPath('root.rps1.path')}
+&nbsp; &nbsp;
+    </g:if>
+
+<g:remoteLink controller="report" action="whereIsMyData"
+              update="centralArea"
+              title="Location of data">
+    My Data
+%{--دقات--}%
+%{--</g:remoteLink>--}%
+%{--style="" target="_blank">--}%
+%{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
+%{--<g:message code="ui.menu.RSS"></g:message>--}%
+</g:remoteLink>
+
 
 &nbsp; &nbsp;   |
-&nbsp; &nbsp; 
-    <b>Repository 2</b>: ${ker.OperationController.getPath('root.rps2.path')}
+&nbsp; &nbsp;
+
+
+<g:if test="${1 ==1 }">
+    <span style="padding-right: 1px !important; background: #8e8e97">
+    &nbsp;
+        <g:remoteLink controller="generics" action="showSelectedRecords"
+                      update="centralArea"
+                      style="padding-right: 0px !important"
+                      before="jQuery.address.value(jQuery(this).attr('href'));"
+                      title="Selected records">
+            <g:message code="ui.selected"></g:message>
+            (<span id="selectBasketRegion" style="color: white">${selectBasketCount ?: 0}</span>)
+        </g:remoteLink>
+    &nbsp;
+    &nbsp;
+        <g:remoteLink controller="generics" action="deselectAll"
+                      update="selectBasketRegion"
+                      style="padding-left: 0px !important; padding-right: 2px !important"
+                      before="if(!confirm('Are you sure you want to deselect all selected records?')) return false"
+                      title="Clear selection">
+        %{--<g:message code="ui.clearAllSelection"></g:message> |--}%
+            Clear
+        </g:remoteLink>
+
+    </span>
+</g:if>
+
+
 &nbsp; &nbsp;  |
 &nbsp; &nbsp; 
    2020 &copy; khuta.org

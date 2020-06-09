@@ -71,6 +71,7 @@
     <script type="text/javascript" src="${resource(dir: 'js', file: 'mousetrap.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'mousetrap-global-bind.min.js')}"></script>
 
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.qtip.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'raphael-min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'typeahead.bundle.js')}"></script>
 

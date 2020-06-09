@@ -1201,11 +1201,21 @@ date = "${r.year ?: ''}"
 
         String pdfPath = params.path
 
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
         def outPath
 
         if (params.module == 'R')
-            outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.type + '/' +
-                    +(params.id.toLong() / 100).toInteger() + '/' + params.id
+            outPath = OperationController.getPath('root.rps1.path') + '/' + params.module +
+                    (resourceNestedByType ?  '/' +  params.type : '') +
+                    (resourceNestedById ?  '/' +   (params.id.toLong() / 100).toInteger() : '') +
+                    '/' + params.id
         else
             outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.id
 
@@ -1249,6 +1259,13 @@ date = "${r.year ?: ''}"
 
     def copyToRps1() {
 
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
 
         def b
         if (params.entityCode == 'R')
@@ -1265,9 +1282,16 @@ date = "${r.year ?: ''}"
             def rps2Folder
             if (params.entityCode == 'R') {
                 rps1Folder =
-                        OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code + '/' + (params.id.toLong() / 100).toInteger() + '/' + params.id
+                        OperationController.getPath('root.rps1.path') + '/R' +
+                (resourceNestedByType ?  '/' +  b.type.code : '') +
+                        (resourceNestedById ?  '/' +   (params.id.toLong()/ 100).toInteger() : '') +
+                        '/' + params.id
+
                 rps2Folder =
-                        OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code + '/' + (params.id.toLong() / 100).toInteger() + '/' + params.id
+                        OperationController.getPath('root.rps2.path') + '/R' +
+                        (resourceNestedByType ?  '/' +  b.type.code : '') +
+                        (resourceNestedById ?  '/' +   (params.id.toLong()/ 100).toInteger() : '') +
+                        '/' + params.id
             } else {
                 rps1Folder = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/' + params.id
                 rps2Folder = OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/' + params.id
@@ -1327,6 +1351,15 @@ date = "${r.year ?: ''}"
 
         def list
 
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
         if (params.entityCode == 'R') {
 
             if (params.id)
@@ -1336,19 +1369,21 @@ date = "${r.year ?: ''}"
             for (b in list) {
                 filesCount = 0
                 folders = []
-                typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R/' + b.type?.code
+                typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R' +
+                (resourceNestedByType ?  '/' +  b.type.code : '') + '/'
 //            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
                 //ResourceType.findByCode(type).libraryPath
-                typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + b.type?.code
+                typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' +
+                        (resourceNestedByType ?  '/' +  b.type.code : '') + '/'
+
                 folders.add(
-                        [typeSandboxPath + '/' + (b.id / 100).toInteger()])
+                        [typeSandboxPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
                 if (!b.bookmarked)
                     folders.add(
-                            [typeRepositoryPath + '/' + (b.id / 100).toInteger()])
+                            [typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger()
                 //     ]
                 folders.each() { folder ->
-
                     if (new File(folder[0]).exists()) {
                         new File(folder[0]).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
                             filesCount++
@@ -1358,10 +1393,10 @@ date = "${r.year ?: ''}"
                 }
                 folders = []
                 folders.add(
-                        [typeSandboxPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+                        [typeSandboxPath +  (resourceNestedById ? '/' + (b.id / 100).toInteger() : '') + '/' + b.id])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
                 if (!b.bookmarked)
-                    folders.add([typeRepositoryPath + '/' + (b.id / 100).toInteger() + '/' + b.id])
+                    folders.add([typeRepositoryPath + (resourceNestedById ? '/' + (b.id / 100).toInteger() : '') + '/' + b.id])
 //                ]
 
                 folders.each() { folder ->

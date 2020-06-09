@@ -104,6 +104,7 @@ class PageController {
                     ['app.parameters.ResourceType', 'Video', 'video'],
                     ['app.parameters.ResourceType', 'Document', 'doc'],
                     ['app.parameters.ResourceType', 'Article', 'article'],
+                    ['app.parameters.ResourceType', 'News', 'nws'],
                     ['app.parameters.ResourceType', 'Book', 'book'],
                     ['mcs.parameters.WritingStatus', 'Revised', 'revised'],
                     ['mcs.parameters.WritingType', 'Unsorted', 'usr'],
@@ -165,10 +166,10 @@ class PageController {
              ['description.summarize.thresholdMax', '180'],
              ['description.style', "padding: 3px; font-size: 20px; font-family: 'Traditional Arabic', tahoma; margin: 5px; line-height: 25px; text-align: justify; color: black;"],
              ['recordPage.text.style', "color: black; padding: 30px; font-size: 17px !important; font-family: 'tahoma,Georgia,serif'; font-weight: normal; margin: 60px; line-height: 1.9; max-width: 700px;text-align: justify;"],
-             ['root.rps1.path', 'D:/Nibras/Repository/'],
-             ['root.rps2.path', ''],
-//             ['root.rps3.path', ''],
-             ['tmp.path', 'd:/Nibras/Temporary'],
+             ['root.rps1.path', './repo1/'],
+             ['root.rps2.path', './repo2/'],
+             ['root.rps3.path', './repo3/'],
+             ['tmp.path', './tmp'],
              ['planner.enabled', 'no'],
              ['journal.enabled', 'yes'],
              ['indicators.enabled', 'no'],
@@ -437,8 +438,22 @@ class PageController {
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
 
         def typeSandboxPath
+
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
         if (record.entityCode() == 'R') {
-            typeSandboxPath = OperationController.getPath('root.rps1.path') + 'R/' + record.type.code + '/' + (record.id / 100).toInteger() + '/' + record.id
+            typeSandboxPath = OperationController.getPath('root.rps1.path') + 'R' +
+                    (resourceNestedByType ?  '/' +  record.type.code : '') +
+                    (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
+                    '/' + record.id
         } else {
             typeSandboxPath = OperationController.getPath('root.rps1.path') + '' + params.entityCode + '/' + record.id
         }

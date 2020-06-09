@@ -31,7 +31,7 @@ class BootStrap {
         println ''
         println ' ************************************************************'
         println ' *                                                          *'
-        println ' * Nibras has launched. You can access it from:   *'
+        println ' * Nibras has launched. You can access it from:             *'
         println ' *                                                          *'
         println ' * https://localhost:1441/nibras                            *'
         println ' *                                                          *'

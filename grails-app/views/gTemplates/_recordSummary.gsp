@@ -145,7 +145,7 @@
 
                     <td class="record-summary text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
-                        style="width: 98%; font-size: 0.95px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
+                        style="width: 98%; font-size: 0.95em; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
 
                     %{--<g:remoteLink controller="generics" action="showDetails"--}%
                     %{--params="${[id: record.id, entityCode: entityCode]}"--}%

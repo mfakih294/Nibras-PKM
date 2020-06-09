@@ -72,7 +72,18 @@ class PkmTagLib {
         def type = attrs.type
         def isStatic = attrs.static
         def filesList = []
-        try {
+
+     def resourceNestedById = false
+     def resourceNestedByType = false
+
+     if (OperationController.getPath('resourceNestedById') == 'yes')
+         resourceNestedById = true
+
+     if (OperationController.getPath('resourceNestedByType') == 'yes')
+         resourceNestedByType = true
+
+
+     try {
             def folders = [
                     OperationController.getPath('root.rps1.path') + '/' + module,
                     OperationController.getPath('root.rps2.path') + '/' + module
@@ -97,13 +108,25 @@ class PkmTagLib {
                 }
             }
             if (module == 'R'){
-                        def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R/' + type
+
+                (resourceNestedByType ?  '/' +  type : '') +
+                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
+
+
+                def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R' +
+                        (resourceNestedByType ?  '/' +  type : '') +
+                        '/'
+
                         //def typeLibraryPath = OperationController.getPath('root.rps3.path')+ '/R/' + type
                         //ResourceType.findByCode(type).libraryPath
-                        def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + type
+                        def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' +
+                                (resourceNestedByType ?  '/' +  type : '') +
+                                '/'
+
                 folders = [
-                        typeSandboxPath  + '/' + (recordId / 100).toInteger(),
-                        typeRepositoryPath + '/' + (recordId / 100).toInteger()
+                        typeSandboxPath +
+                                (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''),
+                        typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')
                       //  typeLibraryPath + '/' + (recordId / 100).toInteger()
                 ]
                 folders.each() { folder ->
@@ -115,9 +138,9 @@ class PkmTagLib {
                     }
                 }
                 folders = [
-          typeSandboxPath +  '/' + (recordId / 100).toInteger() + '/' + recordId,
+          typeSandboxPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId,
       //    typeLibraryPath + '/' + (recordId / 100).toInteger() + '/' + recordId,
-          typeRepositoryPath + '/' + (recordId / 100).toInteger() + '/' + recordId
+          typeRepositoryPath +(resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')  + '/' + recordId
                 ]
 
                 def b = Book.get(recordId)
@@ -183,7 +206,7 @@ class PkmTagLib {
                 output += """<li>
 			<div class="showhim" id="file${fileId}">
 
-<a href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
+<a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
                           target="_blank"
                           title="${i.path}">
 
@@ -193,13 +216,13 @@ ${i.isFile() ? '<br/> ('+ prettySizeMethod(i.size()) + ')' : ''}
 ${i.name}
             </a>
 	    	<span class="testhide">
-		<a href="#" onclick="jQuery('#logArea').load('${
+		<a href="#" title="Extract cover from first page" onclick="jQuery('#logArea').load('${
                     createLink(controller: 'operation', action: 'generateCover', id: recordId, params: [path: i, module: module, type: type])
                 }')"    title="${i.path}">
   cvr
             </a>
  &nbsp;
- <a onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFile', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
+ <a title="Copy to rps1" onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFile', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
               &nbsp;    ->
                   </a>
                   <a onclick="if(confirm('Are you sure you want to delete the file?')) return jQuery('#file${fileId}').load('${
@@ -264,13 +287,21 @@ def listRecordFiles2 = { attrs ->
                 }
             }
             if (module == 'R'){
-                        def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R/' + type
+
+
+                (resourceNestedByType ?  '/' +  type.code : '') +
+                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
+                        (resourceNestedByType ?  '/' +  type.code : '') +
+                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
+
+
+                def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R' + (resourceNestedByType ?  '/' +  type : '')
                         //def typeLibraryPath = OperationController.getPath('root.rps3.path')+ '/R/' + type
                         //ResourceType.findByCode(type).libraryPath
-                        def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R/' + type
+                        def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' +  (resourceNestedByType ?  '/' +  type : '')
                 folders = [
-                        typeSandboxPath  + '/' + (recordId / 100).toInteger(),
-                        typeRepositoryPath + '/' + (recordId / 100).toInteger()
+                        typeSandboxPath  + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : ''),
+                        typeRepositoryPath  (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')
                       //  typeLibraryPath + '/' + (recordId / 100).toInteger()
                 ]
                 folders.each() { folder ->
@@ -282,9 +313,13 @@ def listRecordFiles2 = { attrs ->
                     }
                 }
                 folders = [
-          typeSandboxPath +  '/' + (recordId / 100).toInteger() + '/' + recordId,
+          typeSandboxPath +
+                  (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' +
+                  recordId,
       //    typeLibraryPath + '/' + (recordId / 100).toInteger() + '/' + recordId,
-          typeRepositoryPath + '/' + (recordId / 100).toInteger() + '/' + recordId
+          typeRepositoryPath +
+                  (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' +
+                  recordId
                 ]
 
                 def b = Book.get(recordId)
