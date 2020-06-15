@@ -109,9 +109,7 @@ class PkmTagLib {
             }
             if (module == 'R'){
 
-                (resourceNestedByType ?  '/' +  type : '') +
-                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
-
+               
 
                 def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R' +
                         (resourceNestedByType ?  '/' +  type : '') +
@@ -287,13 +285,6 @@ def listRecordFiles2 = { attrs ->
                 }
             }
             if (module == 'R'){
-
-
-                (resourceNestedByType ?  '/' +  type.code : '') +
-                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
-                        (resourceNestedByType ?  '/' +  type.code : '') +
-                        (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
-
 
                 def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R' + (resourceNestedByType ?  '/' +  type : '')
                         //def typeLibraryPath = OperationController.getPath('root.rps3.path')+ '/R/' + type

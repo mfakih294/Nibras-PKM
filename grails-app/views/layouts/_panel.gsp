@@ -135,21 +135,21 @@ Open record's folder in repository:
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode: entityCode, repository: 1]}"
               update="${entityCode}Record${record.id}OpenLog"
-              title="Open new folder: ${OperationController.getPath('root.rps1.path')}">
+              title="Open rps1 folder: ${OperationController.getPath('root.rps1.path')}">
     <u><b>&nbsp;1&nbsp;</b></u>
 </g:remoteLink>
 /
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
               update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps folder: ${OperationController.getPath('root.rps2.path')}">
+              title="Open rps2 folder: ${OperationController.getPath('root.rps2.path')}">
     <u><b>&nbsp;2&nbsp;</b></u>
 </g:remoteLink>
 /
-<g:remoteLink controller="generics" action="openLibFolder"
-              params="${[id: record.id, entityCode: entityCode]}"
-              update="${entityCode}Record${record.id}"
-              title="Open lib folder: ${OperationController.getPath('root.rps3.path')}">
+<g:remoteLink controller="generics" action="openRpsFolder"
+              params="${[id: record.id, entityCode: entityCode,  repository: 3]}"
+              update="${entityCode}Record${record.id}OpenLog"
+              title="Open rps3 folder: ${OperationController.getPath('root.rps3.path')}">
     <u><b>&nbsp;3&nbsp;</b></u>
 </g:remoteLink>.
 
