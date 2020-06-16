@@ -92,8 +92,8 @@ class SyncController {
     def rssPile() {
         render(feedType: "rss", feedVersion: "2.0") {
             title = "PKM RSS"
-            link = "http://192.168.1.126:1440/nibras/sync/rssPile"
-            description = "..."
+            link = "https://localhost:1441/nibras/sync/rssPile"
+            description = "Your Nibras bookmared records in RSS format"
 
 //NewsItem.findAllByApprovedOnIsNotNullAndByRss([sort: 'dateCreated', order: 'desc', max: 25]).each() { article ->
 
@@ -117,8 +117,8 @@ class SyncController {
                 entry((r.class.declaredFields.name.contains('summary') ? r.summary : '') + ' ' + (r.class.declaredFields.name.contains('title') && r.title ? r.title : '') + "") {
 //  entry(article.title + ' (' + article.type.toString() + ' / ' + article.writingStatus.toString() + ' - ' + (article?.body ? article?.body?.count(' ') : '0') + ' words)') {
                     link = "http://phi:1440/nibras/sync/fetchFullText/${r.id}"
-                    publishedDate = r.lastUpdated
-//                    categories = "cat1,cat2"
+                    publishedDate = r.dateCreated
+                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: "cat1"])]//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
                     author = r.entityCode() + (r.class.declaredFields.name.contains('type') && r.type ? ' / ' + r.type?.code : '') +
                             (r.class.declaredFields.name.contains('context') ? ' @' + r.context : '')
 //                    content(type: 'text/html', value: 'tst')

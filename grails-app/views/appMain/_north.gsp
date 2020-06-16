@@ -230,11 +230,7 @@
 
 
 
-        %{--<g:link controller="page" action="indicators"--}%
-        %{--target="_blank"--}%
-        %{--title="Indicators">--}%
-        %{--<span class="ui-icon ui-icon-signal"></span> KPI--}%
-        %{--</g:link>--}%
+
         %{--</td>--}%
 
 

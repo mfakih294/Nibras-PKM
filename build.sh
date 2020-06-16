@@ -9,7 +9,6 @@ export JAVA_HOME=/home/mf/dev/jdk1.8.0_111/
 export CATALINA="-server"
 export JAVA_OPTS="-server"
 
-cd ..
 grails war
 
 # Keep the terminal window open until user enters an input.
