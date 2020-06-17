@@ -117,7 +117,7 @@ class Goal implements Comparable {  // entity id = 126
     }
 
     static mapping = {
-        description(sqlType: 'longtext')
+        summary(sqlType: 'longtext')
         table 'goal'
         description(sqlType: 'longtext')
         stepsHistory(sqlType: 'longtext')

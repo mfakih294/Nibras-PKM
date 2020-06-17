@@ -12,4 +12,4 @@ export JAVA_OPTS="-server"
 grails war
 
 # Keep the terminal window open until user enters an input.
- $SHELL
+$SHELL
