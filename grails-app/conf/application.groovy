@@ -27,6 +27,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/js/**',       access: ['permitAll']],
 	[pattern: '/**/plugins/**',       access: ['permitAll']],
 	[pattern: '/**/console/**',       access: ['permitAll']],
+	[pattern: '/dbconsole/**',   access: ['permitAll']],
+	[pattern: '/dbconsole/',   access: ['permitAll']],
 	[pattern: '/**/static/console/**',       access: ['permitAll']],
 	[pattern: '/**/page/heartbeat*/**',       access: ['permitAll']],
 	[pattern: '/**/download/**',       access: ['permitAll']],
@@ -67,3 +69,19 @@ grails.config.locations = [
 		"~//myconfig.properties"
 ]
 
+
+
+environments {
+	production {
+		//grails.serverURL = "http://www.changeme.com"
+		grails.dbconsole.enabled = true
+//		grails.dbconsole.urlRoot = '/admin/dbconsole'
+	}
+	development {
+		grails.dbconsole.enabled = true
+//		grails.dbconsole.urlRoot = "${appName}/dbc"
+	}
+	h2 {
+		grails.dbconsole.enabled = true
+	}
+}

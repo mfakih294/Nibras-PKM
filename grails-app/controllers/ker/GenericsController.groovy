@@ -4024,7 +4024,7 @@ ll
                                 queryCriteria.add("entity = '" + it.substring(1) + "'")
                             } else {
 
-                                if (it.substring(1) != 'x') {
+                                if (it.substring(1) != '-') {
                                     properties['department'] = Department.findByCode(it.substring(1)).id
                                     queryCriteria.add("department.code = '" + it.substring(1) + "'")
                                 } else {
@@ -4043,7 +4043,7 @@ ll
                         } else {
 
 
-                            if (it.substring(1) != 'x') {
+                            if (it.substring(1) != '-') {
                                 properties['department'] = Department.findByCode(it.substring(1)).id
                                 queryCriteria.add("course.department.code =  '" + it.substring(1) + "'")
                             } else {
