@@ -21,6 +21,7 @@ import app.Contact
 import app.Tag
 import app.parameters.Markup
 import cmn.DataChangeAudit
+import security.User
 
 class Course implements Comparable {  // entity id = 130
 
@@ -32,6 +33,9 @@ class Course implements Comparable {  // entity id = 130
     // Fields
 
     static hasMany = [tags: Tag, contacts: Contact]
+
+    User user
+
 
   //  String summary
 

@@ -19,6 +19,7 @@ package app
 
 import cmn.DataChangeAudit
 import app.Contact
+import security.User
 
 class IndicatorData implements Comparable {  // entity id = 21
 
@@ -27,6 +28,8 @@ class IndicatorData implements Comparable {  // entity id = 21
      static searchable = [only:['indicator', 'date', 'value', 'notes' ]]
 
     // Fields
+
+    User user
 
     Indicator indicator
 

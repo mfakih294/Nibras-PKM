@@ -50,6 +50,28 @@ import java.text.SimpleDateFormat
 
 import grails.plugin.springsecurity.annotation.Secured
 
+import java.time.format.DateTimeFormatter
+
+import static com.cronutils.model.CronType.QUARTZ;
+import static com.cronutils.model.CronType.UNIX;
+import static com.cronutils.model.field.expression.FieldExpressionFactory.always;
+import static com.cronutils.model.field.expression.FieldExpressionFactory.between;
+import static com.cronutils.model.field.expression.FieldExpressionFactory.on;
+import static com.cronutils.model.field.expression.FieldExpressionFactory.questionMark;
+
+import com.cronutils.builder.CronBuilder;
+import com.cronutils.descriptor.CronDescriptor;
+import com.cronutils.mapper.CronMapper;
+import com.cronutils.model.Cron;
+import com.cronutils.model.definition.CronConstraintsFactory;
+import com.cronutils.model.definition.CronDefinition;
+import com.cronutils.model.definition.CronDefinitionBuilder;
+import com.cronutils.model.time.ExecutionTime;
+import com.cronutils.parser.CronParser;
+
+import java.time.ZonedDateTime;
+import java.util.Locale;
+
 
 
 @Secured('ROLE_ADMIN')
@@ -218,7 +240,6 @@ class ExportController {
     def allCalendarEvents() {
         def events = []
 
-
             Task.executeQuery("from Journal t where t.startDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
@@ -332,7 +353,67 @@ class ExportController {
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=R',
                             allDay         : true   ])
             }
+/*
+        def cc = 1000
 
+        [
+                ['Oil every month on Monday', '0 15 1 * 1'],
+                ['Internet every 14th of month', '0 15 14 * *'],
+                ['Filter every two month on Monday', '0 15 1 /2 1'],
+                ['Every Friday', '0 15 * * 5'],
+                ['Every day', '0 15 * * *'],
+                ['Every last of month', '0 15 29 * *']
+        ].each() { jobTitle, quartzCronExpression ->
+
+
+            //String quartzCronExpression = "0 0 1 2 7";
+            CronParser quartzCronParser =
+                    new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
+
+// parse the QUARTZ cron expression.
+            Cron parsedQuartzCronExpression =
+                    quartzCronParser.parse(quartzCronExpression);
+
+// Create ExecutionTime for a given cron expression.
+
+
+//    DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+//    ZonedDateTime dateTime = ZonedDateTime.parse("2020-06-01 00:00:00 AM +02:00", formatter0);
+            ZonedDateTime now = ZonedDateTime.now();
+
+
+            ExecutionTime executionTime =
+                    ExecutionTime.forCron(parsedQuartzCronExpression);
+
+            //  render 'quartz ' + parsedQuartzCronExpression.asString()
+
+// Given a Cron instance, we can ask for next/previous execution
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("w E dd.MM.yyyy HH:mm Z");
+
+//            render(String.format(
+//                    "%s <b>%s</b>,  last was<br/>w%s, next will be<br/>w%s<br/><br/>",
+//                    parsedQuartzCronExpression.asString(), jobTitle,
+//                    //executionTime.lastExecution(now).get().format(formatter),
+//                    Date.from(executionTime.lastExecution(now).get().toInstant()).format("w E dd.MM.yyyy HH:mm"),
+//                    Date.from(executionTime.nextExecution(now).get().toInstant()).format("w E dd.MM.yyyy HH:mm")
+//                    //executionTime.nextExecution(now).get().format(formatter)
+//            ))
+
+            events.add([id             : cc++,
+                        start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(executionTime.nextExecution(now).get().toInstant())),
+                        end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(executionTime.nextExecution(now).get().toInstant())),
+                        //it.type?.name +
+                        title          : jobTitle,
+                        description    : 'cron generated',
+                        backgroundColor: 'DarkRed',//it.type?.color ?: '#F7F9EE',
+                        borderColor    : 'DarkRed',
+                        textColor      : 'white',//it.type?.style ?: '#515150',
+                        url            : request.contextPath + '/page/record/' + cc + '?entityCode=T',
+                        allDay         : false   ])
+        }
+
+
+*/
         render events as JSON
 
     }
@@ -495,7 +576,6 @@ This presentation aims to give an overview of Pomegranate PKM system.
     }
 
 
-
     def exportTxtToBeamer() {
         // config
         def documentPath = 'D:/tmp'
@@ -558,5 +638,113 @@ This presentation aims to give an overview of Pomegranate PKM system.
             }
         } // end of render
 
+    }
+
+    def cron2Calendar(){
+
+        // min, hour, day of month
+            // month, day of week (sunday = 0), /2 = every 2
+[
+        ['Oil every month on Monday', '0 15 1 * 1'],
+        ['Internet every 14th of month', '0 15 14 * *'],
+        ['Filter every two month on Monday', '0 15 1 /2 1'],
+        ['Every Friday', '0 15 * * 5'],
+        ['Every day', '0 15 * * *'],
+        ['Every last of month', '0 15 29 * *']
+].each() { jobTitle, quartzCronExpression ->
+
+
+
+
+
+    //String quartzCronExpression = "0 0 1 2 7";
+    CronParser quartzCronParser =
+            new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
+
+// parse the QUARTZ cron expression.
+    Cron parsedQuartzCronExpression =
+            quartzCronParser.parse(quartzCronExpression);
+
+// Create ExecutionTime for a given cron expression.
+
+
+//    DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+//    ZonedDateTime dateTime = ZonedDateTime.parse("2020-06-01 00:00:00 AM +02:00", formatter0);
+    ZonedDateTime now = ZonedDateTime.now();
+
+
+    ExecutionTime executionTime =
+            ExecutionTime.forCron(parsedQuartzCronExpression);
+
+    //  render 'quartz ' + parsedQuartzCronExpression.asString()
+
+// Given a Cron instance, we can ask for next/previous execution
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("w E dd.MM.yyyy HH:mm Z");
+
+    render(String.format(
+            "%s <b>%s</b>,  last was<br/>w%s, next will be<br/>w%s<br/><br/>",
+            parsedQuartzCronExpression.asString(), jobTitle,
+            //executionTime.lastExecution(now).get().format(formatter),
+            Date.from(executionTime.lastExecution(now).get().toInstant()).format("w E dd.MM.yyyy HH:mm"),
+            executionTime.nextExecution(now).get().format(formatter)
+             ));
+    ; render(String.format(
+            "%s <b>%s</b>,  last was<br/>w%s, next will be<br/>w%s<br/><br/>",
+            parsedQuartzCronExpression.asString(), jobTitle,
+            //executionTime.lastExecution(now).get().format(formatter),
+            Date.from(executionTime.lastExecution(now).get().toInstant()).format("w E dd.MM.yyyy HH:mm"),
+            executionTime.nextExecution(executionTime.nextExecution(now).get()).get().format(formatter)
+             ));
+    def t =  new Task()
+    t.summary = jobTitle
+    t.startDate =  Date.from(executionTime.nextExecution(now).get().toInstant())
+    long HOUR = 3600*1000; // in milli-seconds.
+    t.endDate  = new Date(Date.from(executionTime.nextExecution(now).get().toInstant()).getTime() + 1 * HOUR)
+    t.recurringCron = parsedQuartzCronExpression.asString()
+//    t.endDate = DateUtils.addHours(executionTime.nextExecution(now).get(), 1);
+    t.save()
+
+}
+
+    }
+
+
+    def recurringTask2Planner(){
+
+        Task.findAllByRecurringCronIsNotNull().each(){
+
+////////////////////
+            CronParser quartzCronParser =
+                    new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
+            Cron parsedQuartzCronExpression =
+                    quartzCronParser.parse(it.recurringCron);
+
+
+
+            DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+            ZonedDateTime dateTime = ZonedDateTime.parse("2021-01-01 00:00:00 AM +02:00", formatter0);
+
+            ZonedDateTime now = dateTime// ZonedDateTime.now();
+
+            ExecutionTime executionTime =
+                    ExecutionTime.forCron(parsedQuartzCronExpression);
+////////////////
+
+            def ref = now
+            while (Date.from(executionTime.nextExecution(now).get().toInstant()) < new Date() + 90){
+                now = executionTime.nextExecution(now).get()
+                def p = new Planner()
+                p.summary = it.summary
+                p.task = it
+
+                p.startDate =  Date.from(executionTime.nextExecution(now).get().toInstant())
+                long HOUR = 3600*1000; // in milli-seconds.
+                p.endDate  = new Date(Date.from(executionTime.nextExecution(now).get().toInstant()).getTime() + 1 * HOUR)
+                p.save()
+            }
+
+        }
+
+        ''
     }
 } // end of class

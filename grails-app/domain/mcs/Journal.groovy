@@ -24,6 +24,7 @@ import app.parameters.Markup
 import cmn.DataChangeAudit
 import mcs.parameters.JournalType
 import mcs.parameters.Location
+import security.User
 
 class Journal implements Comparable {  // entity id = 125
 
@@ -34,6 +35,8 @@ class Journal implements Comparable {  // entity id = 125
     static hasMany = [tags: Tag, contacts: Contact]
 
     // Fields
+
+    User user
 
     String level = 'm'
 

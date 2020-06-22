@@ -23,6 +23,7 @@ import cmn.DataChangeAudit
 //import mcs.parameters.Location
 import mcs.parameters.Context
 import mcs.parameters.WorkStatus
+import security.User
 
 class Task implements Comparable {  // entity id = 127
 
@@ -35,6 +36,9 @@ class Task implements Comparable {  // entity id = 127
     static searchable = true
 
     // Fields
+
+
+    User user
 
     Integer priority
     Course course
@@ -61,12 +65,15 @@ class Task implements Comparable {  // entity id = 127
 
     String deliverable
 
+
     String recurringText
 
     String recurringCron
 
     Boolean isRecurring
     Boolean isRecycable
+
+
     Boolean permissiveRecurring
     Integer recurringInterval
 

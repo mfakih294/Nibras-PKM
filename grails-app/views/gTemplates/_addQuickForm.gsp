@@ -60,6 +60,19 @@
                 </tr>
             </g:if>
 
+     <g:if test="${fields.contains('recurringCron')}">
+                <tr>
+                    <td>
+                    <g:textField id="recurringCron" name="recurringCron"
+                                 title="recurring Cron expression"
+                                 value="${record?.recurringCron}"
+                                 placeholder="Recurring Unix cron expression"
+                                 style="width: 99%;"/>
+                </td>
+
+                </tr>
+            </g:if>
+
 
 
 

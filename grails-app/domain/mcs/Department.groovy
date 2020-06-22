@@ -20,6 +20,7 @@ package mcs
 import app.Contact
 import app.Tag
 import cmn.DataChangeAudit
+import security.User
 
 class Department {  // entity id = 131
 
@@ -29,6 +30,8 @@ class Department {  // entity id = 131
 
     static searchable = [only: ['code', 'summary', 'notes']]
 
+
+    User user
 
     Boolean bookmarked
     Integer priority = 2

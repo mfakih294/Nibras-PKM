@@ -18,6 +18,7 @@
 package app
 
 import cmn.DataChangeAudit
+import security.User
 
 class Indicator implements Comparable {  // entity id = 22
 
@@ -28,6 +29,7 @@ class Indicator implements Comparable {  // entity id = 22
 
 
     // Fields
+    User user
 
     String summary
     String description

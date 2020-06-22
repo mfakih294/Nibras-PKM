@@ -19,6 +19,7 @@ package app
 
 import cmn.DataChangeAudit
 import app.Contact
+import security.User
 
 class PaymentCategory implements Comparable {  // entity id = 23
 
@@ -28,6 +29,8 @@ class PaymentCategory implements Comparable {  // entity id = 23
     static hasMany = [tags: Tag, contacts: Contact]
 
     // Fields
+
+    User user
     
     String category
     String style

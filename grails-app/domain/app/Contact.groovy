@@ -22,6 +22,7 @@ import app.Contact
 import app.Tag
 import mcs.Course
 import mcs.Department
+import security.User
 
 class Contact implements Comparable {  // entity id = 26
 
@@ -32,6 +33,8 @@ class Contact implements Comparable {  // entity id = 26
 //    static hasMany = [tags: Tag, contacts: Contact]
 
     // Fields
+
+    User user
 
     String code
 	String email

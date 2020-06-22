@@ -18,6 +18,7 @@
 package app
 
 import cmn.DataChangeAudit
+import security.User
 
 class Tag implements Comparable {  // entity id = 12
 
@@ -25,6 +26,8 @@ class Tag implements Comparable {  // entity id = 12
     static searchable = [only:['name', 'notes' ]]
 
     // Fields
+
+    User user
 
     String name
     Boolean isKeyword = false

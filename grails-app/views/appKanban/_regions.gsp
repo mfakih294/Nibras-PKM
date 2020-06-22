@@ -103,7 +103,7 @@
                     <td style="background: #fff3cd">G*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
                         <td >
-                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ? order by orderInCourse asc',
+                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ?',
                                     [d])}"
                                     var="p">
                                 <g:render template="/gTemplates/box" model="[record: p]"></g:render>

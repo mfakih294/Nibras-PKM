@@ -27,6 +27,8 @@ import mcs.Writing
 import mcs.parameters.WritingType
 //import app.parameters.WordSource
 import mcs.parameters.WritingStatus
+import security.User
+
 //import com.bloomhealthco.jasypt.GormEncryptedStringType
 
 class IndexCard implements Comparable {  // entity id = 16
@@ -39,6 +41,8 @@ class IndexCard implements Comparable {  // entity id = 16
     static searchable = true
 
     // Fields
+
+    User user
 
     Markup markup
 

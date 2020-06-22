@@ -1932,27 +1932,29 @@ ll
 
         def f, csv
         def contents, csvContents
-        def path = OperationController.getPath('export.recordsToText.path')
-        csv = new File(path + '/all.csv')
+        def path = OperationController.getPath('root.rps1.path')
+        csv = new File(path + '/dmp/all.csv')
         csvContents = ''
         csvContents += "Tb,ID,Version,Priority,Created,Updated,Summary,Description,Notes,Course,Type,Status,Location,Start,End,Level,Reality,Indicator,Date,Value,Title,Published,Book\n"
 
         for (C in ['R', 'G', 'T', 'P', 'W', 'N', 'J', 'E']) {
 
             def c = grailsApplication.classLoader.loadClass(entityMapping[C])
-            f = new File(path + '/' + C + '.txt')
+            f = new File(path + '/dmp/' + C + '.txt')
 
             def array, csvArray
-
-
             contents = ''
 
-
             def none = "-"
+            def countRecords = 0
+            def countFiles = 0
+
             def list = (C == 'R' ?
-                    Book.findAllByStatus(ResourceStatus.findByCode('zbk')) :
-                    (C == 'N' ? IndexCard.findAllByTypeNotEqual(WritingType.findByCode('aya')) : c.findAll([sort: 'id'])))
+                    Book.findAllByStatus(ResourceStatus.findByCode('zbk', [sort: 'id', order: 'asc'])) :
+                    (C == 'N' ? IndexCard.findAllByTypeNotEqual(WritingType.findByCode('aya'), [sort: 'id', order: 'asc']) : c.findAll( [sort: 'id', order: 'asc'])))
+
             for (r in list) {
+                countRecords++
                 array = []
                 csvArray = [C]
                 array.add('ID: ' + r.id)
@@ -2010,8 +2012,8 @@ ll
 
 
                 if ('T'.contains(C)) {
-                    array.add('Location:' + r.location)
-                    csvArray.add(r.location)
+                    array.add('Context:' + r.context)
+                    csvArray.add(r.context)
                 } else
                     csvArray.add(none)
 
@@ -2109,8 +2111,28 @@ ll
 
                 contents += array.join('\n') + '\n\n\n'
                 csvContents += csvArray*.toString()*.replace(',', ' ')*.replace('null', '?')*.replace('\r', '\n')*.replace('\n', ' -- ').join(',') + '\n'
+
+                if ((r.id / 100 ).toInteger() > countFiles){
+//                if (countRecords == 100) {
+                    f = new File(path + '/dmp/' + C + '-' + countFiles + '' + '.txt')
+                    countFiles++
+//                    countRecords = 0
+                    f.write(contents, 'UTF8')
+                    contents = ''
+                }
+
+
+
             }
+
+            f = new File(path + '/dmp/' + C + '-' + countFiles + '' + '.txt')
+            countFiles++
+//            countRecords = 0
             f.write(contents, 'UTF8')
+            contents = ''
+
+
+
         }
         //csv.write(csvContents, 'UTF8')
 

@@ -1018,7 +1018,7 @@
                                                        updateRegion    : '3rdPanel',
                                                        finalRegion     : '3rdPanel']"
                                               update="3rdPanel"
-                                              before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});jQuery('#3rdPanel').scrollTop(0)"
+                                              before="myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});jQuery('#3rdPanel').scrollTop(0)"
                                               title="Edit">
                                     ...</g:remoteLink>
 

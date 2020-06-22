@@ -25,25 +25,25 @@
     %{--${record.id}--}%
 
     <link rel="shortcut icon" href="${resource(dir: 'images/icons', file: 'record.ico')}" type="image/png"/>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-ui-1.10.4.custom.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'mousetrap.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'mousetrap-global-bind.min.js')}"></script>
+
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.layout-latest_min.js')}"></script>
 
 
 
-
-
-    <r:require modules="application"/>
+%{--    <r:require modules="application"/>--}%
     %{--<r:require module="fileuploader"/>--}%
-    <r:require modules="jquery"/>
-    <r:require modules="jquery-ui"/>
+%{--    <r:require modules="jquery"/>--}%
+%{--    <r:require modules="jquery-ui"/>--}%
 %{----}%
 
-    <r:layoutResources/>
+%{--    <r:layoutResources/>--}%
 
 
-<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
-<script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-ui-1.10.4.custom.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jqueryui-editable.min.js')}"></script>
-
-
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui-1.8.22.custom.css')}"/>
 
 
@@ -51,7 +51,172 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jqueryui-editable.css')}"/>
 
 
-%{----}%
+    <script type="text/javascript">
+
+
+        /**
+         *    UI Layout Callback: resizePaneAccordions
+         *
+         *    This callback is used when a layout-pane contains 1 or more accordions
+         *    - whether the accordion a child of the pane or is nested within other elements
+         *    Assign this callback to the pane.onresize event:
+         *
+         *    SAMPLE:
+         *    < jQuery UI 1.9: $("#elem").tabs({ show: $.layout.callbacks.resizePaneAccordions });
+         *    > jQuery UI 1.9: $("#elem").tabs({ activate: $.layout.callbacks.resizePaneAccordions });
+         *    $("body").layout({ center__onresize: $.layout.callbacks.resizePaneAccordions });
+         *
+         *    Version:    1.2 - 2013-01-12
+         *    Author:        Kevin Dalman (kevin.dalman@gmail.com)
+         */
+        ;
+        (function ($) {
+            var _ = $.layout;
+
+// make sure the callbacks branch exists
+            if (!_.callbacks) _.callbacks = {};
+
+            _.callbacks.resizePaneAccordions = function (x, ui) {
+                // may be called EITHER from layout-pane.onresize OR tabs.show
+                var $P = ui.jquery ? ui : $(ui.newPanel || ui.panel);
+                // find all VISIBLE accordions inside this pane and resize them
+                $P.find(".ui-accordion:visible").each(function () {
+                    var $E = $(this);
+                    if ($E.data("accordion"))		// jQuery < 1.9
+                        $E.accordion("resize");
+                    if ($E.data("ui-accordion"))	// jQuery >= 1.9
+                        $E.accordion("refresh");
+                });
+            };
+        })(jQuery);
+
+
+        jQuery(document).ready(function () {
+
+            //   for (var i = 0; i < localStorage.length; i++) {
+            // do something with localStorage.getItem(localStorage.key(i));
+            //       var key = localStorage.key(i)
+            //       var value = localStorage[key]
+
+
+//            console.log('key ' + key + 'value' + value)
+//            if ((typeof value == 'string' || value instanceof String) && !value.contains('datum'))
+//            if (value.contains('pkm-'))
+//            document.getElementById('commandHistory').options.add(new Option(value, localStorage.key(i)))
+
+
+            //   }
+
+
+
+
+            myLayout = $('body').layout({
+                west__size: 3,
+                east__size: 380,
+                west__initClosed: true,
+                south__initClosed: true,
+                north__initClosed: true,
+                east__togglerContent_closed: '<<',
+                // RESIZE Accordion widget when panes resize
+                west__onresize: $.layout.callbacks.resizePaneAccordions,
+                east__onresize: $.layout.callbacks.resizePaneAccordions,
+                onresize: $.layout.callbacks.resizePaneAccordions,
+                north__closable: false,
+                south__closable: false,
+                north__spacing_closed: 5		// big resizer-bar when open (zero height)
+                , north__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
+                , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
+                , north__spacing_open: 5		// no resizer-bar when open (zero height)
+                , south__spacing_open: 5		// no resizer-bar when open (zero height)
+                , south__spacing_closed: 5		// big resizer-bar when open (zero height)
+
+                , east__spacing_open: 5		// no resizer-bar when open (zero height)
+                , east__spacing_closed: 25		// big resizer-bar when open (zero height)
+                , west__spacing_open: 5		// no resizer-bar when open (zero height)
+                , west__spacing_closed: 15		// big resizer-bar when open (zero height)
+//            , west__initClosed: true
+                , west__slideTrigger_open: 'click'
+                , east__slideTrigger_open: 'mouseover'
+
+
+            });
+
+
+            $.fn.editable.defaults.mode = 'inline';
+            $.fn.editable.defaults.showbuttons = false;
+
+            jQuery('.fg-button').hover(
+                function () {
+                    jQuery(this).removeClass('ui-state-default').addClass('ui-state-focus');
+                },
+                function () {
+                    jQuery(this).removeClass('ui-state-focus').addClass('ui-state-default');
+                }
+            );
+
+            var matched, browser;
+
+            jQuery.uaMatch = function (ua) {
+                ua = ua.toLowerCase();
+
+                var match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
+                    /(webkit)[ \/]([\w.]+)/.exec(ua) ||
+                    /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
+                    /(msie) ([\w.]+)/.exec(ua) ||
+                    ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
+                    [];
+
+                return {
+                    browser: match[1] || "",
+                    version: match[2] || "0"
+                };
+            };
+
+            matched = jQuery.uaMatch(navigator.userAgent);
+            browser = {};
+
+            if (matched.browser) {
+                browser[matched.browser] = true;
+                browser.version = matched.version;
+            }
+
+// Chrome is Webkit, but Webkit is also Safari.
+            if (browser.chrome) {
+                browser.webkit = true;
+            } else if (browser.webkit) {
+                browser.safari = true;
+            }
+
+            jQuery.browser = browser;
+
+            // this layout could be created with NO OPTIONS - but showing some here just as a sample...
+            // myLayout = jQuery('body').layout(); -- syntax with No Options
+
+            //        jQuery('input').iCheck({
+            //            checkboxClass: 'icheckbox_minimal-grey',
+            //            radioClass: 'iradio_minimal-grey',
+            //            increaseArea: '-20%' // optional
+            //        });
+
+        });
+
+        %{--</script>--}%
+
+
+        //    jQuery(document).ready(function () {
+
+
+        //    });
+
+        //    $(function() {
+        //         jQuery("#tabsTask").tabs();
+        //        $( "#tabs" ).tabs();
+        //    });
+
+    </script>
+
+
+    %{----}%
 </head>
 
 <body style="margin-left:100px;margin-right:100px; background: lightgray">
@@ -71,8 +236,6 @@
     </div>
 </g:if>
 
-<br/>
-<br/>
 <g:if test="${record.entityCode() == 'R'}">
     <h2>Book highlights</h2>
 </g:if>
@@ -85,20 +248,78 @@
     <h2>Writing page</h2>
 </g:if>
 
-<g:render template="/gTemplates/recordSummary" model="[record: record]"/>
+
+
+<div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
+     style="">
+</div>
+
+<div class="ui-layout-west westRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
+</div>
+
+<div class="ui-layout-south footerRegion"
+     style="font-size: 12px; margin-top: 10px; margin-left: 20px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
+</div>
+
+
+<div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
+    <div id="3rdPanel">
+
+    </div>
+
+</div>
+
+
+<div class="ui-layout-center appBkg" style="margin-top: 4px !important; margin-bottom: 4px !important;">
+
+    <table>
+        <tr>
+            <td>
+                <g:render template="/gTemplates/recordSummary" model="[record: record]"/>
+            </td>
+
+            <td>
+
+
+
+
+
+            </td>
+        </tr>
+    </table>
+
+
+
+    <div id="cardBoxes">
+
+        %{----}%
+
+        %{--<g:if test="${record.entityCode() == 'W'}">--}%
+        %{--<g:each in="${app.IndexCard.findAllByWriting(Writing.get(record.id), [sort: 'orderInWriting', order: 'asc'])}"--}%
+        %{--var="c">--}%
+        %{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
+        %{--</g:each>--}%
+        %{--</g:if>--}%
+
+
+    </div>
+
+
+
+
+    <div id="notificationArea"></div>
+
+
+</div>
+
+
+
 
 
 %{--<g:render template="/gTemplates/recordDetails" model="[record: record]"/>--}%
 
 
 
-<br/>
-<br/>
-
-
-<div id="3rdPanel">
-
-</div>
 
 
 <g:if test="${1 ==2}">
@@ -534,46 +755,12 @@
 %{--collection="${IndexCard.findAllByRecordIdAndEntityCode(record.id, record.entityCode())}"--}%
 %{--var="record"/>--}%
 
-<div id="cardBoxes">
-
-  %{----}%
-
-    %{--<g:if test="${record.entityCode() == 'W'}">--}%
-        %{--<g:each in="${app.IndexCard.findAllByWriting(Writing.get(record.id), [sort: 'orderInWriting', order: 'asc'])}"--}%
-                %{--var="c">--}%
-            %{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
-        %{--</g:each>--}%
-    %{--</g:if>--}%
-
-
-</div>
-
-
-
-
-<div id="notificationArea"></div>
 
 %{--<simpleModal:javascript />--}%
 
-<r:layoutResources/>
+%{--<r:layoutResources/>--}%
 
 </body>
 
-
-<script type="text/javascript">
-
-    %{--</script>--}%
-
-//    jQuery(document).ready(function () {
-
-
-//    });
-
-//    $(function() {
-        jQuery("#tabsTask").tabs();
-//        $( "#tabs" ).tabs();
-//    });
-
-</script>
 
 </html>

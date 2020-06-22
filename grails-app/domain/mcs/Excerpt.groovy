@@ -20,6 +20,7 @@ package mcs
 import app.Contact
 import app.Tag
 import cmn.DataChangeAudit
+import security.User
 
 class Excerpt implements Comparable {  // entity id = 143
 
@@ -28,7 +29,7 @@ class Excerpt implements Comparable {  // entity id = 143
 
     static hasMany = [tags: Tag, contacts: Contact]
 
-
+    User user
 
 
     static searchable = [only: ['book', 'writing', 'title', 'chapter', 'chapters', 'notes']]

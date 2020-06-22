@@ -24,6 +24,8 @@ import app.parameters.Markup
 import cmn.DataChangeAudit
 import mcs.parameters.WritingStatus
 import mcs.parameters.WritingType
+import security.User
+
 //import ys.wikiparser.WikiParser
 
 class Writing implements Comparable {  // entity id = 144
@@ -42,6 +44,8 @@ class Writing implements Comparable {  // entity id = 144
 //    }
 
     // Fields
+
+    User user
 
     String summary
     String description

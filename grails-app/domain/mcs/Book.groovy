@@ -26,6 +26,7 @@ import app.parameters.ResourceType
 //import app.NewsSource
 import mcs.parameters.ResourceStatus
 import app.Tag
+import security.User
 
 class Book implements Comparable {  // entity id = 134
 
@@ -47,6 +48,8 @@ class Book implements Comparable {  // entity id = 134
 
     // Fields
 
+
+    User user
 
     Book book
 

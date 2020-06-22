@@ -22,6 +22,7 @@ import app.Tag
 import cmn.DataChangeAudit
 import mcs.parameters.PlannerType
 import mcs.parameters.WorkStatus
+import security.User
 
 class Planner implements Comparable {  // entity id = 137
 
@@ -34,6 +35,10 @@ class Planner implements Comparable {  // entity id = 137
     static searchable = true
 
     // Fields
+
+    User user
+
+
     PlannerType type
     String summary
     String description
@@ -73,7 +78,6 @@ class Planner implements Comparable {  // entity id = 137
     String language = 'ar'
 
     // end of links
-
 
 
     WorkStatus taskStatus

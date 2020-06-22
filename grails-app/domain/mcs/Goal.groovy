@@ -23,6 +23,7 @@ import app.Tag
 import cmn.DataChangeAudit
 import mcs.parameters.GoalType
 import mcs.parameters.WorkStatus
+import security.User
 
 class Goal implements Comparable {  // entity id = 126
 
@@ -34,6 +35,9 @@ class Goal implements Comparable {  // entity id = 126
 //    static searchable = [only: ['title', 'description', 'priority', 'goalStatus', 'goalType', 'notes']]
 
     static searchable = true
+
+    User user
+
 
     // Fields
 

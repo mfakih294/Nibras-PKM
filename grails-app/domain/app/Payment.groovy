@@ -19,6 +19,7 @@ package app
 
 import cmn.DataChangeAudit
 import app.Contact
+import security.User
 
 class Payment implements Comparable {  // entity id = 24
 
@@ -30,6 +31,7 @@ class Payment implements Comparable {  // entity id = 24
     static searchable = true
 
     // Fields
+    User user
 
     PaymentCategory category
 
