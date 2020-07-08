@@ -233,6 +233,7 @@ class ImportController {
         //b.notes = 'Imported on ' + new Date().format(OperationController.getPath('date.format') ?: 'dd.MM.yyyy')
 
         if (!b.hasErrors() && b.save(flush: true)) {
+
             render(template: '/gTemplates/recordSummary', model: [record: b])
             def ant = new AntBuilder()
             if (entityCode == 'R') {
@@ -307,7 +308,10 @@ class ImportController {
 
 
         if (!b.hasErrors() && b.save(flush: true)) {
-            render(template: '/gTemplates/recordSummary', model: [record: b])
+
+
+
+
             def ant = new AntBuilder()
             if (entityCode == 'R') {
                 type = b.type
@@ -321,6 +325,8 @@ class ImportController {
 
                 ant.move(file: path, tofile: rootPath + '/' + entityCode + '/' + b.id + '' + finalName)
 
+            OperationController.countResourceFilesStatic(b.id, entityCode)
+            render(template: '/gTemplates/recordSummary', model: [record: b])
         } else {
             b.errors.each() {
                 println 'error ' + it

@@ -1457,6 +1457,145 @@ date = "${r.year ?: ''}"
 
         render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
     }
+  static void countResourceFilesStatic(Long id, String entityCode) {
+
+        def typeSandboxPath
+        def typeLibraryPath
+
+        def typeRepositoryPath
+
+        def filesCount
+        def filesList = []
+        def folders
+
+        def list
+
+        def resourceNestedById = false
+        def resourceNestedByType = false
+
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+
+
+        if (entityCode == 'R') {
+
+                list = [Book.get(id)]
+
+            for (b in list) {
+                filesCount = 0
+                folders = []
+                typeSandboxPath = OperationController.getPath('root.rps1.path') + '/R' +
+                (resourceNestedByType ?  '/' +  b.type.code : '') + '/'
+//            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
+                //ResourceType.findByCode(type).libraryPath
+                typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' +
+                        (resourceNestedByType ?  '/' +  b.type.code : '') + '/'
+
+                folders.add(
+                        [typeSandboxPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
+                if (!b.bookmarked)
+                    folders.add(
+                            [typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
+//                    typeLibraryPath + '/' + (b.id / 100).toInteger()
+                //     ]
+                folders.each() { folder ->
+                    if (new File(folder[0]).exists()) {
+                        new File(folder[0]).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
+                            filesCount++
+                            filesList += it.name// + '\n'
+                        }
+                    }
+                }
+                folders = []
+                folders.add(
+                        [typeSandboxPath +  (resourceNestedById ? '/' + (b.id / 100).toInteger() : '') + '/' + b.id])
+//                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
+                if (!b.bookmarked)
+                    folders.add([typeRepositoryPath + (resourceNestedById ? '/' + (b.id / 100).toInteger() : '') + '/' + b.id])
+//                ]
+
+                folders.each() { folder ->
+//                    println 'fld ' + folder + ' class ' + folder.class
+                    if (new File(folder[0]).exists()) {
+                        new File(folder[0]).eachFileRecurse() {
+//Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
+                            if (!it.isFile())
+                                filesList += '*** ' + it.name
+                            else {
+                                filesCount++
+                                filesList += it.name
+                            }
+                        }
+                    }
+                }
+                //println filesCount
+                b.nbFiles = filesCount
+                b.filesList = filesList.join('\n')
+//                println 'filesList '  + filesList.join('\n')
+                b.save(flush: true)
+
+
+            }
+        } else {
+switch (entityCode){
+    case 'T':
+        list = [Task.get(id)]
+        break;
+    case 'G':
+        list = [Goal.get(id)]
+        break;
+    case 'N':
+        list = [IndexCard.get(id)]
+        break;
+    case 'W':
+        list = [Writing.get(id)]
+        break;
+    case 'P':
+        list = [Planner.get(id)]
+        break;
+    case 'J':
+        list = [Journal.get(id)]
+        break;
+
+}
+
+            for (b in list) {
+                filesCount = 0
+                folders = []
+                typeSandboxPath = OperationController.getPath('root.rps1.path') + '/' + entityCode + '/'
+
+                typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/' + entityCode + '/'
+                folders.add([typeSandboxPath + '/' + (b.id)])
+                if (!b.bookmarked)
+                    folders.add([typeRepositoryPath + '/' + (b.id)])
+
+
+
+                folders.each() { folder ->
+                    if (new File(folder[0]).exists()) {
+                        new File(folder[0]).eachFileRecurse() {
+//Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
+                            if (!it.isFile())
+                                filesList += '*** ' + it.name
+                            else {
+                                filesCount++
+                                filesList += it.name
+                            }
+                        }
+                    }
+                }
+                //println filesCount
+                b.nbFiles = filesCount
+                b.filesList = filesList.join('\n')
+                b.save(flush: true)
+            }
+        }
+
+
+       // render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
+    }
 
 
     def updateTotalSteps() {
@@ -1697,7 +1836,7 @@ past.each(){
 
     def sortNotes2() {
 
-        println 'id = ' + params.id
+//        println 'id = ' + params.id
         def sub = 1
         def roots = 1
         params.id?.split('_').eachWithIndex() { i, j ->
@@ -1737,7 +1876,7 @@ past.each(){
 
 
 //        println params.dump()
-        render 'ok?? ' + new Date().format('HH:mm:ss')
+        render 'Done. '// + new Date().format('HH:mm:ss')
     }
 
     def orderChildren(Long id) {

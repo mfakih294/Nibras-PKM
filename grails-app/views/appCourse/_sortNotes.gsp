@@ -79,7 +79,7 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
 
 
 <input id="serialize" name="serialize" type="submit" value=
-"Serialize"></p>
+"Save"></p>
 <div id="serializeOutput"></div>
 <pre id="serializeOutput2"></pre>
 
@@ -89,12 +89,14 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
             var="n">
     %{--<g:if test="${!n.wbsNumber?.contains('.')}">--}%
         <li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_${n.id}">
-        <div>
+        <div class="text${n.language}">
 
             %{--<span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick">abc--}%
             %{--</span>--}%
 
-            <b color="darkbblue">${n.wbsNumber}</b>  #${n.orderNumber} ${n.summary}
+            <b color="darkbblue">${n.wbsNumber}</b>
+%{--            #${n.orderNumber}--}%
+            ${n.summary}
         <g:remoteLink controller="page" action="panel"
                       params="${[id: n.id, entityCode: n.entityCode()]}"
                       update="3rdPanel"
@@ -185,7 +187,7 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
         });
 
 
-        $('#serializeOutput2').text(serialized + '\n\n');
+        // $('#serializeOutput2').text(serialized + '\n\n');
     })
 
 </script>

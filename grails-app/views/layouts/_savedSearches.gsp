@@ -12,7 +12,6 @@
             <g:remoteLink controller="generics" action="executeSavedSearch"
                           style="direction: rtl; text-align: right;  color: #${count > 0 ? '003366' : (count == 0 ? 'ccc' : 'bbb')}; ${i.onHomepage ? 'text-decoration: underline' : ''}"
                           id="${i.id}"
-
                           update="centralArea">
 
                  <span title="${i.query}">   ${i.summary} </span> <b style="color: darkgray">${i.code}</b>

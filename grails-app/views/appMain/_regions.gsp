@@ -68,7 +68,7 @@
                 <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                               url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                               update="centralArea"
-                              onComplete="jQuery('#descriptionDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
+                              onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus();"
                               method="post">
 
                 %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
@@ -77,22 +77,25 @@
 
                     <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
                               id="typeField"
+                              tabindex="1"
                               value="N"/>
                     <g:textField name="title" value="" id="title"
-
-                                 style=" padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 77% !important;"
+                                 tabindex="2" id="summayDaftar"
+                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 77% !important;"
                                  placeholder="Summary * "
                                  class=""/>
 
                     <g:submitButton name="save" value="Add"
-                                    style="text-align: center; padding-left: 4px;padding-right: 4px;"
+                                    style="text-align: center; padding-left: 8px; padding-right: 8px;"
+                                    tabindex="4"
                                     id="addXcdFormDaftarSubmit"
                                     class="fg-button ui-widget ui-state-default"/>
 
                     <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                                tabindex="3"
                                 name="description" id="descriptionDaftar"
                                 value=""
-                                style="font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
+                                style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
                 </g:formRemote>
                 %{--<div id="subDaftarArea">--}%
 %{----}%

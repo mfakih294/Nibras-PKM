@@ -76,7 +76,7 @@
 
                                     <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
                                           style="padding: 3px; margin-right: 3px; color: gray; display: inline;">
-                                        <span style="color: black;">${entityCode}</span><b>&middot;<span style="color: white;">${record.id}</span></b>
+                                        <span style="color: black;">${entityCode}</span><b>&middot;<span style="color: white; font-size: smaller;">${record.id}</span></b>
                                     </span>
                                 </g:remoteLink>
 
@@ -314,6 +314,30 @@
                                 !<b style="color: darkred;">${record?.category?.code}</b>
                                 [${record.amount}]
                             </g:if>
+
+                            <g:if test="${record.class.declaredFields.name.contains('course')}">
+
+                            %{--&nbsp;--}%
+                            %{--&nbsp;--}%
+
+                                <g:set value="course" var="field"></g:set>
+
+                                <a href="#" id="${field}${record.id}" class="${field}"
+                                    style="color: darkgray; font-size: 12px !important"
+                                   data-type="select"
+                                   data-value="${record[field]?.id}"
+                                   data-name="${field}-${entityCode}"
+                                   style=" border-radius: 3px; font-size: 0.95em; font-style: italic; padding-left: 3px; padding-right: 3px;"
+                                   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                                   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
+                                   data-title="Edit ${field}">
+                                    ${record[field] ? (record[field].code ? 'c_' + record[field].code : 'c_' + record.course) : 'c--'}
+                                </a>
+                                <script type="text/javascript">
+                                    jQuery("#${field}${record.id}").editable();
+                                </script>
+                            </g:if>
+
 
 
                             <g:if test="${record.class.declaredFields.name.contains('summary')}">
@@ -1023,28 +1047,6 @@
                                     ...</g:remoteLink>
 
                                 <span id="breadCrumSpan">
-
-                                    <g:if test="${record.class.declaredFields.name.contains('course')}">
-
-                                    %{--&nbsp;--}%
-                                    %{--&nbsp;--}%
-
-                                        <g:set value="course" var="field"></g:set>
-
-                                        <a href="#" id="${field}${record.id}" class="${field}"
-                                           data-type="select"
-                                           data-value="${record[field]?.id}"
-                                           data-name="${field}-${entityCode}"
-                                           style=" border-radius: 3px; font-size: 0.95em; font-style: italic; padding-left: 3px; padding-right: 3px;"
-                                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
-                                           data-title="Edit ${field}">
-                                            ${record[field] ? (record[field].code ? 'C' + record[field].code : 'C' + record.course) : 'c'}
-                                        </a>
-                                        <script type="text/javascript">
-                                            jQuery("#${field}${record.id}").editable();
-                                        </script>
-                                    </g:if>
 
                                     <g:if test="${record.class.declaredFields.name.contains('book')}">
 

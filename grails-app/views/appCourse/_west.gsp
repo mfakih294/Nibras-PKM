@@ -14,7 +14,7 @@
                                   id="${record.id}"
                                   update="centralArea"
                                   title="">
-                        generate book
+                        Generate book
                     </g:remoteLink>
 
 
@@ -24,7 +24,7 @@
                                   id="${record.id}"
                                   update="centralArea"
                                   title="">
-                        sort notes
+                        Sort notes
                     </g:remoteLink>
 
 

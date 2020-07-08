@@ -256,15 +256,15 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
         <g:if test="${entityCode == 'T'}">
 
     <g:set value="recurringInterval" var="field"></g:set>
-
+            Recurring interval:
     <a href="#" id="${field}${record.id}" class="${field}"
-       data-type="select"
+       data-type="select" title="Recurring interval"
        data-value="${record[field]}"
        data-name="${field}-${record.entityCode()}"
        data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
        data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
        data-title="Edit ${field}">
-        ${record[field] ? 'rci-' + record[field] : 'rci-'}
+        ${record[field] ? '--' + record[field] : '--'}
     </a>
     <script>
         jQuery("#${field}${record.id}").editable();

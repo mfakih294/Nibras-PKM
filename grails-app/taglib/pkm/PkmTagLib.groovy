@@ -191,27 +191,19 @@ class PkmTagLib {
                           title="${i.path}">
   ${i.name} <span style="font-size: small; color: gray;">
 &nbsp;&nbsp;&nbsp;${i.isFile() ? ' ('+ prettySizeMethod(i.size()) + ')' : ''}
-</span>
-            </a>
-
-
-			</span>
-			</div>
+</span></a></span></div>
 </li>"""
             }
             else {
                 session[fileId] = i.path
                 output += """<li>
 			<div class="showhim" id="file${fileId}">
-
 <a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
                           target="_blank"
                           title="${i.path}">
-
 <span style="font-size: small; color: gray;" title="${i.path?.replace(i.name, '')}">
-${i.isFile() ? '<br/> ('+ prettySizeMethod(i.size()) + ')' : ''}
-</span><br/>
-${i.name}
+${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
+</span>${i.name}
             </a>
 	    	<span class="testhide">
 		<a href="#" title="Extract cover from first page" onclick="jQuery('#logArea').load('${

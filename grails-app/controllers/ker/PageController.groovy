@@ -193,7 +193,7 @@ class PageController {
              ['dashboard.enabled', 'yes'],
              ['course.enabled', 'yes'],
              ['app.name', 'Nibras PKM'],
-             ['explorer.path.win', 'd:/Nibras/Application/scripts/open-explorer.bat'],
+             ['explorer.path.win', './scripts/open-explorer.bat'],
              ['explorer.path.linux', '/usr/bin/dolphin'],
              ['datetime.format', 'dd.MM.yyyy'],
              ['default.WritingStatus.done', 'revised'],

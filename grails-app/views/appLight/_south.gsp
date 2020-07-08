@@ -35,6 +35,18 @@
 &nbsp; &nbsp;
 
 
+<g:link controller="sync" action="rssPile"
+        target="_blank"
+        title="RSS feed">
+%{--    <span class="ui-icon ui-icon-signal"></span> --}%
+    RSS
+</g:link>
+
+
+&nbsp; &nbsp;   |
+&nbsp; &nbsp;
+
+
 <g:if test="${1 ==1 }">
     <span style="padding-right: 1px !important; background: #8e8e97">
     &nbsp;

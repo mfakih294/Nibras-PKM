@@ -108,12 +108,12 @@
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-family: tahoma, Arial,  Lucida Grande, Lucida Sans, sans-serif;
-    font-size: 1.1em;
+    font-size: 0.95em;
 
 }
 
 .ui-widget input {
-    height: 25px;
+    height: 32px;
 }
 
 .ui-widget-content {

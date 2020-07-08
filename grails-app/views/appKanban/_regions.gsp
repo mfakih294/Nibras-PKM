@@ -54,6 +54,7 @@
 
         <div id="centralArea" class="common kanbanTables">
             %{--<h3>T / context</h3>--}%
+            <g:if test="${1==2}">
             <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
                 <thead>
                 <th>T*</th>
@@ -76,15 +77,17 @@
                     </g:each>
                 </tr>
             </table>
-            %{--<h3>R G C / dept</h3>--}%
+
+        </g:if>
+            <h2>T* G* C* / D*</h2>
             <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
 
                 <thead>
-                <th></th>
+                <th>\ D*</th>
                 <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
                     <th>d<b>${d.code}</b></th>
                 </g:each>
-
+                <th>d-</th>
                 </thead>
 
            %{--     <tr>
@@ -100,6 +103,26 @@
                     </g:each>
                 </tr>--}%
                 <tr>
+                    <td style="background: #fff3cd">T*</td>
+                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                        <td >
+                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department = ?',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
+                        </td>
+                    </g:each>
+                <td >
+                    <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department is null',
+                            [])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+                </td>
+                </tr>
+
+            <tr>
                     <td style="background: #fff3cd">G*</td>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
                         <td >
@@ -110,6 +133,13 @@
                             </g:each>
                         </td>
                     </g:each>
+                <td>
+                    <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department is null',
+                            [])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+                </td>
                 </tr>
                 <tr>
                     <td style="background: #d3e0d3">C*</td>
@@ -122,8 +152,9 @@
                             </g:each>
 
                         </td>
-                    </g:each>
 
+                    </g:each>
+                    <td>-</td>
                 </tr>
 
             </table>

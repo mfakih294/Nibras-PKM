@@ -38,7 +38,8 @@
 <g:link controller="sync" action="rssPile"
         target="_blank"
         title="RSS feed">
-    <span class="ui-icon ui-icon-signal"></span> RSS
+%{--    <span class="ui-icon ui-icon-signal"></span> --}%
+    RSS
 </g:link>
 
 
