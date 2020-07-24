@@ -252,7 +252,7 @@
 
 
 
-
+/*
   setInterval(function() {
       jQuery.ajax({
           type: 'GET',
@@ -270,7 +270,7 @@
           }
       });
   }, 600000);
-
+*/
 
   </script>
 <style>
@@ -343,16 +343,17 @@
                   update="logAreaModal"
 
                   method="post">
-          <table border="0">
+          <table border="0" style="width: 90%">
               <tr>
                   <td style="text-align: left; margin: 3px; direction: ltr">Type:
                       <br/>
                       <g:select name="type" from="${['J', 'P']}" id="typeField" value="J"/>
-                  </td> <td style="text-align: left; margin: 3px; direction: ltr"> Start time:
-                      <br/><g:textField name="start" value="" id="start"></g:textField></td>
+                  </td>
+                  <td style="text-align: left; margin: 3px; direction: ltr"> Start time:
+                      <br/><g:textField name="start" value="" id="start" style="width: 120px"></g:textField></td>
                   <td style="text-align: left; direction: ltr; margin: 3px;">End time:
                       <br/>
-                      <g:textField name="end" value="" id="end"></g:textField></td>
+                      <g:textField name="end" value="" id="end"  style="width: 120px"></g:textField></td>
 
               </tr>
           </table>

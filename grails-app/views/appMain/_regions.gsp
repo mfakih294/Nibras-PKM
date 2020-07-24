@@ -64,7 +64,17 @@
                 Main panel
             </a></h6>
 
-            <div id="inner1" class="common" style="">
+            <div id="1" class="common" style="">
+            <div id="centralArea" class="common" style="">
+                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>
+
+            </div>
+%{--                <div id="centralArea" class="common" style="">--}%
+
+%{--                </div>--}%
+
+                <br/>
+                <br/>
                 <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                               url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                               update="centralArea"
@@ -79,7 +89,7 @@
                               id="typeField"
                               tabindex="1"
                               value="N"/>
-                    <g:textField name="title" value="" id="title"
+                    <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
                                  style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 77% !important;"
                                  placeholder="Summary * "
@@ -97,15 +107,18 @@
                                 value=""
                                 style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
                 </g:formRemote>
+
+                <br/>
+                <br/>
                 %{--<div id="subDaftarArea">--}%
 %{----}%
                 %{--</div>--}%
 
-                <br/>
-                <hr style="color: darkgray; background: darkgray"/>
-                <br/>
+%{--                <br/>--}%
+%{--                <hr style="color: darkgray; background: darkgray"/>--}%
+%{--                <br/>--}%
 
-                <div id="centralArea" class="common" style="">
+
 
 
 
@@ -114,7 +127,12 @@
 %{--                title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
                 %{--<h5>Last plan</h5>--}%
                 %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
-                <g:render template='/reports/homepageSavedSearches'/>
+
+
+                    %{--                    render(template: '/reports/heartbeat', model: [dates: dates])--}%
+%{--                <g:render template='/reports/homepageSavedSearches'/>--}%
+
+
                 %{--</span>--}%
 
                     %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
@@ -129,7 +147,7 @@
                     %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
                         %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
                     %{--</g:if>--}%
-                </div>
+%{--                </div>--}%
 
             </div>
 

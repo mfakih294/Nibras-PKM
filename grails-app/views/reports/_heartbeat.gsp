@@ -1,23 +1,40 @@
-<%@ page import="app.IndexCard; mcs.*" %>
+<%@ page import="ker.OperationController; app.IndexCard; mcs.*" %>
 
-<h2>Dashboard</h2>
+%{--<h2>Dashboard</h2>--}%
 
-<h3>Last 24 hours' records</h3>
+<h2>Data entry over the days</h2>
 
-${app.IndexCard.countByDateCreatedGreaterThan(new Date() - 1)} notes <br/>
-${mcs.Journal.countByDateCreatedGreaterThan(new Date() - 1)} journal<br/>
-${mcs.Planner.countByDateCreatedGreaterThan(new Date() - 1)} planner
-${Task.countByDateCreatedGreaterThan(new Date() - 1)} new tasks <br/>
-${Task.countByCompletedOnGreaterThan(new Date() - 1)} completed tasks <br/>
+<div id="graph${1}" style="width: 500px; height: 250px; margin: 3px auto 0 auto;"></div>
+
+<table>
+    <tr>
+
+        <td style="width: 30%"></td>
+        <td>
+            <h3>Last 24 hours' records</h3>
+
+            ${app.IndexCard.countByDateCreatedGreaterThan(new Date() - 1)} notes <br/>
+            ${mcs.Journal.countByDateCreatedGreaterThan(new Date() - 1)} journal<br/>
+            ${mcs.Planner.countByDateCreatedGreaterThan(new Date() - 1)} planner<br/>
+            ${Task.countByDateCreatedGreaterThan(new Date() - 1)} new tasks <br/>
+            ${Task.countByCompletedOnGreaterThan(new Date() - 1)} completed tasks <br/>
+
+        </td>
+
+        <td>
+            <h3>Last 7 days' records</h3>
+
+            ${IndexCard.countByDateCreatedGreaterThan(new Date() - 7)} notes <br/>
+            ${Journal.countByDateCreatedGreaterThan(new Date() - 7)} journal<br/>
+            ${Planner.countByDateCreatedGreaterThan(new Date() - 7)} planner <br/>
+            ${Task.countByDateCreatedGreaterThan(new Date() - 7)} new tasks <br/>
+            ${Task.countByCompletedOnGreaterThan(new Date() - 7)} completed tasks <br/>
 
 
-<h3>Last 7 days' records</h3>
+        </td>
+    </tr>
+</table>
 
-${IndexCard.countByDateCreatedGreaterThan(new Date() - 7)} notes <br/>
-${Journal.countByDateCreatedGreaterThan(new Date() - 7)} journal<br/>
-${Planner.countByDateCreatedGreaterThan(new Date() - 7)} planner
-${Task.countByDateCreatedGreaterThan(new Date() - 7)} new tasks <br/>
-${Task.countByCompletedOnGreaterThan(new Date() - 7)} completed tasks <br/>
 
 
 
@@ -180,9 +197,6 @@ ${Task.countByCompletedOnGreaterThan(new Date() - 7)} completed tasks <br/>
 
 
 
-<h2>Data entry over the days</h2>
-
-<div id="graph${1}" style="width: 500px; height: 350px; margin: 3px auto 0 auto;"></div>
 
 <script type="text/javascript">
 
@@ -226,7 +240,17 @@ ${Task.countByCompletedOnGreaterThan(new Date() - 7)} completed tasks <br/>
 </script>
 
 
-
+<g:if test="${ker.OperationController.getPath('order-departments.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 <div id="OrderTheFields" style="-moz-columns-count:1">
     <h4>Order the departments</h4>
@@ -249,3 +273,4 @@ ${Task.countByCompletedOnGreaterThan(new Date() - 7)} completed tasks <br/>
 <script type="text/javascript">
     jQuery("#table1").tableDnD();
 </script>
+</g:if>

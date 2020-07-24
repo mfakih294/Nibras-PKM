@@ -251,7 +251,7 @@ class PageController {
 //        String htmlContent = markupParser.parseToHtml(text);
 
         def r = ''
-        def c = 0
+   //     def c = 0
 //        def f = ker.OperationController.getPath('editBox.path')
 //        if (f) {
 //            new File(f)?.listFiles().each(){
@@ -303,12 +303,37 @@ class PageController {
         }
 
 
+
+        def datesHb = [:]
+        for (c in [[mcs.Goal, 'Goal'], [mcs.Task, 'Task'],
+//                [mcs.Book, 'Resource'],
+                   [mcs.Planner, 'Plan'],
+                   [mcs.Journal, 'Journal'], [app.IndexCard, 'Note']]) {
+            for (t in c[0].findAllByDateCreatedGreaterThan(new Date() - 90, [sort: 'dateCreated', order: 'asc'])) {
+                def date = t.dateCreated.format('yyyy-MM-dd')
+                if (!datesHb[date])
+                    datesHb[date] = ['Goal'   : 0,
+                                     'Task'   : 0,
+//                            'Resource': 0,
+                                     'Plan'   : 0,
+                                     'Journal': 0,
+                                     'Writing': 0,
+                                     'Note'   : 0
+                    ]
+
+                datesHb[date][c[1]] += 1
+            }
+        }
+
+
+
         def user = springSecurityService.currentUser
         render(view: '/appMain/main', model: [
                 htmlContent      : null,
                 ips              : ips,
                 selectBasketCount: GenericsController.selectedRecords.size(),
-                editFileCount    : c,
+                editFileCount    : 0, // todo: fix
+                dates: datesHb,
                 username         : user.username,
                 reviewPileSize   : resources.size() + excerpts.size()
 //                environment: environment

@@ -50,7 +50,10 @@
                               id="${i.name.encodeAsMD5()}">
                             ${i.name}
                         </span>
+                        <br/>
                     </g:if>
+
+
   <g:if test="${i.isFile() && !i.name?.contains('--')}">
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFile"
@@ -73,11 +76,11 @@
                               id="${i.name.encodeAsMD5()}">
                             ${i.name}
                         </span>
+      <br/>
                     </g:if>
 
 
                     <g:if test="${i.isDirectory() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1}">
-                        <br/><br/>
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFolder"
                                           style="display: inline; "
@@ -103,10 +106,10 @@
                         <span style="display: inline; font-family: monospace;"
                               id="${i.name.encodeAsMD5()}">${i.name}
                         </span>
+                        <br/>
                     </g:if>
 
                     <g:if test="${i.isDirectory() && !i.name?.contains('--') && i.name?.length() > 1}">
-                        <br/><br/>
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFolder"
                                           style="display: inline; "
@@ -127,6 +130,7 @@
                         <span style="display: inline; font-family: monospace;"
                               id="${i.name.encodeAsMD5()}">${i.name}
                         </span>
+                        <br/>
                     </g:if>
       </g:each>
 
@@ -136,7 +140,7 @@
                         var="i">
 
                     <g:if test="${i.isFile() && i.name?.contains(' ')}">
-                        <br/><br/>
+                        <br/>
 
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFile"
