@@ -659,7 +659,7 @@ Authors: ${authors}
                     %{--<br/>--}%
                 %{--Notes:--}%
                     <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
-					style="${ker.OperationController.getPath('description.style')}; text-align: justify !important; line-height: 170%>
+					style="${ker.OperationController.getPath('description.style')}; text-align: justify !important; line-height: 170%">
                         <div style="color: #003366 !important">${raw(record.notes?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
                         .replaceAll(/\nوَ /, ' وَ')
                         .replaceAll(/^و /, ' و').replaceAll(/\nو / , '\nو' )

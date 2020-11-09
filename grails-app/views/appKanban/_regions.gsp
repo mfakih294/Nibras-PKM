@@ -3,7 +3,7 @@
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
      style="">
     %{--<g:render template="/layouts/north" model="[]"/>--}%
-    <g:render template="/appKanban/north"/>
+%{--    <g:render template="/appKanban/north"/>--}%
 </div>
 
 %{--<div class="ui-layout-west westRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">--}%
@@ -15,18 +15,18 @@
 
 <div class="ui-layout-south footerRegion"
      style="font-size: 11px; margin-top: 9px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
-    <g:render template="/appMain/south"/>
+%{--    <g:render template="/appMain/south"/>--}%
 </div>
 
 
 <div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
     %{--<div class="ui-layout-content ui-widget-content">--}%
-    <g:render template="/appKanban/east"/>
+%{--    <g:render template="/appKanban/east"/>--}%
 </div>
 
 
 <div class="ui-layout-center appBkg"
-     style="margin-top: 2px !important; margin-bottom: 2px !important; background: white; overflow-y: scroll; width: 98% !important;"
+     style="margin-top: 2px !important; margin-bottom: 2px !important; background: white; width: 98% !important;"
      onmouseover="jQuery('#hintArea').html('')">
     %{--ToDo: display none?!--}%
     %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%
@@ -79,6 +79,8 @@
             </table>
 
         </g:if>
+
+<g:if test="${1==2}">
             <h2>T* G* C* / D*</h2>
             <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
 
@@ -158,6 +160,39 @@
                 </tr>
 
             </table>
+</g:if>
+
+            <div style="column-count: 4; background: #f9fbf4; padding: 10px;">
+
+
+                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+
+                        <h2 style="text-align: center">${d.code}</h2>
+
+                        <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? order by orderNumber asc',
+                                [d])}"
+                                var="p">
+                            <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                        </g:each>
+
+                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department = ?',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
+
+                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ?',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                            </g:each>
+
+            </g:each>
+
+
+            </div>
+
+            </div>
 
 
             %{--<span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
@@ -181,7 +216,6 @@
             %{--</g:if>--}%
         </div>
 
-    </div>
 
 
 

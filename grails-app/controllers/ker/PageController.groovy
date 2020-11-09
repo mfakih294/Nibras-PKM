@@ -296,7 +296,7 @@ class PageController {
             while (addresses.hasMoreElements()) {
                 ip = addresses.nextElement().getHostAddress().toString()
                 if (ip && ip != '' && !ip.contains(':') && !ip.startsWith('127'))
-                    ips.add([name: interf.getName(), title: interf.getDisplayName(), ip: ip])
+                    ips.add([name: interf.getName(), title: interf.getDisplayName(), ip: ip]) //?.split(/\(/)[0]
 //                println (addresses.nextElement().getCanonicalHostName())
 //                println (addresses.nextElement().hostAddress)
             }
@@ -429,12 +429,12 @@ class PageController {
      def prayersText = ''
 //     for (int i = 0; i < prayerTimes.size(); i++) {
          prayersText += (prayerNames.get(0) + ": " + prayerTimes.get(0) + '\n')
-         prayersText += (prayerNames.get(1) + ": " + prayerTimes.get(1) + '\n<br/>')
+         prayersText += (prayerNames.get(1) + ": " + prayerTimes.get(1) + '\n')
          prayersText += (prayerNames.get(2) + ": " + prayerTimes.get(2) + '\n')
-         prayersText += (prayerNames.get(3) + ": " + prayerTimes.get(3) + '\n<br/>')
+         prayersText += (prayerNames.get(3) + ": " + prayerTimes.get(3) + '\n')
          prayersText += (prayerNames.get(4) + ": " + prayerTimes.get(4) + '\n')
          prayersText += (prayerNames.get(5) + ": " + prayerTimes.get(5) + '\n')
-         prayersText += (prayerNames.get(6) + ": " + prayerTimes.get(6) + '\n')
+//         prayersText += (prayerNames.get(6) + ": " + prayerTimes.get(6) + '\n')
 //     }
 
 

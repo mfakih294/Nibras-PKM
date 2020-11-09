@@ -13,7 +13,7 @@
             <tr style="${!'GTP'.contains(record.entityCode()) ? 'background: #f1f1eb; border:0.5px solid #cccccc;' : record.status?.style} padding: 0px;"
                 class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}">
 
-                <td style="font-size: 0.9em; padding: 3px; line-height: 1.1em;"
+                <td style="font-size: 0.8em; padding: 3px; line-height: 1.1em;"
                     class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
 
                     <div class="" style="color: darkgray; display: inline; margin: 2px !important; ">

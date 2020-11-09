@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>Nibras dashboard</title>
+    <title>Dashboard</title>
 
     <!-- The javascript and css are managed by sprockets. The files can be found in the /assets folder-->
 
@@ -34,7 +34,7 @@
 //                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
             }
         });
-    }, 30000);
+    }, 60000);
 
 </script>
 
@@ -47,9 +47,10 @@
 
 
         .content {
-            padding: 7px;
+            padding: 5px;
             direction: rtl !important;
             text-align: right !important;
+            vertical-align: top !important;
         }
 
 
@@ -122,15 +123,15 @@
     }
 
     [data-row="4"] {
-        top: 1115px;
+        top: 620px;
     }
 
     [data-row="3"] {
-        top: 745px;
+        top: 360px;
     }
 
     [data-row="2"] {
-        top: 375px;
+        top: 80px;
     }
 
     [data-row="1"] {
@@ -138,15 +139,15 @@
     }
 
     [data-sizey="1"] {
-        height: 360px;
+        height: 250px;
     }
 
     [data-sizey="2"] {
-        height: 730px;
+        height: 600px;
     }
 
     [data-sizey="3"] {
-        height: 1100px;
+        height: 700px;
     }
 
     [data-sizey="4"] {
@@ -219,29 +220,66 @@
     <div class="gridster ready" style="width: 100%;">
         <ul style="height: 370px; width: 930px; position: relative;">
 
-            <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" class="gs-w">
+            <li data-row="1" data-col="1" data-sizex="3" data-sizey="1" class="gs-w  widget-meter"  style="height: 50px !important;">
                 <div data-id="welcome" data-title="اليوم" data-text="14 شعبان 1441هـ. " data-moreinfo=""
-                     class="widget widget-text welcome"><h1 class="title" data-bind="title">
+                     class="widget widget-outboard welcome">
+
+                    <b class="title" data-bind="title">
+                    %{--                    مواقيت الصلاة--}%
+
+%{--                        \--}%
+%{--                    <% Calendar c = new GregorianCalendar(); c.setLenient(false); c.setMinimalDaysInFirstWeek(4);--}%
+%{--                    c.setFirstDayOfWeek(java.util.Calendar.MONDAY)--}%
+%{--                    %>--}%
+%{--                    <b>أ</b> ${c.get(Calendar.WEEK_OF_YEAR)}--}%
+
+                </b>
+
+                    <div class="content" style="font-size: 0.9em; text-align: center;">
+
+<g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                        <b>
+                            <b>${((java.time.chrono.HijrahDate.now().plus(-2, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.forLanguageTag('ar')))}</b>:
+%{--                            ${new Date().format("E dd")}:--}%
+                        </b>
+                            <g:each in="${prayersText.split('\n')}" var='l'>
+                                <span >
+                                        ${raw(l)}
+                                </span>
+                            </g:each>
+<br/>
+                        <g:set var="aya"
+                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>
+                        {
+                        ${aya.shortDescription}
+                        }
+                        (${mcs.Writing.get(aya.recordId)?.summary}
+                        ${aya.orderInWriting})
+</g:if>
+                    </div>
+                </div>
+            </li>
+
+
+            <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" class="gs-w">
+                <div data-id="welcome" data-title="اليوم" data-text="14 شعبان 1441هـ. " data-moreinfo=""
+                     class="widget widget-outboard welcome"><h1 class="title" data-bind="title">
 %{--                    مواقيت الصلاة--}%
-                    <b>${((java.time.chrono.HijrahDate.now().plus(-2, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.forLanguageTag('ar')))}</b>
-                    <br/>
-                    <% Calendar c = new GregorianCalendar(); c.setLenient(false); c.setMinimalDaysInFirstWeek(4);
-                    c.setFirstDayOfWeek(java.util.Calendar.MONDAY)
-                    %>
-                    <b>أ</b> ${c.get(Calendar.WEEK_OF_YEAR)}
-                    ${new Date().format("E dd")}
+                  C *
                 </h1>
 
                     <div class="content">
-                        <ul style="direction: rtl; text-align: right;">
-                            <g:each in="${prayersText.split('\n')}" var='l'>
-                                <li style="text-align: center;">
-                                    <span class="name">
-                                        ${raw(l)}
-                                    </span>
 
+                        <ol style="direction: rtl; text-align: right; margin-right: 30px;">
+                            <g:each in="${mcs.Course.findAllByBookmarked(true, [sort: 'department', order: 'desc'])}" var="j">
+                                <li>
+                                    [${j.code}]
+                                    ${j.summary}
                                 </li>
+
                             </g:each>
+                        </ol>
+
 
                     </div>
 
@@ -251,47 +289,40 @@
                 </div>
             </li>
 
-            <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" class="gs-w widget-list">
-                <div data-id="outboard-prayers" data-title="مواقيت الصلاة" style="direction: rtl; text-align: right; font-size: .8em;"
-                     class="widget widget-outboard outboard-prayers"><h1 class="title"
-                                                                         data-bind="title">
-مناسبات هجرية
+            <li data-row="2" data-col="2" data-sizex="1" data-sizey="1" class="gs-w widget-list">
+                <div data-id="outboard-prayers" data-title=" " style="direction: rtl; text-align: right; font-size: .8em;"
+                     class="widget widget-outboard outboard-prayers">
+
+                    <h1 class="title"  data-bind="title">
+G* p4
                 </h1>
+                    <div class="content" style="">
+
+                    <ol style="direction: rtl; text-align: right; line-height: 12px;">
+                        <g:each in="${mcs.Goal.findAllByBookmarkedAndPriorityGreaterThan(true, 3, [sort: 'department', order: 'desc'])}" var="j">
+                            <li>
+                                [${j.course?.code}]
+                                <b>${j.summary}</b>
+%{--                                <pkm:prettyDuration date1="${j.endDate ?: j.startDate}"/>--}%
+                            </li>
+
+                        </g:each>
+                    </ol>
 
 
-                    2 - فتح مكة المكرمة - 10هـ<br/>
-                    7 - وفاة أبي طالب عم النبي(ص) - 10هـ<br/>
-                    10 - وفاة أم المؤمنين خديجة بنت خويلد(ع) - 10للبعثة<br/>
-                    12 - المؤاخاة بين المهاجرين والأنصار - 1هـ<br/>
-                    15 - مولد الإمام الحسن المجتبى(ع) - 2هـ<br/>
-                    15 - خروج مسلم بن عقيل(ع) إلى الكوفة - 60هـ<br/>
-                    17 - معركة بدر الكبرى - 2هـ<br/>
-                    19 - جرح الإمام علي أمير المؤمنين(ع) - 40هـ<br/>
-                    21 - شهادة الإمام علي بن أبي طالب(ع) - 40هـ
-
-
-
-%{--                    <p class="updated-at" data-bind="updatedAtMessage">Last updated at 15:28</p>--}%
+                    %{--                    <p class="updated-at" data-bind="updatedAtMessage">Last updated at 15:28</p>--}%
+                </div>
                 </div>
             </li>
 
-            <li data-row="1" data-col="3" data-sizex="1" data-sizey="1" class="gs-w widget-meter">
+            <li data-row="2" data-col="3" data-sizex="1" data-sizey="1" class="gs-w widget-meter">
                 <div data-id="outboard-prayers" data-title=" " style="direction: rtl; text-align: right;"
-                     class="widget widget-outboard outboard-prayers"><h1 class="title"
-                                                                         data-bind="title">
-
+                     class="widget widget-outboard outboard-prayers">
+                    <h1 class="title" data-bind="title">
+T* p4
                 </h1>
 
-                    <div class="content" style="font-family: Amiri; font-size: 1.2em">
-                        <g:set var="aya"
-                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ?', [3, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>
-                        {
-                        ${aya.shortDescription}
-                        }
-                        (${mcs.Writing.get(aya.recordId)?.summary}
-                        ${aya.orderInWriting})
-
-
+                    <div class="content" style="">
 
 %{--                        <ul style="direction: rtl; text-align: right;">--}%
 %{--                            <g:each in="${new File('/nbr/goals.txt').text.split('\n')}" var='l'>--}%
@@ -303,47 +334,42 @@
 %{--                                </li>--}%
 %{--                            </g:each>--}%
 %{----}%
-                    </div>
 
-%{--                    <p class="updated-at" data-bind="updatedAtMessage">Last updated at 15:28</p>--}%
+
+                        <ol style="direction: rtl; text-align: right; margin-right: 30px;">
+                        <g:each in="${mcs.Task.findAllByBookmarkedAndPriorityGreaterThan(true, 3, [sort: 'summary', order: 'desc'])}" var="j">
+                            <li>
+%{--                                <u>${j.endDate?.format('dd.MM')}:</u>--}%
+                                [${j.course?.code}]
+                                ${j.summary}
+                            </li>
+
+                        </g:each>
+                    </ol>
+                </div>
+                    %{--                    <p class="updated-at" data-bind="updatedAtMessage">Last updated at 15:28</p>--}%
                 </div>
             </li>
 
-            <li data-row="2" data-col="2" data-sizex="1" data-sizey="1" class="gs-w widget-comments">
+
+
+            <li data-row="3" data-col="1" data-sizex="1" data-sizey="1" class="gs-w widget-comments">
                 <div data-id="outboard-goals" data-title="الأهداف" class="widget widget-outboard outboard-goals" style="direction: rtl; text-align: right;"><h1
                         class="title" data-bind="title">
 
-                    ${Planner.get(376).summary}
+                    R* p4
                 </h1>
 
                     <div class="content">
-                        ${Planner.get(376).description}
+                        <ol style="direction: rtl; text-align: right; margin-right: 30px;">
+                            <g:each in="${mcs.Book.findAllByBookmarkedAndPriorityGreaterThan(true, 3, [sort: 'department', order: 'desc', max: 5])}" var="j">
+                                <li>
+                                    [${j.course?.code}]
+                                    ${j.title}
+                                </li>
 
-                        %{--                        <ul style="direction: rtl; text-align: right;">--}%
-                        %{--                            <g:each in="${new File('/nbr/goals.txt').text.split('\n')}" var='l'>--}%
-                        %{--                                <li>--}%
-                        %{--                                    <span class="name">--}%
-                        %{--                                        ${l}--}%
-                        %{--                                    </span>--}%
-                        %{----}%
-                        %{--                                </li>--}%
-                        %{--                            </g:each>--}%
-                        %{----}%
-                    </div>
-
-                    %{--                    <p class="updated-at" data-bind="updatedAtMessage">Last updated at 15:28</p>--}%
-                </div>
-            </li>   <li data-row="2" data-col="3" data-sizex="1" data-sizey="1" class="gs-w widget-comments">
-                <div data-id="outboard-goals" data-title="الأهداف" class="widget widget-outboard outboard-goals" style="direction: rtl; text-align: right;"><h1
-                        class="title" data-bind="title">
-
-                    ${Planner.get(377).summary}
-                </h1>
-
-                    <div class="content">
-                        ${Planner.get(377).description}
-
-
+                            </g:each>
+                        </ol>
 
                         %{--                        <ul style="direction: rtl; text-align: right;">--}%
                         %{--                            <g:each in="${new File('/nbr/goals.txt').text.split('\n')}" var='l'>--}%
@@ -360,23 +386,62 @@
                     %{--                    <p class="updated-at" data-bind="updatedAtMessage">Last updated at 15:28</p>--}%
                 </div>
             </li>
-          <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" class="gs-w">
-                <div data-id="outboard-goals" data-title="الأهداف" class="widget widget-outboard outboard-goals" style="direction: rtl; text-align: right;"><h1
-                        class="title" data-bind="title">Countups</h1>
+
+          <li data-row="3" data-col="2" data-sizex="1" data-sizey="1" class="gs-w">
+                <div data-id="outboard-goals" data-title="الأهداف" class="widget widget-outboard outboard-goals" style="direction: rtl; text-align: right;">
+                    <h1
+                        class="title" data-bind="title">mls</h1>
 
                     <div class="content">
 
                         %{--Refactor--}%
 %{--                        <b>Countdowns</b>--}%
-                        <ul>
-                            <g:each in="${Journal.findAllByTypeAndBookmarked(JournalType.get(52), true, [sort: 'startDate', order: 'desc'])}" var="j">
+                        <ol style="direction: rtl; text-align: right; margin-right: 30px;">
+                            <g:each in="${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('milestone'), true, [sort: 'startDate', order: 'desc'])}" var="j">
                                 <li>
-                                    <b>${j.summary}</b>
-                                    <pkm:prettyDuration date1="${j.endDate ?: j.startDate}"/>
+                                    <pkm:prettyDuration date1="${j.endDate ?: j.startDate}"/>:
+                                    ${j.summary}
+
                                 </li>
 
                             </g:each>
-                        </ul>
+                        </ol>
+
+%{--                        <b>Countups</b>--}%
+%{--                        <ul>--}%
+%{--                            <g:each in="${Journal.findAllByType(JournalType.get(52), [sort: 'endDate', order: 'desc'])}" var="j">--}%
+%{--                                <li>--}%
+%{--                                    ${j.description} - ${(j.startDate..new Date()).size()} days have passed--}%
+%{--                                </li>--}%
+
+%{--                            </g:each>--}%
+%{--                        </ul>--}%
+                    </div>
+
+
+                </div>
+            </li>
+
+
+  <li data-row="3" data-col="3" data-sizex="1" data-sizey="1" class="gs-w">
+                <div data-id="outboard-goals" data-title="الأهداف" class="widget widget-outboard outboard-goals" style="direction: rtl; text-align: right;">
+                    <h1
+                        class="title" data-bind="title">plc</h1>
+
+                    <div class="content">
+
+                        %{--Refactor--}%
+%{--                        <b>Countdowns</b>--}%
+                        <ol style="direction: rtl; text-align: right; margin-right: 30px;">
+                            <g:each
+in="${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('policy'), true, [sort: 'startDate', order: 'desc', max: 1])}" var="j">
+                                <li>
+                                    <b>${j.summary}</b>:<br/>
+                                    <b>${j.description?.replace('\n', '<br/>')}</b>
+                                </li>
+
+                            </g:each>
+                        </ol>
 
 %{--                        <b>Countups</b>--}%
 %{--                        <ul>--}%
@@ -392,6 +457,36 @@
                     <p class="updated-at" data-bind="updatedAtMessage"></p>
                 </div>
             </li>
+
+
+
+            <li data-row="4" data-col="1" data-sizex="3" data-sizey="1" class="gs-w  widget-meter"  style="height: 30px !important;">
+                <div data-id="welcome" data-title="اليوم" data-text="14 شعبان 1441هـ. " data-moreinfo=""
+                     class="widget widget-outboard welcome">
+
+                    <b class="title" data-bind="title">
+                        %{--                    مواقيت الصلاة--}%
+
+                        %{--                        \--}%
+                        %{--                    <% Calendar c = new GregorianCalendar(); c.setLenient(false); c.setMinimalDaysInFirstWeek(4);--}%
+                        %{--                    c.setFirstDayOfWeek(java.util.Calendar.MONDAY)--}%
+                        %{--                    %>--}%
+                        %{--                    <b>أ</b> ${c.get(Calendar.WEEK_OF_YEAR)}--}%
+
+                    </b>
+
+
+                        <div class="content" style="font-size: 0.8em !important; text-align: center !important;">
+
+                    ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].summary}
+                    ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].description}
+
+                    </div>
+                </div>
+            </li>
+
+
+
 
         </ul>
         <center><div style="font-size: 12px; display: none;">Try this: curl -d

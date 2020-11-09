@@ -169,8 +169,8 @@
                 west__onresize: $.layout.callbacks.resizePaneAccordions,
                 east__onresize: $.layout.callbacks.resizePaneAccordions,
                 onresize: $.layout.callbacks.resizePaneAccordions,
-                north__closable: false,
-                south__closable: false,
+                north__closable: true,
+                south__closable: true,
                 north__spacing_closed: 5		// big resizer-bar when open (zero height)
                 , north__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
                 , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
@@ -603,20 +603,5 @@ $("#accordionCenter").accordion({
 
 
 </body>
-
-<script type="text/javascript">
-    jQuery('#selectAll').click(function() {
-        if (this.checked) {
-            jQuery(':checkbox').each(function() {this.checked = true;});
-        } else {
-            jQuery(':checkbox').each(function() {
-                this.checked = false;
-            });
-        }
-    });
-
-    //    });
-
-</script>
 </body>
 </html>

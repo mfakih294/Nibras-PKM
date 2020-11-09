@@ -6,13 +6,13 @@
     <b>Week</b> ${c.get(Calendar.WEEK_OF_YEAR)}
 &nbsp; &nbsp;   |
 &nbsp; &nbsp; 
-    ${new Date().format("E dd MMM yyyy")}
+    ${new Date().format("E dd MMM")}
 
 &nbsp; &nbsp;   |
 &nbsp; &nbsp;
 
 <g:if test="${OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
-    <b>${java.time.chrono.HijrahDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy"))}</b>
+    <b>${java.time.chrono.HijrahDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM"))}</b>
 
 
 &nbsp; &nbsp;   |
@@ -48,7 +48,9 @@
 
 
 <g:if test="${1 ==1 }">
-    <span style="padding-right: 1px !important; background: #8e8e97">
+    <span style="padding-right: 1px !important;">
+
+        <a onclick="selectAll()" href="#">+</a>
     &nbsp;
         <g:remoteLink controller="generics" action="showSelectedRecords"
                       update="centralArea"
@@ -86,7 +88,9 @@
   IPs:  &nbsp;
 <g:each in="${ips}" var="ip">
 
-   <b title="${ip.title}"> ${ip.ip}</b> (${ip.name})
+   <b title="${ip.name}"> ${ip.ip}</b>
+%{--    vs .title ?--}%
+%{--    (${ip.name})--}%
     &nbsp; &nbsp;
 </g:each>
 
@@ -127,3 +131,30 @@ ${mcs.Course.countByBookmarked(true)} C * / p4:
     %{--<div class="ui-layout-content ui-widget-content">--}line-height: 1px;%
 
     %{--</div>--}%
+
+
+
+<script type="text/javascript">
+    function selectAll() {
+
+
+            jQuery(':checkbox').each(function () {
+                this.click()
+            });
+
+    };
+
+
+
+        jQuery('#selectAll').click(function() {
+            if (this.checked) {
+                jQuery(':checkbox').each(function() {this.checked = true;});
+            } else {
+                jQuery(':checkbox').each(function() {
+                    this.checked = false;
+                });
+            }
+        });
+
+
+</script>

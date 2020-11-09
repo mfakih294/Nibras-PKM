@@ -66,8 +66,7 @@
 
             <div id="1" class="common" style="">
             <div id="centralArea" class="common" style="">
-                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>
-
+%{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
             </div>
 %{--                <div id="centralArea" class="common" style="">--}%
 
@@ -168,7 +167,7 @@
                               method="post">
                     <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
                     <g:submitButton name="batch" value="Execute"
-                                    style="height: 30px; margin: 0px; width: 100px !important; display: none"
+                                    style="height: 30px; margin: 0px; width: 120px !important; display: none"
                                     id="quickAddXcdSubmitTop3"
                                     class="fg-button ui-widget ui-state-default"/>
 

@@ -57,7 +57,7 @@
     var calendar = new FullCalendar.Calendar(calendarEl, {
       isRTL: false,
     //  locale: 'ar',
-      plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+      plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
       //  aspectRatio: 1,
      //   contentHeight: 800,
     //    height: 'auto',
@@ -86,7 +86,7 @@
 //          buttonText: 'Week (list)',
 //          columnHead: true
 //        }
-        ,timeGridDay: {
+        , timeGridDay: {
           buttonText: 'Day',
           columnHead: true
         }
@@ -94,13 +94,11 @@
 //        basicDay: {
 //          buttonText: 'basicDay',
 //          columnHead: false
-
       },
-      defaultView: 'timeGridWeek',
-        allDaySlot: true,
-        nowIndicator: true,
-        timeGridEventMinHeight: true,
-
+      defaultView: 'dayGridWeek',
+      allDaySlot: true,
+      nowIndicator: true,
+      timeGridEventMinHeight: true,
 
         // defaultDate: '2019-06-12',
       navLinks: true, // can click day/week names to navigate views
@@ -128,7 +126,7 @@
        firstHour: '00:00',
       // minTime: 5,
       minTime: '00:00',
-      slotDuration: '00:60',
+      slotDuration: '00:30',
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,

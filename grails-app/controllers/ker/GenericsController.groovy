@@ -3430,8 +3430,8 @@ ll
         n.properties = params
         n.isTodo = true
 //        n.bookmarked = true
-        n.startDate = new Date()
-        n.endDate = new Date() + 3
+        //n.startDate = new Date()
+        //n.endDate = new Date() + 3
 
         if (n.summary && !n.hasErrors() && n.save(flush: true)) {
             render(n.summary)
@@ -5028,6 +5028,27 @@ def addTagToAll(String input) {
 
 
     }
+  def todaysRecords() {
+
+        def recentRecords = []
+
+        allClassesWithCourses.each() {
+            recentRecords += it.executeQuery('from ' + it.name + ' where date(dateCreated) = date(?)', [new Date()])
+            //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
+        }
+
+        recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
+        //recentRecords.unique()
+        if (recentRecords.size() > 0)
+            render(template: '/gTemplates/recordListing', model: [
+                    title: "Today's records",
+                    list : recentRecords
+            ])
+        else
+            render(template: '/layouts/message', model: [messageCode: 'help.recent.records.no'])
+
+
+    }
 
     def countRecentRecords() {
 
@@ -5522,6 +5543,8 @@ def addTagToAll(String input) {
  render mp.parseToHtml(record?.description)
  // render writer.toString()
  //        render ys.wikiparser.WikiParser.renderXHTML(record.description)?.decodeHTML()}*/
+
+
 
 
     def checkoutRecordText(Long id, String entityCode) {

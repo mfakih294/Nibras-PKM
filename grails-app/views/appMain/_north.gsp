@@ -30,7 +30,7 @@
         <td style="padding-right: 3px !important;">
         <a href="${createLink(controller: 'page', action:'appMihrab')}" target="_blank">
             Mihrab
-            &nearr;
+%{--            &nearr;--}%
         </a>
         </td>
     </g:if>
@@ -38,7 +38,7 @@
    <td style="padding-right: 1px !important;">
             <a href="${createLink(controller: 'page', action:'appLight')}" target="_blank">
                 Light
-            &nearr;
+
             </a>
         </td>
 
@@ -47,7 +47,15 @@
         <td style="padding-right: 1px !important;">
             <a href="${createLink(controller: 'page', action:'appKanban')}" target="_blank">
                 Kanban
-            &nearr;
+
+            </a>
+        </td>
+
+
+  <td style="padding-right: 1px !important;">
+            <a href="${createLink(controller: 'page', action:'appDashboard')}" target="_blank">
+                Board
+
             </a>
         </td>
 
@@ -56,7 +64,7 @@
         <td style="padding-right: 1px !important;">
         <a href="${createLink(controller: 'page', action:'appCalendar')}" target="_blank">
             Calendar
-            &nearr;
+
         </a>
         </td>
 
@@ -183,6 +191,16 @@
             %{--<span class="ui-icon ui-icon-calendar"></span>--}%
                 <g:message code="ui.recent"></g:message>
                 (<span id="recentRecordsCount"></span>)
+
+            %{--(${mcs.Journal.countByType(mcs.parameters.JournalType.findByCode('pkm'))})--}%
+            </g:remoteLink>
+       &nbsp;   <g:remoteLink controller="generics" action="todaysRecords"
+                          style="padding-right: 2px !important;"
+                          update="centralArea" title="Today's records">
+            %{--<span class="ui-icon ui-icon-calendar"></span>--}%
+%{--                <g:message code="ui.today"></g:message>--}%
+            Today
+%{--                (<span id="recentRecordsCount"></span>)--}%
 
             %{--(${mcs.Journal.countByType(mcs.parameters.JournalType.findByCode('pkm'))})--}%
             </g:remoteLink>
@@ -386,7 +404,7 @@
          <g:remoteLink controller="page" action="manageUser"
               update="centralArea"
               title="Manager user account">
-                            User: <b>${username}</b>
+                            <u>${username}</u>
 %{--دقات--}%
 %{--</g:remoteLink>--}%
                %{--style="" target="_blank">--}%

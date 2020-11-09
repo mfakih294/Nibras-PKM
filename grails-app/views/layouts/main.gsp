@@ -29,6 +29,59 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
 
 
+
+
+
+    <!-- ToDo: standardize the below code -->
+    <style type="text/css" media="print">
+    /**
+   *	PRINT Stylesheet
+   *
+   *	First 'neutralize' all the positioning/overflow CSS added by Layout
+   *	Then change or add cosmetic styles (borders, padding) for printing
+   *
+   *	MUST use "!important" for all size, position, margin & overflow rules,
+   *	so these will 'override' styles applied to the elements by Layout
+   */
+
+    html, body {
+        /* NEUTRALIZE 'layout container' styles */
+        overflow: visible !important;
+        width: auto !important;
+        height: auto !important;
+    }
+
+    .ui-layout-pane,
+    .ui-layout-resizer,
+    .ui-layout-toggler {
+        /* NEUTRALIZE 'layout element' styles */
+        display: none !important; /* hide ALL by default */
+        position: relative !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* SHOW ONLY the panes you want */
+    .ui-layout-pane-center,
+    .ui-layout-pane-south {
+        display: block !important;
+        /* OPTIONAL: change cosmetic styles as desired
+          border:		0			!important;
+          padding:	0			!important;
+          background:	transparent	!important;
+          */
+    }
+
+
+
+    </style>
+
+
     <script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'fg.menu.js')}"></script>
 
     %{--<script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'jquery.autocomplete.min.js')}"></script>--}%

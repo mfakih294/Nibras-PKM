@@ -707,7 +707,7 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
             try {
                 Instant start = attrs.date1.toInstant()
                 Instant end = (new Date()).toInstant();//
-                Duration dur = Duration.between(start, end);
+                Duration dur = Duration.between(end, start);
                 long years = dur.toDays() / 365;
                 long months = (dur.toDays() % 365 ) / 30;
                 long days = ((dur.toDays() % 365 ) % 30) ;
@@ -716,7 +716,7 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
 
 
 
-                out <<  years + 'y ' + months + 'm '// + days + 'd'
+                out <<  (days ? days + 'd ' : '') + (months ? months + 'm ' : '') + (years ? years + 'y ' : '')
             } catch(Exception e){
                 out << 'WD error!'
             }

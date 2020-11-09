@@ -959,11 +959,17 @@ date = "${r.year ?: ''}"
                              text : it]
             }
         } else if (field == 'course') {
-//            def n = grailsApplication.classLoader.loadClass(entityMapping[params.entity]).get(params.rid)
-//            if (n.department) {
-//                Course.executeQuery('from Course c where c.department = ? and c.bookmarked = true order by c.orderNumber asc',
-            Course.executeQuery('from Course c where c.bookmarked = true order by c.orderNumber asc',
-                    []).each() {
+            def n = grailsApplication.classLoader.loadClass(entityMapping[params.entity]).get(params.rid)
+            def courses
+            if (n.department) {
+                courses = Course.executeQuery('from Course c where c.department = ? order by c.orderNumber asc',
+                        n.department)
+            }
+                else {
+                courses = Course.executeQuery('from Course c where c.bookmarked = true order by c.orderNumber asc')
+            }
+
+                courses.each() {
                 responce += [value: it.id,
                              text : '[' + it.code + '] ' + it.summary]
             }
@@ -1888,6 +1894,51 @@ past.each(){
                 orderChildren(n.id)
         }
     }
+
+
+
+    def dumpRecordForImport(Long id, String entityCode) {
+
+        def r = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+        def filename = entityCode?.toLowerCase() + ' p' +  (r.priority ?: 2) + (r.course ?  ' c' +  r.course?.code : ' ') + (r.department ?  ' d' +  r.department?.code : ' ') + '  -- ' + (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
+
+
+        for (c in '?"/\\*:<>' + '!$^&{}|') {
+            filename = filename.replace(c, ' ')
+        }
+
+        def f
+
+
+        f = new File(OperationController.getPath('root.rps1.path') + '/' +
+                filename + '.txt') // + ' ' + filename
+        // + ' ' + filename
+
+//        if (r.entityCode() == 'W') {
+//            java.util.regex.Matcher matcher = r.description =~ /\}\{([\S\_-]*)\}/
+//            def book
+//            matcher.eachWithIndex() { match, i ->
+//                book = mcs.Book.findByCode(match[1])
+//                if (book) {
+//                    authors += book.authorInBib + '<br/>'
+//                    println r.description.replace('{' + match[1] + '}', '{' + book.authorInBib + '}')
+//                }
+//                else authors += ('Author not found: ' + match[1] + '<br/>')
+//            }
+//        }
+
+//        def f2 = new File(OperationController.getPath('editBox.path') + '/' +
+//                r.entityCode() + '/' + r.id + '.out') // + ' ' + filename
+//        if (!f.exists()) {
+        f.write(r?.description ?: '...', 'UTF-8')
+//            f2.write(r?.description ?: '...', 'UTF-8')
+        render('Text checked out')
+//        } else render 'Dump already exists.'
+
+
+    }
+
 
 
 } // end of class

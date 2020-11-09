@@ -102,10 +102,10 @@
         </td>
      <td class="dashboardCell">
             <span class="dashboardNumber">
-                ${Course.executeQuery('select avg(e.percentCompleted) from Book e where e.bookmarked = true and e.course.bookmarked = true')[0] / 100}
+                ${Course.executeQuery('select count(*) from Book e where e.bookmarked = true and e.course.bookmarked = true and e.completedOn != null')[0]}
 
             </span>
-            <span class="dashboardLabel">% read</span>
+            <span class="dashboardLabel">read res.</span>
 
         </td>
 

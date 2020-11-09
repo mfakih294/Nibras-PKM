@@ -80,7 +80,7 @@
                     </g:if>
 
 
-                    <g:if test="${i.isDirectory() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1}">
+                    <g:if test="${i.isDirectory() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1 && !i.name?.startsWith('.')}">
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFolder"
                                           style="display: inline; "
@@ -109,7 +109,7 @@
                         <br/>
                     </g:if>
 
-                    <g:if test="${i.isDirectory() && !i.name?.contains('--') && i.name?.length() > 1}">
+                    <g:if test="${i.isDirectory() && !i.name?.contains('--') && i.name?.length() > 1  && !i.name?.startsWith('.')}">
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFolder"
                                           style="display: inline; "
