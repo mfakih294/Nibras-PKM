@@ -3,7 +3,7 @@
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
      style="">
     %{--<g:render template="/layouts/north" model="[]"/>--}%
-%{--    <g:render template="/appKanban/north"/>--}%
+    %{--    <g:render template="/appKanban/north"/>--}%
 </div>
 
 %{--<div class="ui-layout-west westRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">--}%
@@ -15,13 +15,13 @@
 
 <div class="ui-layout-south footerRegion"
      style="font-size: 11px; margin-top: 9px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
-%{--    <g:render template="/appMain/south"/>--}%
+    %{--    <g:render template="/appMain/south"/>--}%
 </div>
 
 
 <div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
     %{--<div class="ui-layout-content ui-widget-content">--}%
-%{--    <g:render template="/appKanban/east"/>--}%
+    %{--    <g:render template="/appKanban/east"/>--}%
 </div>
 
 
@@ -53,168 +53,176 @@
     <div id="inner1" class="common" style="">
 
         <div id="centralArea" class="common kanbanTables">
-            %{--<h3>T / context</h3>--}%
-            <g:if test="${1==2}">
-            <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
-                <thead>
-                <th>T*</th>
-                <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
-                        var="d">
-                    <th>@<b>${d.code}</b></th>
-                </g:each>
-                </thead>
-                <tr>
-                   <td style="background: darkgreen"></td>
+        %{--<h3>T / context</h3>--}%
+            <g:if test="${1 == 2}">
+                <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
+                    <thead>
+                    <th>T*</th>
                     <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
                             var="d">
-                        <td id="kanban">
-                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.context = ? order by orderInCourse asc',
-                                    [d])}"
-                                    var="p">
-                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                            </g:each>
-                        </td>
+                        <th>@<b>${d.code}</b></th>
                     </g:each>
-                </tr>
-            </table>
-
-        </g:if>
-
-<g:if test="${1==2}">
-            <h2>T* G* C* / D*</h2>
-            <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
-
-                <thead>
-                <th>\ D*</th>
-                <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                    <th>d<b>${d.code}</b></th>
-                </g:each>
-                <th>d-</th>
-                </thead>
-
-           %{--     <tr>
-                    <td style="background: #d4edda">R*</td>
-                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td>
-                            <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.type.code = ? and p.course.department = ? order by orderInCourse asc',
-                                    ["ebk", d])}"
-                                    var="p">
-                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                            </g:each>
-                        </td>
-                    </g:each>
-                </tr>--}%
-                <tr>
-                    <td style="background: #fff3cd">T*</td>
-                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td >
-                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department = ?',
-                                    [d])}"
-                                    var="p">
-                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                            </g:each>
-                        </td>
-                    </g:each>
-                <td >
-                    <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department is null',
-                            [])}"
-                            var="p">
-                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                    </g:each>
-                </td>
-                </tr>
-
-            <tr>
-                    <td style="background: #fff3cd">G*</td>
-                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td >
-                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ?',
-                                    [d])}"
-                                    var="p">
-                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                            </g:each>
-                        </td>
-                    </g:each>
-                <td>
-                    <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department is null',
-                            [])}"
-                            var="p">
-                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                    </g:each>
-                </td>
-                </tr>
-                <tr>
-                    <td style="background: #d3e0d3">C*</td>
-                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-                        <td >
-                            <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? and p.priority = 4 order by orderNumber asc',
-                                    [d])}"
-                                    var="p">
-                                <g:render template="/gTemplates/box" model="[record: p]"></g:render>
-                            </g:each>
-
-                        </td>
-
-                    </g:each>
-                    <td>-</td>
-                </tr>
-
-            </table>
-</g:if>
-
-            <div style="column-count: 4; background: #f9fbf4; padding: 10px;">
-
-
-                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
-
-                        <h2 style="text-align: center">${d.code}</h2>
-
-                        <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? order by orderNumber asc',
-                                [d])}"
-                                var="p">
-                            <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </thead>
+                    <tr>
+                        <td style="background: darkgreen"></td>
+                        <g:each in="${mcs.Task.executeQuery('select t.context from Task t where t.bookmarked = 1 group by t.context  order by t.context.code')}"
+                                var="d">
+                            <td id="kanban">
+                                <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.context = ? order by orderInCourse asc',
+                                        [d])}"
+                                        var="p">
+                                    <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                                </g:each>
+                            </td>
                         </g:each>
+                    </tr>
+                </table>
 
-                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department = ?',
-                                    [d])}"
+            </g:if>
+
+            <g:if test="${1 == 2}">
+                <h2>T* G* C* / D*</h2>
+                <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
+
+                    <thead>
+                    <th>\ D*</th>
+                    <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                        <th>d<b>${d.code}</b></th>
+                    </g:each>
+                    <th>d-</th>
+                    </thead>
+
+                    %{--     <tr>
+                             <td style="background: #d4edda">R*</td>
+                             <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                                 <td>
+                                     <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.type.code = ? and p.course.department = ? order by orderInCourse asc',
+                                             ["ebk", d])}"
+                                             var="p">
+                                         <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                                     </g:each>
+                                 </td>
+                             </g:each>
+                         </tr>--}%
+                    <tr>
+                        <td style="background: #fff3cd">T*</td>
+                        <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                            <td>
+                                <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department = ?',
+                                        [d])}"
+                                        var="p">
+                                    <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                                </g:each>
+                            </td>
+                        </g:each>
+                        <td>
+                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department is null',
+                                    [])}"
                                     var="p">
                                 <g:render template="/gTemplates/box" model="[record: p]"></g:render>
                             </g:each>
+                        </td>
+                    </tr>
 
-                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ?',
-                                    [d])}"
+                    <tr>
+                        <td style="background: #fff3cd">G*</td>
+                        <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                            <td>
+                                <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ?',
+                                        [d])}"
+                                        var="p">
+                                    <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                                </g:each>
+                            </td>
+                        </g:each>
+                        <td>
+                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department is null',
+                                    [])}"
                                     var="p">
                                 <g:render template="/gTemplates/box" model="[record: p]"></g:render>
                             </g:each>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background: #d3e0d3">C*</td>
+                        <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
+                            <td>
+                                <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? and p.priority = 4 order by orderNumber asc',
+                                        [d])}"
+                                        var="p">
+                                    <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                                </g:each>
 
-            </g:each>
+                            </td>
 
+                        </g:each>
+                        <td>-</td>
+                    </tr>
+
+                </table>
+            </g:if>
+
+            <div style="direction: rtl; column-count: ${OperationController.getPath('kanban.columns.count') ?: 5}; background: #f9fbf4; padding: 10px;">
+                <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'orderNumber'])}" var="d">
+
+                    <h2 style="text-align: right; font-size:larger;">${d.code}</h2>
+
+                    <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.department = ? order by orderNumber asc',
+                            [d])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+
+                    <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.department = ?',
+                            [d])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+
+                    <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.department = ?',
+                            [d])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+                    <g:each in="${mcs.Book.executeQuery('from Planner p where p.bookmarked = 1 and p.department = ?',
+                            [d])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+                    <g:each in="${mcs.Book.executeQuery('from Journal p where p.bookmarked = 1 and p.department = ?',
+                            [d])}"
+                            var="p">
+                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>
+                    </g:each>
+
+
+                </g:each>
 
             </div>
 
-            </div>
-
-
-            %{--<span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
-            %{--title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
-            %{--<h5>Last plan</h5>--}%
-            %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
-
-            %{--</span>--}%
-
-            %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
-            %{--<br/>--}%
-            %{--<br/>--}%
-            %{--Repository folder not found. Please choose an existing folder:--}%
-            %{--<br/>--}%
-            %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
-            %{--</g:if>--}%
-
-
-            %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
-            %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
-            %{--</g:if>--}%
         </div>
+
+
+        %{--<span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
+        %{--title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
+        %{--<h5>Last plan</h5>--}%
+        %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
+
+        %{--</span>--}%
+
+        %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
+        %{--<br/>--}%
+        %{--<br/>--}%
+        %{--Repository folder not found. Please choose an existing folder:--}%
+        %{--<br/>--}%
+        %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
+        %{--</g:if>--}%
+
+
+        %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
+        %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
+        %{--</g:if>--}%
+    </div>
 
 
 
@@ -380,9 +388,9 @@
 
     });
 
-//    setTimeout(location.reload(), 300000);  // executed once
-//    setTimeout(function() {
-//        window.location.href = window.location;
-//    }, 300000);
+    //    setTimeout(location.reload(), 300000);  // executed once
+    //    setTimeout(function() {
+    //        window.location.href = window.location;
+    //    }, 300000);
 
 </script>

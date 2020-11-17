@@ -150,8 +150,8 @@ body {
     /*font: 12px/20px Verdana, Arial, Tahoma, sans-serif;*/
 
     /*todo*/
-    padding-left: 5% !important;
-    padding-right: 5% !important;
+    padding-left: 2% !important;
+    padding-right: 2% !important;
 
     /*'Lucida Sans Unicode';*/
     /*overflow: hidden;*/
@@ -434,7 +434,8 @@ td, th {
 }
 
 th {
-    font: 0.9 Lato, tahoma, verdana, arial, helvetica, sans-serif !important;
+    font-family: Lato, tahoma, verdana, arial, helvetica, sans-serif !important;
+    font-size: 0.9em !important;
     /*font-weight:normal !important;*/
     background: #fff url(../images/skin/shadow.jpg);
     color: #666;
@@ -1084,7 +1085,7 @@ ul.ui-tabs-nav {
 
 .record-summary {
     /*width: auto;*/
-    font-family: Lato !important, tahoma;
+    font-family: Lato, tahoma !important;
     padding-left: 0px;
     padding-right: 2px;
     /*font-size: 11px;*/
@@ -1781,9 +1782,9 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .hiddenActions {
-    /*display: none;*/
+    display: none;
     /*padding: 0px;*/
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 .actionsButtons {
@@ -1794,7 +1795,7 @@ ul.ui-autocomplete.ui-menu {
 .actionsButtons a {
     color: #0b202f !important;
     font-style: normal !important;
-    font-size: 0.95em !important;
+    font-size: 0.85em !important;
     text-decoration: none !important;
     border: 0.5px solid darkgray !important;
     border-radius: 3px !important;
@@ -1804,7 +1805,7 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .actionsButtonsStyle a {
-    font-size: 0.95em !important;
+    font-size: 0.85em !important;
     color: #0b1336 !important;
     font-style: normal !important;
     text-decoration: underline !important;

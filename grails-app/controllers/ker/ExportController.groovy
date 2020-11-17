@@ -261,7 +261,7 @@ class ExportController {
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=J',
-                            allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
+                            allDay         : (it.level != 'm' || it.startDate.hours > 50 ? true : false)])
             }
       Task.executeQuery("from Planner t where t.startDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
@@ -482,7 +482,6 @@ def combineCourseWritings() {
         def path = OperationController.getPath('editBox.path') + "/out-W-" + (c.id) + '.md'
 
         def file = new File(path)
-
 
         def text = """ """
             text += "\n\n# " + c.summary + '\n\n'

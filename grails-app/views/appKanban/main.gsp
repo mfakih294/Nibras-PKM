@@ -27,7 +27,9 @@
     %{--<b style="color: white">--}%
 
 
-    <title style="direction: ltr; text-align: left;">${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' /Kanban': 'Nibras PKM /Kanban'}
+    <title style="direction: ltr; text-align: left;">
+        ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' Kanban': 'Nibras Kanban'}
+
     %{--<g:meta name="app.version"/>--}%
 
 
@@ -83,9 +85,28 @@
 
    %{--<r:layoutResources/>--}%
 
-    <script type="text/javascript">
+    <script type="application/javascript">
 
-        //    $.address.state('${request.contextPath}/')
+        setInterval(function() {
+            jQuery.ajax({
+                type: 'GET',
+                url: '${request.contextPath}/page/heartbeat',
+                dataType: 'html',
+                success: function(html, textStatus) {
+                    if (html == 'ok') {
+                        window.location.href = window.location;
+                        jQuery('#logArea2').html("<span style='background: darkgray; color: darkgreen'>Online</span>");
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    jQuery('#logArea2').html("<span style='background: darkgray; color: darkred'>Offline</span>");
+//                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
+                }
+            });
+        }, 60000);
+
+
+    //    $.address.state('${request.contextPath}/')
         $.address.externalChange(function (event) {
             // do something depending on the event.value property, e.g.
             // $('#content').load(event.value + '.xml');
@@ -150,38 +171,6 @@
 
          //   }
 
-
-            myLayout = $('body').layout({
-                west__size: 360,
-                east__size: 360,
-                // east__initClosed: true,
-                east__togglerContent_closed: '<<',
-                // RESIZE Accordion widget when panes resize
-                west__onresize: $.layout.callbacks.resizePaneAccordions,
-                east__onresize: $.layout.callbacks.resizePaneAccordions,
-                onresize: $.layout.callbacks.resizePaneAccordions,
-                north__closable: true,
-                south__closable: true,
-                north__spacing_closed: 5		// big resizer-bar when open (zero height)
-                , north__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
-                , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
-                , north__spacing_open: 5		// no resizer-bar when open (zero height)
-                , south__spacing_open: 5		// no resizer-bar when open (zero height)
-                , south__spacing_closed: 5		// big resizer-bar when open (zero height)
-
-                , east__spacing_open: 5		// no resizer-bar when open (zero height)
-                , east__spacing_closed: 25		// big resizer-bar when open (zero height)
-                , west__spacing_open: 0		// no resizer-bar when open (zero height)
-                , west__spacing_closed: 15		// big resizer-bar when open (zero height)
-            , north__initClosed: true
-            , south__initClosed: true
-            , west__initClosed: true
-                , east__initClosed: true
-                , west__slideTrigger_open: 'mouseover'
-                , east__slideTrigger_open: 'mouseover'
-
-
-            });
 
 
             $.fn.editable.defaults.mode = 'inline';

@@ -1,4 +1,4 @@
-<%@ page import="java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
+<%@ page import="ker.OperationController; java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
 
 
 <html lang="ar">
@@ -10,8 +10,11 @@
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>Dashboard</title>
+    <title>
+        ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' Dashboard': 'Nibras Dashboard'}
+        </title>
 
+    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'calendar.ico')}" type="image/ico"/>
     <!-- The javascript and css are managed by sprockets. The files can be found in the /assets folder-->
 
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
@@ -239,8 +242,8 @@
 
 <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
                         <b>
-                            <b>${((java.time.chrono.HijrahDate.now().plus(-2, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.forLanguageTag('ar')))}</b>:
-%{--                            ${new Date().format("E dd")}:--}%
+                            <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.forLanguageTag('ar')))}</b>:
+                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;
                         </b>
                             <g:each in="${prayersText.split('\n')}" var='l'>
                                 <span >

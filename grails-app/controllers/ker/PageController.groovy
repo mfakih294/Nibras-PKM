@@ -407,7 +407,7 @@ class PageController {
 
      double latitude = 33.8933182;
      double longitude = 35.5015717;
-     double timezone = 3;
+     double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 2 ;
      // Test Prayer times here
      PrayTime prayers = new newpackage.PrayTime();
 

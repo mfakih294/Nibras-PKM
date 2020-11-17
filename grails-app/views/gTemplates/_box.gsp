@@ -10,9 +10,9 @@
 
             %{--<!--Id: ${plannerInstance.id} -->--}%
 
-            <tr style="${!'GTP'.contains(record.entityCode()) ? 'background: #f1f1eb; border:0.5px solid #cccccc;' : record.status?.style} padding: 0px;"
-                class="${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}">
-
+            <tr style=" padding: 0px;"
+                class="">
+%{--            ${'GTP'.contains(record.entityCode()) ? 'workStatus-' + record.status?.code : ''}--}%
                 <td style="font-size: 0.8em; padding: 3px; line-height: 1.1em;"
                     class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
 
@@ -20,7 +20,7 @@
                         <g:remoteLink controller="generics" action="showSummary"
                                       update="underBox${record.entityCode()}${record.id}"
                                       params="${[id: record.id, entityCode: record.entityCode(), mobileView: mobileView]}"
-                                      style="color: darkgray;">
+                                      style="color: black; font-weight: bold;">
                             ${record.entityCode()}
                         </g:remoteLink>
                     </div>
@@ -32,7 +32,7 @@
                     </g:if>
 
 
-                    <g:if test="${record.class.declaredFields.name.contains('priority')}">
+                    <g:if test="${ 1 == 2 && record.class.declaredFields.name.contains('priority')}">
                         <span style="font-size: 0.8em; color: darkgray">
                             <g:if test="${record.priority == 3}">
                                 &gt;
@@ -49,7 +49,7 @@
                         </span>
                     </g:if>
 
-                    <g:if test="${record.class.declaredFields.name.contains('startDate') && record.startDate}">
+                    <g:if test="${1 == 2 && record.class.declaredFields.name.contains('startDate') && record.startDate}">
                         <span title="s${record.startDate?.format(OperationController.getPath('datetime.format'))} e${record.endDate?.format(OperationController.getPath('datetime.format'))}">
 
 
@@ -96,27 +96,36 @@
                         <div class="text${record.language}" style="display: inline; width: 100%">
                     </g:if>
 
-                    <span style="color: #003399; direction: ltr; text-align: left;">
+                    <span style="${!'GTP'.contains(record.entityCode()) ? 'background: #f1f1eb; border:0.5px solid #cccccc;' : record.status?.style}; color: #003399; direction: ltr; text-align: left;">
 
                         <g:if test="${'G'.contains(record.entityCode())}">
-                            <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
+                            <i style="font-size: small">${record?.type?.code}</i>
+%{--                                ${record.department?.code}--}%
+%{--                            </i>&nbsp;--}%
                         </g:if>
                         <g:if test="${'T'.contains(record.entityCode())}">
-                            <i style="font-size: small; ">
+                            <i style="font-size: small; text-decoration: underline ">
                                 %{--@${record?.context?.code} --}%
-                                c${record?.course?.code} d${record.department?.code}</i>&nbsp;
-                            ?${record.status?.code}
+                                ${record?.course?.code}
+%{--                                d${record.department?.code}--}%
+                            </i>&nbsp;
+%{--                            ?${record.status?.code}--}%
                             <sup>${record.plannedDuration ? record.plannedDuration + "''" : ''}</sup>
                         </g:if>
                         <g:if test="${'P'.contains(record.entityCode())}">
-                            <i style="font-size: small">${record?.type?.code} ${record.status?.code}</i>&nbsp;
+                            <i style="font-size: small">${record?.type?.code}</i>
+%{--                                ${record.status?.code}--}%
+%{--                            </i>&nbsp;--}%
                         </g:if>
                         <g:if test="${'J'.contains(record.entityCode())}">
-                            <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
+                            <i style="font-size: small">${record?.type?.code}</i>
+%{--                                ${record.department?.code}--}%
+%{--                            </i>&nbsp;--}%
                         </g:if>
                         <g:if test="${'W'.contains(record.entityCode())}">
-
-                            <i style="font-size: small">${record?.type?.code} ${record.department?.code}</i>&nbsp;
+                            <i style="font-size: small">${record?.type?.code}
+%{--                                ${record.department?.code}--}%
+                            </i>&nbsp;
                         </g:if>
                         <g:if test="${'E'.contains(record.entityCode())}">
                             <i style="font-size: small">
@@ -126,8 +135,9 @@
                                 (${record?.book?.publisher},
                                 ${record?.book?.publicationDate})
                             </i>&nbsp;
-
-                            <i style="font-size: small">${record.class.declaredFields.name.contains('type') ? record?.type?.code : ''} ${record.class.declaredFields.name.contains('department') ? record.department?.code : ''}</i>&nbsp;
+                            <i style="font-size: small">${record.class.declaredFields.name.contains('type') ? record?.type?.code : ''}
+%{--                                ${record.class.declaredFields.name.contains('department') ? record.department?.code : ''}--}%
+                            </i>&nbsp;
                         </g:if>
                     </span>
 
@@ -135,19 +145,20 @@
 
                     <g:remoteLink controller="generics" action="showSummary"
                                   update="underBox${record.entityCode()}${record.id}"
-                                  style="font-family: tahoma; font-size: 0.9em;"
+                                  style="font-family: tahoma; font-size: 1.2em; line-height: 1.3"
                                   class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};"
                                   params="${[id: record.id, entityCode: record.entityCode(), mobileView: mobileView]}">
 
-                        <span style=""
+                        <span style="font-size: 0.95em !important;"
                               class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')};">
 
                             <g:if test="${'P'.contains(record.entityCode()) && record.task}">
-                                <br/>  <span title="${record?.summary}">${record.task?.summary}</span>
+                                >  <span title="${record?.summary}">${record.task?.summary}</span>
                             </g:if>
                             <g:elseif test="${'N'.contains(record.entityCode())}">
                                 ${record?.orderInWriting ? '#' + record?.orderInWriting + ' ' : ''}
-                              <br/>  ${record?.summary}
+
+                               ${record?.summary}
 
 
                                 <g:if test="${record.fileName}">
@@ -160,27 +171,19 @@
 
                             </g:elseif>
                             <g:elseif test="${'R'.contains(record.entityCode())}">
-                                <br/>
                                 ${record?.title ?: record?.legacyTitle}
                                 <i>${record?.author}</i>
 
                             </g:elseif>
 
                             <g:elseif test="${'E'.contains(record.entityCode())}">
-                                <br/>
                                 <span style="color: gray">${record?.book?.title ?: record?.book?.legacyTitle}</span>
                                 <u>${record.chapters}</u>
                                 <i>${record?.summary}</i>
                             </g:elseif>
-
                             <g:else>
-                                <br/>
                                 ${record?.summary}
                             </g:else>
-
-
-
-
 
                         %{--<g:if test="${'C'.contains(record.entityCode())}">--}%
                         %{--<b>${record.code}--}%
@@ -191,19 +194,17 @@
                     %{--<br/>--}%
                     </g:remoteLink>
 
-
-
-
                     %{--<div style="line-height: 20px; dir: auto !important;">--}%
                     %{-- ${record.description?.encodeAsHTML()?.replaceAll('\n', '<br/>')} --}%
                     %{--</div>--}%
+
                     <g:if test="${record.class.declaredFields.name.contains('language')}">
                         </div>
                     </g:if>
-
                 </td>
             </tr>
-            <g:if test="${expanded}">
+
+            <g:if test="${1 == 2 && expanded}">
             <tr style="background: #fff; border-left: 0px; border-right: 0px; border-bottom: 1px #ccc !important;" >
                 <td class="text${record.language}" style="padding: 3px; border: 1px darkgray dashed;">
 
@@ -248,10 +249,8 @@
     </g:if>
 </div>
 
-
-<br/>
-
-<p style="page-break-before: always"></p>
+%{--<br/>--}%
+%{--<p style="page-break-before: always"></p>--}%
 
 <div id="underBox${record.entityCode()}${record.id}"></div>
 
