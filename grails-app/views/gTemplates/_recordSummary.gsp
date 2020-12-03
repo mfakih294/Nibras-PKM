@@ -67,16 +67,19 @@
                     <table border="0">
                         <tr>
 
-                            <td style="padding-right: 3px;">
+                            <td style="padding-right: 3px; line-height: 20px;">
                                 <g:remoteLink controller="generics" action="showSummary"
                                               params="${[id: record.id, entityCode: entityCode]}"
                                               update="${entityCode}Record${record.id}"
-                                              style="margin-bottom: 5px;padding-bottom: 2px; display: inline"
+                                              style="margin-left: 3px;padding-bottom: 2px; display: inline"
                                               title="ID ${record.id}. Click to refresh">
 
                                     <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
-                                          style="padding: 3px; margin-right: 3px; color: white; display: inline;">
-                                        <span style="color: white;">${entityCode}</span><b></b>
+                                          style="padding: 2px; margin-right: 2px; color: white; display: inline;">
+                                        <span style="color: white; padding: 4px;"><b>${entityCode}</b></span>
+                                    </span>
+                                    <span style="font-size: x-small">
+                                        ${new DecimalFormat("#,###").format(record.id)}
                                     </span>
                                 </g:remoteLink>
 
@@ -97,7 +100,7 @@
 
                     <td class="record-summary text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
-                        style="width: 98%; font-size: 0.95em; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
+                        style="width: 98%; font-size: 0.95em; line-height: 20px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
 
                     %{--<g:remoteLink controller="generics" action="showDetails"--}%
                     %{--params="${[id: record.id, entityCode: entityCode]}"--}%
@@ -194,14 +197,20 @@
 
 
                             <g:if test="${'JPT'.contains(entityCode) && record?.startDate}">
-                                <u title="${record?.startDate?.format('HH:mm')} - ${record?.endDate?.format('HH:mm')}">
-                                &ang;${record?.startDate?.format('dd.MM.yyyy')}</u>
+
+                                <span style="margin: 2px; padding: 2px; border-radius: 3px; border: 1px solid darkgray;"
+                                title="${record?.startDate?.format('HH:mm')} - ${record?.endDate?.format('HH:mm')}">
+%{--                                &ang;--}%
+                                s ${record?.startDate?.format('dd.MM.yyyy')}
+                                </span>
                             %{--(<i><prettytime:display--}%
                             %{--date="${record?.startDate}"></prettytime:display></i>)--}%
                             </g:if>
 <g:if test="${'R'.contains(entityCode) && record?.publishedOn}">
-                                <u>
-                                &ang;${record?.publishedOn?.format('dd.MM.yyyy')}</u>
+                                    <span style="margin: 2px; padding: 2px; border-radius: 3px; border: 1px solid darkgray;">
+%{--                                &ang;--}%
+                                p ${record?.publishedOn?.format('dd.MM.yyyy')}
+</span>
                             %{--(<i><prettytime:display--}%
                             %{--date="${record?.startDate}"></prettytime:display></i>)--}%
                             </g:if>
@@ -254,7 +263,10 @@
                         <span class="${ 'T'.contains(entityCode) && record.endDate < new Date() - 1 && record.completedOn == null ? 'overDueDate' : ''}"
                         title="e${record.endDate?.format(OperationController.getPath('datetime.format'))}">
                         %{--<pkm:weekDate date="${record?.endDate}"/>--}%
-                            &gt;${record?.endDate?.format('dd.MM.yyyy')}
+                            <span style="margin: 2px; padding: 2px; border-radius: 3px; border: 1px solid darkgray;">
+%{--                            &gt;--}%
+                            e ${record?.endDate?.format('dd.MM.yyyy')}
+                        </span>
                         </span>
                         %{--<span title="s${record.endDate?.format(OperationController.getPath('datetime.format'))}">--}%
                         %{--<pkm:weekDate date="${record?.endDate}"/>--}%
@@ -373,6 +385,22 @@
                         %{--<span style="color: #004499; font-family: monospace">${record.slug}</span>--}%
                         %{--</g:if>--}%
 
+                            <span style="float: left">
+<g:if test="${record.class.declaredFields.name.contains('course') && record.course}">
+                        <span style="margin: 2px; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: white; font-weight: bold; background: #1e7e34; font-family: monospace">
+                            ${record.course?.code}</span>
+                        </g:if>
+<g:if test="${record.class.declaredFields.name.contains('type') && record.type}">
+                        <span style="margin: 2px; padding: 2px; border-radius: 0px; border: 1px solid darkgray; color: white; font-weight: bold; background: #695b7e; font-family: monospace">${record.type?.code}</span>
+                        </g:if>
+<g:if test="${record.class.declaredFields.name.contains('status') && record.status}">
+                        <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 1px solid darkgray; color: white; font-weight: bold; background: #7e5e3f; font-size: smaller">${record.status?.code}</span>
+                        </g:if>
+<g:if test="${record.class.declaredFields.name.contains('context') && record.context}">
+                        <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 1px solid darkolivegreen; color: white; font-style: italic; background: darkolivegreen; font-size: smaller">${record.context?.code}</span>
+                        </g:if>
+
+                            </span>
 
                             <g:if test="${record.class.declaredFields.name.contains('entity')}">
                                 <span title="${record.entity}">
@@ -1529,7 +1557,7 @@
 
                             </g:if>
 
-                        <a class="fg-button ui-widget ui-state-default ui-corner-all"
+                        <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
                            onclick="jQuery('#${entityCode}Record${record.id}').html('');" style="color: darkgray; margin-right: 4px;">x</a>
 
                         <g:checkBox name="select-${record.id}-${entityCode}"

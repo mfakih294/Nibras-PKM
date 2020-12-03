@@ -48,7 +48,7 @@ html {
 
 .ID-bkg {
     background: #808080;
-    padding: 4px;
+    padding: 2px;
     margin: 2px;
 }
 
@@ -1029,7 +1029,7 @@ ul.ui-tabs-nav {
 }
 
 .record-id {
-    width: 65px !important;
+    width: 120px !important;
     font-size: 12px;
     color: #fff;
     text-align: left;

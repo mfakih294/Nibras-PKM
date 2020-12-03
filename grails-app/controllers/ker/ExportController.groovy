@@ -136,8 +136,8 @@ class ExportController {
                     [Date.parse('yyyy-MM-dd', params.start) - 20, Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
                 def title = '' + it.type?.code + ' ' +
-                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' ' : '') +
-                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' ' : '') + //it.goal?.code + ' '
+                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' / ' : '') +
+                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' / ' : '') + //it.goal?.code + ' '
                         (it.course ? '(' + it.course?.code + ') ' : '') +
                         (it.summary ? it.summary + '  ' : '')
 //                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
@@ -152,7 +152,7 @@ class ExportController {
                             textColor      : it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=' + savedSearch.entity,
-                            allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
+                            allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
             }
 
         }
@@ -244,9 +244,9 @@ class ExportController {
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
-                def title =  '' + (it.type?.code ? '#' + it.type?.code : '') + '' +
-                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' ' : '') +
-                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' ' : '') + //it.goal?.code + ' '
+                def title =  '' + (it.type?.code ? '#' + it.type?.code + ' ' : '') + '' +
+                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' / ' : '') +
+                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' / ' : '') + //it.goal?.code + ' '
                         (it.course ? '(' + it.course?.code + ') ' : '') +
                         (it.summary ? it.summary + '  ' : '')
 //                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
@@ -261,15 +261,15 @@ class ExportController {
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=J',
-                            allDay         : (it.level != 'm' || it.startDate.hours > 50 ? true : false)])
+                            allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
             }
       Task.executeQuery("from Planner t where t.startDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
                 def title = '' + (it.type?.code ? '#' + it.type?.code : '') + ' ' +
-                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' ' : '') +
-                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' ' : '') + //it.goal?.code + ' '
+                    (it.task ? 'T-' + StringUtils.abbreviate(it.task?.summary, 60) + ' / ' : '') +
+                    (it.goal ? 'G-' + StringUtils.abbreviate(it.goal?.summary, 80) + ' / ' : '') + //it.goal?.code + ' '
                         (it.course ? '(' + it.course?.code + ') ' : '') +
                         (it.summary ? it.summary + '  ' : '')
 //                    (it.description ? StringUtils.abbreviate(it.description, 40) : ' ')
@@ -284,7 +284,7 @@ class ExportController {
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=P',
-                            allDay         : (it.level != 'm' || it.startDate.hours < 6 ? true : false)])
+                            allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
             }
 
             Task.executeQuery("from Task t where t.endDate between :start and :end",
@@ -305,7 +305,7 @@ class ExportController {
                             borderColor    : 'MediumSeaGreen',
                             textColor      : 'white',//it.type?.style ?: '#515150',
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=T',
-                            allDay         : true   ])
+                            allDay         : false   ])
             }
 
 
@@ -328,7 +328,7 @@ class ExportController {
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=T',
-                            allDay         : true   ])
+                            allDay         : false   ])
             }
 
 
@@ -351,7 +351,7 @@ class ExportController {
                             borderColor    : 'DarkKhaki',
                             textColor      : 'white',//it.type?.style ?: '#515150',
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=R',
-                            allDay         : true   ])
+                            allDay         : false   ])
             }
 /*
         def cc = 1000

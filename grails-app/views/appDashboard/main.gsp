@@ -50,7 +50,7 @@
 
 
         .content {
-            padding: 5px;
+            padding: 3px;
             direction: rtl !important;
             text-align: right !important;
             vertical-align: top !important;
@@ -122,19 +122,19 @@
     }
 
     [data-row="5"] {
-        top: 1485px;
+        top: 1450px;
     }
 
     [data-row="4"] {
-        top: 620px;
+        top: 560px;
     }
 
     [data-row="3"] {
-        top: 360px;
+        top: 310px;
     }
 
     [data-row="2"] {
-        top: 80px;
+        top: 60px;
     }
 
     [data-row="1"] {
@@ -142,15 +142,15 @@
     }
 
     [data-sizey="1"] {
-        height: 250px;
+        height: 240px;
     }
 
     [data-sizey="2"] {
-        height: 600px;
+        height: 580px;
     }
 
     [data-sizey="3"] {
-        height: 700px;
+        height: 680px;
     }
 
     [data-sizey="4"] {
@@ -238,19 +238,20 @@
 
                 </b>
 
-                    <div class="content" style="font-size: 0.9em; text-align: center;">
+                    <div class="content" style="font-size: 0.7em; text-align: center;">
 
 <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
                         <b>
-                            <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.forLanguageTag('ar')))}</b>:
-                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;
+                            <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:
+%{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
                         </b>
-                            <g:each in="${prayersText.split('\n')}" var='l'>
+    &nbsp;
+    <g:each in="${prayersText.split('\n')}" var='l'>
                                 <span >
                                         ${raw(l)}
                                 </span>
                             </g:each>
-<br/>
+&nbsp;
                         <g:set var="aya"
                                value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>
                         {

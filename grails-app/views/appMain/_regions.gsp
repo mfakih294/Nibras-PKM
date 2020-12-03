@@ -90,9 +90,14 @@
                               value="N"/>
                     <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
-                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 77% !important;"
+                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 60% !important;"
                                  placeholder="Summary * "
                                  class=""/>
+
+                    <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
+                              optionKey="id" class="chosen"
+                              />
+
 
                     <g:submitButton name="save" value="Add"
                                     style="text-align: center; padding-left: 8px; padding-right: 8px;"
@@ -342,8 +347,11 @@
 
 <script type="text/javascript">
     jQuery(".chosen").chosen({allow_single_deselect: true, no_results_text: "None found"});
+
     jQuery("#chosenTags").chosen({allow_single_deselect: true, no_results_text: "None found"});
+
     jQuery("#chosenTagsArt").chosen({allow_single_deselect: true, no_results_text: "None found"});
+
 
     //    jQuery("#addXcdFormNgs").relatedSelects({
     //        onChangeLoad: '${request.contextPath}/generics/fetchCoursesForDepartment',

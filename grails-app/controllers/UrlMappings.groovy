@@ -8,12 +8,16 @@ class UrlMappings {
         "/m" (controller: 'page', action: 'mobile')
         "/media" (controller: 'page', action: 'mobile')
 
+
         "/cal" (controller: 'page', action: 'appCalendar')
+
+        "/kanban" (controller: 'page', action: 'appKanban')
+        "/daftar" (controller: 'page', action: 'appDaftar')
+
         "/dash" (controller: 'page', action: 'appDashboard')
         "/d" (controller: 'page', action: 'appDashboard')
 
         "/light" (controller: 'page', action: 'appLight')
-        "/q" (controller: 'page', action: 'appLight')
         "/l" (controller: 'page', action: 'appLight')
 
         "/slides"(controller: 'page', action: 'slides')

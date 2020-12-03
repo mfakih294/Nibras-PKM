@@ -69,7 +69,7 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,dayGridWeek,timeGridDay'
+        right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,listWeek,dayGridMonth'
       },
       views: {
         dayGridMonth: {
@@ -89,13 +89,34 @@
         , timeGridDay: {
           buttonText: 'Day',
           columnHead: true
-        }
+        },
+          dayGrid: {
+          buttonText: 'Planner',
+          columnHead: true,
+          visibleRange: function(currentDate) {
+                  // Generate a new date for manipulating in the next step
+                  var startDate = new Date(currentDate.valueOf());
+                  var endDate = new Date(currentDate.valueOf());
+
+                  // Adjust the start & end dates, respectively
+                  startDate.setDate(startDate.getDate() - 1); // One day in the past
+                  endDate.setDate(endDate.getDate() + 3); // Three days into the future
+
+                  return { start: startDate, end: endDate }
+              }
+          },
+          listWeek: {
+          buttonText: 'Week Column',
+          columnHead: true
+          }
 //        ,
 //        basicDay: {
 //          buttonText: 'basicDay',
 //          columnHead: false
       },
-      defaultView: 'dayGridWeek',
+
+
+      defaultView: 'dayGrid',
       allDaySlot: true,
       nowIndicator: true,
       timeGridEventMinHeight: true,
@@ -123,9 +144,9 @@
         // day:''  // Monday 19.07
       // },
       // lazyFetching: true,
-       firstHour: '00:00',
+       firstHour: '05:00',
       // minTime: 5,
-      minTime: '00:00',
+      minTime: '05:00',
       slotDuration: '00:30',
       // showNonCurrentDates: false,
       // dayCount: 31,
@@ -249,8 +270,8 @@
   });
 
 
-
 /*
+
   setInterval(function() {
       jQuery.ajax({
           type: 'GET',
@@ -267,8 +288,9 @@
 //                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
           }
       });
-  }, 600000);
-*/
+  }, 60000);
+  */
+
 
   </script>
 <style>
@@ -345,7 +367,7 @@
               <tr>
                   <td style="text-align: left; margin: 3px; direction: ltr">Type:
                       <br/>
-                      <g:select name="type" from="${['J', 'P']}" id="typeField" value="J"/>
+                      <g:select name="type" from="${['J', 'P']}" id="typeField" value="${session['lastCalendarEntryType'] ?: 'P'}"/>
                   </td>
                   <td style="text-align: left; margin: 3px; direction: ltr"> Start time:
                       <br/><g:textField name="start" value="" id="start" style="width: 120px"></g:textField></td>
@@ -356,22 +378,37 @@
               </tr>
           </table>
 
+        <br/>
+        Goal *:
+        <br/>
+        <g:select name="goal" from="${mcs.Goal.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="goal"
+                  optionKey="id" optionValue="summary"
+            style="width: 99%; direction: rtl; text-align: right;"
+                  noSelection="${['null': '']}" value=""/>
 
-
+        <br/>
+        Task *:
+        <br/>
+        <g:select name="task" from="${mcs.Task.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="task"
+                  optionKey="id" optionValue="summary"
+                  style="width: 99%; direction: rtl; text-align: right;"
+                  noSelection="${['null': '']}" value=""/>
+<br/>
         Summary or Nibras command*:
         <br/>
         <g:textField name="title" value="" id="title"
-                     style=" direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 90% !important;"
+                     style=" direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 99% !important;"
             placeholder=""
                      class="commandBarTexFieldTop"/>
                   <br/>
                 Description:
        <g:textArea name="description" value="" id="description" rows="5" columns="80"
                     placeholder=""
-                     style="width: 90% !important; height: 100px;direction: rtl; text-align: right; display: inline;  font-family: tahoma ; "
+                     style="width: 99% !important; height: 100px;direction: rtl; text-align: right; display: inline;  font-family: tahoma ; "
                      class="commandBarTexFieldTop"/>
                   <br/>
-        <g:submitButton name="batch" value="Save event"
+                  <br/>
+        <g:submitButton name="batch" value="Save"
                         style="height: 20px; margin: 0px; width: 100px !important;"
                         id="quickAddXcdSubmitTop3"
                         class="fg-button ui-widget ui-state-default"/>

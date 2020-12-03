@@ -19,34 +19,34 @@ class SyncController {
 
     static entityMapping = [
             'G'            : 'mcs.Goal',
-            'Â'            : 'mcs.Goal',
+            'Ÿá'            : 'mcs.Goal',
             'T'            : 'mcs.Task',
-            '⁄'            : 'mcs.Task',
+            'ÿπ'            : 'mcs.Task',
             'P'            : 'mcs.Planner',
-            'Œ'            : 'mcs.Planner',
+            'ÿÆ'            : 'mcs.Planner',
 
             'W'            : 'mcs.Writing',
-            'ﬂ'            : 'mcs.Writing',
+            'ŸÉ'            : 'mcs.Writing',
             'N'            : 'app.IndexCard',
-            '‰'            : 'app.IndexCard',
+            'ŸÜ'            : 'app.IndexCard',
 
             'J'            : 'mcs.Journal',
-            '–'            : 'mcs.Journal',
+            'ÿ∞'            : 'mcs.Journal',
             'I'            : 'app.IndicatorData',
             'K'            : 'app.Indicator',
 
             'Q'            : 'app.Payment',
-            'œ'            : 'app.Payment',
+            'ÿØ'            : 'app.Payment',
             'L'            : 'app.PaymentCategory',
 
             'R'            : 'mcs.Book',
-            '„'            : 'mcs.Book',
+            'ŸÖ'            : 'mcs.Book',
             'C'            : 'mcs.Course',
-            'Ê'            : 'mcs.Course',
+            'Ÿà'            : 'mcs.Course',
             'D'            : 'mcs.Department',
-            'Ã'            : 'mcs.Department',
+            'ÿ¨'            : 'mcs.Department',
             'E'            : 'mcs.Excerpt',
-            '›'            : 'mcs.Excerpt',
+            'ŸÅ'            : 'mcs.Excerpt',
             'S'            : 'app.Contact',
             'Tag'          : 'app.Tag',
 
@@ -118,13 +118,15 @@ class SyncController {
 //  entry(article.title + ' (' + article.type.toString() + ' / ' + article.writingStatus.toString() + ' - ' + (article?.body ? article?.body?.count(' ') : '0') + ' words)') {
                     link = "http://phi:1440/nibras/sync/fetchFullText/${r.id}"
                     publishedDate = r.dateCreated
-                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: "cat1"])]//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
-                    author = r.entityCode() + (r.class.declaredFields.name.contains('type') && r.type ? ' / ' + r.type?.code : '') +
-                            (r.class.declaredFields.name.contains('context') ? ' @' + r.context : '')
+                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: r.course?.code])]//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
+                    author = r.entityCode() + (r.class.declaredFields.name.contains('type') && r.type ? ' #' + r.type?.code : '') +
+                            (r.class.declaredFields.name.contains('context') && r.context ? ' @' + r.context : '')
 //                    content(type: 'text/html', value: 'tst')
                     content(type: 'text/html', value: "<div style='${style}'>" +
-                            (r.description ? r.description?.replaceAll('\n', '<br/>') : '') + '<br/>' +
-                            (r.class.declaredFields.name.contains('fullText') && r.fullText ? r.fullText?.replaceAll('\n', '<br/>') : '') + '</div>')
+                            (r.description ? r.description?.replaceAll('\n', '<br/>') : '') + '<br/>---' +
+                            (r.notes ? r.notes?.replaceAll('\n', '<br/>') : '') + '<br/>---' +
+                            (r.class.declaredFields.name.contains('fullText') && r.fullText ? r.fullText?.replaceAll('\n', '<br/>') : '') +
+                            '</div>')
                     //.replaceAll('', '')
                 }
             }
@@ -644,6 +646,8 @@ class SyncController {
             n.summary = new Date().format('dd.MM.yyyy HH:mm') + ' k'
             n.description = data?.replace('::', ':\n')
 //            n.type = WritingType.findByCode('k')
+
+            n.bookmarked = true
             n.save(flush: true)
 
             json = builder.build {

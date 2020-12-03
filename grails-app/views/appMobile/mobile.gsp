@@ -121,7 +121,7 @@
 <div id="notificationArea"></div>
 %{--<r:layoutResources/>--}%
 
-<h3>Nibras Media Server</h3>
+<h3>Nibras Media</h3>
 
 
 %{--<g:render template='/reports/mobileSavedSearches' model="[mobileView: true]"/>--}%

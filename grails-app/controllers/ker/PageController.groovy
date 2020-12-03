@@ -454,9 +454,11 @@ class PageController {
     }
 
     def record() {
-        render(view: '/page/record', model: [record:
-                                                     grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+        def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+        if (record)
+        render(view: '/page/record', model: [record:record
         ])
+        else render 'Record not found.'
     }
 
     def panel() {
@@ -580,6 +582,9 @@ class PageController {
     }
 
     def mobile() {
+        render(view: '/appMobile/mobile', model: [mobileView: true])
+    }
+  def media() {
         render(view: '/appMobile/mobile', model: [mobileView: true])
     }
 

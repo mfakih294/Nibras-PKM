@@ -1766,11 +1766,14 @@ past.each(){
 
         def j
 
-        if (params.type == 'J')
+        if (params.type == 'J') {
+            session['lastCalendarEntryType'] = 'J'
             j = new mcs.Journal([startDate  : Date.parse('dd.MM.yyyy HH:mm', params.start),
                                  endDate    : Date.parse('dd.MM.yyyy HH:mm', params.end),
                                  description: params.description ?: '...'])
+        }
         else if (params.type == 'P') {//(params.title.startsWith('p ') ||  params.title.startsWith('م ')) {
+            session['lastCalendarEntryType'] = 'P'
             j = new mcs.Planner([startDate  : Date.parse('dd.MM.yyyy HH:mm', params.start),
                                  endDate    : Date.parse('dd.MM.yyyy HH:mm', params.end),
                                  description: params.description ?: '...'])
@@ -1779,6 +1782,13 @@ past.each(){
 //	j.level = 'd'
 //	else
         j.level = 'm'
+        j.bookmarked = true
+
+        if (params.task && params.task != 'null')
+            j.task = Task.get(params.task.toLong())
+
+        if (params.goal && params.goal != 'null')
+            j.goal = Goal.get(params.goal.toLong())
 
         if (params.title?.contains('--'))
             j.properties = ker.GenericsController.transformMcsNotation(params.title?.replace('--', ' -- '))['properties']

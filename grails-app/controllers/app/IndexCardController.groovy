@@ -372,7 +372,13 @@ class IndexCardController { // entity id = 16
 //                n.status = WorkStatus.findByCode('pending')
                 n.save()
             }
-            render(template: "/gTemplates/recordSummary", model: [record: n])
+
+        if (params['courseNgs'] && params['courseNgs'] != 'null') {
+            n.course = mcs.Course.get(params['courseNgs'].toLong())
+            n.department = n.course.department
+            n.save()
+        }
+        render(template: "/gTemplates/recordSummary", model: [record: n])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
 //        } else {
 //            render 'No description entered'
