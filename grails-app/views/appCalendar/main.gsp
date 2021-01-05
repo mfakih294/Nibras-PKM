@@ -50,11 +50,11 @@
 
 
   <script>
-
+      var calendar
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+    calendar = new FullCalendar.Calendar(calendarEl, {
       isRTL: false,
     //  locale: 'ar',
       plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
@@ -99,8 +99,8 @@
                   var endDate = new Date(currentDate.valueOf());
 
                   // Adjust the start & end dates, respectively
-                  startDate.setDate(startDate.getDate() - 1); // One day in the past
-                  endDate.setDate(endDate.getDate() + 3); // Three days into the future
+                  startDate.setDate(startDate.getDate() - 2); // One day in the past
+                  endDate.setDate(endDate.getDate() + 2); // Three days into the future
 
                   return { start: startDate, end: endDate }
               }
@@ -144,9 +144,9 @@
         // day:''  // Monday 19.07
       // },
       // lazyFetching: true,
-       firstHour: '05:00',
+       firstHour: '07:00',
       // minTime: 5,
-      minTime: '05:00',
+      minTime: '07:00',
       slotDuration: '00:30',
       // showNonCurrentDates: false,
       // dayCount: 31,
@@ -270,15 +270,20 @@
   });
 
 
-/*
+
 
   setInterval(function() {
+
       jQuery.ajax({
           type: 'GET',
           url: '${request.contextPath}/page/heartbeat',
           dataType: 'html',
           success: function(html, textStatus) {
-              if (html == 'ok') {
+              // console.log('here' + jQuery('#calendar').fullCalendar.view);
+              // console.log('here2' + calendarEl.view.title);
+
+
+              if (html == 'ok' && calendar.view.type == 'dayGrid') {
                   window.location.href = window.location;
                   jQuery('#logArea2').html("<span style='background: darkgray; color: darkgreen'>Online</span>");
               }
@@ -288,8 +293,8 @@
 //                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
           }
       });
-  }, 60000);
-  */
+  }, ${ker.OperationController.getPath('calendar.reload.interval').toInteger()});
+
 
 
   </script>
@@ -351,10 +356,37 @@
 </div>
 
   <div id="calendar-container" style="margin: 10px; text-align: left; height: 99%">
+
+      <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
+          <div style="direction: rtl; text-align: center; ">
+          <b>
+              <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:
+          %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
+          </b>
+          &nbsp;
+
+%{--          <g:set var="aya"--}%
+%{--                 value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>--}%
+%{--          {--}%
+%{--          ${aya.shortDescription}--}%
+%{--          }--}%
+%{--          (${mcs.Writing.get(aya.recordId)?.summary}--}%
+%{--          ${aya.orderInWriting})--}%
+%{--      --}%
+
+
+      <g:each in="${prayersText.split('\n')}" var='l'>
+          <span style="margin-left: 15px;">
+              <b>${raw(l)?.split(': ')[0]}</b>:
+              ${raw(l)?.split(': ')[1]}
+          </span>
+      </g:each>
+          </div>
+      </g:if>
     <div id='calendar' ></div>
   </div>
 
-<div id="login-form" class="modal" style="height: 400px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
+<div id="login-form" class="modal" style="height: 500px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
     %{--Event title or command (e.g. p -- title):--}%
     %{--<br/>--}%
     %{--<br/>--}%
@@ -397,14 +429,16 @@
         Summary or Nibras command*:
         <br/>
         <g:textField name="title" value="" id="title"
-                     style=" direction: rtl; text-align: right; display: inline;  font-family: tahoma ; width: 99% !important;"
-            placeholder=""
+                     style=" text-align: start  !important; unicode-bidi: plaintext !important; display: inline;  font-family: tahoma ; width: 99% !important;"
+
+
+                     placeholder=""
                      class="commandBarTexFieldTop"/>
                   <br/>
                 Description:
        <g:textArea name="description" value="" id="description" rows="5" columns="80"
                     placeholder=""
-                     style="width: 99% !important; height: 100px;direction: rtl; text-align: right; display: inline;  font-family: tahoma ; "
+                     style="width: 99% !important; height: 100px; text-align: start  !important; unicode-bidi: plaintext !important;  display: inline;  font-family: tahoma ; "
                      class="commandBarTexFieldTop"/>
                   <br/>
                   <br/>

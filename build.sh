@@ -1,10 +1,9 @@
 
-export PATH=/home/mf/dev/grails-3.3.10/bin:/home/mf/dev/jdk1.8.0_111/bin/:$PATH
+export PATH=$PATH:/nbr/dev/grails-3.3.10/bin:/nbr/dev/jdk1.8.0_65/bin/
 
-export GRAILS_HOME=/home/mf/dev/grails-3.3.10/
+export GRAILS_HOME=/nbr/dev/grails-3.3.10/
 
-export JAVA_HOME=/home/mf/dev/jdk1.8.0_111/
-#/usr/lib/jvm/java-11-openjdk-amd64/
+export JAVA_HOME=/nbr/dev/jdk1.8.0_65/
 
 export CATALINA="-server"
 export JAVA_OPTS="-server"

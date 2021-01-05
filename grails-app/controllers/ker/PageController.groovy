@@ -449,7 +449,43 @@ class PageController {
     }
 
     def appCalendar() {
+
+
+        double latitude = 33.8933182;
+        double longitude = 35.5015717;
+        double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 2 ;
+        // Test Prayer times here
+        PrayTime prayers = new newpackage.PrayTime();
+
+        prayers.setTimeFormat(prayers.Time12NS);
+        prayers.setCalcMethod(prayers.Jafari);
+        prayers.setAsrJuristic(prayers.Shafii);
+        prayers.setAdjustHighLats(prayers.AngleBased);
+        int[] offsets = [0, 1, 0, 0, 0, 3, 5]; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+        prayers.tune(offsets);
+
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+
+        ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal,
+                latitude, longitude, timezone);
+        ArrayList<String> prayerNames = prayers.getTimeNames();
+
+        def prayersText = ''
+//     for (int i = 0; i < prayerTimes.size(); i++) {
+        prayersText += (prayerNames.get(0) + ": " + prayerTimes.get(0) + '\n')
+        prayersText += (prayerNames.get(1) + ": " + prayerTimes.get(1) + '\n')
+        prayersText += (prayerNames.get(2) + ": " + prayerTimes.get(2) + '\n')
+        prayersText += (prayerNames.get(3) + ": " + prayerTimes.get(3) + '\n')
+        prayersText += (prayerNames.get(4) + ": " + prayerTimes.get(4) + '\n')
+        prayersText += (prayerNames.get(5) + ": " + prayerTimes.get(5) + '\n')
+//         prayersText += (prayerNames.get(6) + ": " + prayerTimes.get(6) + '\n')
+//     }
+
+
         render(view: '/appCalendar/main', model: [
+                prayersText: prayersText
         ])
     }
 

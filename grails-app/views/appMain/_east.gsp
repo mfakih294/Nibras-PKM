@@ -718,9 +718,9 @@
 
             <br/>
 
-            <h5 class="">
+            <h4 class="">
                 <a>Exports</a>
-            </h5>
+            </h4>
 
         %{--<div>--}%
 
@@ -741,8 +741,11 @@
             <br/>
 
 
-            <g:remoteLink controller="export" action="staticWebsite" update="notificationArea">
+            <g:remoteLink controller="export" action="staticWebsite" update="centralArea">
                 Generate static site
+
+
+
             </g:remoteLink>
             <br/>
             <g:remoteLink controller="report" action="quranReportToString" update="centralArea">

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="./site/css/bl-stylesheet.css" type="text/css"/>
 
 
-    <title>PKM Static site</title>
+    <title>Nibras PKM Static site</title>
     <link rel="shortcut icon" href="./site/icons/favicon-32px.png" type="image/png"/>
 </head>
 
@@ -115,6 +115,9 @@
     %{--</h2>--}%
     %{--<br/>--}%
         <div>
+            <g:if test="${1==2}">
+
+
             <h3 title="Writings"><a id="courses">Courses</a></h3>
             <ol>
                 <g:each in="${Course.executeQuery('from Course c where c.code != null order by c.department.code, c.orderNumber')}" var="c">
@@ -133,6 +136,8 @@
                     </li>
                 </g:each>
             </ol>
+
+            </g:if>
         </div>
   <div>
             <h3 title="Writings"><a id="writings">Writings</a></h3>
@@ -142,7 +147,8 @@
                         <i>W${c.id}</i> <u>${c.course ? "(" + c.course.toString() + ")" : ''}</u>
                         <b>${c.summary}</b>:
                         <span class="text${c.language}">
-                            ${org.apache.commons.lang.StringUtils.abbreviate(c.description?.encodeAsHTML()?.replaceAll('\n', '<br/>'), 180)}
+%{--                            ${org.apache.commons.lang.StringUtils.abbreviate(c.description?.encodeAsHTML()?.replaceAll('\n', '<br/>'), 180)}--}%
+                        <a href="./W/${c.id}/index.html">Read</a>
                         </span>
                         <span style="display: block;font-size: 8px; color: gray">
                             ${c.lastUpdated?.format('dd.MM.yyyy')} /
@@ -157,6 +163,10 @@
 
 
         <div>
+
+            <g:if test="${1==2}">
+
+
             <h3 title="Excerpts"><a id="excerpts">Excerpts</a></h3>
 
             <ol>
@@ -184,12 +194,16 @@
                 </g:each>
 
             </ol>
-
+            </g:if>
         </div>
 
 
 
                             <div>
+
+                                <g:if test="${1==2}">
+
+
                                 <h3 title="Resources"><a id="resources">Resources</a></h3>
                                 <ol>
                                     <g:each in="${Book.executeQuery(OperationController.getPath('export.static.R.query'))}" var="c">
@@ -222,16 +236,21 @@
                                         </li>
                                     </g:each>
                                 </ol>
+
+                                </g:if>
                             </div>
 
 
 
         <div>
+            <g:if test="${1==2}">
+
+
             <h3 title="Tasks"><a id="tasks">Tasks</a></h3>
             <ol>
                 <g:each in="${Task.executeQuery(OperationController.getPath('export.static.T.query'))}" var="c">
                     <li>
-                        T${c.id} ${c.location?.code}
+                        T${c.id} @${c.context?.code}
 
                         ${c.course ? "(" + c.course.toString() + ")" : ''}
                         <b>${c.summary}</b>:
@@ -239,7 +258,7 @@
                             ${org.apache.commons.lang.StringUtils.abbreviate(c.description?.encodeAsHTML()?.replaceAll('\n', '<br/>'), 180)}
                         </span>
                         <span style="display: block;font-size: 8px; color: gray">
-                            ${c.status?.code}
+                            @${c.status?.code}
                             ${c.dateCreated?.format('dd.MM.yyyy')} -
                             ${c.lastUpdated?.format('dd.MM.yyyy')}
                             <pkm:listRecordFiles module="T" fileClass="himFile" recordId="${c.id}" static="yes"/>
@@ -247,11 +266,16 @@
                     </li>
                 </g:each>
             </ol>
+
+            </g:if>
         </div>
 
 
 
         <div>
+            <g:if test="${1==2}">
+
+
             <h3 title="Tasks"><a id="goals">Goals</a></h3>
             <ol>
                 <g:each in="${Goal.executeQuery(OperationController.getPath('export.static.G.query'))}" var="c">
@@ -272,6 +296,8 @@
                     </li>
                 </g:each>
             </ol>
+
+            </g:if>
         </div>
 
 

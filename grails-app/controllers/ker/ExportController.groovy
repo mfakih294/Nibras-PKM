@@ -240,7 +240,7 @@ class ExportController {
     def allCalendarEvents() {
         def events = []
 
-            Task.executeQuery("from Journal t where t.startDate between :start and :end",
+            Task.executeQuery("from Journal t where t.bookmarked = 1 and  t.startDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -263,7 +263,7 @@ class ExportController {
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=J',
                             allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
             }
-      Task.executeQuery("from Planner t where t.startDate between :start and :end",
+      Task.executeQuery("from Planner t where t.bookmarked = 1 and t.startDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -287,7 +287,7 @@ class ExportController {
                             allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
             }
 
-            Task.executeQuery("from Task t where t.endDate between :start and :end",
+            Task.executeQuery("from Task t where t.bookmarked = 1 and t.endDate between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -309,7 +309,7 @@ class ExportController {
             }
 
 
-    Task.executeQuery("from Goal t where t.endDate between  :start and :end",
+    Task.executeQuery("from Goal t where t.bookmarked = 1 and t.endDate between  :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -333,7 +333,7 @@ class ExportController {
 
 
 
-            Task.executeQuery("from Book t where t.readOn between :start and :end",
+            Task.executeQuery("from Book t where t.bookmarked = 1 and t.readOn between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -562,13 +562,13 @@ This presentation aims to give an overview of Pomegranate PKM system.
 
 
     def staticWebsiteToString() {
-        render(view: '/static/site')
+        render(view: '/appStatic/site')
     }
 
 
     def staticWebsite() {
 
-        def f = new File('/' + (OperationController.getPath('rootFolder') ?: 'mhi') + '/mcd/site.html')
+        def f = new File('/' + (OperationController.getPath('root.rps1.path') ?: '') + '/site.html')
         f.write(g.include([controller: 'export', action: 'staticWebsiteToString']).toString(), 'UTF-8')
         render 'Generation done: ' + new Date().format('HH:mm:ss')
 

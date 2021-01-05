@@ -246,12 +246,7 @@
 %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
                         </b>
     &nbsp;
-    <g:each in="${prayersText.split('\n')}" var='l'>
-                                <span >
-                                        ${raw(l)}
-                                </span>
-                            </g:each>
-&nbsp;
+
                         <g:set var="aya"
                                value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>
                         {
