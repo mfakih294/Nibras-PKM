@@ -1324,7 +1324,7 @@ ll
 
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-        if (!'R'.contains(entityCode) && record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
+        if (!'RP'.contains(entityCode) && record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
             record.bookmarked = false
 
 

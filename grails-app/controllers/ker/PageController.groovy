@@ -485,7 +485,8 @@ class PageController {
 
 
         render(view: '/appCalendar/main', model: [
-                prayersText: prayersText
+                prayersText: prayersText,
+                random: Math.floor(Math.random()* 400)
         ])
     }
 

@@ -97,6 +97,9 @@
 
             <div id="centralArea" class="common" style="">
 
+
+
+
                 <h4>Notes</h4>
                 <g:each in="${IndexCard.findAllByCourseAndWbsParentIsNull(record, [sort: 'orderNumber', order: 'asc'])}"
                         var="n">
@@ -133,6 +136,53 @@
                 %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
                 %{--</g:if>--}%
             </div>
+
+<br/>
+<br/>
+
+            <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
+                          url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
+                          update="centralArea"
+                          onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus();"
+                          method="post">
+
+            %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
+            %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
+            %{--</code>--}%
+
+                <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
+                          id="typeField"
+                          tabindex="1"
+                          value="N"/>
+                <g:textField name="title" value=""
+                             tabindex="2" id="summayDaftar"
+                             style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 60% !important;"
+                             placeholder="Summary * "
+                             class=""/>
+
+                <g:hiddenField name="courseNgs" id="courseNgs" value="${record.id}"
+                />
+
+                <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}"
+                />
+
+
+                <g:submitButton name="save" value="Add"
+                                style="text-align: center; padding-left: 8px; padding-right: 8px;"
+                                tabindex="4"
+                                id="addXcdFormDaftarSubmit"
+                                class="fg-button ui-widget ui-state-default"/>
+
+                <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                            tabindex="3"
+                            name="description" id="descriptionDaftar"
+                            value=""
+                            style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
+            </g:formRemote>
+
+            <br/>
+            <br/>
+
 
         </div>
 

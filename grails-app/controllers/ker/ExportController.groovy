@@ -284,7 +284,7 @@ class ExportController {
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=P',
-                            allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
+                            allDay         : (it.level != 'm' || it.startDate.hours < 7 ? true : false)])
             }
 
             Task.executeQuery("from Task t where t.bookmarked = 1 and t.endDate between :start and :end",

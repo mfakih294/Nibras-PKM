@@ -21,7 +21,7 @@ grails:
 info:
     app:
         name: nibras
-        version: 1.4.6
+        version: 1.4.9
         grailsVersion: '@info.app.grailsVersion@'
 server:
     contextPath: '/nibras'
@@ -30,10 +30,10 @@ server:
         timeout: 720000  # 20 hours (in ms)
     ssl:
         enabled: true # Activate HTTPS mode on the server port
-        key-store: keystore.jks # e.g. /etc/tomcat7/keystore/tomcat.keystore
-        key-store-password: nibras # e.g. changeit
+        keyStore: keystore.jks # e.g. /etc/tomcat7/keystore/tomcat.keystore
+        keyStorePassword: nibras # e.g. changeit
         key-alias: localhost # e.g. tomcat
-        key-password: nibras
+        keyPassword: nibras
 spring:
     main:
         banner-mode: "off"

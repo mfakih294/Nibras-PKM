@@ -255,7 +255,7 @@ ul {
 input,select, textarea {
     background-color: #fafafa;
     border: 1px solid #ccc;
-    font: 0.9em Lato, tahoma, verdana, arial, helvetica, sans-serif;
+    font: 1em Lato, tahoma, verdana, arial, helvetica, sans-serif;
     margin: 2px 2px !important;
     padding: 4px 8px !important;
     min-width: 20px !important;

@@ -188,9 +188,10 @@ temporary rendered events).
 .fc .fc-row .fc-mirror-skeleton td {
   /* see-through to the background below */
   /* extra precedence to prevent theme-provided backgrounds */
-  background: none;
+  /*background: #c2d1d7;*/
+  
   /* in case <td>s are globally styled */
-  border-color: transparent; }
+  border-color: white; } /*darkgray*/
 
 .fc-row .fc-content-skeleton td,
 .fc-row .fc-mirror-skeleton td {
@@ -503,8 +504,24 @@ TODO: more distinction between this file and common.css
 .fc-unthemed .fc-list-heading td {
   background: #eee; }
 
+.fc-unthemed td.fc-past {
+  margin: 3px;
+  background: #7DB46CFF; }
+
 .fc-unthemed td.fc-today {
-  background: #fcf8e3; }
+  margin: 3px;
+
+  background: #E7EBE0FF; }
+
+.fc-unthemed td.fc-future {
+  margin: 3px;
+  background: #ABD6DFFF; }
+
+
+
+/*Tanager Turquoise (#95DBE5FF), Teal Blue (#078282FF) and Kelly Green (#339E66FF)*/
+/*Grass Green (#7DB46CFF), Lightest Sky (#E7EBE0FF) and Clearwater (#ABD6DFFF)*/
+/*from https://www.designwizard.com/blog/design-trends/colour-combination*/
 
 .fc-unthemed .fc-disabled-day {
   background: #d7d7d7;

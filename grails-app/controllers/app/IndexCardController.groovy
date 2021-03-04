@@ -378,6 +378,8 @@ class IndexCardController { // entity id = 16
             n.department = n.course.department
             n.save()
         }
+
+        n.language = params.language
         render(template: "/gTemplates/recordSummary", model: [record: n])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
 //        } else {

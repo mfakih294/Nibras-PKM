@@ -14,7 +14,7 @@
         ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' Dashboard': 'Nibras Dashboard'}
         </title>
 
-    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'calendar.ico')}" type="image/ico"/>
+    <link rel="shortcut icon" href="${resource(dir: 'images/icons', file: 'calendar.ico')}" type="image/png"/>
     <!-- The javascript and css are managed by sprockets. The files can be found in the /assets folder-->
 
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
@@ -238,23 +238,10 @@
 
                 </b>
 
-                    <div class="content" style="font-size: 0.7em; text-align: center;">
 
-<g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                        <b>
-                            <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:
-%{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
-                        </b>
-    &nbsp;
-
-                        <g:set var="aya"
-                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>
-                        {
-                        ${aya.shortDescription}
-                        }
-                        (${mcs.Writing.get(aya.recordId)?.summary}
-                        ${aya.orderInWriting})
-</g:if>
+    <div class="content" style="font-size: 0.8em !important; text-align: center !important;">
+                        ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].summary}
+                        ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].description}
                     </div>
                 </div>
             </li>
@@ -477,8 +464,6 @@ in="${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('policy'), true,
 
                         <div class="content" style="font-size: 0.8em !important; text-align: center !important;">
 
-                    ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].summary}
-                    ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].description}
 
                     </div>
                 </div>

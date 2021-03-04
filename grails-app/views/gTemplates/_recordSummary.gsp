@@ -386,10 +386,17 @@
                         %{--</g:if>--}%
 
                             <span style="float: left">
-<g:if test="${record.class.declaredFields.name.contains('course') && record.course}">
+<g:if test="${record.class.declaredFields.name.contains('department') && record.department}">
+                        <span style="margin: 4px; font-size: 1.2em; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: white; font-weight: bold; background: darkblue; font-family: monospace">
+                            ${record.department?.code}</span>
+                        </g:if>
+
+                                <g:if test="${record.class.declaredFields.name.contains('course') && record.course}">
                         <span style="margin: 2px; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: white; font-weight: bold; background: #1e7e34; font-family: monospace">
                             ${record.course?.code}</span>
                         </g:if>
+                                <br/>
+                                <br/>
 <g:if test="${record.class.declaredFields.name.contains('type') && record.type}">
                         <span style="margin: 2px; padding: 2px; border-radius: 0px; border: 1px solid darkgray; color: white; font-weight: bold; background: #695b7e; font-family: monospace">${record.type?.code}</span>
                         </g:if>
@@ -406,7 +413,6 @@
                                 <span title="${record.entity}">
                                     <i>${record.entity}</i>
                                 </span>
-
                             </g:if>
 
 

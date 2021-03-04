@@ -1,4 +1,4 @@
-<%@ page import="ker.OperationController" %>
+<%@ page import="ker.OperationController; java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -91,7 +91,7 @@
           columnHead: true
         },
           dayGrid: {
-          buttonText: 'Planner',
+          buttonText: 'Dashboard',
           columnHead: true,
           visibleRange: function(currentDate) {
                   // Generate a new date for manipulating in the next step
@@ -99,8 +99,8 @@
                   var endDate = new Date(currentDate.valueOf());
 
                   // Adjust the start & end dates, respectively
-                  startDate.setDate(startDate.getDate() - 2); // One day in the past
-                  endDate.setDate(endDate.getDate() + 2); // Three days into the future
+                  startDate.setDate(startDate.getDate() - 3); // One day in the past
+                  endDate.setDate(endDate.getDate() + 3); // Three days into the future
 
                   return { start: startDate, end: endDate }
               }
@@ -144,10 +144,10 @@
         // day:''  // Monday 19.07
       // },
       // lazyFetching: true,
-       firstHour: '07:00',
+       firstHour: '08:00',
       // minTime: 5,
-      minTime: '07:00',
-      slotDuration: '00:30',
+      minTime: '08:00',
+      slotDuration: '01:00',
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,
@@ -305,11 +305,42 @@
     font-family: tahoma, Helvetica Neue, Helvetica, sans-serif;
     font-size: 13px;
     text-align: right;
+      background: #ffffea;
 
   }
   td{
     /*direction: rtl;*/
     text-align: right;
+  }
+ .dashboard table{
+    /*direction: rtl;*/
+    border: 0px lightgrey !important;
+    text-align: right;
+  }
+
+  .dashboard td{
+    /*direction: rtl;*/
+      font-size: small !important;
+    border: 1px lightgrey !important;
+    text-align: right;
+  }  .dashboard td ol li{
+    /*direction: rtl;*/
+      font-size: small !important;
+    border: 1px lightgrey !important;
+    text-align: right;
+  }
+.dashboard ol{
+    /*direction: rtl;*/
+    margin: 2px;
+    text-align: right;
+    padding: 2px;
+  }
+
+  .dashboard h3{
+    /*direction: rtl;*/
+    margin: 3px !important;
+    text-align: right;
+    padding: 2px !important;
   }
 
   #calendar-container {
@@ -329,8 +360,18 @@
     padding-left: 2em;
     padding-right: 2em;
   }
+  .fc-content{
+      direction: rtl !important;
+  }
 
+  .completed  div span {
+      /*text-line-through: single;*/
+      text-decoration: line-through;
+  }
 
+  .fc-time {
+      font-size: larger;
+  }
   /*.prompt  {*/
       /*width: 500px;*/
       /*height: 200px;*/
@@ -358,7 +399,34 @@
   <div id="calendar-container" style="margin: 10px; text-align: left; height: 99%">
 
       <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
+      
+      
+      
+      
           <div style="direction: rtl; text-align: center; ">
+
+	  
+
+%{--   <g:set var="aya1"--}%
+%{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random - 1])[0]}"/>--}%
+    <g:set var="aya2"
+                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'], [offset: random])[0]}"/>
+%{--    <g:set var="aya3"--}%
+%{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
+<div style="font-family: 'traditional arabic'; font-size: x-large; margin-bottom: 14px; line-height: 29px;">
+              بسم الله الرحمن الرحيم
+%{--                        ${aya1.shortDescription}--}%
+%{--   (${aya1.orderInWriting})--}%
+
+              {${aya2.shortDescription}}
+              (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2.orderInWriting})
+%{--              ${aya3.shortDescription}--}%
+%{--              (${aya3.orderInWriting})--}%
+
+
+
+          </div>
+
           <b>
               <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:
           %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
@@ -374,15 +442,17 @@
 %{--          ${aya.orderInWriting})--}%
 %{--      --}%
 
-
+			
+			
       <g:each in="${prayersText.split('\n')}" var='l'>
-          <span style="margin-left: 15px;">
+          <span style="margin-left: 15px; margin-top: 15px;">
               <b>${raw(l)?.split(': ')[0]}</b>:
               ${raw(l)?.split(': ')[1]}
           </span>
       </g:each>
           </div>
       </g:if>
+     <br/>
     <div id='calendar' ></div>
   </div>
 
@@ -452,6 +522,132 @@
               <br/>
 
     </div>
+
+<table class="dashboard" style="width: 90%; margin: 0 4%; position: absolute; bottom: 5px;" border="0">
+    <tr>
+        <td colspan="3">
+            <div style="text-align: center !important;">
+                ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].summary}
+                ${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('fcs'), true, [sort: 'startDate', order: 'desc', max: 1])[0].description}
+            </div>  
+        </td>
+    </tr>
+    
+    <tr>
+        <td style="width: 33%">
+
+
+            <h3>
+                %{--                    مواقيت الصلاة--}%
+                C *
+            </h3>
+
+
+            <ol style="direction: rtl; text-align: right;">
+                <g:each in="${mcs.Course.findAllByBookmarked(true, [sort: 'department', order: 'desc'])}" var="j">
+                    <li>
+                        [${j.code}]
+                        ${j.summary}
+                    </li>
+
+                </g:each>
+            </ol>
+
+            <h3>
+                G* p4
+            </h3>
+
+            <ol style="direction: rtl; text-align: right; line-height: 12px;">
+                <g:each in="${mcs.Goal.findAllByBookmarkedAndPriorityGreaterThan(true, 3, [sort: 'department', order: 'desc'])}" var="j">
+                    <li>
+                        [${j.course?.code}]
+                        <i>${j.summary}</i>
+                        %{--                                <pkm:prettyDuration date1="${j.endDate ?: j.startDate}"/>--}%
+                    </li>
+
+                </g:each>
+            </ol>
+
+        </td>
+        <td style="width: 33%">
+
+            <h3>
+                T* p4
+            </h3>
+
+
+            <ol style="direction: rtl; text-align: right; ">
+                <g:each in="${mcs.Task.findAllByBookmarkedAndPriorityGreaterThan(true, 3, [sort: 'summary', order: 'desc'])}" var="j">
+                    <li>
+                        %{--                                <u>${j.endDate?.format('dd.MM')}:</u>--}%
+                        [${j.course?.code}]
+                        ${j.summary}
+                    </li>
+
+                </g:each>
+            </ol>
+
+
+            <h3>
+
+                R* p4
+            </h3>
+
+            <ol style="direction: rtl; text-align: right; ">
+                <g:each in="${mcs.Book.findAllByBookmarkedAndPriorityGreaterThan(true, 3, [sort: 'department', order: 'desc', max: 5])}" var="j">
+                    <li>
+                        [${j.course?.code}]
+                        ${j.title}
+                    </li>
+
+                </g:each>
+            </ol>
+            
+        </td>
+        <td style="width: 33%">
+
+            <h3>mls</h3>
+
+            <ol style="direction: rtl; text-align: right; ">
+                <g:each in="${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('milestone'), true, [sort: 'startDate', order: 'desc'])}" var="j">
+                    <li>
+                        <pkm:prettyDuration date1="${j.endDate ?: j.startDate}"/>:
+                        ${j.summary}
+
+                    </li>
+
+                </g:each>
+            </ol>
+
+            <h3>plc</h3>
+
+
+            <ol style="direction: rtl; text-align: right; ">
+                <g:each
+                        in="${Planner.findAllByTypeAndBookmarked(PlannerType.findByCode('policy'), true, [sort: 'startDate', order: 'desc', max: 1])}" var="j">
+                    <li>
+                        <i>${j.summary}</i>:<br/>
+                        <i>${j.description?.replace('\n', '<br/>')}</i>
+                    </li>
+
+                </g:each>
+            </ol>
+            
+            
+        </td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+
+
+
+
 
 
 </body></html>
