@@ -75,7 +75,7 @@
                                               title="ID ${record.id}. Click to refresh">
 
                                     <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
-                                          style="padding: 2px; margin-right: 2px; color: white; display: inline;">
+                                          style="padding: 2px; margin-right: 2px; color: white; display: inline; border-radius: 4px;">
                                         <span style="color: white; padding: 4px;"><b>${entityCode}</b></span>
                                     </span>
                                     <span style="font-size: x-small">
@@ -83,6 +83,9 @@
                                     </span>
                                 </g:remoteLink>
 
+                                <g:if test="${record.class.declaredFields.name.contains('type') && record.type}">
+                                    <span style="margin: 2px; padding: 2px; border-radius: 0px; border: 1px solid darkgray; color: white; font-weight: bold; background: #695b7e; font-family: monospace">${record.type?.code}</span>
+                                </g:if>
 
 
                             </td>
@@ -385,21 +388,20 @@
                         %{--<span style="color: #004499; font-family: monospace">${record.slug}</span>--}%
                         %{--</g:if>--}%
 
-                            <span style="float: left">
+                            <span style="float: left; direction: ltr; text-align: left;">
 <g:if test="${record.class.declaredFields.name.contains('department') && record.department}">
-                        <span style="margin: 4px; font-size: 1.2em; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: white; font-weight: bold; background: darkblue; font-family: monospace">
-                            ${record.department?.code}</span>
+                        <span style="margin: 2px; font-size: 1.2em; padding: 3px; border-radius: 4px; color: white; font-weight: bold; background: #0d4f98; font-family: monospace">
+                            ${record.department?.code}
+                        </span>
+    &nbsp;
                         </g:if>
 
                                 <g:if test="${record.class.declaredFields.name.contains('course') && record.course}">
-                        <span style="margin: 2px; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: white; font-weight: bold; background: #1e7e34; font-family: monospace">
+                        <span style="margin: 2px; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: black; font-weight: bold; font-family: monospace">
                             ${record.course?.code}</span>
                         </g:if>
                                 <br/>
-                                <br/>
-<g:if test="${record.class.declaredFields.name.contains('type') && record.type}">
-                        <span style="margin: 2px; padding: 2px; border-radius: 0px; border: 1px solid darkgray; color: white; font-weight: bold; background: #695b7e; font-family: monospace">${record.type?.code}</span>
-                        </g:if>
+
 <g:if test="${record.class.declaredFields.name.contains('status') && record.status}">
                         <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 1px solid darkgray; color: white; font-weight: bold; background: #7e5e3f; font-size: smaller">${record.status?.code}</span>
                         </g:if>
@@ -776,14 +778,13 @@
                             </g:remoteLink>
                         </span>
 
-                        <g:if test="${record.class.declaredFields.name.contains('tags') && record.tags}">
-                            <br/> &nbsp;
+%{--                        <g:if test="${record.class.declaredFields.name.contains('tags') && record.tags}">--}%
+%{--                            <br/> &nbsp;--}%
                             <g:render template="/tag/tags" model="[instance: record, entity: entityCode]"/>
-
-                        </g:if>
-                        <g:if test="${record.class.declaredFields.name.contains('contacts') && record.contacts}">
+%{--                        </g:if>--}%
+%{--                        <g:if test="${record.class.declaredFields.name.contains('contacts') && record.contacts}">--}%
                             &nbsp; <g:render template="/tag/contacts" model="[instance: record, entity: entityCode]"/>
-                        </g:if>
+%{--                        </g:if>--}%
 
 
                         %{--<br/>--}%
@@ -1604,13 +1605,13 @@
 
 
         </div>
+        <div style="margin-left: 20px;" id="below${entityCode}Record${record.id}" >
 
-
-    </div>
-
-    <div style="margin-left: 20px;" id="below${entityCode}Record${record.id}" >
+        </div>
 
     </div>
+
+
 
 
 </g:elseif>

@@ -29,6 +29,19 @@ import mcs.Writing
 import mcs.parameters.ResourceStatus
 
 
+import com.intuit.fuzzymatcher.component.MatchService;
+import com.intuit.fuzzymatcher.domain.Document;
+import com.intuit.fuzzymatcher.domain.Element;
+import static com.intuit.fuzzymatcher.domain.ElementType.ADDRESS;
+import static com.intuit.fuzzymatcher.domain.ElementType.NAME;
+import com.intuit.fuzzymatcher.domain.Match;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+
+
 import grails.plugin.springsecurity.annotation.Secured
 
 
@@ -585,6 +598,41 @@ def enterJournalWithType() {
 
 
     }
+
+
+    def duplicatesList2(){
+        String[][] input = [
+        ];
+
+        Goal.list().each(){
+            input  += [[it.id.toString(), it.summary?: it.id.toString(), '']]
+        }
+
+//        println input
+
+
+        List<Document> documentList = Arrays.asList(input).stream().map({contact ->
+            return new Document.Builder(contact[0])
+                    .addElement(new Element.Builder<String>().setValue(contact[0]).setType(NAME).createElement())
+                    .addElement(new Element.Builder<String>().setValue(contact[1]).setType(NAME).createElement())
+//                    .addElement(new Element.Builder<String>().setValue(contact[2]).setType(ADDRESS).createElement())
+                    .createDocument();
+        }).collect(Collectors.toList());
+
+        MatchService matchService = new MatchService();
+        Map<String, List<Match<Document>>> result =
+                matchService.applyMatchByDocId(documentList);
+
+        result.entrySet().forEach({ entry ->
+            entry.getValue().forEach({ match ->
+                render("Data: " + match.getData() + " Matched With:<br/> " + match.getMatchedWith() + " Score: " + new java.text.DecimalFormat('#.##').format(match.getScore().getResult()) + '<br/><br/><br/>');
+            });
+        });
+
+
+    render 'done.'
+
+}
 
 
 } // end of class

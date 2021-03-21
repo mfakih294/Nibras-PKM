@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-version "1.4.6"
+version "1.5.0"
 group "nibras"
 
 //apply plugin:"eclipse"
@@ -97,6 +97,9 @@ dependencies {
     //  compile group: 'com.gravity', name: 'goose', version: '2.1.23'
      //compile group: 'com.github.emmanueltouzery', name: 'crony', version: '1.1.0'
 compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
+
+    // https://mvnrepository.com/artifact/com.intuit.fuzzymatcher/fuzzy-matcher
+    compile group: 'com.intuit.fuzzymatcher', name: 'fuzzy-matcher', version: '1.0.4'
 
 // other plugins
     compile "com.nayidisha.grails.uploadr:grails3-uploadr:3.0"

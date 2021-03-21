@@ -1,9 +1,12 @@
 /* @group Base */
 .chzn-container {
-    font-size: 11px;
+    font-size: 12px;
     position: relative;
     display: inline-block;
     vertical-align: middle;
+    width: 350px !important;
+    text-align: right;
+    padding: 2px;
     zoom: 1;
     *display: inline;
 }
@@ -61,6 +64,7 @@
     padding: 0 0 0 4px;
     color: #444444;
     text-decoration: none;
+    text-align: right;
 }
 
 .chzn-container-single .chzn-default {
@@ -70,6 +74,7 @@
 .chzn-container-single .chzn-single span {
     margin-right: 26px;
     display: block;
+    text-align: right;
     overflow: hidden;
     white-space: nowrap;
     -o-text-overflow: ellipsis;

@@ -673,7 +673,7 @@ Authors: ${authors}
             %{--<br/>--}%
 
                 <g:if test="${'R'.contains(record.entityCode())}">
-                    <div style="font-family: tahoma; text-align: justify; line-height: 20px; font-size: 14px; margin: 5px;">
+                    <div style="font-family: tahoma; text-align: justify; line-height: 20px; font-size: 16px; margin: 4px;">
                         <g:if test="${record.highlights}">
                             <div class="text${record.class.declaredFields.name.contains('language') ? record.language : ''}">
 

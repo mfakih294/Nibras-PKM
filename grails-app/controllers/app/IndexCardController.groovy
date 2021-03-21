@@ -381,6 +381,7 @@ class IndexCardController { // entity id = 16
 
         n.language = params.language
         render(template: "/gTemplates/recordSummary", model: [record: n])
+        render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
 //        } else {
 //            render 'No description entered'

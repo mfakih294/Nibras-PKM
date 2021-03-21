@@ -86,7 +86,8 @@ class PkmTagLib {
      try {
             def folders = [
                     OperationController.getPath('root.rps1.path') + '/' + module,
-                    OperationController.getPath('root.rps2.path') + '/' + module
+                    OperationController.getPath('root.rps2.path') + '/' + module,
+                    OperationController.getPath('root.rps3.path') + '/' + module
             ]
             folders.each() { folder ->
                 if (folder && new File(folder).exists()) {

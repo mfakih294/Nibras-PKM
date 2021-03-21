@@ -22,29 +22,36 @@
 
 
 
-  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main5.js')}"></script>
+%{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main5.js')}"></script>--}%
+%{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main1.js')}"></script>--}%
+%{--  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main1.css')}"/>--}%
+%{--<script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main1.js')}"></script>--}%
+%{-- <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main2.css')}"/>--}%
+%{--<script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main2.js')}"></script>--}%
+%{--  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main3.css')}"/>--}%
+%{--<script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main3.js')}"></script>--}%
 
 
-  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main1.js')}"></script>
-  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main1.css')}"/>
-
-<script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main1.js')}"></script>
-
-  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main2.css')}"/>
-<script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main2.js')}"></script>
-
-  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main3.css')}"/>
-<script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main3.js')}"></script>
-
-
-  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main6.css')}"/>
-  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main6.js')}"></script>
+%{--  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main6.css')}"/>--}%
+%{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main6.js')}"></script>--}%
 
 
 
-  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main4.css')}"/>
+%{--  <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar', file: 'main4.css')}"/>--}%
 
-  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main4.js')}"></script>
+%{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main4.js')}"></script>--}%
+
+
+    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430', file: 'main.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/430', file: 'main.css')}"/>
+
+    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430/daygrid', file: 'main.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/430/daygrid', file: 'main.css')}"/>
+
+    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430/timegrid', file: 'main.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/430/timegrid', file: 'main.css')}"/>
+
+    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430/interaction', file: 'main.js')}"></script>
 
     <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main-calendar.css')}"/>
 
@@ -522,7 +529,7 @@
               <br/>
 
     </div>
-
+<g:if test="${1==2}">
 <table class="dashboard" style="width: 90%; margin: 0 4%; position: absolute; bottom: 5px;" border="0">
     <tr>
         <td colspan="3">
@@ -638,7 +645,7 @@
     </tr>
 
 </table>
-
+</g:if>
 
 
 

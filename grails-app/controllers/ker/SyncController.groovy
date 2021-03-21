@@ -253,8 +253,31 @@ class SyncController {
 
         def records = []
         for (i in mcs.Planner.executeQuery("from Planner where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
-                [new Date() - 3, new Date() + 7, true])) {
+                [new Date() - 7, new Date() + 7, true])) {
             records += [type    : 'P', id: i.id, ecode: 'P',
+                        meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
+                        color   : 'darkblue',
+                        title   : i.summary,
+                        language: i.language,
+                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+        }
+
+//println 'records' + records
+        def json = builder.build {
+            result = "ok"
+            data = records
+        }
+
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+
+  def exportJsonJ = {
+        def builder = new JSONBuilder()
+
+        def records = []
+        for (i in mcs.Planner.executeQuery("from Journal where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
+                [new Date() - 7, new Date() + 7, true])) {
+            records += [type    : 'J', id: i.id, ecode: 'J',
                         meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
                         color   : 'darkblue',
                         title   : i.summary,
@@ -568,6 +591,7 @@ class SyncController {
 
     def mobilePush() {
         def c = 0
+        if (params.tosyncText && params.tosyncText?.contains(','))
         params.tosyncText.split(',').each() { r ->
             if (r.trim() != '' && r != 'null') {
                 //println 'r ' + r
@@ -592,7 +616,10 @@ class SyncController {
 //            t.properties = record.properties
                     t.summary = 'rc: ' + t.summary
                     t.description = 'rc: ' + t.description
+                    if (record.endDate)
                     t.endDate = record.endDate + record.recurringInterval
+                    else
+                        t.endDate = new Date() + record.recurringInterval
                     t.recurringInterval = record.recurringInterval
                     t.isRecurring = true
                     t.completedOn = null
@@ -642,10 +669,11 @@ class SyncController {
         def data = request.JSON.data
         if (data && data?.trim() != '') {
             def c = 0
-            def n = new app.IndexCard()
+            def n = new mcs.Journal()
             n.summary = new Date().format('dd.MM.yyyy HH:mm') + ' k'
             n.description = data?.replace('::', ':\n')
-//            n.type = WritingType.findByCode('k')
+            n.type = JournalType.findByCode('usr')
+            n.startDate = new Date()
 
             n.bookmarked = true
             n.save(flush: true)

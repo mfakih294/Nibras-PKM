@@ -10,6 +10,7 @@ class UrlMappings {
 
 
         "/cal" (controller: 'page', action: 'appCalendar')
+        "/calm" (controller: 'page', action: 'appMobileCalendar')
 
         "/kanban" (controller: 'page', action: 'appKanban')
         "/daftar" (controller: 'page', action: 'appDaftar')

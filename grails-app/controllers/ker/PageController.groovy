@@ -489,6 +489,15 @@ class PageController {
                 random: Math.floor(Math.random()* 400)
         ])
     }
+  def appMobileCalendar() {
+
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+
+        render(view: '/appMobileCalendar/main', model: [
+        ])
+    }
 
     def record() {
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
