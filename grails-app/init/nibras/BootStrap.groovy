@@ -1,5 +1,6 @@
 package nibras
 
+import ker.OperationController
 import security.*
 
 
@@ -41,6 +42,13 @@ class BootStrap {
         println ' ************************************************************'
         println ''
         println ''
+
+        if (org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS) {
+            """c:\\windows\\explorer  "" https://localhost:1441/nibras/""".execute()
+        } else if (org.apache.commons.lang.SystemUtils.IS_OS_LINUX){
+            """/usr/bin/xdg-open https://localhost:1441/nibras/""".execute()
+        }
+
 
     }
     def destroy = {

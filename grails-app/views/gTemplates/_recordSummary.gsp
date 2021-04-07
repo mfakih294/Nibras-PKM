@@ -781,8 +781,8 @@
                         <g:if test="${record.class.declaredFields.name.contains('tags') && record.tags}">
 %{--                            <br/> &nbsp;--}%
                             <g:render template="/tag/tags" model="[instance: record, entity: entityCode]"/>
-%{--                        </g:if>--}%
-%{--                        <g:if test="${record.class.declaredFields.name.contains('contacts') && record.contacts}">--}%
+                        </g:if>
+                        <g:if test="${record.class.declaredFields.name.contains('contacts') && record.contacts}">
                             &nbsp; <g:render template="/tag/contacts" model="[instance: record, entity: entityCode]"/>
                         </g:if>
 

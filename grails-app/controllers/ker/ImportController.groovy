@@ -219,6 +219,9 @@ class ImportController {
             b = grailsApplication.classLoader.loadClass(entityMapping[entityCode.toUpperCase()]).newInstance()
             b.properties = GenericsController.transformMcsNotation(title)['properties']
 
+            if (!b.language) {
+            b.language = OperationController.getPath('default.language') ?: 'en'
+            }
 
             finalName = entityCode.toLowerCase() + '.' + ext
         }
@@ -290,6 +293,9 @@ class ImportController {
         b = grailsApplication.classLoader.loadClass(entityMapping[entityCode.toUpperCase()]).newInstance()
         b.properties = GenericsController.transformMcsNotation(title)['properties']
 
+        if (!b.language) {
+            b.language = OperationController.getPath('default.language') ?: 'en'
+        }
 
         finalName = ''//entityCode.toLowerCase()
 

@@ -23,8 +23,8 @@
 
     %{--<link rel="stylesheet" href="${resource(dir: 'css', file: 'fg.menu.css')}"/>--}%
 
-    %{--<script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'ui.achtung-min.js')}"></script>--}%
-    %{--<link rel="stylesheet" href="${resource(dir: 'css', file: 'ui.achtung-min.css')}"/>--}%
+    <script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'ui.achtung-min.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'ui.achtung-min.css')}"/>
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
 

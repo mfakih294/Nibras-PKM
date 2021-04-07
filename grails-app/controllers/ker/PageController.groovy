@@ -65,6 +65,10 @@ class PageController {
                          app.Payment, app.IndicatorData,
                          mcs.Journal, mcs.Planner, mcs.Book]
 
+    static allClassesWithCourses = allClasses -
+            [mcs.Excerpt, mcs.Course,
+             app.IndicatorData, app.Payment, app.PaymentCategory, app.Indicator, mcs.parameters.SavedSearch]
+
     static recentClasses = [mcs.Goal, mcs.Task, mcs.Planner, mcs.Journal, mcs.Writing, app.IndexCard,
                             mcs.Book]
 
@@ -195,18 +199,19 @@ class PageController {
              ['app.name', 'Nibras PKM'],
              ['explorer.path.win', './scripts/open-explorer.bat'],
              ['explorer.path.linux', '/usr/bin/dolphin'],
-             ['datetime.format', 'dd.MM.yyyy'],
+             ['date.format', 'dd.MM.yyyy'],
+             ['datetime.format', 'dd.MM.yyyy_HHmm'],
              ['default.WritingStatus.done', 'revised'],
              ['default.WorkStatus.done', 'done'],
              ['default.ResourceStatus.done', 'read'],
-             ['default.language', 'en'],
              ['updateResultSet.max-items', '100'],
              ['accordion.east.default.panel', '1'],
              ['accordion.west.default.panel', '0'],
              ['planner.homepage.default-type', 'knb'],
-             ['repository.languages', 'ar,fa,fr,en'],
-             ['repository.languages.RTL', 'ar,fa'],
-             ['repository.languages.LTR', 'fr,en']
+             ['repository.languages', 'ar,fr,en'],
+             ['repository.languages.RTL', 'ar'],
+             ['repository.languages.LTR', 'fr,en'],
+             ['default.language', 'en']
             ].each() {
                 new cmn.Setting([name: it[0], value: it[1]]).save(flush: true)
             }
@@ -402,6 +407,43 @@ class PageController {
         render(view: '/appKanban/main', model: [])
 
     }
+
+    def appNotes() {
+
+        def recentRecords = []
+
+        allClassesWithCourses.each() {
+            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date()+1, new Date() - 1, [sort: 'dateCreated', order: 'desc', max: 4])
+            //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
+        }
+
+//        recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
+//        //recentRecords.unique()
+//        if (recentRecords.size() > 0)
+//            render(template: '/gTemplates/recordListing', model: [
+//                    title: 'Recent records',
+//                    list : recentRecords
+//            ])
+//        else
+//            render(template: '/layouts/message', model: [messageCode: 'help.recent.records.no'])
+
+
+
+        def types = [
+                [id: 'Jy', name: 'Journal before'],
+                [id: 'Jt', name: 'Journal now'],
+                [id: 'N', name: 'Note'],
+                [id: 'W', name: 'Writing'],
+                [id: 'G', name: 'Goal'],
+                [id: 'T', name: 'Task'],
+                [id: 'R', name: 'Resource']
+        ]
+
+        render(view: '/appNote/main', model: [types: types, recentRecords: recentRecords])
+
+    }
+
+
 
  def appDashboard() {
 

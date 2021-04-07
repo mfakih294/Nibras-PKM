@@ -1911,7 +1911,10 @@ past.each(){
 
         def r = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-        def filename = entityCode?.toLowerCase() + ' p' +  (r.priority ?: 2) + (r.course ?  ' c' +  r.course?.code : ' ') + (r.department ?  ' d' +  r.department?.code : ' ') + '  -- ' + (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
+        def filename = entityCode?.toLowerCase()
+        + ' p' +  (r.priority ?: 2) + (r.course ?  ' c' +  r.course?.code : ' ') +
+                (r.department ?  ' d' +  r.department?.code : ' ') + '  -- '
+        + (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
 
 
         for (c in '?"/\\*:<>' + '!$^&{}|') {
@@ -1921,8 +1924,8 @@ past.each(){
         def f
 
 
-        f = new File(OperationController.getPath('root.rps1.path') + '/' +
-                filename + '.txt') // + ' ' + filename
+        f = new File(OperationController.getPath('root.rps1.path') + '/' + entityCode + '/entityCode-' + id + ' ' +
+                filename + '.md') // + ' ' + filename
         // + ' ' + filename
 
 //        if (r.entityCode() == 'W') {
@@ -1943,7 +1946,8 @@ past.each(){
 //        if (!f.exists()) {
         f.write(r?.description ?: '...', 'UTF-8')
 //            f2.write(r?.description ?: '...', 'UTF-8')
-        render('Text checked out')
+//        render('Text checked out')
+        render(template: '/layouts/achtung', model: [message: 'Note text written to disk.'])
 //        } else render 'Dump already exists.'
 
 

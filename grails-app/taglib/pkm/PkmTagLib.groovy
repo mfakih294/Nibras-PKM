@@ -84,33 +84,35 @@ class PkmTagLib {
 
 
      try {
-            def folders = [
-                    OperationController.getPath('root.rps1.path') + '/' + module,
-                    OperationController.getPath('root.rps2.path') + '/' + module,
-                    OperationController.getPath('root.rps3.path') + '/' + module
-            ]
-            folders.each() { folder ->
-                if (folder && new File(folder).exists()) {
-                    new File(folder).eachFileMatch(~/${recordId}[a-z][\S\s]*\.[\S\s]*/) {
-                        filesList.add(it)
-                    }
-                }
-            }
+         def folders
+         if (module != 'R') {
              folders = [
-                    OperationController.getPath('root.rps1.path')+ '/' + module + '/' + recordId,
-                    OperationController.getPath('root.rps2.path')+ '/' + module + '/' + recordId
+                     OperationController.getPath('root.rps1.path') + '/' + module,
+                     OperationController.getPath('root.rps2.path') + '/' + module,
+                     OperationController.getPath('root.rps3.path') + '/' + module
+             ]
+             folders.each() { folder ->
+                 if (folder && new File(folder).exists()) {
+                     new File(folder).eachFileMatch(~/${recordId}[a-z][\S\s]*\.[\S\s]*/) {
+                         filesList.add(it)
+                     }
+                 }
+             }
+             folders = [
+                     OperationController.getPath('root.rps1.path') + '/' + module + '/' + recordId,
+                     OperationController.getPath('root.rps2.path') + '/' + module + '/' + recordId,
+                     OperationController.getPath('root.rps3.path') + '/' + module + '/' + recordId
 //                   , OperationController.getPath('pictures.repository.path') + '/' + module + '/' + recordId
-            ]
-            folders.each() { folder ->
-                if (folder && new File(folder).exists()) {
-                    new File(folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
-                        filesList.add(it)
-                    }
-                }
-            }
-            if (module == 'R'){
-
-               
+             ]
+             folders.each() { folder ->
+                 if (folder && new File(folder).exists()) {
+                     new File(folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
+                         filesList.add(it)
+                     }
+                 }
+             }
+         }
+          else if (module == 'R'){
 
                 def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R' +
                         (resourceNestedByType ?  '/' +  type : '') +
@@ -121,12 +123,16 @@ class PkmTagLib {
                         def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' +
                                 (resourceNestedByType ?  '/' +  type : '') +
                                 '/'
+ def typeLibraryPath = OperationController.getPath('root.rps3.path') + '/R' +
+                        (resourceNestedByType ?  '/' +  type : '') +
+                        '/'
+
 
                 folders = [
                         typeSandboxPath +
                                 (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''),
-                        typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')
-                      //  typeLibraryPath + '/' + (recordId / 100).toInteger()
+                        typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''),
+                        typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')
                 ]
                 folders.each() { folder ->
 
@@ -139,7 +145,8 @@ class PkmTagLib {
                 folders = [
           typeSandboxPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId,
       //    typeLibraryPath + '/' + (recordId / 100).toInteger() + '/' + recordId,
-          typeRepositoryPath +(resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')  + '/' + recordId
+          typeRepositoryPath +(resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')  + '/' + recordId,
+          typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId
                 ]
 
                 def b = Book.get(recordId)
@@ -198,7 +205,8 @@ class PkmTagLib {
             else {
                 session[fileId] = i.path
                 output += """<li>
-			<div class="showhim" id="file${fileId}">
+<b>${i.path?.replace(i.name, '')}</b>:<br/>
+			<div class="showhim fileCard" id="file${fileId}">
 <a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
                           target="_blank"
                           title="${i.path}">
@@ -221,7 +229,7 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
               &nbsp;    x
                  </a>
 			</span>
-			<br/>
+			
 			</div>
 </li>"""
 

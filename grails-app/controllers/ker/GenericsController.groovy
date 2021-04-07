@@ -4267,7 +4267,7 @@ ll
                                 queryCriteria.add("date(" + dateField + ') = str_to_date("' + OperationController.fromWeekDateAsDateTimeFullSyntax(core).format('dd.MM.yyyy') + '", "%d.%m.%Y")')
                                 // todo: test
                             } else if (core.contains('_')) {
-                                def format = Setting.findByName('datetime.add.format')
+                                def format = Setting.findByName('datetime.format')
                                 properties[dateField] = Date.parse(format ? format.value : 'dd.MM.YYYY_HHmm', core)
                                 queryCriteria.add("date(" + dateField + ") = " + Date.parse(format ? format.value : 'dd.MM.YYYY_HHMM', core)?.format('YYYY-MM-DD'))
                             } else {
@@ -4291,7 +4291,7 @@ ll
                                 properties[dateField] = OperationController.fromWeekDateAsDateTimeFullSyntax(core)
                                 queryCriteria.add("date(" + dateField + ') = str_to_date("' + OperationController.fromWeekDateAsDateTimeFullSyntax(core).format('dd.MM.yyyy') + '", "%d.%m.%Y")')
                             } else if (core.contains('_')) {
-                                def format = Setting.findByName('datetime.add.format')
+                                def format = Setting.findByName('datetime.format')
                                 properties[dateField] = Date.parse(format ? format.value : 'dd.MM.YYYY_HHmm', core)
                                 queryCriteria.add("date(" + dateField + ") = " + Date.parse(format ? format.value : 'dd.MM.YYYY_HHMM', core)?.format('YYYY-MM-DD'))
                             } else {

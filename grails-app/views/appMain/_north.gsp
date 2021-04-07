@@ -41,6 +41,11 @@
 
             </a>
         </td>
+ <td style="padding-right: 1px !important;">
+            <a href="${createLink(controller: 'page', action:'appNotes')}" target="_blank">
+                Notes
+            </a>
+        </td>
 
 
 

@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jqueryui-editable.css')}"/>
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'layout-mine.css')}"/>--}%
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
-%{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>--}%
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'simpleSlider.css')}"/>
 
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'uploader.css')}"/>--}%

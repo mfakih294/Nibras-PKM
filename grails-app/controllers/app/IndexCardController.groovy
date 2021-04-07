@@ -303,7 +303,7 @@ class IndexCardController { // entity id = 16
     }
 
     def addXcdFormDaftar() {
-//        if (params.title) {
+        if (params.title || params.description) {
 
             /*
 
@@ -383,9 +383,10 @@ class IndexCardController { // entity id = 16
         render(template: "/gTemplates/recordSummary", model: [record: n])
         render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
-//        } else {
-//            render 'No description entered'
-//        }
+        } else {
+//            render 'No content entered.'
+            render(template: '/layouts/achtung', model: [message: 'No content entered'])
+        }
     }
 
     def addArticleFormNgs() {

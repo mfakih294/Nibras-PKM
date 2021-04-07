@@ -13,6 +13,7 @@ class UrlMappings {
         "/calm" (controller: 'page', action: 'appMobileCalendar')
 
         "/kanban" (controller: 'page', action: 'appKanban')
+        "/notes" (controller: 'page', action: 'appNotes')
         "/daftar" (controller: 'page', action: 'appDaftar')
 
         "/dash" (controller: 'page', action: 'appDashboard')
