@@ -1215,7 +1215,11 @@ ll
                 newRecord.bookmarked = oldRecord.bookmarked
                 newRecord.save()
 //            newRecord.dateCreated = oldRecord.dateCreated
-                oldRecord.delete()
+                //oldRecord.delete()
+                oldRecord.isMerged = true
+                oldRecord.mergedOn = new Date()
+                oldRecord.entityCode = params.type
+                oldRecord.recordId = newRecord.id
 
             } else if (params.type == 'T') {
                 newRecord = new Task()
@@ -1227,8 +1231,25 @@ ll
                 newRecord.language = oldRecord.language
                 newRecord.save()
 //            newRecord.dateCreated = oldRecord.dateCreated
-                oldRecord.delete()
-
+              //  oldRecord.delete()
+                oldRecord.isMerged = true
+                oldRecord.mergedOn = new Date()
+                oldRecord.entityCode = params.type
+                oldRecord.recordId = newRecord.id
+            }  else if (params.type == 'G') {
+                newRecord = new Goal()
+                newRecord.summary = oldRecord.summary
+                newRecord.description = oldRecord.description
+                newRecord.priority = oldRecord.priority
+                newRecord.bookmarked = oldRecord.bookmarked
+                newRecord.language = oldRecord.language
+                newRecord.save()
+//            newRecord.dateCreated = oldRecord.dateCreated
+              //  oldRecord.delete()
+                oldRecord.isMerged = true
+                oldRecord.mergedOn = new Date()
+                oldRecord.entityCode = params.type
+                oldRecord.recordId = newRecord.id
             } else if (params.type == 'R') {
                 newRecord = new Book()
                 newRecord.course = oldRecord.course
@@ -1241,7 +1262,11 @@ ll
                 newRecord.bookmarked = oldRecord.bookmarked
                 newRecord.language = oldRecord.language
                 newRecord.save()
-                oldRecord.delete()
+                //oldRecord.delete()
+                oldRecord.isMerged = true
+                oldRecord.mergedOn = new Date()
+                oldRecord.entityCode = params.type
+                oldRecord.recordId = newRecord.id
 //            newRecord.dateCreated = oldRecord.dateCreated
 
             } else if (params.type == 'W') {
@@ -1254,7 +1279,11 @@ ll
                 newRecord.language = oldRecord.language
                 newRecord.bookmarked = oldRecord.bookmarked
                 newRecord.save()
-                oldRecord.delete()
+                //oldRecord.delete()
+                oldRecord.isMerged = true
+                oldRecord.mergedOn = new Date()
+                oldRecord.entityCode = params.type
+                oldRecord.recordId = newRecord.id
 
 //            newRecord.dateCreated = oldRecord.dateCreated
 

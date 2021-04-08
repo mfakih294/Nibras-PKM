@@ -139,6 +139,7 @@ class IndexCard implements Comparable {  // entity id = 16
     Boolean isPrivate = false
 
     Boolean isMerged = false
+    Date mergedOn
     Boolean isConverted = false
 
     Boolean isNewSection = false

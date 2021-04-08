@@ -204,13 +204,16 @@ class PkmTagLib {
             }
             else {
                 session[fileId] = i.path
+                def extension = i.name?.split(/\./)?.size() > 0 ? i.name?.split(/\./)?.last()?.toLowerCase() : ''
                 output += """<li>
 <b>${i.path?.replace(i.name, '')}</b>:<br/>
 			<div class="showhim fileCard" id="file${fileId}">
 <a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
                           target="_blank"
                           title="${i.path}">
-<span style="font-size: small; color: gray;" title="${i.path?.replace(i.name, '')}">
+<img src='${resource(dir: '/file-icons/32px', file: "${extension}.png")}' style="width: 32px;"
+                                     title=""/>
+                                     <span style="font-size: small; color: gray;" title="${i.path?.replace(i.name, '')}">
 ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
 </span>${i.name}
             </a>

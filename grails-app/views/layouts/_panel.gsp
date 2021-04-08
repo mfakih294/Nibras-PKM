@@ -1166,8 +1166,10 @@ Authors: ${authors}
         </g:if>
 
 <g:if test="${entityCode == 'N'}">
-    &nbsp; &nbsp;Convert to &nbsp;
-    <g:each in="${['J', 'P', 'T', 'R', 'W']}" var="t">
+    <br/>
+    <br/>
+    &nbsp; &nbsp;<b>Convert to:</b>
+    <g:each in="${['J', 'P', 'T', 'G', 'R', 'W']}" var="t">
 
         <g:remoteLink controller="generics" action="convertNoteToRecord"
                       params="${[id: record.id, entityCode: entityCode, type: t]}"
@@ -1213,7 +1215,8 @@ Authors: ${authors}
                 jQuery("#${field}${record.id}").editable();
             </script>
 
-
+<br/>
+<br/>
             <span id="${entityCode}CheckoutLog${record.id}"></span>
 
 

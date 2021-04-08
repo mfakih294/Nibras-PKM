@@ -5,3 +5,6 @@
     padding: 4px;
     margin: 4px;
 }
+.merged {
+    text-decoration: line-through;
+}

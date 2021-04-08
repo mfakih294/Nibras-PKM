@@ -101,7 +101,7 @@
 
 
 
-                    <td class="record-summary text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
+                    <td class="record-summary ${record.class.declaredFields.name.contains('isMerged') && record.isMerged ? 'merged' : '' }  text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
                         style="width: 98%; font-size: 0.95em; line-height: 20px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 3px; text-align: justify !important;">
 
@@ -852,9 +852,9 @@
                                     <g:if test="${Journal.countByTask(record) > 0}">
                                         J <sup>${Journal.countByTask(record)}</sup>
                                     </g:if>
-                                    <g:if test="${app.IndexCard.countByEntityCodeAndRecordId(record.entityCode(), record.id) > 0}">
-                                        N <sup>${app.IndexCard.countByEntityCodeAndRecordId(record.entityCode(), record.id)}</sup>
-                                    </g:if>
+%{--                                    <g:if test="${app.IndexCard.countByEntityCodeAndRecordId(record.entityCode(), record.id) > 0}">--}%
+%{--                                        N <sup>${app.IndexCard.countByEntityCodeAndRecordId(record.entityCode(), record.id)}</sup>--}%
+%{--                                    </g:if>--}%
 
                                 </g:if>
                                 <g:if test="${entityCode == 'G'}">

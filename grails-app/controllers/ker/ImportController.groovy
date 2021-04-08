@@ -368,7 +368,7 @@ class ImportController {
 
 
     def upload() {
-        println 'params ' + params.dump()
+//        println 'params ' + params.dump()
 
         String contentType = request.getHeader("Content-Type")
         String fileName = URLDecoder.decode(request.getHeader('X-File-Name'), 'UTF-8')
@@ -377,7 +377,7 @@ class ImportController {
         def info = session.getAttribute('uploadr')
         def myInfo = (name && info && info.containsKey(name)) ? info[name] : [:]
         String savePath = myInfo.path ?: "d:/tmp"
-        println 'path ' + myInfo.path
+//        println 'path ' + myInfo.path
         def dir = new File(savePath)
         def file = new File(savePath, fileName)
         def namePart = ""
@@ -397,7 +397,7 @@ class ImportController {
         if (!dir.exists()) {
             try {
                 dir.mkdirs()
-                println 'dir created'
+            //    println 'dir created'
             } catch (e) {
                 response.sendError(500, "could not create upload path ${savePath}")
                 render([written: false, fileName: file.name] as JSON)
