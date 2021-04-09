@@ -41,11 +41,6 @@ class SchedulerJob {
                 break
         }
 
-        def db = new Sql(dataSource)
-        def date = new Date()?.format('ddMMyyyyHHmmss')
-        def query = "BACKUP TO 'db-backup-" + new Date()?.format('ddMMyyyyHHmmss') +".zip'"
-        def result = db.execute(query)
-      //  result
-        println "Job run!"
+
     }
 }
