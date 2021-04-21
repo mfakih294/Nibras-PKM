@@ -14,9 +14,9 @@
 
 <g:if test="${totalHits != 0}">
 <g:if test="${title && !ssId}">
-    <h2 style="font-family: Georgia; font-size: 14px; font-weight: bold; line-height: 20px;">
+    <h4 style="font-family: Georgia; font-size: 14px; font-weight: bold; line-height: 20px;">
        ${title} ${totalHits != null ? ' (' + totalHits + ')' : ''}
-    </h2>
+    </h4>
 %{--<hr/>--}%
 </g:if>
 

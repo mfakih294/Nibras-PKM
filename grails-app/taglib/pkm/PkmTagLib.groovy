@@ -117,9 +117,10 @@ class PkmTagLib {
                 def typeSandboxPath = OperationController.getPath('root.rps1.path')+ '/R' +
                         (resourceNestedByType ?  '/' +  type : '') +
                         '/'
-
                         //def typeLibraryPath = OperationController.getPath('root.rps3.path')+ '/R/' + type
                         //ResourceType.findByCode(type).libraryPath
+
+
                         def typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' +
                                 (resourceNestedByType ?  '/' +  type : '') +
                                 '/'
@@ -208,6 +209,7 @@ class PkmTagLib {
                 output += """<li>
 <b>${i.path?.replace(i.name, '')}</b>:<br/>
 			<div class="showhim fileCard" id="file${fileId}">
+
 <a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
                           target="_blank"
                           title="${i.path}">

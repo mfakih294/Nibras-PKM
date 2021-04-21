@@ -1911,10 +1911,12 @@ past.each(){
 
         def r = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-        def filename = entityCode?.toLowerCase()
-        + ' p' +  (r.priority ?: 2) + (r.course ?  ' c' +  r.course?.code : ' ') +
-                (r.department ?  ' d' +  r.department?.code : ' ') + '  -- '
-        + (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
+        def filename = //entityCode?.toLowerCase() +
+//                ' p' + (r.priority ?: 2) +
+                (r.course ?
+                        ' c' +  r.course?.code : ' ') +
+                (r.department ?  ' d' +  r.department?.code : ' ') + '  -- ' +
+         (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
 
 
         for (c in '?"/\\*:<>' + '!$^&{}|') {
@@ -1924,8 +1926,8 @@ past.each(){
         def f
 
 
-        f = new File(OperationController.getPath('root.rps1.path') + '/' + entityCode + '/entityCode-' + id + ' ' +
-                filename + '.md') // + ' ' + filename
+        f = new File(OperationController.getPath('root.rps1.path') + '/edit/' + entityCode + "-" + id + ' ' +
+                filename + '.txt') // + ' ' + filename
         // + ' ' + filename
 
 //        if (r.entityCode() == 'W') {
@@ -1953,6 +1955,115 @@ past.each(){
 
     }
 
+
+
+    def viewScan = {
+        def f = new File(params.name)
+        if (f.exists()) {
+            byte[] image = f.readBytes()
+            response.outputStream << image
+        } else
+            log.wan 'image not found for signature ' + params.id
+    }
+
+
+    def processScans = {
+            def list = new File(OperationController.getPath('root.rps1.path') + '/scans/').listFiles().sort()
+        if (list.size() > 0) {
+
+            def articleContent = list[0].name;
+//TODO: too long filename => file not found exception! w156
+            def dateFound = ''
+            def matches = (articleContent =~ /\d{14}/) //grabs 'gr' and its following 4 chars
+            if (matches){
+                def t = matches[0]
+            dateFound =
+                    t[6] + t[7] + '.' +
+                    t[4] + t[5] + '.' +
+                    t[0] + t[1] + t[2] + t[3] + '_' +
+                    t[8] + t[9] + '' +
+                    t[10] + t[11]
+            }
+            else if (articleContent =~ /\d{8}\_\d{6}/){
+
+            matches = (articleContent =~ /\d{8}\_\d{6}/)
+//                if (matches) {
+                    def t = matches[0]
+                    dateFound =
+                            t[6] + t[7] + '.' +
+                                    t[4] + t[5] + '.' +
+                                    t[0] + t[1] + t[2] + t[3] + '_' +
+                                    t[9] + t[10] + '' +
+                                    t[11] + t[12]
+//                }
+            }
+            else if (articleContent =~ /\d{8}\-\d{6}/){
+matches = (articleContent =~ /\d{8}\-\d{6}/)
+//                if (matches) {
+                def t = matches[0]
+                dateFound =
+                        t[6] + t[7] + '.' +
+                                t[4] + t[5] + '.' +
+                                t[0] + t[1] + t[2] + t[3] + '_' +
+                                t[9] + t[10] + '' +
+                                t[11] + t[12]
+//                }
+            }
+            render(view: '/appProcessor/main', model: [list: list, dateFound: dateFound])
+        }
+        else render 'Folder: '  + OperationController.getPath('root.rps1.path') + '/scans/' + ' is empty.'
+    }
+
+
+  def saveScanForm = {
+            def filePath = params.filePath
+            def fileName = params.fileName
+            def command = params.command
+      session['lastCommand'] = command
+      session['lastType'] = params.type
+      session['lastCourse'] = params.courseId
+//            def course = params.command
+
+      if (params.command && params.command?.length() < 140) {
+          def list = new File(OperationController.getPath('root.rps1.path') + '/scans/').listFiles().sort()
+          def extension = fileName?.split(/\./)[1]
+          def result = command[0].toLowerCase() + ' ' +
+                  ' p' + command[1].toLowerCase() +
+                  (params.courseId != 'null' ? ' C' + params.courseId : '') +
+                  ' d' + command[2].toLowerCase() +
+                  (params.dateFound ? ' (' + params.dateFound : '') +
+                  (command.length() > 3 ? ' -- ' + command.substring(3) : '')
+
+          result = result.trim()
+
+
+          def ant = new AntBuilder()
+          if (params.type == 'New') {
+              ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') + '/' + result + '.' + extension)
+              render '<br/><br/><b></b>File has been moved to <b>: ' +
+                      OperationController.getPath('root.rps1.path') + '/' + result + '</b>'
+
+          } else if (params.type == 'Group') {
+              ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') +
+                      '/' + result + '/' + fileName)
+              render ' <b></b>File has been moved to folder <br/><br/><b> ' +
+                      OperationController.getPath('root.rps1.path') + '/' + result + '/' + fileName + '</b>'
+          }
+
+//          render(5)
+//          sleep(1000)
+//          render(4 + ' ')
+//          sleep(1000)
+//          render(3 + ' ')
+//          sleep(1000)
+//          render(2 + ' ')
+//          sleep(1000)
+//          render(1 + ' ')
+//          sleep(1000)
+
+          render(template: '/appProcessor/reload')
+      } else render 'No text entered, or text too long.'
+    }
 
 
 } // end of class

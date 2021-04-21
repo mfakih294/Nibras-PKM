@@ -9,8 +9,8 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
-    //    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1"
+        classpath "org.grails.plugins:hibernate5:${gormVersion - ".RELEASE"}"
+        //    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1"
 //        runtime ':resources:1.2.14'
         // for ajax uploader
         //classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.5.0'
@@ -22,10 +22,10 @@ group "nibras"
 
 //apply plugin:"eclipse"
 //apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
+apply plugin: "war"
+apply plugin: "org.grails.grails-web"
 //apply plugin:"asset-pipeline"
-apply plugin:"org.grails.grails-gsp"
+apply plugin: "org.grails.grails-gsp"
 
 repositories {
     mavenLocal()
@@ -95,8 +95,8 @@ dependencies {
 
 
     //  compile group: 'com.gravity', name: 'goose', version: '2.1.23'
-     //compile group: 'com.github.emmanueltouzery', name: 'crony', version: '1.1.0'
-compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
+    //compile group: 'com.github.emmanueltouzery', name: 'crony', version: '1.1.0'
+    compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
 
     // https://mvnrepository.com/artifact/com.intuit.fuzzymatcher/fuzzy-matcher
     compile group: 'com.intuit.fuzzymatcher', name: 'fuzzy-matcher', version: '1.0.4'
@@ -109,17 +109,18 @@ compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
     compile 'org.grails.plugins:grails-markdown:3.0.0'
     compile 'org.grails.plugins:iCalendar:0.6.4'
 
-     compile 'org.grails.plugins:external-config:1.4.0'
+    compile 'org.grails.plugins:external-config:1.4.0'
 
+    compile 'org.grails.plugins:quartz:2.0.13'
 
     //compile "org.grails.plugins:feeds:1.6"
     compile 'org.grails.plugins:feeds:2.0.0-SNAPSHOT'
 
     compile 'org.grails.plugins:spring-security-core:3.2.3'
- //   compile "org.grails.plugins:resources"
+    //   compile "org.grails.plugins:resources"
 
 
-   // compile 'org.grails.plugins:joda-time:2.1.0'
+    // compile 'org.grails.plugins:joda-time:2.1.0'
 
     //compile "org.grails.plugins:ajax-uploader:1.1"
 
@@ -156,15 +157,12 @@ tasks.withType(Test) {
 }
 
 //assets {
-  //  minifyJs = true
-  //  minifyCss = true
+//  minifyJs = true
+//  minifyCss = true
 //}
 
 
 war {
-  version ""
-  archiveName = "nibras.war"
+    version ""
+    archiveName = "nibras.war"
 }
-
-
-

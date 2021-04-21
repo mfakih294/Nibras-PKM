@@ -28,9 +28,11 @@
 
         %{--${justUpdated ? 'justUpdated' : ''} todo--}%
 
+%{--        onmouseover="jQuery('.temp44').addClass('hiddenActions');--}%
+%{--        jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions')"--}%
+
         <div class="recordContainer"
-             onmouseover="jQuery('.temp44').addClass('hiddenActions');
-             jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions')"
+
              onxxxmouseout="jQuery('.temp44').addClass('hiddenActions');"
              style="background: #f2f2f2;  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2); padding: 0px;  margin: 5px; border-radius: 0px; margin-top: 10px;">
 
@@ -67,25 +69,31 @@
                     <table border="0">
                         <tr>
 
-                            <td style="padding-right: 3px; line-height: 20px;">
+                            <td style="padding-right: 3px; line-height: 14px;">
+
+                                <div style="font-size: xx-small;">
+                                    ${record.class.declaredFields.name.contains('type') && record.type ? record.type?.code : ''}
+                                </div>
                                 <g:remoteLink controller="generics" action="showSummary"
                                               params="${[id: record.id, entityCode: entityCode]}"
                                               update="${entityCode}Record${record.id}"
-                                              style="margin-left: 3px;padding-bottom: 2px; display: inline"
+                                              style="margin-left: 3px;padding-bottom: 5px; display: inline"
                                               title="ID ${record.id}. Click to refresh">
 
-                                    <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
-                                          style="padding: 2px; margin-right: 2px; color: white; display: inline; border-radius: 4px;">
-                                        <span style="color: white; padding: 4px;"><b>${entityCode}</b></span>
-                                    </span>
-                                    <span style="font-size: x-small">
-                                        ${new DecimalFormat("#,###").format(record.id)}
-                                    </span>
-                                </g:remoteLink>
 
-                                <g:if test="${record.class.declaredFields.name.contains('type') && record.type}">
-                                    <span style="margin: 2px; padding: 2px; border-radius: 0px; border: 1px solid darkgray; color: white; font-weight: bold; background: #695b7e; font-family: monospace">${record.type?.code}</span>
-                                </g:if>
+                                    <span class="${entityCode}-bkg ID-bkg ${entityCode == 'N' && record.entityCode != null ? 'non-genuineNote' : ''} ${entityCode == 'T' && record.isTodo ? 'todoTask' : ''}"
+                                          style="padding: 2px; margin-right: 2px; color: white; display: inline; border-radius: 4px;" title="${new DecimalFormat("#,###").format(record.id)}">
+                                        <span style="display: inline-block; color: white; padding: 4px;">
+                                            <b>${entityCode}</b><sup style="color: black;font-size: x-small; ">${record.class.declaredFields.name.contains('priority') && record.priority ? record.priority: ''}</sup><sub style="color: black;font-size: small; ">${record.class.declaredFields.name.contains('department') && record.department ? record.department?.code: ''}</sub>
+                                        </span></g:remoteLink>
+%{--                                    <span style="font-size: x-small">--}%
+%{--                                        ${new DecimalFormat("#,###").format(record.id)}--}%
+%{--                                    </span>--}%
+
+
+%{--                                <g:if test="${record.class.declaredFields.name.contains('type') && record.type}">--}%
+%{--                                    <div style="font-size: smaller;margin: 3px; padding: 2px; border-radius: 0px; border: 1px solid darkgray; color: white; font-weight: bold; background: #695b7e; font-family: monospace">${record.type?.code}</div>--}%
+%{--                                </g:if>--}%
 
 
                             </td>
@@ -306,7 +314,7 @@
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 2px; font-size: 1em;"
-                                              before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0)">
+                                              before=" myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0)">
                                 %{--class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"--}%
                                     <g:if test="${!record.summary}">
                                         ...
@@ -328,7 +336,7 @@
 
 
                                         %{--</bdi>--}%
-                                        %{--<br/>--}%
+%{--                                        <br/>--}%
                                         </span>
                                     </g:if>
                                 </g:remoteLink>
@@ -388,19 +396,19 @@
                         %{--<span style="color: #004499; font-family: monospace">${record.slug}</span>--}%
                         %{--</g:if>--}%
 
-                            <span style="float: left; direction: ltr; text-align: left;">
-<g:if test="${record.class.declaredFields.name.contains('department') && record.department}">
-                        <span style="margin: 2px; font-size: 1.2em; padding: 3px; border-radius: 4px; color: white; font-weight: bold; background: #0d4f98; font-family: monospace">
-                            ${record.department?.code}
-                        </span>
-    &nbsp;
-                        </g:if>
+                            <span style="direction: rtl; text-align: right;">
+%{--<g:if test="${record.class.declaredFields.name.contains('department') && record.department}">--}%
+%{--                        <span style="margin: 2px; font-size: 1.2em; padding: 3px; border-radius: 4px; color: white; font-weight: bold; background: #0d4f98; font-family: monospace">--}%
+%{--                            ${record.department?.code}--}%
+%{--                        </span>--}%
+%{--    &nbsp;--}%
+%{--                        </g:if>--}%
 
                                 <g:if test="${record.class.declaredFields.name.contains('course') && record.course}">
-                        <span style="margin: 2px; padding: 2px; border-radius: 0px; border-bottom: 1px solid darkgreen; color: black; font-weight: bold; font-family: monospace">
-                            ${record.course?.code}</span>
+                        <span style="padding: 4px; margin: 0px 7px; font-size: x-small; border-radius: 0px; border-bottom: 1px solid darkgreen;border-right: 1px solid darkgreen;border-left: 1px solid darkgreen; color: black; font-weight: normal; font-family: monospace">
+                            ${record.course?.summary}</span>
                         </g:if>
-                                <br/>
+%{--                                <br/>--}%
 
 <g:if test="${record.class.declaredFields.name.contains('status') && record.status}">
                         <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 1px solid darkgray; color: white; font-weight: bold; background: #7e5e3f; font-size: smaller">${record.status?.code}</span>
@@ -511,7 +519,7 @@
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 4px; font-size: 0.95em;"
-                                              before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
+                                              before=" myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                     <pkm:summarize text="${(record.title ?: '...')}"
                                                    length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/>
@@ -544,7 +552,7 @@
                                     </g:if>
 
                                 </g:remoteLink>
-
+<br/>
                             </g:if>
 
 
@@ -621,7 +629,7 @@
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                                           style="padding: 2px; font-size: 0.95em; font-style: italic"
-                                                          before=" myLayout.open('east'); jQuery('#3rdPanel').html(''); jQuery('#accordionEast').accordion({ active: 0});">
+                                                          before=" myLayout.slideOpen('east'); jQuery('#3rdPanel').html(''); jQuery('#accordionEast').accordion({ active: 0});">
                                                 ${record?.description?.replaceAll("\\<.*?>", "")?.replaceAll('\n', '\n')?.decodeHTML()?.replaceAll('\n', '\n')?.replace('Product Description', '')}
                                             </g:remoteLink>
                                         </g:if>
@@ -651,7 +659,7 @@
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                                           style="padding: 4px; font-size: 0.95em;"
-                                                          before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
+                                                          before=" myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                                 <pkm:summarize
                                                         text="${record?.description?.replace('Product Description', '')?.replaceAll("\\<.*?>", "")}"
@@ -676,7 +684,7 @@
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 4px; font-size: 0.95em;"
-                                              before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
+                                              before=" myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                     <span style="font-size: 0.9em; font-style: italic; color: #435d59">
                                         <pkm:summarize text="${record.fullText}"
@@ -733,7 +741,7 @@
                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                           style="padding: 1px; font-size: 0.9em;"
-                                          before="jQuery('#3rdPanel').html(''); myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});"
+                                          before="jQuery('#3rdPanel').html(''); myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0});"
                                           title="Created ${record?.dateCreated?.format('dd.MM.yyyy')}">
 
                                 <g:if test="${record.class.declaredFields.name.contains('completedOn') && record.completedOn}">
@@ -955,6 +963,16 @@
                                 </a>
                             </g:if>
                         </g:if>
+
+
+<br/>
+                        <a
+                                    title="Actions"
+                           class="fg-button ui-widget ui-state-default ui-corner-all" style="padding: 0px 3px; margin: 2px;"
+                                    onclick="jQuery('.temp44').addClass('hiddenActions');jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions')">
+&hellip;
+                    </a>
+
                     </td>
 
 
@@ -1054,7 +1072,9 @@
                         %{-- class += hiddenActions--}%
                         <div id="actionsButtons${entityCode}${record.id}"
                              class="temp44 hiddenActions actionsButtons"
-                             style="text-align: left; direction: ltr; line-height: 20px;font-size: 0.9em !important; color: darkgray !important">
+                             style="text-align: left; direction: ltr; line-height: 20px;font-size: 0.9em !important; color: darkgray !important; column-count: 3">
+
+                        ID:  <span style="color: darkslategrey; font-size: smaller;">${record.id}</span>
 
                             <g:remoteLink controller="generics" action="fetchAddForm"
                                           id="${record.id}"
@@ -1064,7 +1084,7 @@
                                           update="${entityCode}Record${record.id}"
                                           title="Edit">
                             %{--<i style="font-size: 0.9em;">--}%
-                                Edit
+                                Full Edit
                             %{--</i>--}%
                             </g:remoteLink>
                             <g:remoteLink controller="generics" action="fetchQuickAddForm"
@@ -1075,16 +1095,22 @@
                                                    updateRegion    : '3rdPanel',
                                                    finalRegion     : '3rdPanel']"
                                           update="3rdPanel"
-                                          before="myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});jQuery('#3rdPanel').scrollTop(0)"
+                                          before="myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0});jQuery('#3rdPanel').scrollTop(0)"
                                           title="Edit">
-                                ...</g:remoteLink>
+                                Quick edit</g:remoteLink>
 
 
+                            <g:remoteLink controller="generics" action="showComment" style=""
+                                          params="${[id: record.id, entityCode: entityCode]}"
+                                          update="below${entityCode}Record${record.id}"
+                                          title="Comments">
+                                Add note record
+                            </g:remoteLink>
 
-                            [<span style="color: darkslategrey; font-size: smaller;">${record.id}</span>]
+                          <br/>
 
                         <g:if test="${record.class.declaredFields.name.contains('type')}">
-
+Type:
                             <g:set value="type" var="field"></g:set>
                         %{--<div style=" margin-top: 5px; padding-right: 1px;">--}%
                             <a href="#" id="2${field}${record.id}" class="${field}"
@@ -1109,6 +1135,7 @@
 
                     %{--<g:if test="${session['showFullCard'] == 'on'  || showFull}">--}%
                         <g:if test="${record.class.declaredFields.name.contains('status')}">
+                            Status:
                             <div style="padding-right: 1px; display: inline;">
                                 %{--<br/>--}%
                                 <g:set value="status" var="field"></g:set>
@@ -1130,12 +1157,12 @@
                             </script>
 
                         </g:if>
-
+<br/>
                         <g:if test="${record.class.declaredFields.name.contains('course')}">
 
                         %{--&nbsp;--}%
                         %{--&nbsp;--}%
-
+Course
                             <g:set value="course" var="field"></g:set>
 
                             <a href="#" id="${field}${record.id}" class="${field}"
@@ -1156,20 +1183,20 @@
 
 
 
-                        <g:if test="${record.class.declaredFields.name.contains('priority')}">
-                            <span style="font-size: 1em; color: #003366">
-                                p${record.priority}
+%{--                        <g:if test="${record.class.declaredFields.name.contains('priority')}">--}%
+%{--                            <span style="font-size: 1em; color: #003366">--}%
+%{--                                p${record.priority}--}%
 
 
 
-                            </span>
-                        </g:if>
+%{--                            </span>--}%
+%{--                        </g:if>--}%
 
 
 
                         <g:if test="${entityCode == 'T'}">
 
-                            &nbsp;
+                         Task:   &nbsp;
                             <g:set value="context" var="field"></g:set>
 
                             <a href="#" id="${field}${record.id}" class="${field}"
@@ -1192,7 +1219,8 @@
 
 
                         <g:if test="${record.class.declaredFields.name.contains('department')}">
-
+                            <br/>
+Department:
                             <g:set value="department" var="field"></g:set>
 
                             <a href="#" id="${field}${record.id}" class="${field}"
@@ -1238,6 +1266,7 @@
 
 
                         <g:if test="${'E'.contains(entityCode)}">
+                            Book:
                             <b style="font-family: Courier">${record?.book?.course?.code}</b>
                         </g:if>
 
@@ -1245,7 +1274,7 @@
 
 
                         <g:if test="${record.class.declaredFields.name.contains('plannedDuration') && record.plannedDuration}">
-                            &nbsp;
+                           Duration:  &nbsp;
                             <g:set value="plannedDuration" var="field"></g:set>
 
                             <a href="#" id="${field}${recordId}" class="${field}"
@@ -1266,7 +1295,7 @@
 
 
                         <g:if test="${entityCode == 'I'}">
-                            ${record.indicator?.code}
+                        Indicator:    ${record.indicator?.code}
                         </g:if>
 
                         <g:if test="${entityCode == 'Q'}">
@@ -1275,12 +1304,12 @@
 
 
                         <g:if test="${entityCode == 'I'}">
-                            <g:formatNumber number="${record.value}" format="#,###"/>
+                         Value:   <g:formatNumber number="${record.value}" format="#,###"/>
                         </g:if>
 
 
                         <g:if test="${entityCode == 'N'}">
-
+Parent:
                             <g:if test="${record.recordId}">
 
                                 <g:remoteLink controller="generics" action="showSummary"
@@ -1319,7 +1348,7 @@
 
 
                         <span id="breadCrumSpan">
-
+Book:
                                 <g:if test="${record.class.declaredFields.name.contains('book')}">
 
                                     <g:set value="book" var="field"></g:set>
@@ -1354,7 +1383,7 @@
                                 <g:if test="${entityCode == 'N'}">
 
                                     <g:if test="${entityCode == 'N' && record.recordId}">
-
+Parent:
                                         <g:remoteLink controller="generics" action="showSummary"
                                                       id="${record.recordId}"
                                                       params="[entityCode: record.entityCode]"
@@ -1371,7 +1400,7 @@
                                         </g:remoteLink>
 
                                     </g:if>
-
+Writing:
                                     <g:set value="writing" var="field"></g:set>
 
                                     <a href="#" id="2${field}${record.id}" class="${field}"
@@ -1391,14 +1420,14 @@
                                 </g:if>
 
                                 <g:if test="${record.class.declaredFields.name.contains('writing') && record.writing}">
-                                    <br/>w ${record.writing}
+                                    <br/>W ${record.writing}
                                 </g:if>
 
 
 
 
                                 <g:if test="${record.class.declaredFields.name.contains('language')}">
-
+<br/>Language:
                                     <g:set value="language" var="field"></g:set>
 
                                     <a href="#" id="${field}${record.id}" class="${field}"
@@ -1429,7 +1458,7 @@
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
-                                tag
+                                Tag
                             </g:remoteLink>
 
                         %{--<g:remoteLink controller="generics" action="showRelate"--}%
@@ -1442,13 +1471,15 @@
 
 
 
-
                             <g:if test="${record.class.declaredFields.name.contains('priority')}">
-                                &nbsp;          <a name="bookmark${record.id}${entityCode}" title="priority++"
+
+                                <br/>
+                                Priority:
+                                        &nbsp;          <a name="bookmark${record.id}${entityCode}" title="priority++"
                                                    value="${record.priority}"
                                                    style="background: lightgrey"
                                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')">
-                                <b>p+</b>
+                                <b>+</b>
                             </a>
                             %{--</g:if>--}%
 
@@ -1459,14 +1490,16 @@
                                     <b>-</b>
                                 </a>
                             </g:if>
+<br/>
 
                             <g:if test="${record.class.declaredFields.name.contains('endDate')}">
-                                &nbsp;          <a name="bookmark${record.id}${entityCode}"
+                                Due date:
+                             &nbsp;          <a name="bookmark${record.id}${entityCode}"
                                                    value="${record.endDate}"
                                                    style="background: lightgrey"
                                                    title="Increase end date and, if not set, set it to tomorrow"
                                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increaseEndDate/${entityCode}${record.id}')">
-                                e+
+                                +
                             </a>
                                 <a name="bookmark${record.id}${entityCode}"
                                    value="${record.endDate}"
@@ -1493,43 +1526,31 @@
 
                         %{--update="commentArea${entityCode}${record.id}"--}%
 
-                            <g:remoteLink controller="generics" action="showComment" style="background: lightgrey"
-                                          params="${[id: record.id, entityCode: entityCode]}"
-                                          update="below${entityCode}Record${record.id}"
-                                          title="Comments">
-                                N+
-                            </g:remoteLink>
 
-                            <g:if test="${'CTGREW'.contains(entityCode)}">
 
-                                <g:remoteLink controller="generics" action="showJP"
-                                              params="${[id: record.id, entityCode: entityCode]}"
-                                              update="below${entityCode}Record${record.id}"
-                                              title="Details">
-                                    jp
-                                </g:remoteLink>
-                            </g:if>
 
-                        &nbsp;
+
+                        &nbsp;<br/>
+                        Append to
                             <g:remoteLink controller="generics" action="showAppend"
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
-                                d+
+                               description
                             </g:remoteLink>
 
                             <g:remoteLink controller="generics" action="showAppendNotes"
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
-                                n+
+                                 record's notes
                             </g:remoteLink>
 
 
 
 
                             <g:if test="${'TPGREJWN'.contains(entityCode)}">
-
+<br/> Mark as
                                 <g:remoteLink controller="generics" action="markCompleted"
                                               id="${record.id}"
                                               params="[entityCode: entityCode]"
@@ -1545,10 +1566,20 @@
                                               params="[entityCode: entityCode]"
                                               update="${entityCode}Record${record.id}"
                                               title="Mark review">
-                                    <b style="color: darkgreen">rev</b>
+                                    <b style="color: darkgreen">reviewed</b>
                                 %{--${record.class.declaredFields.name.contains('reviewCount') && record.reviewCount > 0 ? '(' + record.reviewCount  + ')': ''}--}%
                                 </g:remoteLink>
 
+<br/>
+                                <g:if test="${'CTGREW'.contains(entityCode)}">
+
+                                    <g:remoteLink controller="generics" action="showJP"
+                                                  params="${[id: record.id, entityCode: entityCode]}"
+                                                  update="below${entityCode}Record${record.id}"
+                                                  title="Details">
+                                        Add J/P
+                                    </g:remoteLink>
+                                </g:if>
 
                                 <g:remoteLink controller="operation" action="dumpRecordForImport"
                                               id="${record.id}"
@@ -1556,7 +1587,7 @@
                                               update="${entityCode}CheckoutLog${record.id}"
                                               class="fg-button ui-widget ui-state-default ui-corner-all"
                                               title="Dump to txt for re-importing">
-                                    txt &crarr;
+                                    Export to text &crarr;
                                 </g:remoteLink>
 
                                 <span id="${entityCode}CheckoutLog${record.id}"></span>
@@ -1564,18 +1595,18 @@
 
                             </g:if>
 
-                        <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
-                           onclick="jQuery('#${entityCode}Record${record.id}').html('');" style="color: darkgray; margin-right: 4px;">x</a>
 
+
+
+
+                        <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
+                           onclick="jQuery('#${entityCode}Record${record.id}').html('');" style="float: right; color: darkgray; margin-right: 4px;">Close</a>
                         <g:checkBox name="select-${record.id}-${entityCode}"
                                     title="Select record"
                                     value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes().getSession()[entityCode + record.id] == 1}"
-                                    style="height: 14px !important;"
+                                    style="height: 14px !important; float: right;"
                                     onclick="jQuery('#selectBasketRegion').load('${request.contextPath}/generics/select/${entityCode}${record.id}')"
                         />
-
-
-
 
                     </div>
                     </div>

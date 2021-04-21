@@ -15,13 +15,13 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>
   --}%
 
-<%@ page import="ker.OperationController; cmn.Setting" %>
+<%@ page import="ker.OperationController; cmn.Setting; mcs.Course" %>
 <html xmlns="http://www.w3.org/1999/xhtml" >
 %{--xml:lang="ar" lang="ar" dir="rtl"--}%
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    %{--<meta name="layout" content="main"/>--}%
+%{--    <meta name="layout" content="main"/>--}%
 
 
     %{--<b style="color: white">--}%
@@ -29,8 +29,8 @@
 
     <title style="direction: rtl; text-align: right;">
 
-    ${OperationController.getPath('app.name') ?: 'Nibras PKM'}
-    <g:meta name="app.version"/>
+    ${OperationController.getPath('app.name') ?: 'Nibras'} Scans
+%{--    <g:meta name="app.version"/>--}%
 
     </title>
 
@@ -44,9 +44,9 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui-1.8.22.custom.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.continuousCalendar.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jqueryui-editable.css')}"/>
-%{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'layout-mine.css')}"/>--}%
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'layout-mine.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>
+%{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>--}%
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'simpleSlider.css')}"/>
 
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'uploader.css')}"/>--}%
@@ -59,10 +59,9 @@
     <script type="text/javascript" src="${resource(dir: 'js', file: 'chosen.jquery.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'am2_SimpleSlider.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.address-1.5.min.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.continuousCalendar-latest.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.layout-latest_min.js')}"></script>
+
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.purr.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.relatedselects.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.tablednd_0_5.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'jqueryui-editable.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js', file: 'morris.js')}"></script>
@@ -86,11 +85,32 @@
     <script type="text/javascript" src="${resource(dir: 'plugins/uploader', file: 'jquery.uploadr.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'plugins/uploader', file: 'jquery.uploadr.css')}"/>
 
+<style>
+.chzn-container{
+    width: 350px !important;
+}
 
+.chzn-container-single .chzn-single abbr {
+    left: 26 !important;
+}
+</style>
 
    %{--<r:layoutResources/>--}%
 
-    <script type="text/javascript">
+<script type="application/javascript">
+     jQuery('#command').select();
+     jQuery('#command').focus();
+      jQuery(".chosen").chosen();
+      jQuery("#searchFieldScan").autocomplete("/sgn/signature/autoCompleteNames", {
+                mustMatch: false, minChars:2, selectFirst: false, highlight: false, autoFill: false,multipleSeparator: ' ', multiple: false,
+                 delay:200
+      		});
+   jQuery("#searchFieldScanPosition").autocomplete("/sgn/signature/autoCompletePositions", {
+                mustMatch: false, minChars:2, selectFirst: false, highlight: false, autoFill: false,multipleSeparator: ' ', multiple: false,
+                 delay:200
+      		});
+
+
 
         //    $.address.state('${request.contextPath}/')
         $.address.externalChange(function (event) {
@@ -140,8 +160,9 @@
             };
         })(jQuery);
 
-
         jQuery(document).ready(function () {
+
+            jQuery(".chosen").chosen({allow_single_deselect: true, search_contains: true, no_results_text: "None found"});
 
          //   for (var i = 0; i < localStorage.length; i++) {
                 // do something with localStorage.getItem(localStorage.key(i));
@@ -161,26 +182,25 @@
 
 
             myLayout = $('body').layout({
-                west__size: 300,
+                west__size: 0,
                 east__size: 380,
-                 east__initClosed: true,
+                 west__initClosed: true,
                 east__togglerContent_closed: '<<',
                 // RESIZE Accordion widget when panes resize
                 west__onresize: $.layout.callbacks.resizePaneAccordions,
                 east__onresize: $.layout.callbacks.resizePaneAccordions,
                 onresize: $.layout.callbacks.resizePaneAccordions,
-                north__closable: true,
-                south__closable: true,
+                north__closable: false,
+                south__closable: false,
                 north__spacing_closed: 5		// big resizer-bar when open (zero height)
                 , north__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
                 , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
-                , east__slidable: true	// OVERRIDE the pane-default of 'resizable=true'
                 , north__spacing_open: 5		// no resizer-bar when open (zero height)
                 , south__spacing_open: 5		// no resizer-bar when open (zero height)
                 , south__spacing_closed: 5		// big resizer-bar when open (zero height)
 
                 , east__spacing_open: 5		// no resizer-bar when open (zero height)
-                , east__spacing_closed: 5		// big resizer-bar when open (zero height)
+                , east__spacing_closed: 25		// big resizer-bar when open (zero height)
                 , west__spacing_open: 5		// no resizer-bar when open (zero height)
                 , west__spacing_closed: 15		// big resizer-bar when open (zero height)
 //            , west__initClosed: true
@@ -239,71 +259,14 @@
             jQuery.browser = browser;
 
             // this layout could be created with NO OPTIONS - but showing some here just as a sample...
-            // myLayout = jQuery('body').layout(); -- syntax with No Options
+            // myLayout = jQuery('body').layout();
+            // -- syntax with No Options
 
 //        jQuery('input').iCheck({
 //            checkboxClass: 'icheckbox_minimal-grey',
 //            radioClass: 'iradio_minimal-grey',
 //            increaseArea: '-20%' // optional
 //        });
-
-//        jQuery('#searchForm').load('${request.contextPath}/generics/hqlSearchForm/T')
-        jQuery('#tagCloud').load('${request.contextPath}/report/tagCloud')
-
-// jQuery('#centralArea').load('${request.contextPath}/generics/recentRecords')
-
-//        jQuery('#quickAddTextField').select();
-//        jQuery('#quickAddTextField').focus();
-
-
-
-
-
-$("#accordionCenter").accordion({
-                heightStyle: "fill",
-                header: "h6",
-                fillSpace: true,
-                event: "click",
-                active: 0,
-                collapsible: false,
-                icons: {
-                    header: "ui-icon-circle-arrow-e",
-                    headerSelected: "ui-icon-circle-arrow-s"
-                }
-
-            });
-
-
-
-            jQuery("#accordionWest").accordion({
-                heightStyle: "fill",
-                fillSpace: true,
-                header: "h3",
-                event: "click",
-                active: ${ker.OperationController.getPath('accordion.west.default.panel')?: '0'},
-                collapsible: true,
-                icons: {
-                    header: "ui-icon-circle-arrow-e",
-                    headerSelected: "ui-icon-circle-arrow-s"
-                }
-
-            });
-
-/*
-            $("#accordionEast").accordion({
-                heightStyle: "fill",
-                header: "h3",
-                fillSpace: true,
-                event: "click",
-                active: ${ker.OperationController.getPath('accordion.east.default.panel')?: '1'},
-                collapsible: true,
-                icons: {
-                    header: "ui-icon-circle-arrow-e",
-                    headerSelected: "ui-icon-circle-arrow-s"
-                }
-            });
-*/
-
 
 //            setTimeout(function() {
 //                window.location.href = window.location;
@@ -364,61 +327,11 @@ $("#accordionCenter").accordion({
         });
             */
 
- jQuery.idleTimeout('#importFileCount','#importFileCount', {
-            idleAfter: 10,
-            pollingInterval: 15,
-            keepAliveURL: '${request.contextPath}/page/importbeat',
-            serverResponseEquals: 'ok',
-     AJAXTimeout: 5,
-     onTimeout: function () {
-//                confirm('Your session has timeout.');
-                jQuery.ajax({
-                    type: 'GET',
-                    url: '${request.contextPath}/page/importbeat',
-                    dataType: 'html',
-
-                    success: function(html, textStatus) {
-                    jQuery('#importFileCount').text(html);
-//                        console.log('resp timeout: ' + html)
-                    }
-                });
-            }
-        });
-
-            jQuery('#contactPanel').load('${request.contextPath}/generics/contactCloud');
-            jQuery('#tagsPanel').load('${request.contextPath}/generics/tagCloud');
-            jQuery('#importFileCount').load('${request.contextPath}/page/importbeat');
-            jQuery('#recentRecordsCount').load('${request.contextPath}/generics/countRecentRecords');
-//            jQuery('#centralArea').load('${request.contextPath}/generics/recentRecords');
-
-        Mousetrap.bindGlobal('ctrl+1', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 0});
-            });
-          Mousetrap.bindGlobal('ctrl+2', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 1});
-            });
-          Mousetrap.bindGlobal('ctrl+3', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 2});
-            });
-          Mousetrap.bindGlobal('ctrl+4', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 3});
-            });
-
-            Mousetrap.bindGlobal('f7', function (e) {
-//                jQuery('#accordionCenter').accordion({ active: 0});
-                jQuery('#quickAddTextFieldBottomTop').select();
-                jQuery('#quickAddTextFieldBottomTop').focus();
-            });
-            Mousetrap.bindGlobal('shift+esc', function (e) {
-//                jQuery('#accordionCenter').accordion({ active: 0});
-                jQuery('#quickAddTextFieldBottomTop').select();
-                jQuery('#quickAddTextFieldBottomTop').focus();
-            });
-     Mousetrap.bindGlobal('esc', function (e) {
+     // Mousetrap.bindGlobal('esc', function (e) {
 //            jQuery("html, body").animate({ scrollTop: 0 }, "fast");
 //            jQuery('#centralArea').html('');
-                jQuery('#speedsearch').select();
-                jQuery('#speedsearch').focus();
+//                 jQuery('#speedsearch').select();
+//                 jQuery('#speedsearch').focus();
 //                jQuery('#quickAddTextFieldBottomTop').select();
 //                jQuery('#3rdPanel').html('');
 //                jQuery('#sandboxPanel').html('');
@@ -426,16 +339,16 @@ $("#accordionCenter").accordion({
                 //	jQuery('#accordionEast').accordion({ active: 3});
                 //	jQuery('#accordionWest').accordion({ active: 3});
 //            jQuery('#quickAddTextField').scrollTop(0);
-            });
+//             });
 
-//        Mousetrap.bindGlobal('esc', function (e) {
-//
+        Mousetrap.bindGlobal('shift+enter', function (e) {
+                jQuery('#scanSubmit').click();
 ////            jQuery('#centralArea').html('');
 ////            jQuery('#quickAddTextField').focus();
 ////            jQuery('#quickAddTextField').select();
 //            jQuery('#quickAddRecordTextArea').select().focus();
 //
-//        });
+     });
 
 //            Mousetrap.bindGlobal('f6', function (e) {
 //                jQuery('#centralArea').html('');
@@ -446,19 +359,19 @@ $("#accordionCenter").accordion({
       /*
             Mousetrap.bindGlobal('f2', function (e) {
                 jQuery('#accordionEast').accordion({ active: 6});
-//                jQuery('#addXcdFormDaftarSubmit').click();
+
                 jQuery('#quickAddRecordTextArea').select().focus();
 
                 jQuery('#descriptionDaftar').focus();
             });
             */
-  Mousetrap.bindGlobal('f2', function (e) {
-                jQuery('#quickAddXcdSubmitExecute').click();
-                jQuery('#quickAddTextField').select().focus();
-//                jQuery('#quickAddTextField').focus();
-            });
+  // Mousetrap.bindGlobal('f2', function (e) {
+  //               jQuery('#quickAddXcdSubmitExecute').click();
+  //               jQuery('#quickAddTextField').select().focus();
+//               // jQuery('#quickAddTextField').focus();
+//             });
 
-            Mousetrap.bindGlobal('shift+f2', function (e) {
+            Mousetrap.bindGlobal('f2', function (e) {
 //                jQuery('#accordionEast').accordion({ active: 5});
 
                 jQuery('#addXcdFormDaftarSubmit').click();
@@ -556,9 +469,9 @@ $("#accordionCenter").accordion({
             // document.forms.quickAddForm['submit'].disabled = true;
 
 
-            jQuery(window).bind('beforeunload', function () {
-                return 'Are you sure you want to leave the application?';
-            });
+            // jQuery(window).bind('beforeunload', function () {
+            //     return 'Are you sure you want to leave the application?';
+            // });
 
 
             jQuery.ajaxSetup({
@@ -589,7 +502,8 @@ $("#accordionCenter").accordion({
                 $('#spinner2').hide();
             });
 
-            jQuery('#descriptionDaftar').focus();
+            jQuery('#command').select();
+            jQuery('#command').focus();
         });
 
     </script>
@@ -598,12 +512,124 @@ $("#accordionCenter").accordion({
 
 <body>
 
-<g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips, recentRecords: recentRecords]"/>
-<div id="idletimeout"></div>
+<div id="spinner2" style="display:none; z-index: 10000 !important">
+    <img src="${resource(dir: '/images', file: 'Eclipse-1.4s-200px.gif')}" alt="Spinner2"
+         style="z-index: 10000 !important"/>
+</div>
+<div class="ui-layout-center" style="margin-top: 2px !important; margin-bottom: 2px !important; background: none; overflow: auto;">
+    <table>
+        <tr>
+            <td style="vertical-align: top; width: 99%;">
+                <h2>Processing: ${list[0].name}</h2>
+
+                <div id="scannedPage">
+
+                </div>
+
+                <div style="border: 1px solid darkgray; padding: 3px; margin: 3px;">
+
+  <g:formRemote name="qedit" url="[controller: 'operation', action:'saveScanForm']" update="scannedPage" method="post">
+
+    <div class="dialog">
+
+        <g:hiddenField name="filePath" value="${list[0].path}"></g:hiddenField>
+        <g:hiddenField name="fileName" value="${list[0].name}"></g:hiddenField>
+        <g:hiddenField name="dateFound" value="${dateFound}"></g:hiddenField>
+
+        <table style="width: 99% !important;">
+            <tbody>
+
+            <tr class="prop">
+
+                <td valign="top" class="value">
+                    Course
+                    <g:select name="courseId" class="ui-corner-all chosen" style="width: 300px !important"
+                              from="${mcs.Course.list()}" optionKey="id"
+                        value="${session['lastType'] == 'Group' ? session['lastCourse'] : ''}"
+                              noSelection="${['null':'']}" />
+                </td>
 
 
 
+                <td valign="top" class="value">
+                        Type:
+                    <g:select name="type" class="ui-corner-all" style="width: 100px;"
+                              from="${['New', 'Group', 'Delete']}"
+                              value="${session['lastType'] ?: 'New'}"/>
 
-</body>
+                    <span style="float: right">
+                    <i>Date found: ${dateFound}</i>
+                    </span>
+                </td>
+                <td valign="top" class="value">
+                    <g:submitButton name="create" id="scanSubmit" value="${message(code: 'save', 'default': 'Process')} (Shift+Enter)" style=""
+                                    onclick="this.value='Done'"
+                                                  class="fg-button ui-widget ui-state-default ui-corner-all"/>
+
+                </td>
+
+                %{--<td valign="top" class="value ${hasErrors(bean:signatureInstance,field:'validFrom','errors')}"><label for="validFrom"  ><g:message code="signature.validFrom" default="Valid from"/>--}%
+                %{--</label>--}%
+                %{--<g:textField id="validFrom" name="validFrom" class="ui-corner-all" value="${signatureInstance?.validFrom}" /> </td> --}%
+                %{----}%
+
+            </tr>
+            <tr>
+                <td colspan="3" valign="top" class="value">
+                    Text * (e.g. N3A ...)
+                    <g:textField
+                            id="command" style="width: 85% !important;"  name="command" class="longInput ui-corner-all"
+                        placehoder="type-priority-dept (optional description)"
+                            value="${session['lastType'] == 'Group' ? session['lastCommand'] : ''}"/>
+%{--                    list[0].name?.substring(16, list[0].name?.length() - 4)--}%
+%{--                    session['lastCommand']--}%
+%{--                    <br/>--}%
+%{--                    <br/>--}%
+%{--                    Last command: ${session['lastCommand']}--}%
+
+
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+	
+
+
+  </g:formRemote>
+
+
+
+%{--<img src="/job/sgn-scans/${list[0]}"/>--}%
+
+<div style="width: 99%;">
+
+
+    <div >
+    <img style="display:block; width: 99%;"
+         src="${createLink(controller: 'operation', action: 'viewScan'
+                 , params: [name: list[0].path])}"/>
+    </div>
+
+</div>
+           </td>
+
+            
+        </tr>
+    </table>
+
+
+        %{--<div id="subDaftarArea">--}%
+        %{----}%
+
+        <div id="idletimeout"></div>
+
+</div>
+
+
 </body>
 </html>

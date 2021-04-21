@@ -1362,6 +1362,8 @@ x
 %{--(${new PrettyTime()?.format(record.dateCreated)})--}%
     <br/>
     <b>Version</b> <span style="font-weight: normal">${record.version}</span>
+    <br/>
+    <br/>
 </div>
 
 
@@ -1370,16 +1372,17 @@ x
 %{----}%
 
 
-        <br/>
-        <br/>
-
 
 
 <div id="notificationArea"></div>
 
 <r:layoutResources/>
 
-<script type="text/javascript">
+
+
+
+
+        <script type="text/javascript">
 //jQuery('.uploadr[name=uploader]').data('uploadr').set('path', 'd:/test');
 jQuery('#spinner2').hide();
 </script>

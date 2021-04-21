@@ -47,6 +47,11 @@
             </a>
         </td>
 
+        <td style="padding-right: 1px !important;">
+            <a href="${createLink(controller: 'operation', action:'processScans')}" target="_blank">
+                Scans
+            </a>
+        </td>
 
 
         <td style="padding-right: 1px !important;">

@@ -14,8 +14,10 @@
    <g:render template="/indexCard/form" model="[indexCardInstance: indexCardInstance]"/>
     </g:else>
     <g:submitButton name="create" value="${message(code: 'save', 'default': 'Save')}"
-                    style="width: 99%;"
+                    style=""
                     class="fg-button ui-widget ui-state-default ui-corner-all"/>
+    <br/>
+    <br/>
 </g:formRemote>
     </g:if>
 

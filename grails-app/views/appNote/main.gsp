@@ -550,7 +550,7 @@
                 </div>
 
                 <div id="centralArea" class="common" style="">
-                    <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Today\'s records']"></g:render>
+                    <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
                 </div>
 
             </td>

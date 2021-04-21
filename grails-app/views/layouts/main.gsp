@@ -55,7 +55,7 @@
     .ui-layout-resizer,
     .ui-layout-toggler {
         /* NEUTRALIZE 'layout element' styles */
-        display: none !important; /* hide ALL by default */
+        /*display: none !important; !* hide ALL by default *!*/
         position: relative !important;
         top: auto !important;
         bottom: auto !important;

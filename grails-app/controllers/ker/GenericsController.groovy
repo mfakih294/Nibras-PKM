@@ -3335,6 +3335,7 @@ ll
         def queryCriteria = []
         try {
             properties = transformMcsNotation(input)['properties']
+
             if (!properties['language']) {
                 def dlang = OperationController.getPath('default.language') ?: 'en'
                 properties['language'] = dlang
@@ -4011,7 +4012,8 @@ ll
                             properties['course'] = null
                             queryCriteria.add("course is null")
                         } else {
-                            def crsId = Course.findByNumberCode(it.substring(1)).id
+                            def crsId = Course.findById(it.substring(1)).id
+                            // TODO: changed to allow scans filename to be looked up w156.21
                             properties['course'] = crsId
                             queryCriteria.add('course.id = ' + crsId)
                         }
@@ -5039,7 +5041,6 @@ def addTagToAll(String input) {
     def recentRecords() {
 
         def recentRecords = []
-
         allClassesWithCourses.each() {
             recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 7, [sort: 'dateCreated', order: 'desc', max: 4])
             //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
@@ -5621,7 +5622,7 @@ def addTagToAll(String input) {
 
     def commitTextChanges() {
 
-        def f = new File(OperationController.getPath('editBox.path') + '/' + params.name)
+        def f = new File(OperationController.getPath('root.rps1.path') + '/edit/' + params.name)
         def r
         if (params.entityCode == 'W')
             r = Writing.get(params.id.replace('.md', '').toLong())//.replace('W-', ''))
@@ -5629,33 +5630,34 @@ def addTagToAll(String input) {
             r = IndexCard.get(params.id.replace('.md', '').toLong())
 
         r.description = (f.text != '' ? f.text : '...')
+if (1 == 2) {
+    def htmlFile = new File(OperationController.getPath('root.rps1.path') + '/edit/' + params.name.replace('.md', '.md.html'))
 
-        def htmlFile = new File(OperationController.getPath('editBox.path') + '/' + params.name.replace('.md', '.md.html'))
-
-        def command = "D:\\app\\pandoc281\\pandoc -f markdown --metadata rtl=true -i r:/W/W-${r.id}.md -o r:/W/W-${r.id}.md.html"
+    def command = "D:\\app\\pandoc281\\pandoc -f markdown --metadata rtl=true -i r:/W/W-${r.id}.md -o r:/W/W-${r.id}.md.html"
 //        println 'cmd: ' + command
-        try {
-            println 'command: ' + command
-            println 'exit: ' + command.execute().exitValue()
+    try {
+        println 'command: ' + command
+        println 'exit: ' + command.execute().exitValue()
 
-            println 'out: ' + command.execute().outputStream
-            println 'err: ' + command.execute().errorStream
-            render 'done'
-        } catch (Exception e) {
-            println e.toString()
-            render 'error pandoc...'
-        }
+        println 'out: ' + command.execute().outputStream
+        println 'err: ' + command.execute().errorStream
+        render 'done'
+    } catch (Exception e) {
+        println e.toString()
+        render 'error pandoc...'
+    }
 
-        sleep(2000) // wait for pandoc to finish converting the document
+    sleep(2000) // wait for pandoc to finish converting the document
 
-        if (htmlFile.exists()) {
+    if (htmlFile.exists()) {
 //            println 'here !!! exists... '
-            r.descriptionHTML = htmlFile.text
-            htmlFile.delete()
-        }
-        // if contents is correctly set in database, delete file to declutter the editing folder
-//        if (r.description == f.text)
-//        f.delete()
+        r.descriptionHTML = htmlFile.text
+        htmlFile.delete()
+    }
+}
+//         if contents is correctly set in database, delete file to declutter the editing folder
+        if (r.description == f.text)
+        f.delete()
 
         // changes to DB after file editing
         r.description = r.description?.replace('< ', '«')?.replace(' >', '»')
@@ -5683,17 +5685,17 @@ def addTagToAll(String input) {
         render(template: '/gTemplates/recordSummary', model: [record: r])
         render(template: '/layouts/achtung', model: [message: "Changes saved to database and files deleted."])
     }
-
-    def sajaList() {
-        def list = Book.createCriteria().list() { tags { idEq(new Long(437)) } }
-        println list.dump()
-        render(view: '/page/kanbanCrs', model: [
-                searchResultsTotal: list.size(),
-                totalHits         : list.size(),
-                list              : list,
-                title             : "Saja's Files"]
-        )
-    }
+//TODO: remove
+//    def sajaList() {
+//        def list = Book.createCriteria().list() { tags { idEq(new Long(437)) } }
+//        println list.dump()
+//        render(view: '/page/kanbanCrs', model: [
+//                searchResultsTotal: list.size(),
+//                totalHits         : list.size(),
+//                list              : list,
+//                title             : "Saja's Files"]
+//        )
+//    }
 
     def selectionSize() {
         def c = 0

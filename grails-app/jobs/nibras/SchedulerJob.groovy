@@ -41,6 +41,5 @@ class SchedulerJob {
                 break
         }
 
-
     }
 }

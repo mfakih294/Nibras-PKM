@@ -100,7 +100,7 @@ html * {
 }
 
 .ui-layout-toggler-east{
-    /*background: darkgray !important;*/
+    background: darkgray !important;
 }
 
 .ui-layout-resizer-north{
@@ -1406,12 +1406,19 @@ ul.ui-tabs-nav {
     height: 15px;
     display: block;
 }
-
 .icon-star-gm {
     background: url("../images/mail.png") no-repeat scroll 0px -20px transparent;
     width: 15px;
     height: 15px;
     display: block;
+}
+
+.icon-edit {
+    background: url("../images/mail.png") no-repeat scroll -80px -120px transparent;
+    width: 15px;
+    height: 15px;
+    display: block;
+    margin-top: 5px;
 }
 
 .deleted {

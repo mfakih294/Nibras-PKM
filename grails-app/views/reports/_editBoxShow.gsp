@@ -1,21 +1,22 @@
 <%@ page import="ker.OperationController; cmn.Setting; app.IndexCard; mcs.Writing" %>
 
 
-<h2>Changed records (${OperationController.getPath('editBox.path')})</h2>
+<h2>Changed records (${OperationController.getPath('root.rps1.path') + '/edit/'})</h2>
 
 
 <br/>
 %{--Edit folder: .--}%
 
-<g:if test="${!new File(OperationController.getPath('editBox.path')).exists()}">
-    Folder does not exist. Set: <g:render template="/forms/updateSetting" model="[settingValue: 'editBox.path']"/>.
+<g:if test="${!new File(OperationController.getPath('root.rps1.path') + '/edit/').exists()}">
+    Folder does not exist (${OperationController.getPath('root.rps1.path') + '/edit/'}).
+%{--    Set: <g:render template="/forms/updateSetting" model="[settingValue: 'editBox.path']"/>.--}%
     </g:if>
 <g:else>
-<g:each in="${new File(OperationController.getPath('editBox.path')).listFiles()}" var="f">
+<g:each in="${new File(OperationController.getPath('root.rps1.path') + '/edit/').listFiles()}" var="f">
 
-    <g:if test="${f.name.endsWith('.md') && 'WN'.contains(f.name?.substring(0, 1))}">
+    <g:if test="${f.name.endsWith('.txt') && 'WN'.contains(f.name?.substring(0, 1))}">
     %{--<g:set value="${f.name.split(/\./)[0].substring(1)}" var="id"></g:set>--}%
-        <g:set value="${f.name.split('-')[1].replace('.md', '')}" var="id"></g:set>
+        <g:set value="${f.name.split('-')[1]?.split(' ')[0].replace('.txt', '')}" var="id"></g:set>
 
         <g:if test="${f.name?.startsWith('W')}">
             <g:set value="${Writing.get(id)?.description}" var="description"></g:set>
@@ -44,7 +45,7 @@
                             <g:remoteLink controller="generics" action="commitTextChanges" id="${id}"
                                           params="[entityCode: f.name?.substring(0, 1), name: f.name]"
                                           update="summary${f.name.substring(0, 1)}${id}"
-                                style="font-size: big; margin: 2px; padding: 2px"
+                                style="font-size: larger; margin: 2px; padding: 2px"
                                           title="Commit text changes to database">
                                 Commit changes &crarr;
                             </g:remoteLink>

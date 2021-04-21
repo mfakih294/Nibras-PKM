@@ -223,7 +223,8 @@ class ImportController {
             b.language = OperationController.getPath('default.language') ?: 'en'
             }
 
-            finalName = entityCode.toLowerCase() + '.' + ext
+
+                finalName = entityCode.toLowerCase() + '.' + ext
         }
 
         if (ext == 'txt') {
@@ -584,7 +585,7 @@ class ImportController {
 
 
     def editBox() {
-        render(template: '/reports/editBoxShow', model: [])
+        render(template: '/reports/editBoxShow')
     }
 
     def addToRecordFolder2() {

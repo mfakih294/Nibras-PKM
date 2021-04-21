@@ -54,7 +54,7 @@
                     </g:if>
 
 
-  <g:if test="${i.isFile() && !i.name?.contains('--')}">
+  <g:if test="${i.isFile() && !i.name?.contains('--') && !'desktop.ini,'.contains(i.name + ',')}">
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFile"
                                           url="[controller: 'import', action: 'importIndividualFile']"
@@ -80,7 +80,7 @@
                     </g:if>
 
 
-                    <g:if test="${i.isDirectory() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1 && !i.name?.startsWith('.')}">
+                    <g:if test="${i.isDirectory() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1 && !i.name?.startsWith('.')  && !'scans,later,raw,'.contains(i.name + ',')}">
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFolder"
                                           style="display: inline; "
@@ -109,7 +109,7 @@
                         <br/>
                     </g:if>
 
-                    <g:if test="${i.isDirectory() && !i.name?.contains('--') && i.name?.length() > 1  && !i.name?.startsWith('.')}">
+                    <g:if test="${i.isDirectory() && !i.name?.contains('--') && i.name?.length() > 1  && !i.name?.startsWith('.')  && !i.name?.startsWith('.')  && !'scans,later,raw,'.contains(i.name + ',')}">
                         <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                             <g:formRemote name="importIndividualFolder"
                                           style="display: inline; "

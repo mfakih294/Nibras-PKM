@@ -27,6 +27,34 @@ class IndexCardController { // entity id = 16
 
     def supportService
 
+    static allClasses = [
+            mcs.Goal,
+            mcs.Task,
+            mcs.Planner,
+
+            mcs.Journal,
+            app.IndicatorData,
+            app.Payment,
+
+            mcs.Writing,
+            app.IndexCard,
+            mcs.Course,
+
+            mcs.Book,
+            mcs.Excerpt,
+
+//            app.parameters.WordSource,
+            app.Indicator,
+            app.PaymentCategory,
+            app.Contact,
+            mcs.parameters.SavedSearch
+    ]
+
+    static allClassesWithCourses = allClasses -
+            [mcs.Excerpt, mcs.Course,
+             app.IndicatorData, app.Payment, app.PaymentCategory, app.Indicator, mcs.parameters.SavedSearch]
+
+
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete: 'POST', save: 'POST', update: 'POST']
 
@@ -380,7 +408,26 @@ class IndexCardController { // entity id = 16
         }
 
         n.language = params.language
+
+
         render(template: "/gTemplates/recordSummary", model: [record: n])
+
+
+            def recentRecords = []
+            allClassesWithCourses.each() {
+                recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 4])
+                //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
+            }
+
+            recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
+            //recentRecords.unique()
+            if (recentRecords.size() > 0)
+                render(template: '/gTemplates/recordListing', model: [
+                        title: '',
+                        list : recentRecords - n
+                ])
+
+
         render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
         } else {

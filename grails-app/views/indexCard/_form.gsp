@@ -1,6 +1,6 @@
 <%@ page import="cmn.Setting; mcs.Course; mcs.parameters.WritingType; mcs.parameters.ResourceStatus; mcs.Book; app.IndexCard" %>
 
-
+%{--TODO: improve N+ UI--}%
 %{--<g:hiddenField name="entityCode" value="${recordEntityCode}"></g:hiddenField>--}%
 %{--<g:hiddenField name="recordId" value="${recordId}"></g:hiddenField>--}%
 
@@ -8,13 +8,13 @@
     <tbody>
 
     <tr>
-        <td style="width: 50%">
+        <td style="width: 99%">
 
             %{--<label for="description">Description--}%
             %{--</label>--}%
 
-            <g:select name="type.id" class="ui-corner-all" style="width: 60px"
-                      from="${WritingType.list([sort: 'name'])}" optionKey="id" optionValue="code"
+            <g:select name="type.id" class="ui-corner-all" style="width: 120px"
+                      from="${WritingType.list([sort: 'name'])}" optionKey="id" optionValue="name"
                       value="${indexCardInstance?.type?.id ?: (session['lastIcdTypeId'] ?: WritingType.findByCode('quote').id)}"
                       noSelection="${['null': 'No type']}"/>
 
@@ -34,23 +34,23 @@
             <g:select name="language" from="${['ar', 'fa', 'en', 'fr']}"
                       style="width: 40px" value="${language ?: indexCardInstance?.language}"/>
 
-            <g:textField placeholder="Book ID" id="book.id" name="book.id" style="width: 60px" class="ui-corner-all"
+            <g:textField placeholder="Book ID" id="book.id" name="book.id" style="width: 60px; display: none;" class="ui-corner-all"
                          value="${indexCardInstance?.book?.id ?: (bookId ?: null)}"/>
-&nbsp;
-&nbsp;
 &nbsp;
             <g:textField placeholder="Pages" id="pages" name="pages" style="width: 70px" class="ui-corner-all"
                          value="${indexCardInstance?.pages}"/>
 
-            <g:textField placeholder="Summary"  id="summary" name="summary" style="width: 90%" class="ui-corner-all"
+            <g:textField placeholder="Summary"  id="summary" name="summary" style="width: 50%" class="ui-corner-all"
                          value="${indexCardInstance?.summary}"/>
 
 
         </td>
-        <td  style="width: 50%;">
+    </tr>
+    <tr>
+        <td  style="">
 
             <g:textArea placeholder="" id="descriptionOfNote" name="description"
-                        style="width: 99%; height: 60px;"
+                        style="width: 99%; height: 120px;"
                         class="ui-corner-all"
                         cols="40" rows="5" value="${indexCardInstance?.description}"/>
 

@@ -24,7 +24,7 @@
 </div>
 
 
-<div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
+<div class="ui-layout-east eastRegion appBkg" style="margin-top: 0px !important; z-index: 1000000; overflow: auto;">
 
     %{--<div class="ui-layout-content ui-widget-content">--}%
 
@@ -74,6 +74,7 @@
 
                 <br/>
                 <br/>
+                <h4>Quick add records</h4>
                 <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                               url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                               update="centralArea"
@@ -117,6 +118,8 @@
 
                 <br/>
                 <br/>
+
+                <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
                 %{--<div id="subDaftarArea">--}%
 %{----}%
                 %{--</div>--}%

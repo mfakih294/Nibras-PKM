@@ -199,15 +199,21 @@ class PageController {
              ['app.name', 'Nibras PKM'],
              ['explorer.path.win', './scripts/open-explorer.bat'],
              ['explorer.path.linux', '/usr/bin/dolphin'],
+
              ['date.format', 'dd.MM.yyyy'],
              ['datetime.format', 'dd.MM.yyyy_HHmm'],
+
              ['default.WritingStatus.done', 'revised'],
              ['default.WorkStatus.done', 'done'],
              ['default.ResourceStatus.done', 'read'],
+
              ['updateResultSet.max-items', '100'],
+
              ['accordion.east.default.panel', '1'],
              ['accordion.west.default.panel', '0'],
+
              ['planner.homepage.default-type', 'knb'],
+
              ['repository.languages', 'ar,fr,en'],
              ['repository.languages.RTL', 'ar'],
              ['repository.languages.LTR', 'fr,en'],
@@ -234,10 +240,10 @@ class PageController {
 //            wrtCount += it.description?.count(' ') ?: 0 //length() ?: 0
 //        }
 
-//        def recentRecords = []
-//        recentClasses.each() {
-//            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 1, [sort: 'dateCreated', order: 'desc', max: 50])
-//        }
+        def recentRecords = []
+        recentClasses.each() {
+            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 50])
+        }
 
 //        def filledInDates = ''
 //        Journal.executeQuery("select  DATE_FORMAT(startDate, '%c/%e/%Y') from Journal group by date(startDate) order by startDate asc").each() {
@@ -340,11 +346,12 @@ class PageController {
                 editFileCount    : 0, // todo: fix
                 dates: datesHb,
                 username         : user.username,
-                reviewPileSize   : resources.size() + excerpts.size()
+                reviewPileSize   : resources.size() + excerpts.size(),
 //                environment: environment
                 //,
 //                filledInDates: filledInDates?.trim(),
-                // wrtCount: wrtCount, recentRecords: recentRecords
+                // wrtCount: wrtCount,
+                recentRecords: recentRecords
 
         ])
     }
@@ -413,11 +420,11 @@ class PageController {
         def recentRecords = []
 
         allClassesWithCourses.each() {
-            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date()+1, new Date() - 1, [sort: 'dateCreated', order: 'desc', max: 4])
+            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date()+1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 4])
             //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
         }
 
-//        recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
+        recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
 //        //recentRecords.unique()
 //        if (recentRecords.size() > 0)
 //            render(template: '/gTemplates/recordListing', model: [
@@ -442,8 +449,6 @@ class PageController {
         render(view: '/appNote/main', model: [types: types, recentRecords: recentRecords])
 
     }
-
-
 
  def appDashboard() {
 
