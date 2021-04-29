@@ -14,7 +14,17 @@
                                   id="${record.id}"
                                   update="centralArea"
                                   title="">
-                        Generate book
+                        Generate book on screen
+                    </g:remoteLink>
+
+                    <br/>
+                    <br/>
+
+  <g:remoteLink controller="indexCard" action="generateWritingsBookToFile"
+                                  id="${record.id}"
+                                  update="centralArea"
+                                  title="">
+                        Generate book to file
                     </g:remoteLink>
 
 

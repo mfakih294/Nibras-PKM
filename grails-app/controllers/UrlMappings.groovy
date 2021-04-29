@@ -4,6 +4,7 @@ class UrlMappings {
         "/" (controller: 'page', action: 'appMain')
 
         "/main" (controller: 'page', action: 'appMain')
+        "/new" (controller: 'page', action: 'appModern')
 
         "/m" (controller: 'page', action: 'mobile')
         "/media" (controller: 'page', action: 'mobile')

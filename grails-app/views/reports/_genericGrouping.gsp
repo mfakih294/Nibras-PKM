@@ -16,29 +16,30 @@
     %{--</g:remoteLink>--}%
 %{--</g:if>--}%
 
-<table> <tr>
-
+%{--<table> <tr>--}%
+<div style="column-count: 5">
 <g:each in="${groups}" var="g">
     <g:if test="${items[groupBy].contains(g)}">
         %{--<div >--}%
             %{--<hr/>--}%
         %{--</div>   --}%
-       <td style="vertical-align: top;">
-        <h4 style="text-align: center; font-weight: bold;">${g?.code}</h4>
+%{--       <td style="vertical-align: top;">--}%
+        <h4 style="text-align: center; font-weight: bold;">${g}</h4>
 
 
     <g:findAll in="${items}" expr="${it[groupBy] == g}">
         <g:render template="/gTemplates/box" model="[record: it]"/>
     </g:findAll>
-        </td>
+%{--        </td>--}%
                 %{--<center>--}%
                     %{--* * *--}%
                 %{--</center>--}%
         </g:if>
 
 </g:each>
-</tr>
-</table>
+</div>
+%{--</tr>--}%
+%{--</table>--}%
     %{--</div>--}%
         <br/>
         <br/>

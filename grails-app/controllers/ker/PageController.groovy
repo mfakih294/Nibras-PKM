@@ -403,6 +403,10 @@ class PageController {
         render(view: '/appMihrab/main', model: [
         ])
     }
+  def appModern() {
+        render(view: '/appModern/main', model: [
+        ])
+    }
 
     def appCourse() {
         render(view: '/appCourse/main', model: [record: mcs.Course.get(params.id)

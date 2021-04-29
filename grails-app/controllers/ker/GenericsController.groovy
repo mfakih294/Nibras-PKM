@@ -3335,7 +3335,6 @@ ll
         def queryCriteria = []
         try {
             properties = transformMcsNotation(input)['properties']
-
             if (!properties['language']) {
                 def dlang = OperationController.getPath('default.language') ?: 'en'
                 properties['language'] = dlang

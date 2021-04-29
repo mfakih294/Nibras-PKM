@@ -67,6 +67,7 @@
             <div id="1" class="common" style="">
             <div id="centralArea" class="common" style="">
 %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
+<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
             </div>
 %{--                <div id="centralArea" class="common" style="">--}%
 
@@ -119,7 +120,7 @@
                 <br/>
                 <br/>
 
-                <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
+
                 %{--<div id="subDaftarArea">--}%
 %{----}%
                 %{--</div>--}%

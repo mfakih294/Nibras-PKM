@@ -550,7 +550,11 @@ class IndexCardController { // entity id = 16
     def generateWritingsBook(){
         render(template: "/appCourse/writingsBook", model: [record: mcs.Course.get(params.id)])
     }
-
+    def generateWritingsBookToFile() {
+        def f = new File('/' + (OperationController.getPath('root.rps1.path') ?: '') + '/crs.md')
+        f.write(g.include([controller: 'indexCard', action: 'generateWritingsBook', id: params.id]).toString(), 'UTF-8')
+        render 'Generation done: ' + new Date().format('HH:mm:ss')
+    }
     def sortNotes(){
         render(template: "/appCourse/sortNotes", model: [record: mcs.Course.get(params.id)])
     }

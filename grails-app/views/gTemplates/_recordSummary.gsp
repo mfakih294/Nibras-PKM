@@ -24,7 +24,7 @@
 %{--jQuery('#2ndLine${entityCode}${record.id}').addClass('hiddenActions');"--}%
 
 
-    <div id="${entityCode}Record${record.id}" style="">
+    <div id="${entityCode}Record${record.id}" style="" tabindex="0">
 
         %{--${justUpdated ? 'justUpdated' : ''} todo--}%
 
@@ -75,6 +75,7 @@
                                     ${record.class.declaredFields.name.contains('type') && record.type ? record.type?.code : ''}
                                 </div>
                                 <g:remoteLink controller="generics" action="showSummary"
+                                              tabindex="-1"
                                               params="${[id: record.id, entityCode: entityCode]}"
                                               update="${entityCode}Record${record.id}"
                                               style="margin-left: 3px;padding-bottom: 5px; display: inline"
@@ -187,6 +188,7 @@
                         %{--before="jQuery('#accordionEast').accordion({ active: 0});jQuery('#3rdPanel').scrollTop(0)"--}%
 
                         <g:remoteLink controller="page" action="panel"
+                                      tabindex="-1"
                                       params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                       update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                       title="Go to page">
@@ -311,6 +313,7 @@
                             %{--</g:remoteLink>--}%
 
                                 <g:remoteLink controller="page" action="panel"
+                                              tabindex="-1"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 2px; font-size: 1em;"
@@ -358,6 +361,7 @@
 
 
                                     <g:remoteLink controller="generics" action="executeSavedSearch"
+                                                  tabindex="-1"
                                                   style=" color: gray"
                                                   before="jQuery.address.value(jQuery(this).attr('href'));"
                                                   id="${record.id}" params="[reportType: 'random']"
@@ -516,6 +520,7 @@
                             <g:if test="${entityCode == 'R'}">
 
                                 <g:remoteLink controller="page" action="panel"
+                                              tabindex="-1"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 4px; font-size: 0.95em;"
@@ -581,6 +586,7 @@
                             <g:if test="${record.class.declaredFields.name.contains('excerpt') && record.excerpt}">
 
                                 <g:remoteLink controller="generics" action="showSummary" id="${record.excerpt.id}"
+                                              tabindex="-1"
                                               params="[entityCode: 'R']"
                                               update="below${entityCode}Record${record.id}"
                                               title="Go to record">
@@ -615,6 +621,7 @@
                                     <g:if test="${entityCode == 'N' && record?.type?.code == 'word'}">
                                         <span id="descriptionArea${record.id}">
                                             <g:remoteLink controller="generics" action="showAnswer"
+                                                          tabindex="-1"
                                                           id="${record.id}"
                                                           params="[entityCode: entityCode]"
                                                           update="descriptionArea${record.id}"
@@ -626,6 +633,7 @@
                                     <g:else>
                                         <g:if test="${record.description?.length() < OperationController.getPath('description.summarize.threshold')?.toInteger() && record.description != '?'}">
                                             <g:remoteLink controller="page" action="panel"
+                                                          tabindex="-1"
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                                           style="padding: 2px; font-size: 0.95em; font-style: italic"
@@ -640,6 +648,7 @@
 
                                             <span id="descriptionArea${record.id}">
                                                 <g:remoteLink controller="generics" action="showFullDescription"
+                                                              tabindex="-1"
                                                               id="${record.id}"
                                                               params="[entityCode: entityCode]"
                                                               update="descriptionArea${record.id}"
@@ -656,6 +665,7 @@
                                         <g:if test="${record.description?.length() > OperationController.getPath('description.summarize.thresholdMax')?.toInteger()}">
 
                                             <g:remoteLink controller="page" action="panel"
+                                                          tabindex="-1"
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                                           style="padding: 4px; font-size: 0.95em;"
@@ -681,6 +691,7 @@
                             <g:if test="${record.class.declaredFields.name.contains('fullText') && record.fullText}">
 
                                 <g:remoteLink controller="page" action="panel"
+                                              tabindex="-1"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 4px; font-size: 0.95em;"
@@ -738,6 +749,7 @@
                         <span id="datesSpan" style="direction: ltr !important; text-align: left !important;">
 
                             <g:remoteLink controller="page" action="panel"
+                                          tabindex="-1"
                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                           style="padding: 1px; font-size: 0.9em;"
@@ -803,6 +815,7 @@
                               style="padding-left: 5px; padding-right: 5px;">
 
                             <g:remoteLink controller="generics" action="showChildren"
+                                          tabindex="-1"
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Children">
@@ -1076,7 +1089,8 @@
 
                         ID:  <span style="color: darkslategrey; font-size: smaller;">${record.id}</span>
 
-                            <g:remoteLink controller="generics" action="fetchAddForm"
+                            <g:remoteLink controller="generics" action="fetchAddForm" class="fullEditButton${entityCode}${record.id}"
+                                          tabindex="-1"
                                           id="${record.id}"
                                           params="[entityController: record.class.name,
                                                    updateRegion    : entityCode + 'Record' + record.id,
@@ -1087,9 +1101,10 @@
                                 Full Edit
                             %{--</i>--}%
                             </g:remoteLink>
+
                             <g:remoteLink controller="generics" action="fetchQuickAddForm"
                                           style="padding: 2px; font-size: 0.95em;"
-                                          class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"
+                                          class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}  quickEditButton${entityCode}${record.id}"
                                           id="${record.id}"
                                           params="[entityController: record.class.name,
                                                    updateRegion    : '3rdPanel',
@@ -1351,21 +1366,21 @@ Parent:
 Book:
                                 <g:if test="${record.class.declaredFields.name.contains('book')}">
 
-                                    <g:set value="book" var="field"></g:set>
+%{--                                    <g:set value="book" var="field"></g:set>--}%
 
-                                    <a href="#" id="${field}${record.id}" class="${field}"
-                                       data-type="select"
-                                       data-value="${record[field]?.id}"
-                                       data-name="${field}-${entityCode}"
-                                       style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"
-                                       data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-                                       data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
-                                       data-title="Edit ${field}">
-                                        ${record[field] ? (record[field].code ?: record.book?.title) : 'r'}
-                                    </a>
-                                    <script type="text/javascript">
-                                        jQuery("#${field}${record.id}").editable();
-                                    </script>
+%{--                                    <a href="#" id="${field}${record.id}" class="${field}"--}%
+%{--                                       data-type="select"--}%
+%{--                                       data-value="${record[field]?.id}"--}%
+%{--                                       data-name="${field}-${entityCode}"--}%
+%{--                                       style="border-bottom: 0.5px solid #808080; border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"--}%
+%{--                                       data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&recordId=${record.id}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"--}%
+%{--                                       data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"--}%
+%{--                                       data-title="Edit ${field}">--}%
+%{--                                        ${record[field] ? (record[field].code ?: record.book?.title) : 'r'}--}%
+%{--                                    </a>--}%
+%{--                                    <script type="text/javascript">--}%
+%{--                                        jQuery("#${field}${record.id}").editable();--}%
+%{--                                    </script>--}%
 
                                     <g:if test="${record.book}">
 
@@ -1456,6 +1471,7 @@ Writing:
 
                             <g:remoteLink controller="generics" action="showTags"
                                           params="${[id: record.id, entityCode: entityCode]}"
+                                class="addTagButton${entityCode}${record.id}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
                                 Tag
@@ -1475,7 +1491,9 @@ Writing:
 
                                 <br/>
                                 Priority:
-                                        &nbsp;          <a name="bookmark${record.id}${entityCode}" title="priority++"
+                                        &nbsp;          <a name="priority+${record.id}${entityCode}"
+                                                           id="priority+${record.id}${entityCode}"
+                                                           title="priority++"
                                                    value="${record.priority}"
                                                    style="background: lightgrey"
                                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')">
@@ -1484,7 +1502,11 @@ Writing:
                             %{--</g:if>--}%
 
                             %{--<g:if test="${record.class.declaredFields.name.contains('priority')}">--}%
-                                <a name="bookmark${record.id}${entityCode}" title="priority--"
+                                <a
+                                        name="priority-${record.id}${entityCode}"
+                                        id="priority-${record.id}${entityCode}"
+
+                                        title="priority--"
                                    value="${record.priority}"
                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')">
                                     <b>-</b>
@@ -1533,6 +1555,7 @@ Writing:
                         &nbsp;<br/>
                         Append to
                             <g:remoteLink controller="generics" action="showAppend"
+                                class="appendToDescription${entityCode}${record.id}"
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
@@ -1541,6 +1564,7 @@ Writing:
 
                             <g:remoteLink controller="generics" action="showAppendNotes"
                                           params="${[id: record.id, entityCode: entityCode]}"
+                                          class="appendToNotes${entityCode}${record.id}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
                                  record's notes
@@ -1647,3 +1671,64 @@ Writing:
 
 </g:elseif>
 
+%{--tabindex = "${tabIndex}" id ${record.id}--}%
+<script type="application/javascript">
+    if ('2340' == "${tabIndex}"){
+        bindMyKeys();
+        console.log('valid if ' + ${record.id})
+        jQuery("#${entityCode}Record${record.id}").focus();
+        %{--jQuery("#${entityCode}Record${record.id}").select();--}%
+    }
+
+    console.log('now binding in ' + ${record.id})
+    Mousetrap.bind('space', function (e) {
+        jQuery('.temp44').addClass('hiddenActions');
+        jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions')
+    });
+
+    Mousetrap.bind('e', function (e) {
+        jQuery(".fullEditButton${entityCode}${record.id}").click();
+    });
+    Mousetrap.bind('q', function (e) {
+        jQuery(".quickEditButton${entityCode}${record.id}").click();
+    });
+    Mousetrap.bind('t', function (e) {
+        jQuery(".addTagButton${entityCode}${record.id}").click();
+        jQuery("#newTagField${entityCode}${record.id}").focus();
+    });
+    Mousetrap.bind('d', function (e) {
+        jQuery(".appendToDescription${entityCode}${record.id}").click();
+        jQuery("#appendTextFor${entityCode}${record.id}").focus();
+    });
+
+    Mousetrap.bind('shift+n', function (e) {
+        jQuery(".appendToNotes${entityCode}${record.id}").click();
+        jQuery("#appendTextFor${entityCode}${record.id}").focus();
+    });
+
+
+    Mousetrap.bind('p =', function (e) {
+        %{--jQuery("#priority+${record.id}${entityCode}").click();--}%
+        jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')
+    });
+    Mousetrap.bind('p -', function (e) {
+        jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')
+    });
+// }
+
+    unbindMyKeys = function() {
+    console.log('now unbinding in ' + ${record.id})
+    Mousetrap.unbind('space');
+
+    Mousetrap.unbind('e');
+    Mousetrap.unbind('q');
+    Mousetrap.unbind('t');
+    Mousetrap.unbind('d');
+
+    Mousetrap.unbind('shift+n');
+
+    Mousetrap.unbind('p =');
+    Mousetrap.unbind('p -');
+}   
+
+</script>

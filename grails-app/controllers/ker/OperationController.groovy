@@ -1969,9 +1969,13 @@ past.each(){
 
     def processScans = {
             def list = new File(OperationController.getPath('root.rps1.path') + '/scans/').listFiles().sort()
+        def total = list.size()
+        def extension = ''
         if (list.size() > 0) {
 
-            def articleContent = list[0].name;
+            def articleContent = list[params.id ? params.id?.toInteger() : 0].name;
+			println 'articleContent ' + articleContent
+            extension = articleContent?.split(/\./)[1]
 //TODO: too long filename => file not found exception! w156
             def dateFound = ''
             def matches = (articleContent =~ /\d{14}/) //grabs 'gr' and its following 4 chars
@@ -2009,7 +2013,8 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
                                 t[11] + t[12]
 //                }
             }
-            render(view: '/appProcessor/main', model: [list: list, dateFound: dateFound])
+
+          render(view: '/appProcessor/main', model: [list: list, id: params.id ?: 0, dateFound: dateFound, total: total, extension: extension, name: articleContent])
         }
         else render 'Folder: '  + OperationController.getPath('root.rps1.path') + '/scans/' + ' is empty.'
     }

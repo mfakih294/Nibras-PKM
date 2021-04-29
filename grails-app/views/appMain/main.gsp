@@ -92,6 +92,7 @@
 
     <script type="text/javascript">
 
+  
         //    $.address.state('${request.contextPath}/')
         $.address.externalChange(function (event) {
             // do something depending on the event.value property, e.g.
@@ -452,6 +453,8 @@ $("#accordionCenter").accordion({
                 jQuery('#descriptionDaftar').focus();
             });
             */
+
+
   Mousetrap.bindGlobal('f2', function (e) {
                 jQuery('#quickAddXcdSubmitExecute').click();
                 jQuery('#quickAddTextField').select().focus();

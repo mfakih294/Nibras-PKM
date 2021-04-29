@@ -27,17 +27,17 @@ class SchedulerJob {
 
         println ' in env: '  + Environment.current.name + ' at ' + new Date()?.format('dd.MM.yyyy HH:mm:ss')
 //        def environment
-        switch (Environment.current) {
-            case Environment.PRODUCTION:
+        switch (Environment.current.name) {
+            case 'production':
             //    println "Job run in prod env!"
                 break
-            case Environment.DEVELOPMENT:
+            case 'h2':
                 def db = new Sql(dataSource)
                 def date = new Date()?.format('ddMMyyyyHHmmss')
                 def query = "BACKUP TO 'db-backup-" + new Date()?.format('EE_HH') +".zip'" //ddMMyyyyHHmmss
                 def result = db.execute(query)
                 //  result
-             //   println "Job run in dev env!"
+             //   println "Job run in h2 env!"
                 break
         }
 

@@ -195,12 +195,14 @@
 
 <g:if test="${session['showLine1Only'] == 'on'}">
 <g:each in="${list}" status="i" var="record">
-    <g:render template="/gTemplates/recordSummary" model="[record: record]"/>
+    <g:render template="/gTemplates/recordSummary" model="[record: record, tabIndex: i]"/>
 </g:each>
 </g:if>
 <g:else>
     <g:each in="${list}" status="i" var="record">
-        <g:render template="/gTemplates/recordSummary" model="[record: (record.entityCode() == 'R' ? mcs.Book.findById(record.id): record),
+        <g:render template="/gTemplates/recordSummary" model="[
+                record: (record.entityCode() == 'R' ? mcs.Book.findById(record.id): record),
+                tabIndex: i,
                 context: (highlights && highlights[i] ? highlights[i] : null)]"/>
     </g:each>
 

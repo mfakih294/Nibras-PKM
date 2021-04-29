@@ -36,6 +36,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 
 	[pattern: '/**/sync/**',       access: ['permitAll']],
 	[pattern: '/**/css/**',      access: ['permitAll']],
+	[pattern: '/**/kickstart/**',      access: ['permitAll']],
 	[pattern: '/**/file-icons/**',      access: ['permitAll']],
 //	[pattern: '/**/slides/**',      access: ['permitAll']],
 	[pattern: '/**/fonts/**',   access: ['permitAll']],
@@ -52,6 +53,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/download/**',      filters: 'none'],
 	[pattern: '/json/**',      filters: 'none'],
 	[pattern: '/**/js/**',       filters: 'none'],
+	[pattern: '/**/kickstart/**',       filters: 'none'],
 	[pattern: '/**/css/**',      filters: 'none'],
 	[pattern: '/**/file-icons/**',      filters: 'none'],
 	[pattern: '/**/images/**',   filters: 'none'],

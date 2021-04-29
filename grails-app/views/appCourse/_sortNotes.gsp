@@ -101,7 +101,7 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
                       params="${[id: n.id, entityCode: n.entityCode()]}"
                       update="3rdPanel"
                       style="padding: 2px; font-size: 12px;"
-                      before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0)">
+                      before=" myLayout.slideOpen('east'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0)">
             i${n.id}
         </g:remoteLink>
         </div>

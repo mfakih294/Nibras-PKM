@@ -51,6 +51,11 @@
 
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'uploader.css')}"/>--}%
 
+%{--    <link rel="resource" type="application/l10n" href="locale/locale.properties">--}%
+
+    <script type="text/javascript" src="${resource(dir: 'plugins/pdfjs/build', file: 'pdf.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'plugins/pdfjs/build', file: 'pdf.worker.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'plugins/pdfjs/web', file: 'viewer.js')}"></script>
 
 
 
@@ -520,7 +525,7 @@
     <table>
         <tr>
             <td style="vertical-align: top; width: 99%;">
-                <h2>Processing: ${list[0].name}</h2>
+                <h2>Processing: <u><${list[id?.toInteger()].name}</u></h2>
 
                 <div id="scannedPage">
 
@@ -556,8 +561,7 @@
                     <g:select name="type" class="ui-corner-all" style="width: 100px;"
                               from="${['New', 'Group', 'Delete']}"
                               value="${session['lastType'] ?: 'New'}"/>
-
-                    <span style="float: right">
+                  <span style="float: right">
                     <i>Date found: ${dateFound}</i>
                     </span>
                 </td>
@@ -580,7 +584,7 @@
                     <g:textField
                             id="command" style="width: 85% !important;"  name="command" class="longInput ui-corner-all"
                         placehoder="type-priority-dept (optional description)"
-                            value="${session['lastType'] == 'Group' ? session['lastCommand'] : ''}"/>
+                            value="${session['lastType'] == 'Group' ? session['lastCommand'] : (extension != 'jpg' ? name: '')}"/>
 %{--                    list[0].name?.substring(16, list[0].name?.length() - 4)--}%
 %{--                    session['lastCommand']--}%
 %{--                    <br/>--}%
@@ -607,12 +611,163 @@
 %{--<img src="/job/sgn-scans/${list[0]}"/>--}%
 
 <div style="width: 99%;">
+  <div>
+Files: 
+     <g:each in="${0..total - 1}" var="f">
+         <a  class=" fg-button fg-button-icon-left ui-widget ui-state-default ui-corner-all"
+		 href="${createLink(controller: 'operation', action: 'processScans', params: [id: f])}">
+              ${f + 1}
+         </a> &nbsp;
+     </g:each>
+	 <br/>
+	 <br/>
 
+      <g:if test="${'txt,md,adoc,'.contains(extension?.toLowerCase())}">
+    <div style="display:block; width: 99%;">
 
-    <div >
+        <b>Full text:</b> <br/><br/>
+        ${new File(list[id?.toInteger()].path).text}
+    </div>
+      </g:if>
+  <g:if test="${'jpg,png,bmp,jpeg,webp'.contains(extension)}">
     <img style="display:block; width: 99%;"
          src="${createLink(controller: 'operation', action: 'viewScan'
-                 , params: [name: list[0].path])}"/>
+                 , params: [name: list[id?.toInteger()].path])}"/>
+      </g:if>
+
+      <g:if test="${'mp4,mkv,avi'.contains(extension)}">
+     <video width="320" height="240" controls
+                 source src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}">
+              Your browser does not support the video tag.
+          </video>
+      </g:if>g
+      <g:if test="${'mp3,aud,'.contains(extension)}">
+     <audio width="320" height="240" controls
+                 source src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}">
+              Your browser does not support the video tag.
+          </audio>
+      </g:if>
+
+
+      <g:if test="${extension == 'pdf'}">
+%{--      <iframe src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[0].path])}"--}%
+%{--      width="100%" height="500px">--}%
+
+<div>
+  <button id="prev">Previous</button>
+  <button id="next">Next</button>
+  &nbsp; &nbsp;
+  <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+</div>
+
+          <canvas id="the-canvas" style="width: 100%; border: 1px solid black; direction: ltr;"></canvas>
+
+		  
+          <script id="script">
+              //
+              // If absolute URL from the remote server is provided, configure the CORS
+              // header on that server.
+              //
+              var url = "${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}";
+
+              //
+              // The workerSrc property shall be specified.
+              //
+              // pdfjsLib.GlobalWorkerOptions.workerSrc =
+              //     '../../node_modules/pdfjs-dist/build/pdf.worker.js';
+
+              var pdfDoc = null,
+      pageNum = 1,
+      pageRendering = false,
+      pageNumPending = null,
+      scale = 1,
+      canvas = document.getElementById('the-canvas'),
+      ctx = canvas.getContext('2d');
+
+  /**
+   * Get page info from document, resize canvas accordingly, and render page.
+   * @param num Page number.
+   */
+  function renderPage(num) {
+    pageRendering = true;
+    // Using promise to fetch the page
+    pdfDoc.getPage(num).then(function(page) {
+      var viewport = page.getViewport({ scale: scale, });
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      // Render PDF page into canvas context
+      var renderContext = {
+        canvasContext: ctx,
+        viewport: viewport,
+      };
+      var renderTask = page.render(renderContext);
+
+      // Wait for rendering to finish
+      renderTask.promise.then(function () {
+        pageRendering = false;
+        if (pageNumPending !== null) {
+          // New page rendering is pending
+          renderPage(pageNumPending);
+          pageNumPending = null;
+        }
+      });
+    });
+
+    // Update page counters
+    document.getElementById('page_num').textContent = num;
+  }
+
+  /**
+   * If another page rendering in progress, waits until the rendering is
+   * finised. Otherwise, executes rendering immediately.
+   */
+  function queueRenderPage(num) {
+    if (pageRendering) {
+      pageNumPending = num;
+    } else {
+      renderPage(num);
+    }
+  }
+
+  /**
+   * Displays previous page.
+   */
+  function onPrevPage() {
+    if (pageNum <= 1) {
+      return;
+    }
+    pageNum--;
+    queueRenderPage(pageNum);
+  }
+  document.getElementById('prev').addEventListener('click', onPrevPage);
+
+  /**
+   * Displays next page.
+   */
+  function onNextPage() {
+    if (pageNum >= pdfDoc.numPages) {
+      return;
+    }
+    pageNum++;
+    queueRenderPage(pageNum);
+  }
+  document.getElementById('next').addEventListener('click', onNextPage);
+
+  /**
+   * Asynchronously downloads PDF.
+   */
+  var loadingTask = pdfjsLib.getDocument(url);
+  loadingTask.promise.then(function(pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+    // Initial/first page rendering
+    renderPage(pageNum);
+  });
+</script>
+
+      </g:if>
     </div>
 
 </div>

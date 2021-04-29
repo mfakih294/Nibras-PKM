@@ -42,16 +42,8 @@
 %{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main4.js')}"></script>--}%
 
 
-    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430', file: 'main.js')}"></script>
-    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/430', file: 'main.css')}"/>
-
-    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430/daygrid', file: 'main.js')}"></script>
-    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/430/daygrid', file: 'main.css')}"/>
-
-    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430/timegrid', file: 'main.js')}"></script>
-    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/430/timegrid', file: 'main.css')}"/>
-
-    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/430/interaction', file: 'main.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/560', file: 'main.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/560', file: 'main.css')}"/>
 
     <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main-calendar.css')}"/>
 
@@ -62,9 +54,9 @@
     var calendarEl = document.getElementById('calendar');
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-      isRTL: false,
+      direction: 'rtl',
     //  locale: 'ar',
-      plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
+    //  plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
       //  aspectRatio: 1,
      //   contentHeight: 800,
     //    height: 'auto',
@@ -73,7 +65,7 @@
    //     themeSystem:'bootstrap3',
    //   fixedWeekCount: false,
        shouldRedistribute: true,
-      header: {
+        headerToolbar : {
         left: 'prev,next today',
         center: 'title',
         right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,listWeek,dayGridMonth'
@@ -123,7 +115,7 @@
       },
 
 
-      defaultView: 'dayGrid',
+        initialView : 'dayGrid',
       allDaySlot: true,
       nowIndicator: true,
       timeGridEventMinHeight: true,
@@ -131,7 +123,7 @@
         // defaultDate: '2019-06-12',
       navLinks: true, // can click day/week names to navigate views
       editable: true,
-      eventLimit: false, // allow "more" link when too many events
+      dayMaxEventRows: false, // allow "more" link when too many events
       firstDay: 1,
       themeSystem: 'standard',
       // eventOrder: 'start,-duration,allDay,title',
@@ -153,12 +145,12 @@
       // lazyFetching: true,
        firstHour: '08:00',
       // minTime: 5,
-      minTime: '08:00',
+      slotMinTime: '08:00',
       slotDuration: '01:00',
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,
-      weekNumbersWithinDays: false,
+      // weekNumbersWithinDays: false,
       weekNumberCalculation: 'ISO',
       events:"${request.contextPath}/export/allCalendarEvents",
       selectable: true,
@@ -224,7 +216,7 @@
                 window.open(info.event.url, '_default');
             }
         },
-      eventRender: function(info) {
+        eventDidMount : function(info) {
         // var tooltip = new Tooltip(info.el, {
         //  $(info.el).tooltip(info.event.extendedProps.description);
         // $(info.el).title(info.event.extendedProps.description)

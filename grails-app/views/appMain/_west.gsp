@@ -935,10 +935,10 @@
                 Records per page
                 <ul>
                     <li>
+%{--                        noSelection="${['null': '']}"--}%
                         <g:select name="resultType"
-                                  from="${[1, 2, 3, 4, 5, 7, 10, 15, 20, 30, 40, 50, 100, 250]}"
+                                  from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"
                                   style="direction: ltr; text-align: left; padding: 0; margin: 0;  height: 24px;"
-                                  noSelection="${['null': '']}"
                                   onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
                                   value="${Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
                         <span id="notificationArea" style=""></span>
