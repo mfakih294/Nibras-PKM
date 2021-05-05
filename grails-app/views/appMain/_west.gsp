@@ -36,8 +36,8 @@
         <g:render template="/layouts/savedSearches" model="[entity: 'F']"/>
 
 
-
-
+<g:if test="${1==2}">
+%{--todo disabled on w164.21 for simplicity--}%
         <h4>Full-page calendars</h4>
 
         <ul>
@@ -54,6 +54,7 @@
             </g:each>
 
         </ul>
+</g:if>
         %{--<ul>--}%
         %{--<li>--}%
         %{--<a href="${request.contextPath}/generics/showCalendar/Tcal"--}%

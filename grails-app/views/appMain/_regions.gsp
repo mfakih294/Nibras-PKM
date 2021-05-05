@@ -107,6 +107,7 @@
                     <g:submitButton name="save" value="Add"
                                     style="text-align: center; padding-left: 8px; padding-right: 8px;"
                                     tabindex="4"
+
                                     id="addXcdFormDaftarSubmit"
                                     class="fg-button ui-widget ui-state-default"/>
 

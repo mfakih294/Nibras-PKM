@@ -640,7 +640,7 @@ Files:
                  source src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}">
               Your browser does not support the video tag.
           </video>
-      </g:if>g
+      </g:if>
       <g:if test="${'mp3,aud,'.contains(extension)}">
      <audio width="320" height="240" controls
                  source src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}">

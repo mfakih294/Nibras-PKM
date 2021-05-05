@@ -410,7 +410,7 @@ $("#accordionCenter").accordion({
                 jQuery('#quickAddTextFieldBottomTop').select();
                 jQuery('#quickAddTextFieldBottomTop').focus();
             });
-            Mousetrap.bindGlobal('shift+esc', function (e) {
+            Mousetrap.bindGlobal('f1', function (e) {
 //                jQuery('#accordionCenter').accordion({ active: 0});
                 jQuery('#quickAddTextFieldBottomTop').select();
                 jQuery('#quickAddTextFieldBottomTop').focus();
@@ -488,17 +488,20 @@ $("#accordionCenter").accordion({
 
             });
 
-            Mousetrap.bind('n', function (e) {
+            Mousetrap.bind('right', function (e) {
                 jQuery('.nextLink').click()
             });
 
-            Mousetrap.bind('ctrl+s', function (e) {
-                jQuery('#quickAddRecordSubmit').click()
-            });
-
-            Mousetrap.bind('p', function (e) {
+            Mousetrap.bind('left', function (e) {
                 jQuery('.prevLink').click()
             });
+
+
+            Mousetrap.bind('ctrl+s', function (e) {
+                jQuery('#addXcdFormDaftarSubmit').click();
+                return false;
+            });
+
 
             /*
              For modifier keys you can use shift, ctrl, alt, option, meta, and command.

@@ -11,10 +11,10 @@
 </g:hasErrors>
 
 
-<g:if test="${record?.id && OperationController.getPath('private_mode') == 'on' && record.class.declaredFields.name.contains('keepSecret') && record.keepSecret}">
-    &notin;
-</g:if>
-<g:elseif test="${record?.id}">
+%{--<g:if test="${record?.id && OperationController.getPath('private_mode') == 'on' && record.class.declaredFields.name.contains('keepSecret') && record.keepSecret}">--}%
+%{--    &notin;--}%
+%{--</g:if>--}%
+%{--<g:elseif test="${record?.id}">--}%
 
     <g:set var="entityCode"
            value="${record.metaClass.respondsTo(record, 'entityCode') ? record.entityCode()?.split(/\./).last() : record.class?.name?.split(/\./).last()}"/>
@@ -1598,6 +1598,7 @@ Writing:
                                 <g:if test="${'CTGREW'.contains(entityCode)}">
 
                                     <g:remoteLink controller="generics" action="showJP"
+                                        class="addJPButton${entityCode}${record.id}"
                                                   params="${[id: record.id, entityCode: entityCode]}"
                                                   update="below${entityCode}Record${record.id}"
                                                   title="Details">
@@ -1651,14 +1652,6 @@ Writing:
 
 
 
-            %{--<br/>--}%
-            %{--</g:else>--}%
-            <script type="text/javascript">
-
-            </script>
-
-
-
         </div>
         <div style="margin-left: 20px;" id="below${entityCode}Record${record.id}" >
 
@@ -1666,13 +1659,11 @@ Writing:
 
     </div>
 
-
-
-
-</g:elseif>
+%{--</g:elseif>--}%
 
 %{--tabindex = "${tabIndex}" id ${record.id}--}%
 <script type="application/javascript">
+
     if ('2340' == "${tabIndex}"){
         bindMyKeys();
         console.log('valid if ' + ${record.id})
@@ -1680,14 +1671,18 @@ Writing:
         %{--jQuery("#${entityCode}Record${record.id}").select();--}%
     }
 
-    console.log('now binding in ' + ${record.id})
+   // console.log('now binding in ' + ${record.id})
     Mousetrap.bind('space', function (e) {
         jQuery('.temp44').addClass('hiddenActions');
-        jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions')
+        jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions');
+        return false;
     });
 
     Mousetrap.bind('e', function (e) {
         jQuery(".fullEditButton${entityCode}${record.id}").click();
+    });
+      Mousetrap.bind('8', function (e) {
+          jQuery("#${entityCode}Record${record.id}").load("${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}")
     });
     Mousetrap.bind('q', function (e) {
         jQuery(".quickEditButton${entityCode}${record.id}").click();
@@ -1701,34 +1696,37 @@ Writing:
         jQuery("#appendTextFor${entityCode}${record.id}").focus();
     });
 
-    Mousetrap.bind('shift+n', function (e) {
+    Mousetrap.bind('n', function (e) {
         jQuery(".appendToNotes${entityCode}${record.id}").click();
         jQuery("#appendTextFor${entityCode}${record.id}").focus();
     });
+    Mousetrap.bind('j', function (e) {
+        jQuery(".addJPButton${entityCode}${record.id}").click();
+    });
 
 
-    Mousetrap.bind('p =', function (e) {
+    Mousetrap.bind('=', function (e) {
         %{--jQuery("#priority+${record.id}${entityCode}").click();--}%
         jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')
     });
-    Mousetrap.bind('p -', function (e) {
+    Mousetrap.bind('-', function (e) {
         jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')
     });
 // }
 
-    unbindMyKeys = function() {
-    console.log('now unbinding in ' + ${record.id})
-    Mousetrap.unbind('space');
+%{--    unbindMyKeys = function() {--}%
+%{--    console.log('now unbinding in ' + ${record.id})--}%
+%{--    Mousetrap.unbind('space');--}%
 
-    Mousetrap.unbind('e');
-    Mousetrap.unbind('q');
-    Mousetrap.unbind('t');
-    Mousetrap.unbind('d');
+%{--    Mousetrap.unbind('e');--}%
+%{--    Mousetrap.unbind('q');--}%
+%{--    Mousetrap.unbind('t');--}%
+%{--    Mousetrap.unbind('d');--}%
 
-    Mousetrap.unbind('shift+n');
+%{--    Mousetrap.unbind('shift+n');--}%
 
-    Mousetrap.unbind('p =');
-    Mousetrap.unbind('p -');
-}   
+%{--    Mousetrap.unbind('p =');--}%
+%{--    Mousetrap.unbind('p -');--}%
+%{--}   --}%
 
 </script>

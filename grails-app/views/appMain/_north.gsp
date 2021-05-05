@@ -35,12 +35,12 @@
         </td>
     </g:if>
 
-   <td style="padding-right: 1px !important;">
-            <a href="${createLink(controller: 'page', action:'appLight')}" target="_blank">
-                Light
+%{--   <td style="padding-right: 1px !important;">--}%
+%{--            <a href="${createLink(controller: 'page', action:'appLight')}" target="_blank">--}%
+%{--                Light--}%
 
-            </a>
-        </td>
+%{--            </a>--}%
+%{--        </td>--}%
  <td style="padding-right: 1px !important;">
             <a href="${createLink(controller: 'page', action:'appNotes')}" target="_blank">
                 Notes
@@ -195,6 +195,7 @@
 
 
         <td style="padding-right: 3px !important;">
+            <g:if test="${1 == 2}">
             <g:remoteLink controller="generics" action="recentRecords"
                           style="padding-right: 2px !important;"
                           update="centralArea" title="Records entered within last week">
@@ -204,6 +205,7 @@
 
             %{--(${mcs.Journal.countByType(mcs.parameters.JournalType.findByCode('pkm'))})--}%
             </g:remoteLink>
+            </g:if>
        &nbsp;   <g:remoteLink controller="generics" action="todaysRecords"
                           style="padding-right: 2px !important;"
                           update="centralArea" title="Today's records">
