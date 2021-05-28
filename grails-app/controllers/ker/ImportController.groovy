@@ -349,7 +349,7 @@ class ImportController {
 
     def importLocalFiles() {
         def files = []
-        def rootPath = OperationController.getPath('root.rps1.path')
+        def rootPath = OperationController.getPath('root.rps2.path')
 
 //        new java.io.File(rootPath).eachFileRecurse() {
         if (new File(rootPath).exists()) {

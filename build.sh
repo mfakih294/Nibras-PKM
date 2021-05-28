@@ -8,7 +8,10 @@ export JAVA_HOME=/nbr/dev/jdk1.8.0_65/
 export CATALINA="-server"
 export JAVA_OPTS="-server"
 
-grails war
+./gradlew assemble --offline
+
+
+#grails war
 
 # Keep the terminal window open until user enters an input.
-$SHELL
+#$SHELL

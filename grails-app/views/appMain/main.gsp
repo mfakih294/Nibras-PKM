@@ -456,8 +456,8 @@ $("#accordionCenter").accordion({
 
 
   Mousetrap.bindGlobal('f2', function (e) {
-                jQuery('#quickAddXcdSubmitExecute').click();
-                jQuery('#quickAddTextField').select().focus();
+                // jQuery('#quickAddXcdSubmitExecute').click();
+                // jQuery('#quickAddTextField').select().focus();
 //                jQuery('#quickAddTextField').focus();
             });
 
@@ -478,7 +478,7 @@ $("#accordionCenter").accordion({
                     jQuery('#navMenu').addClass('navHidden');
                     jQuery('#southRegion').addClass('navHidden');
                     collapsed = true
-                }
+                } 
                 else {
                     jQuery('#topRegion').removeClass('navHidden');
                     jQuery('#navMenu').removeClass('navHidden');
