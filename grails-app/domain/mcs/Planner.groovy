@@ -124,7 +124,7 @@ class Planner implements Comparable {  // entity id = 137
 
     static constraints = {
         level(inList: ['l', 'y', 'e', 'A', 'M', 'r', 'w', 'd', 'm', 'i'])
-        startDate(nullable: false)
+        startDate(nullable: false, unique: ['task'])
         endDate()
 
         description()

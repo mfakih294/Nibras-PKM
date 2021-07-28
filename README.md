@@ -1,9 +1,13 @@
 # Nibras PKM
 
-**Nibras PKM** is a __local open source__ system for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use, and an Android __mobile__ reader application.
+**Nibras PKM** is a __local open source__ system for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use and where all the records are entered, and an Android __mobile__ reader application.
 
 ![](https://raw.githubusercontent.com/mfakih294/Nibras-PKM/master/docs/images/screenshot.jpg)
 
+
+**Local**
+
+The user has full control over his/her data, without the need for a (fast) internet connection, and without all the distractions and information overload that the internet can cause.
 
 **Open source**
 
@@ -41,13 +45,13 @@ Running Nibras requires three simple steps:
 - Extract the zipped file to a location of your choice on your local disk.
 - Launch Nibras by double clicking on ./scripts/start file.
 
-Once Nibras has finished launching, a text message like the one below will appear.
+Once Nibras has finished launching, a message like the one below will appear.
 
 `************************************************************`
 
-`* Nibras has launched. You can access it from: *`
+`* Nibras has launched. You can access it from:             *`
 
-`* https://localhost:1441/nibras *`
+`* https://localhost:1441/nibras                            *`
 
 `************************************************************`
 
@@ -64,3 +68,18 @@ Notes:
 * Grails applications run on any platform that can run Java 8 and later, so practically all platforms, including Windows, Linux, Mac.
 * For production use, Nibras uses MySQL 5 for its database, and the file system to store the files of the records. To testing and demonstration, you can run it with h2 database, with no need to configure it.
 * Apache Tomcat 8+ is the recommended application server to run it for production use.
+
+
+## Nibras Reader
+
+
+* **Nibras Reader** is available as a companion Android application to Nibras. It that connects to a Nibras PKM system (e.g. on the same WIFI network), and syncs the bookmarked records in it, so you can read them without network access whenever you go.
+
+* It  also allows the user to enter quick one-line notes that will be synced to Nibras Desktop on user's choice.
+
+* To use Nibras Reader, the user has to specify first the IP and port of Nibras PKM (found on the footer region). Then, when clicking 'Sync', all bookmarked records will be available for reading on mobile.
+
+* To install it, copy the bundled .apk file to your Android phone, and install it, or get it from its Github page: [https://github.com/mfakih294/nibras-mobile](https://github.com/mfakih294/nibras-mobile).
+
+![homepage](./images/nibras-mobile-homepage.jpg)
+

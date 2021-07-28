@@ -22,7 +22,7 @@ import mcs.Writing
 import org.apache.commons.lang.WordUtils
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class IndexCardController { // entity id = 16
 
     def supportService
@@ -396,7 +396,7 @@ class IndexCardController { // entity id = 16
                 n = new mcs.Book()
                 n.title = params.title//extractTitleReturn(params.description)
                 n.fullText = params.description //extractDescriptionReturn(params.description)
-                n.type = ResourceType.findByCode('nws')
+                n.type = ResourceType.findByCode((OperationController.getPath('resource.add.type.default') ?: 'nws'))
 //                n.status = WorkStatus.findByCode('pending')
                 n.save()
             }
@@ -408,6 +408,7 @@ class IndexCardController { // entity id = 16
         }
 
         n.language = params.language
+        n.bookmarked = true
 
 
         render(template: "/gTemplates/recordSummary", model: [record: n])
@@ -415,11 +416,11 @@ class IndexCardController { // entity id = 16
 
             def recentRecords = []
             allClassesWithCourses.each() {
-                recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 4])
+                recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
                 //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
             }
 
-            recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
+            recentRecords = recentRecords.sort({ it.dateCreated })//.reverse()
             //recentRecords.unique()
             if (recentRecords.size() > 0)
                 render(template: '/gTemplates/recordListing', model: [
@@ -548,10 +549,10 @@ class IndexCardController { // entity id = 16
 
 
     def generateWritingsBook(){
-        render(template: "/appCourse/writingsBook", model: [record: mcs.Course.get(params.id)])
+        render(template: "/appCourse/writingsBookHtml", model: [record: mcs.Course.get(params.id)])
     }
     def generateWritingsBookToFile() {
-        def f = new File('/' + (OperationController.getPath('root.rps1.path') ?: '') + '/crs.md')
+        def f = new File('/' + (OperationController.getPath('root.rps1.path') ?: '') + '/crs' + params.id + '.md')
         f.write(g.include([controller: 'indexCard', action: 'generateWritingsBook', id: params.id]).toString(), 'UTF-8')
         render 'Generation done: ' + new Date().format('HH:mm:ss')
     }

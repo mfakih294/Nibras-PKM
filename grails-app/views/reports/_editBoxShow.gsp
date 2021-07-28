@@ -1,4 +1,4 @@
-<%@ page import="ker.OperationController; cmn.Setting; app.IndexCard; mcs.Writing" %>
+<%@ page import="ker.OperationController; cmn.Setting; app.IndexCard; mcs.Writing; mcs.Book" %>
 
 
 <h2>Changed records (${OperationController.getPath('root.rps1.path') + '/edit/'})</h2>
@@ -14,7 +14,7 @@
 <g:else>
 <g:each in="${new File(OperationController.getPath('root.rps1.path') + '/edit/').listFiles()}" var="f">
 
-    <g:if test="${f.name.endsWith('.txt') && 'WN'.contains(f.name?.substring(0, 1))}">
+    <g:if test="${f.name.endsWith('.txt') && 'WNR'.contains(f.name?.substring(0, 1))}">
     %{--<g:set value="${f.name.split(/\./)[0].substring(1)}" var="id"></g:set>--}%
         <g:set value="${f.name.split('-')[1]?.split(' ')[0].replace('.txt', '')}" var="id"></g:set>
 
@@ -23,6 +23,9 @@
         </g:if>
         <g:if test="${f.name?.startsWith('N')}">
             <g:set value="${IndexCard.get(id.toLong()).description}" var="description"></g:set>
+        </g:if>
+ <g:if test="${f.name?.startsWith('R')}">
+            <g:set value="${Book.get(id.toLong()).fullText}" var="description"></g:set>
         </g:if>
 
         <g:if test="${f && f.text != description}">
@@ -36,7 +39,7 @@
                             <hr/>
                             <b>${f.name}:</b>
                             <g:render template="/gTemplates/recordSummary"
-                                      model="[record: f.name?.substring(0, 1) == 'W' ? Writing.get(id) : IndexCard.get(id.toLong())]"></g:render>
+                                      model="[record: f.name?.substring(0, 1) == 'W' ? Writing.get(id?.toLong()) : (f.name?.substring(0, 1) == 'R' ? Book.get(id?.toLong()) : IndexCard.get(id.toLong()))]"></g:render>
 
                         </td>
                     </tr>
@@ -60,7 +63,7 @@
                         <td style="width: 50%; vertical-align: top; text-align: justify" class="textar">
                             <br/>
                             <g:each in="${description?.split('\n')}" var="l">
-                                <g:if test="${!f?.text?.contains(l)}">
+                                <g:if test="${!f?.text?.contains(l?.trim())}">
                                   +  ${l} <br/> <br/>
                                 </g:if>
                             </g:each>
@@ -72,7 +75,7 @@
                         %{--${?.encodeAsHTML()?.replace('\n', '<br/>')}--}%
 
                             <g:each in="${f?.text?.split('\n')}" var="l">
-                                <g:if test="${!description?.contains(l)}">
+                                <g:if test="${!description?.contains(l?.trim())}">
                                   +  ${l} <br/><br/>
                                 </g:if>
                             </g:each>

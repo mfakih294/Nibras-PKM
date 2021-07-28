@@ -11,7 +11,7 @@ package app
     
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class IndicatorDataController { // entity id = 21
 
 

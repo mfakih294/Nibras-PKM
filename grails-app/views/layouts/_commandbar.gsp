@@ -17,23 +17,32 @@
 
              %{--</td>--}%
             <tr>
-                <td style=" padding: 0px; margin: 0px; width: 60%">
-                    Prefix: <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"
+                <td style=" padding: 0px; margin: 0px; width: 99%">
+                    Manual prefix: <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"
                                          rows="5"
-                                         style="width:30%; display: inline; " value=""/>
+                                         style="display: inline; " value=""/>
                     %{--For each line?--}%
                     %{--<input type="text" name="forEachLine" id="forEachLine"--}%
                 %{--/>--}%
 
+
                     <span style="float: right">
 
-                    Template:
+
+                    Prefix template:
                     <g:select name="commandPrefix"
                               from="${CommandPrefix.list([sort: 'orderNumber'])}" optionKey="id" optionValue="summary"
                               style="direction: ltr; text-align: left; display: inline; width: 160px;"
-                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextField').val(jsdata.info);jQuery('#prefixField').val(jsdata.prefix); })"
+                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextFieldInfoNotes').html('Contents format: ' + jsdata.info);jQuery('#prefixField').val(jsdata.prefix); })"
                               value=""/>
+
                     %{--if (jsdata.info  == null ||  jsdata.info  == 'null' || !jsdata.info) jQuery('#quickAddTextField').addClass('commandMode'); else  jQuery('#quickAddTextField').removeClass('commandMode')--}%
+
+                    <g:submitButton name="batch" value="Execute"
+                                    style="margin: 0px; padding: 0 10px; width: 90px !important;"
+                                    id="quickAddXcdSubmitExecute"
+                                    class="fg-button ui-widget ui-state-default"/>
+
                 </span>
 
 
@@ -44,26 +53,27 @@
                 %{--</select>--}%
 
 
-                    <g:submitButton name="batch" value="Execute"
-                                    style="margin: 0px; width: 60px !important;"
-                                    id="quickAddXcdSubmitExecute"
-                                    class="fg-button ui-widget ui-state-default"/>
 
                 </td>
             </tr>
 
             <tr>
-            <td colspan="2">
+            <td>
                 %{--(Add, update, search, assign records...) Type ? for more info--}%
-                <g:textArea cols="120" rows="5" name="block" id="quickAddTextField" value="${OperationController.getPath('commandBar.initialText')?.replace('+', '\n')?.replaceAll(/\?date/, ker.OperationController.toWeekDate(new Date() -1))}"
+                %{--value="${OperationController.getPath('commandBar.initialText')?.replace('+', '\n')?.replaceAll(/\?date/, ker.OperationController.toWeekDate(new Date() -1))}"--}%
+                %{--value="localStorage['myscratch']"--}%
+                %{--placeholder="Batch operations..."--}%
+                %{--dir="rtl"--}%
+
+
+                <g:textArea cols="120" rows="5" name="block" id="quickAddTextField"
                             autocomplete="off"
-                            dir="rtl"
-                            placeholder="Batch operations..."
+                            onkeydown="localStorage['myscratch'] = jQuery('#quickAddTextField').val();"
                             onkeyup="if (jQuery('#quickAddTextField').val().search(';')== -1){jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))}"
                             onfocus="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))"
                             onblur="jQuery('#hintArea').html('')"
                             class="commandBarTexField"/>
-
+                <div id="quickAddTextFieldInfoNotes" style="color: darkgreen; font-size: normal; font-style: italic; padding: 5px 5px; display: inline-block"></div>
             </td>
             %{--<td style="width: 25px !important ; padding: 0px; margin: 0px;">--}%
 
@@ -83,4 +93,5 @@
 
 <script type="text/javascript">
 //   jQuery('#commandBars').addClass('navHidden')
+jQuery('#quickAddTextField').val(localStorage['myscratch']);
 </script>

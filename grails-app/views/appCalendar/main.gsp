@@ -3,9 +3,13 @@
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-  <title style="direction: ltr; text-align: left;">${ker.OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' /Calendar': 'Nibras PKM /Calendar'}</title>
+  <title style="direction: ltr; text-align: left;">
 
-  <link rel="shortcut icon" href="${resource(dir: 'images/icons', file: 'calendar.ico')}" type="image/png"/>
+%{--      ${ker.OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' /Calendar': 'Nibras PKM /Calendar'}--}%
+  Calendar
+  </title>
+
+  <link rel="shortcut icon" href="${resource(dir: 'images/icons', file: 'calendar.ico')}" type="image/ico"/>
 
 
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
@@ -46,9 +50,11 @@
     <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/560', file: 'main.css')}"/>
 
     <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main-calendar.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>
 
 
-  <script>
+    <script>
       var calendar
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
@@ -98,8 +104,8 @@
                   var endDate = new Date(currentDate.valueOf());
 
                   // Adjust the start & end dates, respectively
-                  startDate.setDate(startDate.getDate() - 3); // One day in the past
-                  endDate.setDate(endDate.getDate() + 3); // Three days into the future
+                  startDate.setDate(startDate.getDate() - 2); // One day in the past
+                  endDate.setDate(endDate.getDate() + 2); // Three days into the future
 
                   return { start: startDate, end: endDate }
               }
@@ -115,7 +121,7 @@
       },
 
 
-        initialView : 'dayGrid',
+        initialView : 'timeGridWeek',
       allDaySlot: true,
       nowIndicator: true,
       timeGridEventMinHeight: true,
@@ -180,7 +186,7 @@
 
         var eventData;
 
-        if (title & 1 == 2) {
+        if (title && 1 == 2) {
           eventData = {
             title: title,
             start: moment(arg.start).format('DD.MM.YYYY HH:mm'),
@@ -455,7 +461,7 @@
     <div id='calendar' ></div>
   </div>
 
-<div id="login-form" class="modal" style="height: 500px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
+<div id="login-form" class="modal" style="z-index:1000; height: 500px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
     %{--Event title or command (e.g. p -- title):--}%
     %{--<br/>--}%
     %{--<br/>--}%
@@ -484,7 +490,7 @@
         <br/>
         <g:select name="goal" from="${mcs.Goal.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="goal"
                   optionKey="id" optionValue="summary"
-            style="width: 99%; direction: rtl; text-align: right;"
+            style="width: 99% !important; direction: rtl; text-align: right;"
                   noSelection="${['null': '']}" value=""/>
 
         <br/>
@@ -492,7 +498,7 @@
         <br/>
         <g:select name="task" from="${mcs.Task.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="task"
                   optionKey="id" optionValue="summary"
-                  style="width: 99%; direction: rtl; text-align: right;"
+                  style="width: 99%  !important; direction: rtl; text-align: right;"
                   noSelection="${['null': '']}" value=""/>
 <br/>
         Summary or Nibras command*:
@@ -512,7 +518,7 @@
                   <br/>
                   <br/>
         <g:submitButton name="batch" value="Save"
-                        style="height: 20px; margin: 0px; width: 100px !important;"
+                        style="height: 20px  !important; margin: 0px; width: 100% !important;"
                         id="quickAddXcdSubmitTop3"
                         class="fg-button ui-widget ui-state-default"/>
     </g:formRemote>

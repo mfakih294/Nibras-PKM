@@ -10,25 +10,37 @@ class BootStrap {
 
         if (User.count() == 0) {
             def adminRole = new Role(authority: 'ROLE_ADMIN').save()
-//            def standardRole = new Role(authority: 'ROLE_STANDARD').save()
+            def standardRole = new Role(authority: 'ROLE_READER').save()
 
-//            def adminUser = new User(username: 'admin', password: 'admin').save()
-            def standardUser = new User(username: 'nibras', password: 'nibras').save()
+            def adminUser = new User(username: 'admin', password: 'admin').save()
+            def standardUser = new User(username: 'reader', password: 'reader').save()
 
-//            UserRole.create adminUser, adminRole
-            UserRole.create standardUser, adminRole //standardRole
+            UserRole.create adminUser, adminRole
+            UserRole.create standardUser, standardRole
 
             UserRole.withSession {
                 it.flush()
                 it.clear()
             }
 
-            assert User.count() == 1
-            assert Role.count() == 1
-            assert UserRole.count() == 1
+            assert User.count() == 2
+            assert Role.count() == 2
+            assert UserRole.count() == 2
         }
 
-        println ''
+        println """
+
+
+
+   _   _   _   _   _   _     _   _   _  
+  / \\ / \\ / \\ / \\ / \\ / \\   / \\ / \\ 
+ ( N | i | b | r | a | s ) ( P | K | M ) 
+  \\_/ \\_/ \\_/ \\_/ \\_/ \\_/   \\_/ \\_/  v1.7
+
+
+
+
+"""
         println ''
         println ' ************************************************************'
         println ' *                                                          *'
@@ -55,7 +67,7 @@ class BootStrap {
 
         println '************************************************************'
         println '*                                                          *'
-        println '* Nibras is being stopped...                               *'
+        println '* Nibras is stopping...                                    *'
         println '*                                                          *'
         println '************************************************************'
 

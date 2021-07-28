@@ -4,7 +4,7 @@
 
 
             <h3><a href="#">
-                 Goals   (${Goal.countByCourse(record)})
+                 Actions
             </a></h3>
 
                 <div style="">
@@ -20,7 +20,7 @@
                     <br/>
                     <br/>
 
-  <g:remoteLink controller="indexCard" action="generateWritingsBookToFile"
+                    <g:remoteLink controller="indexCard" action="generateWritingsBookToFile"
                                   id="${record.id}"
                                   update="centralArea"
                                   title="">
@@ -28,8 +28,8 @@
                     </g:remoteLink>
 
 
-                                                                          <br/>
-                                                                          <br/>
+                    <br/>
+                    <br/>
                     <g:remoteLink controller="indexCard" action="sortNotes"
                                   id="${record.id}"
                                   update="centralArea"
@@ -38,8 +38,19 @@
                     </g:remoteLink>
 
 
+                </div>
 
-                    <g:render template="/gTemplates/recordListingBox" model="[list: Goal.findAllByCourse(record)]"/>
+
+  <h3><a href="#">
+                 Goals   (${Goal.countByCourse(record)})
+            </a></h3>
+
+                <div style="">
+
+
+
+
+                    <g:render template="/gTemplates/recordListing" model="[list: Goal.findAllByCourse(record)]"/>
 
                 </div>
 
@@ -49,7 +60,7 @@
 
     <div>
 
-        <g:render template="/gTemplates/recordListingBox" model="[list: Journal.findAllByCourse(record)]"/>
+        <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByCourse(record)]"/>
 
     </div>
   <h3><a href="#">
@@ -57,7 +68,7 @@
             </a></h3>
 
                 <div style="">
-                    <g:render template="/gTemplates/recordListingBox" model="[list: Planner.findAllByCourse(record)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByCourse(record)]"/>
 
                 </div>
 
@@ -66,7 +77,7 @@
             </a></h3>
 
                 <div style="direction: rtl; text-align: right;">
-                    <g:render template="/gTemplates/recordListingBox" model="[list: Book.findAllByCourse(record)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Book.findAllByCourse(record)]"/>
                 </div>
 
             <h3><a href="#">
@@ -74,18 +85,15 @@
             </a></h3>
 
             <div style="direction: rtl; text-align: right; ">
-                <g:render template="/gTemplates/recordListingBox" model="[list: Writing.findAllByCourse(record)]"/>
+                <g:render template="/gTemplates/recordListing" model="[list: Writing.findAllByCourse(record)]"/>
             </div>
+%{--  <h3><a href="#">--}%
+%{--                Notes  (${IndexCard.countByCourse(record)})--}%
+%{--            </a></h3>--}%
 
-              <h3><a href="#">
+%{--            <div style="direction: rtl; text-align: right; ">--}%
+%{--                <g:render template="/gTemplates/recordListing" model="[list: IndexCard.findAllByCourse(record)]"/>--}%
+%{--            </div>--}%
 
-            </a></h3>
-
-            <div>
-
-
-
-
-            </div>
 
 </div>

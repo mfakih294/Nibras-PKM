@@ -127,8 +127,7 @@
 
             <div id="2" class="common" style="">
                 <div id="inner2" class="common" style="">
-                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%
-                    <g:render template='/reports/homepageSavedSearches'/>
+                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%                    
                 </div>
                 %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
                 <g:formRemote name="batchAdd2" class="commandBarInPanel"

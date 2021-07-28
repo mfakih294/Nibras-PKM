@@ -28,17 +28,15 @@
 
 
     <title style="direction: ltr; text-align: left;">
-        ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' Kanban': 'Nibras Kanban'}
-
+%{--        ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' Kanban': 'Nibras Kanban'}--}%
+Tasks
     %{--<g:meta name="app.version"/>--}%
-
-
 
     </title>
 
 
     %{--<link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon-transparent.png')}" type="image/png"/>--}%
-    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'calendar.ico')}" type="image/ico"/>
+    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'edx-check.png')}" type="image/ico"/>
 
 
 
@@ -103,7 +101,7 @@
 //                        console.log('An error occurred! ' + ( errorThrown ? errorThrown :   xhr.status ));
                 }
             });
-        }, 60000);
+        }, 6000000);
 
 
     //    $.address.state('${request.contextPath}/')
@@ -221,7 +219,7 @@
             jQuery.browser = browser;
 
             // this layout could be created with NO OPTIONS - but showing some here just as a sample...
-            // myLayout = jQuery('body').layout(); -- syntax with No Options
+            myLayout = jQuery('body').layout(); //-- syntax with No Options
 
 //        jQuery('input').iCheck({
 //            checkboxClass: 'icheckbox_minimal-grey',
@@ -452,7 +450,7 @@ $("#accordionCenter").accordion({
 
 <body>
 
-<g:render template="/appKanban/regions" model="[htmlContent: htmlContent]"/>
+<g:render template="/appKanban/regions" model="[htmlContent: htmlContent, courses: courses]"/>
 <div id="idletimeout"></div>
 
 

@@ -103,22 +103,22 @@ class SyncController {
 //                    IndexCard.findAllByDateCreatedGreaterThanAndBookmarked(new Date() - 7, true, [sort: 'dateCreated', order: 'asc']) +
 //                            Book.findAllByDateCreatedGreaterThanAndReadOnIsNull(new Date() - 7, [sort: 'dateCreated', order: 'asc']) +
 //                            Book.findAllByBookmarkedAndType(true, ResourceType.findByCode('art')) +
-                    Book.findAllByBookmarked(true) +
-                            Writing.findAllByBookmarked(true) +
-                            IndexCard.findAllByBookmarked(true) +
-                            Task.findAllByBookmarked(true) +
-                            Goal.findAllByBookmarked(true)
+                    Book.findAllByBookmarked(true, [sort: 'priority', order: 'desc']) +
+                            Writing.findAllByBookmarked(true, [sort: 'priority', order: 'desc']) +
+                            IndexCard.findAllByBookmarked(true, [sort: 'priority', order: 'desc']) +
+                            Task.findAllByBookmarkedAndCompletedOnIsNull(true, [sort: 'priority', order: 'desc']) +
+                            Goal.findAllByBookmarkedAndCompletedOnIsNull(true, [sort: 'priority', order: 'desc'])
 
 
             list.each() { r ->
                 //def title =
                 def style = r.language == 'ar' ? "text-align: right; direction: rtl" : ''
 
-                entry((r.class.declaredFields.name.contains('summary') ? r.summary : '') + ' ' + (r.class.declaredFields.name.contains('title') && r.title ? r.title : '') + "") {
+                entry((r.priority ? 'p' + r.priority + ' ' : 'p2 ' ) + (r.class.declaredFields.name.contains('summary') ? r.summary : '') + ' ' + (r.class.declaredFields.name.contains('title') && r.title ? r.title : '') + "") {
 //  entry(article.title + ' (' + article.type.toString() + ' / ' + article.writingStatus.toString() + ' - ' + (article?.body ? article?.body?.count(' ') : '0') + ' words)') {
-                    link = "http://phi:1440/nibras/sync/fetchFullText/${r.id}"
+                    link = "https://localhost:1442/nibras/page/rssPage/${r.id}-${r.entityCode()}"
                     publishedDate = r.dateCreated
-                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: r.course?.code])]//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
+                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: r.course?.summary])]//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
                     author = r.entityCode() + (r.class.declaredFields.name.contains('type') && r.type ? ' #' + r.type?.code : '') +
                             (r.class.declaredFields.name.contains('context') && r.context ? ' @' + r.context : '')
 //                    content(type: 'text/html', value: 'tst')
@@ -252,12 +252,14 @@ class SyncController {
         def builder = new JSONBuilder()
 
         def records = []
-        for (i in mcs.Planner.executeQuery("from Planner where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
-                [new Date() - 7, new Date() + 7, true])) {
+        for (i in mcs.Planner.executeQuery("from Planner where startDate >= ? and startDate <= ? and completedOn is null order by startDate asc",
+                [new Date() - 4, new Date() + 4])) {
             records += [type    : 'P', id: i.id, ecode: 'P',
                         meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
+                        date    : i?.startDate?.format('dd-MM-yyyy'),
+                        datediff    : i?.startDate - new Date(),
                         color   : 'darkblue',
-                        title   : i.summary,
+                        title   : '[' + i.task + '] ' + i.summary,
                         language: i.language,
                         body    : i.description ? i.description?.replace('\n', '<br/>') : '']
         }
@@ -276,7 +278,7 @@ class SyncController {
 
         def records = []
         for (i in mcs.Planner.executeQuery("from Journal where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
-                [new Date() - 7, new Date() + 7, true])) {
+                [new Date() - 14, new Date() + 7, true])) {
             records += [type    : 'J', id: i.id, ecode: 'J',
                         meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
                         color   : 'darkblue',
@@ -300,7 +302,7 @@ class SyncController {
         def records = []
         def c = 1
         //def t = ''
-        for (d in (new Date() + 3..new Date() - 4)) {
+        for (d in (new Date() + 13..new Date() - 14)) {
             //t = ''
             for (i in mcs.Planner.executeQuery("from Planner p where date(p.startDate) = ? order by p.startDate desc ", [d])) {
                 //    t += '<b>' +  i.summary + '</b><br/>' +( i.description  &&  i.description?.trim() != '?' ? i.description?.replace('\n', '<br/>'): '') + '<br/><br/>'
@@ -611,7 +613,7 @@ class SyncController {
                     record.status = mcs.parameters.WorkStatus.findByCode('done')
                 }
 
-                if ('T'.contains(entityCode) && record.isRecurring) {
+                if (1 == 2 && 'T'.contains(entityCode) && record.isRecurring) {
                     def t = new Task()
 //            t.properties = record.properties
                     t.summary = 'rc: ' + t.summary
@@ -641,7 +643,9 @@ class SyncController {
                     }
                 }
                 if ('R'.contains(entityCode)) {
-                    record.status = mcs.parameters.ResourceStatus.findByCode('core')
+
+                    //todo
+                    record.status = mcs.parameters.ResourceStatus.findByCode('read')
                 }
                 if ('W'.contains(entityCode)) {
 

@@ -1,4 +1,4 @@
-<%@ page import="mcs.Department; mcs.parameters.WorkStatus;" %>
+<%@ page import="ker.OperationController; mcs.Department; mcs.parameters.WorkStatus;" %>
 
 
 <!-- searchForm -->
@@ -28,13 +28,12 @@ Full text<br/>
 
 
 Date range of <g:select name="dateField"
-                        from="${['startDate', 'endDate', 'dateCreated', 'lastUpdated']}"
-                        noSelection="${['null': 'Any date']}"/>
+                        from="${['startDate', 'endDate', 'dateCreated', 'lastUpdated']}" value="dateCreated"/>
+                        %{--noSelection="${['null': 'Any date']}"--}%
 <br/>
 
 between <g:textField name="dateA" style="width: 50px;" value="-"/>
 and <g:textField name="dateB" style="width: 50px;" value=""/>
-
 <br/>
 
 <g:if test="${'GPJWNR'.contains(entityCode)}">
@@ -45,8 +44,6 @@ and <g:textField name="dateB" style="width: 50px;" value=""/>
     <br/>
 </g:if>
 
-
-
 <g:if test="${'GTPRW'.contains(entityCode)}">
     <g:select name="status" style="width: 150px;"
               from="${statuses}" optionKey="id" optionValue="value"
@@ -56,13 +53,13 @@ and <g:textField name="dateB" style="width: 50px;" value=""/>
 </g:if>
 
 <g:if test="${'T'.contains(entityCode)}">
-
     <g:select name="location" style="width: 150px;"
               from="${locations}" optionKey="id" optionValue="value"
               noSelection="${['null': 'Any location']}"/>
     <br/>
 </g:if>
 
+<g:if test="${ker.OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
 <g:select name="department" style="width: 150px;"
           from="${departments}" optionKey="id" optionValue="value"
@@ -74,29 +71,33 @@ and <g:textField name="dateB" style="width: 50px;" value=""/>
           from="${courses}" optionKey="id" optionValue="value"
           noSelection="${['null': 'Any course']}"/>
 <br/>
+</g:if>
+
 
 <g:if test="${'JP'.contains(entityCode)}">
     <g:select name="level"
               from="${['i', 'd', 'w', 'm', 'y', 'e', 'l']}"
               noSelection="${['null': 'Any level']}"/>
-    <br/>
+<br/>
 </g:if>
 
 
 <g:select name="priority"
           from="${[1, 2, 3, 4]}"
           noSelection="${['null': 'Any priority']}"/>
-
 <br/>
+
+<g:if test="${OperationController.getPath('resource.extra-fields.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <g:if test="${'R'.contains(entityCode)}">
-    <g:checkBox name="withExcerpts" value="${false}"/> With excerpts?
-%{--Todo: implement--}%s
+    %{--<g:checkBox name="withExcerpts" value="${false}"/> With excerpts?--}%
+%{--Todo: implement--}%
     <g:textField name="author" placeholder="Author" style="width: 100px;" value=""/>
     <g:textField name="publisher" placeholder="Publisher" style="width: 100px;" value=""/>
     <g:textField name="legacyTitle" placeholder="Legacy title" style="width: 100px;" value=""/>
     <g:textField name="publicationDate" placeholder="Publication date" style="width: 100px;" value=""/>
     <g:textField name="language" placeholder="Language" style="width: 30px;" value=""/>
     <br/>
+</g:if>
 </g:if>
 
 

@@ -1194,7 +1194,7 @@ ul.ui-tabs-nav {
 
 .recordLine td {
     vertical-align: middle;
-    padding: 1px;
+    padding: 0;
 }
 
 .D-bkg {
@@ -1240,6 +1240,11 @@ ul.ui-tabs-nav {
 
 .J-bkg {
     background: #90accf;
+    padding: 4px;
+}
+
+.K-bkg {
+    background: #50abcf;
     padding: 4px;
 }
 
@@ -1905,10 +1910,12 @@ ul.ui-autocomplete.ui-menu {
     font-family: Lato, tahoma !important;
     font-size: 0.95em;
     width: 98% !important;
-    height: 100px;
+    height: 300px;
     background: #dce5e5;
     margin: 0px !important;
     border: 1px solid darkgray;
+    text-align: start  !important;
+    unicode-bidi: plaintext !important;
 }
 
 .dis {
@@ -2058,4 +2065,12 @@ a :hover {
 
 .panelCard{
     border: 1px solid lightgrey; padding: 5px; margin: 12px 3px; border-radius: 4px;
+}
+
+.recordSelected{
+    border: 1px solid darkgreen;
+}
+
+.recordNotSelected{
+    border: 0px solid darkgreen;
 }

@@ -24,20 +24,17 @@ import mcs.Book
 import mcs.Course
 import mcs.Department
 import mcs.Goal
-import mcs.Planner
 import mcs.Writing
 import mcs.parameters.ResourceStatus
 
 
 import com.intuit.fuzzymatcher.component.MatchService;
 import com.intuit.fuzzymatcher.domain.Document;
-import com.intuit.fuzzymatcher.domain.Element;
-import static com.intuit.fuzzymatcher.domain.ElementType.ADDRESS;
+import com.intuit.fuzzymatcher.domain.Element
+
 import static com.intuit.fuzzymatcher.domain.ElementType.NAME;
-import com.intuit.fuzzymatcher.domain.Match;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import com.intuit.fuzzymatcher.domain.Match
+
 import java.util.stream.Collectors;
 
 
@@ -46,7 +43,7 @@ import grails.plugin.springsecurity.annotation.Secured
 
 
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class ReportController {
 
     def supportService
@@ -633,6 +630,30 @@ def enterJournalWithType() {
     render 'done.'
 
 }
+
+    def customReport1(){
+        /*
+
+mcs.Book.list().each(){
+
+
+  if (it.author && it.title)
+  it.title = it.title + ' - ' + it.author
+   else if (it.author && !it.title)
+  it.title = it.author
+
+  it.author = null
+
+}
+*/
+
+
+    def list = mcs.Book.executeQuery("from Book r where (r.type.code = 'paintings' or r.type.code = 'sculptures' ) order by r.status.name, r.title asc")
+
+render (view: '/reports/customReport1', model: [list: list, i: 1])
+
+
+    }
 
 
 } // end of class

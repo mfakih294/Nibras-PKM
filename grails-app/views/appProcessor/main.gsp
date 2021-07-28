@@ -630,7 +630,7 @@ Files:
     </div>
       </g:if>
   <g:if test="${'jpg,png,bmp,jpeg,webp'.contains(extension)}">
-    <img style="display:block; width: 99%;"
+    <img style="display:block;"
          src="${createLink(controller: 'operation', action: 'viewScan'
                  , params: [name: list[id?.toInteger()].path])}"/>
       </g:if>

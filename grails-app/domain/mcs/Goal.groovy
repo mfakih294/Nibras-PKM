@@ -73,6 +73,7 @@ class Goal implements Comparable {  // entity id = 126
     Float plannedDuration
     Float actualDuration
     Date completedOn
+    Date startDate
     Date endDate
 
     Boolean bookmarked = false

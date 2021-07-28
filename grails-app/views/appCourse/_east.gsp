@@ -19,7 +19,7 @@
 
         <div>
 
-            <g:render template="/gTemplates/recordListingBox" model="[list: Task.findAllByCourse(record)]"/>
+            <g:render template="/gTemplates/recordListing" model="[list: Task.findAllByCourse(record)]"/>
 
         </div>
 

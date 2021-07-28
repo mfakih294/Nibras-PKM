@@ -38,7 +38,7 @@ import grails.plugin.springsecurity.annotation.Secured
 //import com.gravity.goose.Goose
 
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class ImportController {
 
     def supportService
@@ -377,7 +377,7 @@ class ImportController {
         String name = URLDecoder.decode(request.getHeader('X-Uploadr-Name'), 'UTF-8')
         def info = session.getAttribute('uploadr')
         def myInfo = (name && info && info.containsKey(name)) ? info[name] : [:]
-        String savePath = myInfo.path ?: "d:/tmp"
+        String savePath = myInfo.path ?: "/tmp"
 //        println 'path ' + myInfo.path
         def dir = new File(savePath)
         def file = new File(savePath, fileName)
@@ -431,6 +431,106 @@ class ImportController {
             file = new File(savePath, testName)
             testIterator++
         }
+
+        // handle file upload
+        try {
+            FileCopyUtils.copy(request.inputStream, new FileOutputStream(file))
+            status = 200
+            statusText = "'${file.name}' upload successful!"
+        } catch (e) {
+            status = 500
+            statusText = e.message
+        }
+
+        // make sure the file was properly written
+        if (status == 200 && fileSize > file.size()) {
+            // whoops, looks like the transfer was aborted!
+            status = 500
+            statusText = "'${file.name}' transfer incomplete, received ${file.size()} of ${fileSize} bytes"
+        }
+
+        // got an error of some sorts?
+        if (status != 200) {
+            // then -try to- delete the file
+            try {
+                file.delete()
+            } catch (ignored) {
+            }
+        }
+
+        // render json response
+        response.setStatus(status)
+        render([written: (status == 200), fileName: file.name, status: status, statusText: statusText] as JSON)
+    }
+  def uploadCover2() {
+//        println 'params ' + params.dump()
+
+        String contentType = request.getHeader("Content-Type")
+        String fileName = URLDecoder.decode(request.getHeader('X-File-Name'), 'UTF-8')
+        long fileSize = (request.getHeader('X-File-Size') != "undefined") ? request.getHeader('X-File-Size') as long : 0
+        String name = URLDecoder.decode(request.getHeader('X-Uploadr-Name'), 'UTF-8')
+        def info = session.getAttribute('uploadr')
+        def myInfo = (name && info && info.containsKey(name)) ? info[name] : [:]
+      String savePath = myInfo.path ? myInfo.path?.split('-')[0]: "/tmp"
+      String saveId = myInfo.path ? myInfo.path?.split('-')[1]: "/tmp"
+
+//        println 'path ' + myInfo.path
+        def dir = new File(savePath)
+        def file = new File(savePath, saveId)
+        def namePart = ""
+        def extension = ""
+        def testName = ""
+        int status = 0
+        def statusText = ""
+
+        response.contentType = 'application/json'
+
+        // update lastUsed stamp in session
+        if (name && info && info.containsKey(name)) {
+            session.uploadr[name].lastUsed = new Date()
+            session.uploadr[name].lastAction = "upload"
+        }
+
+        if (!dir.exists()) {
+            try {
+                dir.mkdirs()
+            //    println 'dir created'
+            } catch (e) {
+                response.sendError(500, "could not create upload path ${savePath}")
+                render([written: false, fileName: file.name] as JSON)
+                return false
+            }
+        }
+
+        def freeSpace = dir.getUsableSpace()
+        if (fileSize > freeSpace) {
+            response.sendError(500, "cannot store '${fileName}' (${fileSize} bytes), only ${freeSpace} bytes of free space left on device")
+            render([written: false, fileName: file.name] as JSON)
+            return false
+        }
+
+        if (!dir.canWrite()) {
+            if (!dir.setWritable(true)) {
+                response.sendError(500, "'${savePath}' is not writable, and unable to change rights")
+                render([written: false, fileName: file.name] as JSON)
+                return false
+            }
+        }
+
+        // make sure the file name is unique
+        int dot = fileName.lastIndexOf(".")
+        namePart = saveId
+        extension = ''//(dot) ? fileName[dot + 1..fileName.length() - 1] : ""
+
+/*
+        int testIterator = 1
+        while (file.exists()) {
+            testName = "${namePart}"//-${testIterator}.${extension}"
+            file = new File(savePath, testName)
+            testIterator++
+        }
+*/
+
 
         // handle file upload
         try {
@@ -554,6 +654,7 @@ class ImportController {
 
     }
 
+
     def uploadCover() {
 
         def status = ''
@@ -566,7 +667,7 @@ class ImportController {
 
             if (params.entityCode == 'R') {
                 def b = Book.get(params.recordId)
-                path = OperationController.getPath('root.rps1.path') + '/R/cvr/' + b.type?.code + '/' + b.id + '.jpg'
+                path = OperationController.getPath('root.rps1.path') + '/R/cvr/' + b.id + '.jpg'
             } else {
                 path = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/cvr/' +
                         params.recordId + '.jpg'

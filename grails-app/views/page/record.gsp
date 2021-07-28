@@ -237,7 +237,7 @@
 </g:if>
 
 <g:if test="${record.entityCode() == 'R'}">
-    <h2>Book highlights</h2>
+    <h2>Resource page</h2>
 </g:if>
 
 <g:if test="${record.entityCode() == 'G'}">
@@ -271,7 +271,8 @@
 
 
 <div class="ui-layout-center appBkg" style="margin-top: 4px !important; margin-bottom: 4px !important;">
-
+<br/>
+<br/>
     <table>
         <tr>
             <td>

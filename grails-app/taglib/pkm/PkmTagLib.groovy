@@ -55,7 +55,7 @@ class PkmTagLib {
     def summarize = { attrs ->
 
         if (attrs.text && attrs.text != '' && attrs.text != '?' ) {
-            def text = attrs.text ? attrs.text.encodeAsHTML() : ''
+            def text = attrs.text ? attrs.text : ''
             def length = attrs.length
 
             out << StringUtils.abbreviate(text, length ? length.toInteger() : 80)?.replaceAll('>', ' ')?.replaceAll('<', ' ')?.encodeAsHTML()?.decodeHTML()
@@ -657,7 +657,7 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
         def cal = resource(dir: 'images', file: 'cal.png')
 
         out << """
-      <input type="text" name="${fieldName}" id="${fieldId}" value="${formattedValue}" style="width:90px;" placeholder="${attrs.placeholder}" />
+      <input type="text" name="${fieldName}" id="${fieldId}" value="${formattedValue}" style="width:100px;" placeholder="${attrs.placeholder}" />
       <script>
     var pickerOpts = {
 //    showOn: "both",

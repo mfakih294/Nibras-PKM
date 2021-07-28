@@ -1,3 +1,40 @@
+/* lato-regular - latin-ext_latin */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/lato-v16-latin-ext_latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */   url('../fonts/lato-v16-latin-ext_latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* lato-italic - latin-ext_latin */
+@font-face {
+    font-family: 'Lato';
+    font-style: italic;
+    font-weight: 400;
+    src: url('../fonts/lato-v16-latin-ext_latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/lato-v16-latin-ext_latin-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* lato-700 - latin-ext_latin */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/lato-v16-latin-ext_latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/lato-v16-latin-ext_latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* lato-700italic - latin-ext_latin */
+@font-face {
+    font-family: 'Lato';
+    font-style: italic;
+    font-weight: 700;
+    src: url('../fonts/lato-v16-latin-ext_latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/lato-v16-latin-ext_latin-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+
+
 html {
     /*background: #f1f1f1;*/
     font-family:  Lato !important;
@@ -380,20 +417,19 @@ tr {
 }
 
 td, th {
-    font: 12px tahoma, verdana, arial, helvetica, sans-serif;
+    font: 0.95em Lato, verdana, arial, helvetica, sans-serif;
     line-height: 15px;
     padding: 2px;
     /*text-align: left;*/
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 th {
-    font: 11px tahoma, verdana, arial, helvetica, sans-serif !important;
+    font-family: Lato, tahoma, verdana, arial, helvetica, sans-serif !important;
+    font-size: 0.9em !important;
     /*font-weight:normal !important;*/
-    background: #eee ;
-    /*fff url(../images/skin/shadow.jpg);*/
-
-    color: black;
+    background: #fff url(../images/skin/shadow.jpg);
+    color: #666;
     /*font-size: 12px;*/
     /*font-weight: bold;*/
     line-height: 17px;
@@ -984,7 +1020,7 @@ ul.ui-tabs-nav {
 }
 
 .record-id {
-    width: 65px !important;
+    width: 120px !important;
     font-size: 12px;
     color: #fff;
     text-align: left;
@@ -1040,7 +1076,7 @@ ul.ui-tabs-nav {
 
 .record-summary {
     /*width: auto;*/
-    font-family: Lato, tahoma;
+    font-family: Lato, tahoma !important;
     padding-left: 0px;
     padding-right: 2px;
     /*font-size: 11px;*/
@@ -1154,7 +1190,7 @@ ul.ui-tabs-nav {
 
 .recordLine td {
     vertical-align: middle;
-    padding: 1px;
+    padding: 0px;
 }
 
 .D-bkg {
@@ -1286,6 +1322,7 @@ ul.ui-tabs-nav {
     color: gray !important;
     text-decoration: line-through;
 }
+
 
 .status-nst a {
     color: #7894a5 !important;
@@ -1651,8 +1688,7 @@ h2 {
 }
 
 .ui-helper-reset {
-    font-size: 12px !important;
-    /*0.99em !important;*/
+    font-size: 0.9em !important;
 }
 
 ul.ui-autocomplete.ui-menu {
@@ -1738,9 +1774,9 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .hiddenActions {
-    /*display: none;*/
+    display: none;
     /*padding: 0px;*/
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 .actionsButtons {
@@ -1751,17 +1787,17 @@ ul.ui-autocomplete.ui-menu {
 .actionsButtons a {
     color: #0b202f !important;
     font-style: normal !important;
-    font-size: 10px !important;
+    font-size: 0.85em !important;
     text-decoration: none !important;
     border: 0.5px solid darkgray !important;
     border-radius: 3px !important;
-    padding: 2px;
+    padding: 1px 2px;
     margin-left: 2px;
     margin-right: 2px;
 }
 
 .actionsButtonsStyle a {
-    font-size: 10px !important;
+    font-size: 0.85em !important;
     color: #0b1336 !important;
     font-style: normal !important;
     text-decoration: underline !important;

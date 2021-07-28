@@ -11,7 +11,7 @@ import java.text.NumberFormat
  */
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class UtilsController {
     static String toWeekDate(Date date) {
         Calendar c = new GregorianCalendar()

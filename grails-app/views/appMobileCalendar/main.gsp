@@ -182,7 +182,7 @@
 
         var eventData;
 
-        if (title & 1 == 2) {
+        if (title && 1 == 2) {
           eventData = {
             title: title,
             start: moment(arg.start).format('DD.MM.YYYY HH:mm'),

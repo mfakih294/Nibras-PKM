@@ -34,7 +34,7 @@
 &nbsp; &nbsp;   |
 &nbsp; &nbsp;
 
-
+<g:if test="${OperationController.getPath('rss.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <g:link controller="sync" action="rssPile"
         target="_blank"
         title="RSS feed">
@@ -45,9 +45,9 @@
 
 &nbsp; &nbsp;   |
 &nbsp; &nbsp;
+</g:if>
 
-
-<g:if test="${1 ==1 }">
+<g:if test="${OperationController.getPath('selection-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <span style="padding-right: 1px !important;">
 
         <a onclick="selectAll()" href="#">+</a>
@@ -72,18 +72,24 @@
         </g:remoteLink>
 
     </span>
+    &nbsp; &nbsp;  |
 </g:if>
 
 
-&nbsp; &nbsp;  |
+
+
+
+<g:if test="${OperationController.getPath('copyright.show')?.toLowerCase() == 'yes' ? true : false}">
+                    
 &nbsp; &nbsp; 
    2020 &copy; khuta.org
+    &nbsp; &nbsp; |&nbsp; &nbsp;
+    </g:if>
 
-&nbsp; &nbsp; |&nbsp; &nbsp; 
 
 
 <span id="onlineLog"></span>
-
+<g:if test="${OperationController.getPath('IPs.show')?.toLowerCase() == 'yes' ? true : false}">
  &nbsp;
   IPs:  &nbsp;
 <g:each in="${ips}" var="ip">
@@ -93,6 +99,7 @@
 %{--    (${ip.name})--}%
     &nbsp; &nbsp;
 </g:each>
+</g:if>
 
 <g:if test="${1==2}">
 <span style="border: 0px dashed darkgray; padding-left: 15px !important; background: #8e8e97">

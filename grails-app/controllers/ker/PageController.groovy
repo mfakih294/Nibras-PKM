@@ -25,14 +25,41 @@ import grails.web.JSONBuilder
 //import org.eclipse.mylyn.wikitext.core.parser.MarkupParser
 //import org.eclipse.mylyn.wikitext.markdown.core.MarkdownLanguage
 
+
 import grails.plugin.springsecurity.annotation.Secured
 import newpackage.PrayTime
 
 import java.time.Duration
 import java.time.Instant
 
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.toc.TocExtension;
+import com.vladsch.flexmark.ext.typographic.TypographicExtension;
 
-@Secured('ROLE_ADMIN')
+import com.vladsch.flexmark.ext.emoji.EmojiExtension;
+import com.vladsch.flexmark.ext.emoji.EmojiImageType;
+import com.vladsch.flexmark.ext.emoji.EmojiShortcutType;
+import com.vladsch.flexmark.ext.definition.DefinitionExtension;
+import com.vladsch.flexmark.ext.emoji.EmojiExtension;
+import com.vladsch.flexmark.ext.footnotes.FootnoteExtension;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
+import com.vladsch.flexmark.ext.ins.InsExtension;
+import com.vladsch.flexmark.ext.superscript.SuperscriptExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.data.MutableDataSet;
+
+//import java.io.StringWriter;
+//import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
+//import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
+//import org.eclipse.mylyn.wikitext.core.parser.markup.MarkupLanguage;
+//import org.eclipse.mylyn.wikitext.markdown.core.MarkdownLanguage;
+
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class PageController {
 
     static entityMapping = [
@@ -89,6 +116,33 @@ class PageController {
 
 
     def appMain() {
+
+
+//
+//        ['IPs.show',                    'add-import-panel.enabled',                    'advanced-panel.enabled',                    'calendar.enabled',                    'commandbar.enabled',                    'copyright.show',                    'course.enabled',                    'extra-panes.enabled',                    'notes.enabled',                    'open-record-folders.enabled',                    'quick-add-form.enabled',                    'review.enabled',                    'rss.enabled',                    'scans.enabled',                    'selection-actions.enabled',                    'tasks.enabled',                    'today-report.enabled',
+//         'convert-records.enabled',
+//         'bibTex.enabled',
+//
+//         'upload-cover.enabled',                    'upload-files.enabled',                    'department.enabled'].each() {
+//            new cmn.Setting([name: it, value: 'yes', allowedValue: 'yes,no']).save(flush: true)
+//        }
+
+
+        def types = []
+
+        [
+                [id: 'Jy', name: 'Current journal', code: 'journal'],
+                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'N', name: 'Note', code: 'notes'],
+                [id: 'W', name: 'Writing', code: 'writings'],
+                [id: 'G', name: 'Goal', code: 'goals'],
+                [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'R', name: 'Resource', code: 'resources']
+        ].each(){
+            if (OperationController.getPath(it.code + '.enabled') == 'yes')
+                types += it
+        }
+
 
         if (cmn.Setting.count() == 0) {
             def r
@@ -164,60 +218,73 @@ class PageController {
 
 
 
-            [['app.URL', 'http://localhost:2019/nibras'],
-             ['description.summarize.threshold', '180'],
-             ['summary.summarize.threshold', '160'],
-             ['description.summarize.thresholdMax', '180'],
-             ['description.style', "padding: 3px; font-size: 20px; font-family: 'Traditional Arabic', tahoma; margin: 5px; line-height: 25px; text-align: justify; color: black;"],
-             ['recordPage.text.style', "color: black; padding: 30px; font-size: 17px !important; font-family: 'tahoma,Georgia,serif'; font-weight: normal; margin: 60px; line-height: 1.9; max-width: 700px;text-align: justify;"],
-             ['root.rps1.path', './repo1/'],
-             ['root.rps2.path', './repo2/'],
-             ['root.rps3.path', './repo3/'],
-             ['tmp.path', './tmp'],
-             ['planner.enabled', 'no'],
-             ['journal.enabled', 'yes'],
-             ['indicators.enabled', 'no'],
-             ['payments.enabled', 'no'],
-             ['writings.enabled', 'no'],
-             ['notes.enabled', 'yes'],
-             ['contacts.enabled', 'no'],
-             ['excerpts.enabled', 'no'],
-             ['goals.enabled', 'no'],
-             ['tasks.enabled', 'yes'],
-             ['resources.enabled', 'yes'],
-             ['fullCalendar.enabled', 'yes'],
-             ['rangeCalendar.enabled', 'yes'],
-             ['coursePanel.enabled', 'yes'],
-             ['commandBar.enabled', 'yes'],
-             ['enable.kanban', 'yes'],
-             ['enable.fullCalendar', 'yes'],
-             ['import.enabled', 'yes'],
-             ['coursesPanel.enabled', 'yes'],
-             ['courses.enabled', 'yes'],
-             ['dashboard.enabled', 'yes'],
-             ['course.enabled', 'yes'],
-             ['app.name', 'Nibras PKM'],
-             ['explorer.path.win', './scripts/open-explorer.bat'],
-             ['explorer.path.linux', '/usr/bin/dolphin'],
-
-             ['date.format', 'dd.MM.yyyy'],
-             ['datetime.format', 'dd.MM.yyyy_HHmm'],
-
-             ['default.WritingStatus.done', 'revised'],
-             ['default.WorkStatus.done', 'done'],
-             ['default.ResourceStatus.done', 'read'],
-
-             ['updateResultSet.max-items', '100'],
-
-             ['accordion.east.default.panel', '1'],
-             ['accordion.west.default.panel', '0'],
-
-             ['planner.homepage.default-type', 'knb'],
-
-             ['repository.languages', 'ar,fr,en'],
-             ['repository.languages.RTL', 'ar'],
-             ['repository.languages.LTR', 'fr,en'],
-             ['default.language', 'en']
+            [                    
+				["IPs.show","yes"],
+				["accordion.east.default.panel","1"],
+				["accordion.west.default.panel","0"],
+				["add-import-panel.enabled","yes"],
+				["advanced-panel.enabled","no"],
+				["app.name","Nibras"],
+				['app.URL', 'http://localhost:1441/nibras'],
+				["bibTex.enabled","no"],
+				["calendar.enabled","yes"],
+				["calendar.reload.interval","60"],
+				["commandBar.enabled","no"],
+				["contacts.enabled","yes"],
+				["convert-records.enabled","no"],
+				["copyright.show","yes"],
+				["course.enabled","yes"],
+				["coursePanel.enabled","yes"],
+				["courses.enabled","yes"],
+				["coursesPanel.enabled","yes"],
+				["dashboard.enabled","no"],
+				["date.format","dd.MM.yyyy"],
+				["datetime.format","dd.MM.yyyy_HHmm"],
+				["default.ResourceStatus.done","read"],
+				["default.WorkStatus.done","done"],
+				["default.WritingStatus.done","revised"],
+				["default.language","en"],
+				["department.enabled","yes"],
+				["description.style","padding:3px;font-size:20px;font-family:'TraditionalArabic',tahoma;margin:5px;line-height:25px;text-align:justify;color:black;"],
+				["description.summarize.threshold","180"],
+				["description.summarize.thresholdMax","180"],
+				["enable.fullCalendar","yes"],
+				["enable.kanban","yes"],
+				["excerpts.enabled","no"],
+				["explorer.path.linux","/usr/bin/nemo"],
+				["explorer.path.win","./scripts/open-explorer.bat"],
+				["extra-panes.enabled","yes"],
+				["fullCalendar.enabled","yes"],
+				["goals.enabled","no"],
+				["import.enabled","yes"],
+				["indicators.enabled","no"],
+				["journal.enabled","yes"],
+				["notes.enabled","yes"],
+				["open-record-folders.enabled","yes"],
+				["payments.enabled","no"],
+				["planner.enabled","no"],
+				["planner.homepage.default-type","knb"],
+				["quick-add-form.enabled","yes"],
+				["rangeCalendar.enabled","yes"],
+				["recordPage.text.style","color:black;padding:30px;font-size:17px!important;font-family:'Lato,Georgia,serif';font-weight:normal;margin:60px;line-height:1.9;max-width:700px;text-align:justify;"],
+				["repository.languages","ar,fr,en"],
+				["repository.languages.LTR","fr,en"],
+				["repository.languages.RTL","ar"],
+				["resources.enabled","yes"],
+				["review.enabled","no"],
+				["root.rps1.path","./repo1/"],
+				["root.rps2.path","./repo2/"],
+				["rss.enabled","yes"],
+				["scans.enabled","no"],
+				["selection-actions.enabled","no"],
+				["summary.summarize.threshold","160"],
+				["tasks.enabled","yes"],
+				["tmp.path","./tmp"],
+				["today-report.enabled","no"],
+				["updateResultSet.max-items","100"],
+				["upload-cover.enabled","no"],
+				["upload-files.enabled","yes"],
+				["writings.enabled","no"]
             ].each() {
                 new cmn.Setting([name: it[0], value: it[1]]).save(flush: true)
             }
@@ -242,7 +309,7 @@ class PageController {
 
         def recentRecords = []
         recentClasses.each() {
-            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 50])
+            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
         }
 
 //        def filledInDates = ''
@@ -347,11 +414,12 @@ class PageController {
                 dates: datesHb,
                 username         : user.username,
                 reviewPileSize   : resources.size() + excerpts.size(),
+                types: types,
 //                environment: environment
                 //,
 //                filledInDates: filledInDates?.trim(),
                 // wrtCount: wrtCount,
-                recentRecords: recentRecords
+                recentRecords: recentRecords?.sort({ it.dateCreated })//.reverse()
 
         ])
     }
@@ -415,7 +483,15 @@ class PageController {
 
     def appKanban() {
 
-        render(view: '/appKanban/main', model: [])
+        def courses = mcs.Book.executeQuery('select p.course from Task p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Goal p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Planner p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Journal p where p.bookmarked = 1')
+//                mcs.Book.executeQuery('select p.course from Book p where p.bookmarked = 1 and p.priority >=4')
+
+//        println 'crs +' + courses
+
+        render(view: '/appKanban/main', model: [courses: courses.unique().reverse()]) //.sort({i,j -> i.priority.compareTo(j.priority)})
 
     }
 
@@ -424,11 +500,11 @@ class PageController {
         def recentRecords = []
 
         allClassesWithCourses.each() {
-            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date()+1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 4])
+            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date()+1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
             //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
         }
 
-        recentRecords = recentRecords.sort({ it.dateCreated }).reverse()
+        recentRecords = recentRecords.sort({ it.dateCreated })//.reverse()
 //        //recentRecords.unique()
 //        if (recentRecords.size() > 0)
 //            render(template: '/gTemplates/recordListing', model: [
@@ -440,15 +516,19 @@ class PageController {
 
 
 
-        def types = [
-                [id: 'Jy', name: 'Journal before'],
-                [id: 'Jt', name: 'Journal now'],
-                [id: 'N', name: 'Note'],
-                [id: 'W', name: 'Writing'],
-                [id: 'G', name: 'Goal'],
-                [id: 'T', name: 'Task'],
-                [id: 'R', name: 'Resource']
-        ]
+        def types = []
+
+        [        [id: 'Jy', name: 'Current journal', code: 'journal'],
+                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                 [id: 'N', name: 'Note', code: 'notes'],
+                 [id: 'W', name: 'Writing', code: 'writings'],
+                 [id: 'G', name: 'Goal', code: 'goals'],
+                 [id: 'T', name: 'Task', code: 'tasks'],
+                 [id: 'R', name: 'Resource', code: 'resources']
+        ].each(){
+            if (OperationController.getPath(it.code + '.enabled') == 'yes')
+                types += it
+        }
 
         render(view: '/appNote/main', model: [types: types, recentRecords: recentRecords])
 
@@ -458,7 +538,7 @@ class PageController {
 
      double latitude = 33.8933182;
      double longitude = 35.5015717;
-     double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 2 ;
+     double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 3 ;
      // Test Prayer times here
      PrayTime prayers = new newpackage.PrayTime();
 
@@ -504,7 +584,7 @@ class PageController {
 
         double latitude = 33.8933182;
         double longitude = 35.5015717;
-        double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 2 ;
+        double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 3 ;
         // Test Prayer times here
         PrayTime prayers = new newpackage.PrayTime();
 
@@ -512,7 +592,7 @@ class PageController {
         prayers.setCalcMethod(prayers.Jafari);
         prayers.setAsrJuristic(prayers.Shafii);
         prayers.setAdjustHighLats(prayers.AngleBased);
-        int[] offsets = [0, 1, 0, 0, 0, 3, 5]; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+        int[] offsets = [1, 1, 0, 0, 0, 3, 5]; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
         prayers.tune(offsets);
 
         Date now = new Date();
@@ -557,6 +637,12 @@ class PageController {
         ])
         else render 'Record not found.'
     }
+ def rssPage() {
+        def record = grailsApplication.classLoader.loadClass(entityMapping[params.id?.split('-')[1]]).get(params.id?.split('-')[0])
+        if (record)
+        render(view: '/page/record', model: [record:record])
+        else render 'Record not found.'
+    }
 
     def panel() {
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
@@ -580,6 +666,14 @@ class PageController {
                     '/' + record.id
         } else {
             typeSandboxPath = OperationController.getPath('root.rps1.path') + '' + params.entityCode + '/' + record.id
+        }
+
+def coverPath
+        if (params.entityCode == 'R') {
+            def b = Book.get(params.recordId)
+            coverPath = OperationController.getPath('root.rps1.path') + '/R/cvr/' //+ b.id + '.jpg'
+        } else {
+            coverPath = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/cvr/' //+ params.recordId + '.jpg'
         }
 
         def source = ''
@@ -615,8 +709,79 @@ class PageController {
             }
             */
 
-            render(template: '/layouts/panel', model: [entityCode: params.entityCode, record: record, mobileView: params.mobileView, typeSandboxPath: typeSandboxPath,
-                                                       source    : source, authors: authors
+
+def htmlText = ''
+
+            if (record.entityCode() == 'N' && record.description) {
+                MutableDataSet options = new MutableDataSet();
+
+                options.setFrom(ParserEmulationProfile.MARKDOWN);
+                options.set(Parser.EXTENSIONS, Arrays.asList(
+                        //                    AbbreviationExtension.create(),
+                        //                    DefinitionExtension.create(),
+                        StrikethroughExtension.create(),
+                    TocExtension.create(),
+                                            FootnoteExtension.create(),
+                                            TypographicExtension.create(),
+                        TablesExtension.create()
+                ));
+
+                Parser parser = Parser.builder(options).build();
+                HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+
+                // You can re-use parser and renderer instances
+                Node document = parser.parse(record.description?.replaceAll('\n', '\n<br/>\n'));
+                String html = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
+                record.descriptionHTML =  html//?.replaceAll('\n', '<br/>\n')?.replaceAll('<br/>', '<br/>\n')
+                // println 'html ' + html
+            }
+
+
+            def htmlFullText = ''
+//            println record.dump()
+if (record.entityCode() == 'R' && record.withMarkdown) {
+
+                MutableDataSet options = new MutableDataSet();
+
+                options.setFrom(ParserEmulationProfile.MARKDOWN);
+                options.set(Parser.EXTENSIONS, Arrays.asList(
+                        //                    AbbreviationExtension.create(),
+                        //                    DefinitionExtension.create(),
+                        StrikethroughExtension.create(),
+                    TocExtension.create(),
+                                            FootnoteExtension.create(),
+                                            TypographicExtension.create(),
+                        TablesExtension.create()
+                ));
+
+                Parser parser = Parser.builder(options).build();
+                HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+
+                // You can re-use parser and renderer instances
+                Node document = parser.parse(record.fullText?.replaceAll('\n', '\n<br/>\n'));
+                htmlFullText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
+            }
+
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("# Heading 1\n");
+//            String text = sb.toString();
+//
+//            MarkupLanguage markupLanguage = new MarkdownLanguage();
+//
+//            StringWriter writer = new StringWriter();
+//            HtmlDocumentBuilder builder = new HtmlDocumentBuilder(writer);
+//            builder.setEmitAsDocument(false);
+//            MarkupParser parser = new MarkupParser(markupLanguage, builder);
+//            parser.parse(text);
+//htmlText = writer.toString();
+//            println 'hhtmlText' + htmlText
+
+
+            render(template: '/layouts/panel', model: [entityCode: params.entityCode, record: record,
+                                                       mobileView: params.mobileView,
+                                                       typeSandboxPath: typeSandboxPath,
+                                                       coverPath: coverPath + '-' + record.id,
+                                                       source    : source, authors: authors, htmlText: htmlText, htmlFullText: htmlFullText
             ])
         } else render 'Record not found'
     }
@@ -671,11 +836,28 @@ class PageController {
     }
 
     def kanban() {
-        render(view: '/page/kanbanCrs', model: [])
+
+        def courses = mcs.Book.executeQuery('select p.course from Task p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Goal p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Plan p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Journal p where p.bookmarked = 1') +
+                mcs.Book.executeQuery('select p.course from Book p where p.bookmarked = 1')
+
+     //   println 'crs +' + courses
+        render(view: '/page/kanbanCrs', model: [courses: courses])
     }
 
     def kanbanCrs() {
-        render(view: '/page/kanbanCrs', model: [])
+
+
+        def courses = mcs.Book.executeQuery('select p.course from Task p where p.bookmarked = 1') +
+        mcs.Book.executeQuery('select p.course from Goal p where p.bookmarked = 1') +
+        mcs.Book.executeQuery('select p.course from Plan p where p.bookmarked = 1') +
+        mcs.Book.executeQuery('select p.course from Journal p where p.bookmarked = 1') +
+        mcs.Book.executeQuery('select p.course from Book p where p.bookmarked = 1')
+
+    //    println 'crs +' + courses
+        render(view: '/page/kanbanCrs', model: [courses: courses])
     }
 
     def mobile() {

@@ -45,6 +45,7 @@ class IndexCard implements Comparable {  // entity id = 16
     User user
 
     Markup markup
+    Boolean withMarkdown = false   // description is in markdown format
 
     IndexCard parent
 

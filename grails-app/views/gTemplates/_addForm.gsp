@@ -14,6 +14,8 @@
 
 
     <table>
+
+    <g:if test="${ker.OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes'}">
         <tr>
 
     <g:if test="${fields.contains('book')}">
@@ -70,7 +72,7 @@
     </g:if>
 
     </tr>
-
+        </g:if>
     <tr>
 
         <g:if test="${fields.contains('queryType')}">
@@ -302,13 +304,7 @@
         </g:if>
 
 
-        <g:if test="${fields.contains('isbn')}">
-            <td colspan="1">
-                <label>ISBN</label>
-                <g:textField placeholder="ISBN" name="isbn" title="isbn" value="${record?.isbn}"
-                             style="width: 150px;"/>
-            </td>
-        </g:if>
+
         <g:if test="${fields.contains('link')}">
             <td colspan="3">
                 <label>Link</label>
@@ -482,8 +478,17 @@
                                  style="width: 150px"
                                  class="ui-corner-all"
                                  value="${record?.nbPages}"/>
+                    <br/>
+                <g:if test="${fields.contains('isbn')}">
+                        <label>ISBN</label>
+                        <g:textField placeholder="ISBN" name="isbn" title="isbn" value="${record?.isbn}"
+                                     style="width: 150px;"/>
+                </g:if>
                 </td>
             </g:if>
+
+
+
             <g:if test="${fields.contains('pages')}">
                 <td>
                     <label>Pages</label>
@@ -520,7 +525,7 @@
               <table>
                   <tr>
                       <td>   <label>Start date</label>
-                          <pkm:datePicker placeholder="Start date" name="startDate" value="${record?.startDate}"/>
+                          <pkm:datePicker placeholder="" name="startDate" value="${record?.startDate}"/>
                       </td>
                       <td> <label>time</label>
 
@@ -555,7 +560,7 @@
                 <td>
 
                     <label>Completed on</label>
-                    <pkm:datePicker name="completedOn" placeholder="Completed on"
+                    <pkm:datePicker name="completedOn" placeholder=""
                                     value="${record?.completedOn}"/>
                 </td>
             </g:if>
@@ -600,6 +605,28 @@
                                 style="width: 95%; height: 100px;"/>
                 </td>
             </g:if>
+
+        %{--            <g:if test="${fields.contains('recurringInterval')}">--}%
+        %{--                <td>--}%
+        %{--                    <label>Recurring interval</label>--}%
+        %{--                    <g:textField name="recurringInterval"--}%
+        %{--                                 value="${fieldValue(bean: record, field: 'recurringInterval')}"--}%
+        %{--                                 placeholder="" title="recur #" style="width: 20px;"/>--}%
+
+        %{--                </td>--}%
+        %{--            </g:if> --}%
+
+            <g:if test="${fields.contains('recurringCron')}">
+                <td>
+                    <label>Recurrence cron expression: </label>
+                    <br/>
+                    <i>min h dom mon dow y*, e.g. <b>0 8 * * 1</b></i>
+                    <g:textField name="recurringCron"
+                                 value="${fieldValue(bean: record, field: 'recurringCron')}"/>
+
+                </td>
+            </g:if>
+
 
             <g:if test="${fields.contains('fullText')}">
                 <td colspan="2">
@@ -783,12 +810,13 @@
             </g:if>
 
 
-        %{--<g:if test="${fields.contains('totalSteps')}">--}%
-        %{--<td>--}%
-        %{--Total steps<g:textField name="totalSteps" value="${fieldValue(bean: record, field: 'totalSteps')}"--}%
-        %{--placeholder="# total steps"--}%
-        %{--title="# total steps"--}%
-        %{--style="width: 20px;"/>--}%
+        <g:if test="${fields.contains('plannedDuration')}">
+        <td>
+        Planned duration (min)
+        <br/><g:textField name="plannedDuration" value="${fieldValue(bean: record, field: 'plannedDuration')}"
+        placeholder=""
+        title="# planned duration"
+        style="width: 80px;"/>
         %{--<br/>--}%
         %{--Completed steps<g:textField name="completedSteps"--}%
         %{--value="${fieldValue(bean: record, field: 'completedSteps')}"--}%
@@ -796,8 +824,23 @@
         %{--title="# actual steps"--}%
         %{--style="width: 20px;"/>--}%
 
-        %{--</td>--}%
-        %{--</g:if>--}%
+        </td>
+        </g:if>
+%{--    <g:if test="${fields.contains('totalSteps')}">--}%
+%{--        <td>--}%
+%{--        Total steps<g:textField name="totalSteps" value="${fieldValue(bean: record, field: 'totalSteps')}"--}%
+%{--        placeholder="# total steps"--}%
+%{--        title="# total steps"--}%
+%{--        style="width: 20px;"/>--}%
+%{--        --}%%{--<br/>--}%
+%{--        --}%%{--Completed steps<g:textField name="completedSteps"--}%
+%{--        --}%%{--value="${fieldValue(bean: record, field: 'completedSteps')}"--}%
+%{--        --}%%{--placeholder="# actual steps"--}%
+%{--        --}%%{--title="# actual steps"--}%
+%{--        --}%%{--style="width: 20px;"/>--}%
+
+%{--        </td>--}%
+%{--        </g:if>--}%
 
         %{--<g:if test="${fields.contains('percentCompleted')}">--}%
         %{--<td>--}%
@@ -830,16 +873,7 @@
                 <td>
                     <label>Order #</label>
                     <g:textField name="orderNumber" value="${fieldValue(bean: record, field: 'orderNumber')}"
-                                 placeholder="order #" title="order #" style="width: 80px;"/>
-
-                </td>
-            </g:if>
-            <g:if test="${fields.contains('recurringInterval')}">
-                <td>
-                    <label>Recurring interval</label>
-                    <g:textField name="recurringInterval"
-                                 value="${fieldValue(bean: record, field: 'recurringInterval')}"
-                                 placeholder="" title="recur #" style="width: 80px;"/>
+                                 placeholder="" title="order #" style="width: 80px;"/>
 
                 </td>
             </g:if>
@@ -865,7 +899,9 @@
 
             <g:if test="${fields.contains('writtenOn')}">
                 <td>
-                    w.on  <pkm:datePicker placeholder="Written on" name="writtenOn" value="${record?.writtenOn}"/>
+                    Written on
+                    <br/>
+                    <pkm:datePicker placeholder="Written on" name="writtenOn" value="${record?.writtenOn}"/>
                     <g:checkBox name="approximateDate" id="approximateDate" value="${record?.approximateDate}"/> ~ ?
                 </td>
             </g:if>
@@ -910,8 +946,10 @@
 
         <g:if test="${fields.contains('publishedNodeId')}">
         <td>
+            Published node Id
+            <br/>
         <g:textField id="publishedNodeId" name="publishedNodeId"
-        placeholder="Published node Id" title="Published node Id"
+        placeholder="" title="Published node Id"
         style="width: 90px;" class="ui-corner-all"
         value="${record?.publishedNodeId}"/>
         </td>

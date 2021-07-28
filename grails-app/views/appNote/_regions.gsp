@@ -33,7 +33,7 @@
     </div>
 
 
-    <div class="ui-layout-center appBkg" style="margin-top: 4px !important; margin-bottom: 4px !important;"
+    <div class="ui-layout-center appBkg" style="margin-top: 4px !important; margin-bottom: 4px !important; ;"
          onmouseover="jQuery('#hintArea').html('')">
         %{--ToDo: display none?!--}%
         %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%
@@ -65,15 +65,15 @@
             </a></h6>
 
             <div id="1" class="common" style="">
-            <div id="centralArea" class="common" style="">
-%{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
-            </div>
-%{--                <div id="centralArea" class="common" style="">--}%
 
-%{--                </div>--}%
+                <div id="centralArea" class="common" style="">
+
+                </div>
 
                 <br/>
                 <br/>
+
+                <h4>Quick add records</h4>
                 <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                               url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                               update="centralArea"
@@ -84,10 +84,10 @@
                 %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
                 %{--</code>--}%
 
-                    <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
+                    <g:select name="type" from="${types}"
                               id="typeField"
                               tabindex="1"
-                              value="N"/>
+                              value=""/>
                     <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
                                  style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
@@ -117,6 +117,10 @@
 
                 <br/>
                 <br/>
+
+%{--                <div id="centralArea" class="common" style="">--}%
+%{--                    --}%%{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
+%{--                </div>--}%
                 %{--<div id="subDaftarArea">--}%
 %{----}%
                 %{--</div>--}%

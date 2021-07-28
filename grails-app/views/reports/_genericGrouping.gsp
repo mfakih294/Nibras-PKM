@@ -17,18 +17,19 @@
 %{--</g:if>--}%
 
 %{--<table> <tr>--}%
-<div style="column-count: 5">
+%{--todo: add to settings--}%
+<div style="column-count: ${ker.OperationController.getPath('grouping.column.count') ?: '3'}">
 <g:each in="${groups}" var="g">
     <g:if test="${items[groupBy].contains(g)}">
         %{--<div >--}%
             %{--<hr/>--}%
         %{--</div>   --}%
 %{--       <td style="vertical-align: top;">--}%
-        <h4 style="text-align: center; font-weight: bold;">${g}</h4>
+        <h4 style="text-align: left; font-weight: bold;">${g}</h4>
 
 
     <g:findAll in="${items}" expr="${it[groupBy] == g}">
-        <g:render template="/gTemplates/box" model="[record: it]"/>
+        <g:render template="/gTemplates/recordSummary" model="[record: it]"/>
     </g:findAll>
 %{--        </td>--}%
                 %{--<center>--}%

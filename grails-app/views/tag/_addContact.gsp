@@ -10,6 +10,8 @@
                     class="fg-button  ui-widget ui-state-default ui-corner-all"/>
 </g:formRemote>
 
+<span id="contacts${entity}${instance.id}"></span>
+
 <script type="text/javascript">
 
     var bestPictures = new Bloodhound({

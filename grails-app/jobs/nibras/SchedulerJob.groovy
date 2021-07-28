@@ -25,7 +25,7 @@ class SchedulerJob {
     def execute() {
         // execute job
 
-        println ' in env: '  + Environment.current.name + ' at ' + new Date()?.format('dd.MM.yyyy HH:mm:ss')
+//        println ' in env: '  + Environment.current.name + ' at ' + new Date()?.format('dd.MM.yyyy HH:mm:ss')
 //        def environment
         switch (Environment.current.name) {
             case 'production':

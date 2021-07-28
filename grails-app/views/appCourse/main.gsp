@@ -27,7 +27,9 @@
     %{--<b style="color: white">--}%
 
 
-    <title style="direction: ltr; text-align: left;">${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' /Study': 'Nibras PKM /Study'}
+    <title style="direction: ltr; text-align: left;">
+        ${record}
+%{--        ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' /Study': 'Nibras PKM /Study'}--}%
     %{--<g:meta name="app.version"/>--}%
 
 
@@ -45,7 +47,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery.continuousCalendar.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jqueryui-editable.css')}"/>
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'layout-mine.css')}"/>--}%
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'main-mihrab.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>--}%
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'simpleSlider.css')}"/>
 

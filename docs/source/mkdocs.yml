@@ -1,6 +1,9 @@
 site_name: Nibras System
-use_directory_urls: false #The default style of use_directory_urls: true creates more user friendly URLs, and is usually what you'll want to use. The alternate style (edit: use_directory_urls: false) can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it creates links that point directly to the target file rather than the target directory.nav:
+use_directory_urls: false #The default style of use_directory_urls: true creates more user friendly URLs, and is usually what you'll want to use. The alternate style (edit: use_directory_urls: false) can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it creates links that point directly to the target file rather than the target directory.
+nav:
   - Home : 01.md
+  - Installation and Configuration: 10.md
+  - Backup and restore: 09.md
   - Interface: 02.md
   - Records and Data Model: 03.md
   - Repository and Files: 04.md
@@ -8,8 +11,7 @@ use_directory_urls: false #The default style of use_directory_urls: true creates
   - Search: 06.md
   - Commands: 07.md
   - Reports: 08.md
-  - Backup and restore: 09.md
-  - Installation and Configuration: 10.md
   - Nibras Reader: 11.md
   - License: 12.md  
+
 theme: readthedocs

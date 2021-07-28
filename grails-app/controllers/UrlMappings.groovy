@@ -24,6 +24,7 @@ class UrlMappings {
         "/l" (controller: 'page', action: 'appLight')
 
         "/slides"(controller: 'page', action: 'slides')
+        "/filed"(controller: 'operation', action: 'filed')
 
         "/$controller/$action?/$id?"{
             constraints {

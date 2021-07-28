@@ -12,6 +12,8 @@
                     class="fg-button  ui-widget ui-state-default ui-corner-all"/>
 </g:formRemote>
 
+<span id="tags${entity}${instance.id}"></span>
+
  %{--<g:if test="${entity == 'N'}">--}%
 %{--<g:formRemote name="linkNoteToResource" url="[controller: 'indexCard', action: 'linkNoteToResource']"--}%
               %{--update="tags${entity}${instance.id}"--}%

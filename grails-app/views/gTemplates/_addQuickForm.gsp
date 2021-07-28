@@ -22,7 +22,7 @@
             <g:if test="${fields.contains('name')}">
                 <tr>
                     <td>
-
+                        Name:<br/>
                     <g:textField name="name" placeholder="Name" title="Name" class="ui-corner-all"
                                  style="width: 99%;"
                                  value="${record?.name}"/>
@@ -35,6 +35,7 @@
             <g:if test="${fields.contains('value')}">
                 <tr>
                 <td>
+                    Value: <br/>
                     <g:textArea id="value" name="value" placeholder="Value" title="Value"
                                 style="width: 99%;"
                                 class="ui-corner-all"
@@ -48,11 +49,12 @@
                 <tr>
                     <td>
                 <g:if test="${fields.contains('code')}">
+                    Code:<br/>
                         <g:textField name="code" placeholder="Code" title="Code" class="ui-corner-all"
                                      style="width: 10%;"
                                      value="${record?.code}"/>
                     </g:if>
-
+Summary: <br/>
                     <g:textField id="sumamryField" name="summary" title="summary" value="${record?.summary}" placeholder="Summary"
                                  style="width: 89%;"/>
                 </td>
@@ -63,6 +65,7 @@
      <g:if test="${fields.contains('recurringCron')}">
                 <tr>
                     <td>
+                        Recurring cron expression:<br/>
                     <g:textField id="recurringCron" name="recurringCron"
                                  title="recurring Cron expression"
                                  value="${record?.recurringCron}"
@@ -79,8 +82,9 @@
 
             <g:if test="${fields.contains('title')}">
                 <tr>      <td>
+                    Title:<br/>
                     <g:textField placeholder="Title" name="title" title="title" value="${record?.title}"
-                        placeholder="Title"
+
                                  style="width: 99%;"/>
 
                 %{--<g:if test="${fields.contains('authorInfo')}">--}%
@@ -97,6 +101,7 @@
 
             <g:if test="${fields.contains('shortDescription')}">
                 <tr>      <td>
+                    Short description:<br/>
                     <g:textArea cols="80" rows="5" placeholder="Short description" title="Short description" name="shortDescription"
                                 value="${record?.shortDescription}"
                                 style="width: 99%; height: 60px;"/>
@@ -106,23 +111,27 @@
 
             <g:if test="${fields.contains('description')}">
                 <tr>      <td>
+                    Description:<br/>
                     <g:textArea cols="80" rows="5" placeholder="Description" title="Description" name="description"
                                 value="${record?.description}"
                                 style="width: 99%; height: 160px;"/>
                 </td></tr>
             </g:if>
-   <g:if test="${fields.contains('descriptionHTML')}">
-                <tr>      <td>
-                    <g:textArea cols="80" rows="5" placeholder="Description HTML" title="Description HTML" name="descriptionHTML"
-                                value="${record?.descriptionHTML}"
-                                style="width: 99%; height: 60px;"/>
-                </td></tr>
-            </g:if>
+
+   %{--<g:if test="${fields.contains('descriptionHTML')}">--}%
+                %{--<tr>      <td>--}%
+                    %{--Description (in HTML)--}%
+                    %{--<g:textArea cols="80" rows="5" placeholder="Description HTML" title="Description HTML" name="descriptionHTML"--}%
+                                %{--value="${record?.descriptionHTML}"--}%
+                                %{--style="width: 99%; height: 60px;"/>--}%
+                %{--</td></tr>--}%
+            %{--</g:if>--}%
 
 
         <tr>
             <g:if test="${fields.contains('fullText')}">
                 <td>
+                    Full text:<br/>
                     <g:textArea cols="80" rows="5" placeholder="Full text" title="Full text" name="fullText"
                                 value="${record?.fullText}"
                                 style="width: 99%;  height: 100px;"/>
@@ -163,7 +172,7 @@
         %{--</td>--}%
         %{--</g:if>--}%
         %{--</tr>--}%
-        <tr>
+        %{--<tr>--}%
         %{--<g:if test="${fields.contains('repositoryPath')}">--}%
         %{--<td>--}%
         %{--rps    <g:textField--}%
@@ -184,12 +193,13 @@
         %{--</td>--}%
         %{--</g:if>--}%
 
-        </tr>
+        %{--</tr>--}%
 
         <tr>
             <g:if test="${fields.contains('notes')}">
 
                 <td colspan="2">
+                    Notes:<br/>
                     <g:textArea cols="80" rows="5" id="notes" placeholder="Notes" title="Notes"
                                 name="notes" style="width: 99%;" class="ui-corner-all"
                                 value="${record?.notes}"/>
@@ -200,6 +210,7 @@
    <tr>
             <g:if test="${fields.contains('mainHighlights')}">
                 <td colspan="2">
+                    Highlights:<br/>
                     <g:textArea cols="80" rows="5" id="mainHighlights" placeholder="Highlights" title="mainHighlights"
                                 name="mainHighlights" style="width: 99%; background: lightgreen;" class="ui-corner-all"
                                 value="${record?.mainHighlights}"/>
@@ -210,7 +221,7 @@
 
 
 
-        <tr>
+        %{--<tr>--}%
 
 
 
@@ -240,7 +251,7 @@
                 %{--</td>--}%
             %{--</g:if>--}%
 
-        </tr>
+        %{--</tr>--}%
 
 
     </table>
@@ -248,7 +259,6 @@
                     style="width: 99%; height: 25px; text-align: center; background: #f0f0f0;"
                     value="Update"
                     onsubmit=""/>
-
 </g:formRemote>
 
 %{--<g:if test="${savedRecord && !record}">--}%

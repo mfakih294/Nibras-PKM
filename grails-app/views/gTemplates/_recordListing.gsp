@@ -88,6 +88,7 @@
     <util:remotePaginate controller="generics" action="executeSavedSearch" total="${searchResultsTotal}"
                          maxsteps="10"
                          params="[id: ssId]" update="centralArea"/>
+       <br/>
 </div>
 </g:if>
 
@@ -98,8 +99,8 @@
   <div class="paginateButtons" style="display:inline !important;">
     <util:remotePaginate controller="generics" action="hqlSearch" total="${searchResultsTotal}"
                          maxsteps="10"
-
                          update="centralArea"/>
+      <br/>
 </div>
 </g:elseif>
 
@@ -113,6 +114,7 @@
         <util:remotePaginate controller="generics" action="findRecords" total="${totalHits}"
                              maxsteps="10"
                              params="[input: queryKey]" update="centralArea"/>
+        <br/>
     </div>
 
 </g:if>
@@ -123,6 +125,7 @@
         <util:remotePaginate controller="generics" action="queryRecords" total="${totalHits}"
                              maxsteps="10"
                              params="[input: queryKey2]" update="centralArea"/>
+        <br/>
     </div>
 
 </g:if>
@@ -187,14 +190,14 @@
 
 
 
-%{--<g:if test="${!list}">--}%
-%{--<i>No record.</i>--}%
-%{--</g:if>--}%
-
+<g:if test="${!list}">
+<i>No records found.</i>
+</g:if>
 
 
 <g:if test="${session['showLine1Only'] == 'on'}">
 <g:each in="${list}" status="i" var="record">
+
     <g:render template="/gTemplates/recordSummary" model="[record: record, tabIndex: i]"/>
 </g:each>
 </g:if>

@@ -11,7 +11,7 @@ import java.text.DecimalFormat
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class BookController { // entity id = 134
 
     def supportService
@@ -512,18 +512,20 @@ class BookController { // entity id = 134
 
         //def photo = Photo.get( params.id )
         def f
+        def extension = '' // ''.jpg'
         def bookInstance = Book.get(params.id)
 //        if (bookInstance.status == ResourceStatus.get(1))
 //        f = new File(OperationController.getPath('covers.sandbox.path') + '/' + params.id + '.jpg')
-        if(new File(OperationController.getPath('root.rps1.path')  + '/R/cvr/' + bookInstance?.type?.code + '/' + params.id + '.jpg')?.exists())
-            f = new File(OperationController.getPath('root.rps1.path') + '/R/cvr/' + bookInstance?.type?.code + '/' +  params.id + '.jpg')
-        else if(new File(OperationController.getPath('root.rps2.path') + '/R/cvr/' + bookInstance?.type?.code + '/' +  params.id + '.jpg')?.exists())
-        f = new File(OperationController.getPath('root.rps2.path') + '/R/cvr/' + bookInstance?.type?.code + '/' +  params.id + '.jpg')
+//        bookInstance?.type?.code +
+        if(new File(OperationController.getPath('root.rps1.path')  + '/R/cvr/' + '/' + params.id + extension)?.exists())
+            f = new File(OperationController.getPath('root.rps1.path') + '/R/cvr/' + '/' +  params.id + extension)
+        else if(new File(OperationController.getPath('root.rps2.path') + '/R/cvr/'  + '/' +  params.id + extension)?.exists())
+        f = new File(OperationController.getPath('root.rps2.path') + '/R/cvr/' + '/' +  params.id + extension)
 
         
 //        else
-//            f = new File("d:/todo/cvr/ebk/" + params.id + '.jpg')
-//    println 'cover path is ' + "I:/ebk/cvr/" + params.id + '.jpg'
+//            f = new File("d:/todo/cvr/ebk/" + params.id + extension)
+//    println 'cover path is ' + "I:/ebk/cvr/" + params.id + extension
         if (f?.exists()) {
             byte[] image = f.readBytes()
             response.outputStream << image

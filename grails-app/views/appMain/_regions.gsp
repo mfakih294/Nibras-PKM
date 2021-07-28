@@ -73,8 +73,11 @@
 
 %{--                </div>--}%
 
+
+<g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 <br/>
                 <br/>
+
                 <h4>Quick add records</h4>
                 <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                               url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
@@ -86,41 +89,47 @@
                 %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
                 %{--</code>--}%
 
-                    <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
+                    <g:select name="type" from="${types}"
                               id="typeField"
                               tabindex="1"
-                              value="N"/>
+                               optionKey="id"
+                                  optionValue="name"
+                              value=""/>
+                    <g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                              <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
+                                  optionKey="id" class="chosen" style="width: 350px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>
+                        </g:if>
+
+                        <g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"
+                                  value="${OperationController.getPath('default.language')}"
+                        />
+
                     <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
                                  style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
                                  placeholder="Summary * "
                                  class=""/>
 
-                    <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
-                              optionKey="id" class="chosen" style="width: 350px !important;" optionValue="summary"
-                              />
+  <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                                tabindex="3"
+                                name="description" id="descriptionDaftar"
+                                value=""
+                                style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
 
-      <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}"
-                              />
 
-
-                    <g:submitButton name="save" value="Add"
-                                    style="text-align: center; padding-left: 8px; padding-right: 8px;"
+                    <g:submitButton name="save" value="Add (F2)"
+                                    style="text-align: center; padding-left: 8px; padding-right: 8px; width: 99%"
                                     tabindex="4"
 
                                     id="addXcdFormDaftarSubmit"
                                     class="fg-button ui-widget ui-state-default"/>
 
-                    <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
-                                tabindex="3"
-                                name="description" id="descriptionDaftar"
-                                value=""
-                                style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
+
                 </g:formRemote>
 
                 <br/>
                 <br/>
-
+    </g:if>
 
                 %{--<div id="subDaftarArea">--}%
 %{----}%
@@ -162,7 +171,7 @@
 %{--                </div>--}%
 
             </div>
-
+<g:if test="${OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
             <h6 style="text-aling: center"><a href="#" id="testTitle2">
                 Panel 2
             </a></h6>
@@ -172,6 +181,8 @@
                     %{--<g:render template='/reports/homepageSavedSearches'/>--}%
 
                 </div>
+    <sec:ifAnyGranted roles="ROLE_ADMIN">
+<g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
                 <g:formRemote name="batchAdd2" class="commandBarInPanel"
                               url="[controller: 'generics', action: 'actionDispatcher']"
@@ -190,7 +201,8 @@
                                  placeholder=""
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
-
+</g:if>
+    </sec:ifAnyGranted>
             </div>
             <h6><a href="#" id="testTitle3">
                 Panel 3
@@ -200,6 +212,8 @@
                 <div id="inner3" class="common" style="">
                 </div>
                 %{--before="jQuery('#testTitle3').text('[3]: ' + jQuery('#testField3').val());"--}%
+    <sec:ifAnyGranted roles="ROLE_ADMIN">
+<g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 <g:formRemote name="batchAdd2" class="commandBarInPanel"
                               url="[controller: 'generics', action: 'actionDispatcher']"
 
@@ -217,10 +231,16 @@
                                  placeholder=""
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
+    </g:if>
+    </sec:ifAnyGranted>
 
             </div>
+    </g:if>
+            %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
+
+                <g:if test="${OperationController.getPath('advanced-panel.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <h6 id="h64"><a href="#" id="testTitle4">
-            Advanced panel
+            Scratch panel
         </a></h6>
 
             <div id="4d" class="common" style="">
@@ -228,9 +248,11 @@
                 </div>
 
                 %{--<br/>--}%
-%{--                <sec:ifAnyGranted roles="ROLE_ADMIN">--}%
+
+                <g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
                     <g:render template="/layouts/commandbar" model="[]"/>
-%{--                </sec:ifAnyGranted>--}%
+                    </g:if>
+                
 
                 %{--first commented one below was in action 14.03.2019 --}%
                 %{--<g:formRemote name="batchAdd2"  class="commandBarInPanel"--}%
@@ -289,6 +311,8 @@
                 %{--</g:formRemote>--}%
 
             </div>
+                </g:if>
+                 %{--</sec:ifAnyGranted>--}%
 
             %{--<h6 style="text-aling: center"><a href="#" id="testTitle5">--}%
             %{--5--}%
@@ -320,9 +344,13 @@
 
             %{--</div>--}%
 
-        </div>
+        %{--</div>--}%
+
         %{--<hr/>--}%
         %{--before="jQuery('#testTitle1').text('[1]: ' + jQuery('#quickAddTextFieldBottomTop').val());"--}%
+        
+        <sec:ifAnyGranted roles="ROLE_ADMIN">
+        
         <g:formRemote name="batchAdd2" class="commandBarInPanel"
                       url="[controller: 'generics', action: 'actionDispatcher']"
                       update="centralArea" style="display: inline"
@@ -338,7 +366,7 @@
             <g:textField name="input" id="quickAddTextFieldBottomTop" value=""
                          autocomplete="off"
                          style="display: inline; margin-top: 4px; margin-left: 0px !important; padding-left: 5px !important; width: 100% !important;  border: 1px solid darkgray"
-                         placeholder="Command prompt..."
+                         placeholder="Command prompt...(f2)"
                          onkeyup="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()))"
                          onkeypress="jQuery('#notificationAreaHidden').load('${request.contextPath}/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"
                          onfocus="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextFieldBottomTop').val()));jQuery('#notificationAreaHidden').load('${request.contextPath}/generics/verifySmartCommand', { 'line':jQuery('#quickAddTextFieldBottomTop').val() }, function (response, status, xhr) {jQuery('#quickAddTextFieldBottomTop').attr('class', '');jQuery('#quickAddTextFieldBottomTop').attr('class', response); });"
@@ -346,13 +374,14 @@
                          class=""/>
 
         </g:formRemote>
+        </sec:ifAnyGranted>
         %{--if (jQuery('#quickAddTextFieldBottomTop').val().search('--')== -1){--}%
         %{--<div style="-moz-column-count: 3; -webkit-column-count:3">--}%
         <div id="hintArea" style="font-size: 12px; padding: 0px; margin: 0px; "></div>
-        %{--</div>--}%
+        </div>
 
     </div>
-
+<div id="notificationAreaHidden"></div>
 <script type="text/javascript">
     jQuery(".chosen").chosen({allow_single_deselect: true, search_contains: true, no_results_text: "None found"});
 

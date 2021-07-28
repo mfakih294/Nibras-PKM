@@ -29,14 +29,15 @@
 
     <title style="direction: rtl; text-align: right;">
 
-    ${OperationController.getPath('app.name') ?: 'Nibras'} Notes
+%{--    ${OperationController.getPath('app.name') ?: 'Nibras'}--}%
+    Notes
 %{--    <g:meta name="app.version"/>--}%
 
     </title>
 
 
     %{--<link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon-transparent.png')}" type="image/png"/>--}%
-    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'calendar.ico')}" type="image/ico"/>
+    <link rel="shortcut icon" href="${resource(dir: 'images/icons', file: 'record.ico')}" type="image/ico"/>
 
 
 
@@ -46,7 +47,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jqueryui-editable.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'layout-mine.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
-%{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>--}%
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'simpleSlider.css')}"/>
 
 %{--    <link rel="stylesheet" href="${resource(dir: 'css', file: 'uploader.css')}"/>--}%
@@ -497,11 +498,17 @@
 <br/>
 <br/>
 <br/>
-<div class="ui-layout-center" style="margin-top: 4px !important; margin-bottom: 4px !important; background: none;">
+<div class="ui-layout-center" style="margin-top: 4px !important; margin-bottom: 4px !important; background: none; overflow: auto;">
 
     <table>
         <tr>
             <td style="vertical-align: top; width: 70%;">
+
+                <div id="centralArea" class="common" style="">
+                    <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
+                </div>
+
+
                 <h2>Add new record</h2>
                 <div style="border: 1px solid darkgray; padding: 10px; margin: 10px;">
 
@@ -549,13 +556,11 @@
                     </g:formRemote>
                 </div>
 
-                <div id="centralArea" class="common" style="">
-                    <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
-                </div>
+
 
             </td>
 
-            <td>
+            <td style="vertical-align: top">
                 <div id="3rdPanel" style="background: white; padding: 7px;">
                 </div>
             </td>

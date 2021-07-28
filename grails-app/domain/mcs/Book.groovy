@@ -153,6 +153,7 @@ class Book implements Comparable {  // entity id = 134
 
     Integer percentCompleted
     Boolean isPublic = false   // for sharing online
+    Boolean withMarkdown = false   // description or full text is in markdown format
 
     String bibEntry
 

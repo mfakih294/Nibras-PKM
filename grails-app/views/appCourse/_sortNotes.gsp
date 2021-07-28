@@ -89,8 +89,8 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
             var="n">
     %{--<g:if test="${!n.wbsNumber?.contains('.')}">--}%
         <li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_${n.id}">
-        <div class="text${n.language}">
-
+        <div >
+%{--            class="text${n.language}"--}%
             %{--<span title="Click to show/hide children" class="disclose ui-icon ui-icon-minusthick">abc--}%
             %{--</span>--}%
 
@@ -154,7 +154,7 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
         tolerance: 'pointer',
         toleranceElement: '> div',
         maxLevels: 4,
-//        isTree: true,
+       isTree: true,
         expandOnHover: 700,
         startCollapsed: false
 //        change: function(){

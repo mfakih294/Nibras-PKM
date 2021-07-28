@@ -4,12 +4,19 @@
 
     <h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">
         <g:message code="ui.lists0"></g:message>
-
     </a></h3>
 
     <div>
 
         <g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
+
+<g:if test="${OperationController.getPath('customReport.paintings.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <br/>
+        <a href="${request.contextPath}/report/customReport1" style="" target="_blank">
+        Paintings and sculptures report
+        </a>
+        </g:if>
+        <br/>
 
         <g:render template="/layouts/modulesAccordion"/>
 
@@ -24,7 +31,7 @@
 
     %{--</g:if>--}%
 
-
+    <g:if test="${OperationController.getPath('calendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <h3 class="accordionPanelBrowse"><a href="#">
         <g:message code="ui.calendar"></g:message>
     </a></h3>
@@ -125,6 +132,9 @@
     %{--<g:render template="/layouts/coursesAccordionOnePanel"></g:render>--}%
     </div>
 
+    </g:if>
+
+    <g:if test="${OperationController.getPath('course.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <h3 class="accordionPanelBrowse"><a href="#">
         %{--<g:message code="ui.calendar"></g:message>--}%
         Courses
@@ -324,7 +334,7 @@
     %{--<div id='searchPanel'>--}%
 
     </div>
-
+        </g:if>
 %{--<h4><a href="#">--}%
 %{--<g:message code="ui.lists0"></g:message>--}%
 
@@ -406,6 +416,7 @@
         </div>
     </g:if>
 
+    <g:if test="${OperationController.getPath('search.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <h3><a href="#">
         <g:message code="ui.calendar.and.search"></g:message>
 
@@ -466,8 +477,9 @@
         </g:formRemote>
 
     </div>
+</g:if>
 
-
+<g:if test="${OperationController.getPath('add-import-panel.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
     <h3 class="accordionPanelAdd" style="margin-top: 5px;"><a href="#">
         <g:message code="ui.add"></g:message>
@@ -514,6 +526,7 @@
             </ul>
 
         </div>
+
 
 
         <div class="panelCard">
@@ -577,7 +590,10 @@
                 </li>
             </ul>
         </div>
+
+
     </div>
+    </g:if>
 <g:if test="${1==2}">
     <h3 class="accordionPanelAdd"><a href="#">
         <g:message code="ui.add.full.art"></g:message>
@@ -801,9 +817,11 @@
     %{--</div>--}%
 
 
-    %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
+    <sec:ifAnyGranted roles="ROLE_ADMIN">
     %{--<h4>Configuration</h4>--}%
     %{--<hr/>--}%
+    
+    
     <h3 class="accordionPanelSettings" style="margin-top: 5px;"><a href="#">
         <g:message code="ui.settings"></g:message>
 
@@ -1233,6 +1251,8 @@
         %{--</div>--}%
         </g:if>
     </div>
+    
+    </sec:ifAnyGranted>
 
 </div>
 <script type="text/javascript">

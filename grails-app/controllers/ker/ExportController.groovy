@@ -74,7 +74,7 @@ import java.util.Locale;
 
 
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class ExportController {
 
     def supportService
@@ -146,6 +146,7 @@ class ExportController {
                             end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(it.endDate ?: it.startDate),
                             //it.type?.name +
                             title          : title,
+
                             description    : it.description,
                             backgroundColor: it.type?.color ?: '#F7F9EE',
                             borderColor    : 'darkgray',
@@ -240,7 +241,7 @@ class ExportController {
     def allCalendarEvents() {
         def events = []
 
-            Task.executeQuery("from Journal t where t.bookmarked = 1 and  t.startDate between :start and :end",
+            Task.executeQuery("from Journal t where t.bookmarked = 1 and  t.startDate  between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -279,12 +280,13 @@ class ExportController {
                             //it.type?.name +
                             title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
+                            classNames: it.completedOn != null ? ['done'] : [''],
                             backgroundColor: 'Chocolate',//it.type?.color ?: '#F7F9EE',
                             borderColor    : 'Chocolate',
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=P',
-                            allDay         : (it.level != 'm' || it.startDate.hours < 7 ? true : false)])
+                            allDay         : (it.level != 'm' || it.startDate.hours < 7 || it.task != null ? true : false)])
             }
 
             Task.executeQuery("from Task t where t.bookmarked = 1 and t.endDate between :start and :end",
@@ -708,42 +710,84 @@ This presentation aims to give an overview of Pomegranate PKM system.
     }
 
 
-    def recurringTask2Planner(){
+    def generateNextRecurringPlans(Long id){
 
-        Task.findAllByRecurringCronIsNotNull().each(){
+        def t = Task.get(id)
 
 ////////////////////
             CronParser quartzCronParser =
                     new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
             Cron parsedQuartzCronExpression =
-                    quartzCronParser.parse(it.recurringCron);
+                    quartzCronParser.parse(t.recurringCron);
 
 
 
             DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
-            ZonedDateTime dateTime = ZonedDateTime.parse("2021-01-01 00:00:00 AM +02:00", formatter0);
+         //   ZonedDateTime dateTime = ZonedDateTime.parse("2021-01-01 00:00:00 AM +02:00", formatter0);
 
-            ZonedDateTime now = dateTime// ZonedDateTime.now();
+            ZonedDateTime now = ZonedDateTime.now();
 
             ExecutionTime executionTime =
                     ExecutionTime.forCron(parsedQuartzCronExpression);
 ////////////////
 
             def ref = now
-            while (Date.from(executionTime.nextExecution(now).get().toInstant()) < new Date() + 90){
-                now = executionTime.nextExecution(now).get()
+        def i = 1
+        while (i <= (t.recurringInterval ?: 4)){
+//            while (Date.from(executionTime.nextExecution(now).get().toInstant()) < new Date() + 40){
                 def p = new Planner()
-                p.summary = it.summary
-                p.task = it
+                p.summary = '...' //t.summary
+                p.task = t
 
                 p.startDate =  Date.from(executionTime.nextExecution(now).get().toInstant())
-                long HOUR = 3600*1000; // in milli-seconds.
+                long HOUR = (t.plannedDuration?.toInteger() ?: 30)*60*1000; // 30min in milli-seconds.
                 p.endDate  = new Date(Date.from(executionTime.nextExecution(now).get().toInstant()).getTime() + 1 * HOUR)
+                p.language = t.language
+                p.bookmarked = true
                 p.save()
+            i++
+            now = executionTime.nextExecution(now).get()
+
+            render 'Generated plan record with ID: ' + p.id + '<br/>'
             }
 
-        }
 
-        ''
+    }
+
+    def showNextRecurringDates(Long id){
+
+        def t = Task.get(id)
+
+////////////////////
+            CronParser quartzCronParser =
+                    new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
+            Cron parsedQuartzCronExpression =
+                    quartzCronParser.parse(t.recurringCron);
+
+
+
+            DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+         //   ZonedDateTime dateTime = ZonedDateTime.parse("2021-01-01 00:00:00 AM +02:00", formatter0);
+
+            ZonedDateTime now = ZonedDateTime.now();
+
+            ExecutionTime executionTime =
+                    ExecutionTime.forCron(parsedQuartzCronExpression);
+////////////////
+
+            def ref = now
+        def dates = []
+        def i = 1
+        render 'Dates in the next 40 days:<br/><br/>'
+//            while (Date.from(executionTime.nextExecution(now).get().toInstant()) < new Date() + 40){
+        while (i <= (t.recurringInterval ?: 4)){
+            render i++ + ': '  + Date.from(executionTime.nextExecution(now).get().toInstant())?.format('EEE dd.MM.yyyy HH:mm') + '<br/>'
+
+            now = executionTime.nextExecution(now).get()
+            }
+
+
+
+
     }
 } // end of class

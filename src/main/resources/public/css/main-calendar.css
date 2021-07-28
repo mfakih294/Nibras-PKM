@@ -36,3 +36,7 @@
     overflow-y:auto;
 
 }
+
+.done {
+    text-decoration: line-through black !important;
+}

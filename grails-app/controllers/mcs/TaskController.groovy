@@ -9,7 +9,7 @@ import mcs.parameters.WorkStatus
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class TaskController { // entity id = 127
 
     def supportService

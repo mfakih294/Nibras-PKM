@@ -43,7 +43,7 @@ import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class GenericsController {
 
     static entityMapping = [
@@ -178,7 +178,7 @@ class GenericsController {
 
     def quickTextSearch(String input) {
 //        println params.dump()
-        if (!input.startsWith(' ')) {
+//        if (!input.startsWith(' ')) {
 
 /**
  def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
@@ -203,31 +203,54 @@ class GenericsController {
  queryKey : queryKey,
  title    : entityCode + ': ' + count + ' results.'
  ])}*/
-            findRecords('r -- ' + params.input)
-            findRecords('c -- ' + params.input)
-            findRecords('g -- ' + params.input)
-            findRecords('t -- ' + params.input)
-            findRecords('j -- ' + params.input)
-            findRecords('p -- ' + params.input)
+        render '<h2>Searching titles...</h2>'
 
+            [
+                    [id: 'j', name: 'Journal', code: 'journal'],
+                    [id: 'n', name: 'Note', code: 'notes'],
+                    [id: 'w', name: 'Writing', code: 'writings'],
+                    [id: 'g', name: 'Goal', code: 'goals'],
+                    [id: 't', name: 'Task', code: 'tasks'],
+                    [id: 'r', name: 'Resource', code: 'resources'],
+                    [id: 'p', name: 'Planner', code: 'planner'],
+                    [id: 's', name: 'Contact', code: 'contacts'],
+                    [id: 'p', name: 'Planner', code: 'planner'],
+                    [id: 'c', name: 'Course', code: 'courses']
+            ].each(){
+                if (OperationController.getPath(it.code + '.enabled') == 'yes')
+                    findRecords(it.id + ' -- ' + params.input)
+            }
+             render '<h2>Searching contents...</h2>'
 
-            findRecords('w -- ' + params.input)
-            findRecords('n -- ' + params.input)
+            [
+                    [id: 'j', name: 'Journal', code: 'journal'],
+                    [id: 'n', name: 'Note', code: 'notes'],
+                    [id: 'w', name: 'Writing', code: 'writings'],
+                    [id: 'g', name: 'Goal', code: 'goals'],
+                    [id: 't', name: 'Task', code: 'tasks'],
+                    [id: 'r', name: 'Resource', code: 'resources'],
+                    [id: 'p', name: 'Planner', code: 'planner'],
+                    [id: 's', name: 'Contact', code: 'contacts'],
+                    [id: 'p', name: 'Planner', code: 'planner'],
+                    [id: 'c', name: 'Course', code: 'courses']
+            ].each(){
+                if (OperationController.getPath(it.code + '.enabled') == 'yes')
+                    findRecords(it.id + ' :: ' + params.input)
+            }
 
-            findRecords('s -- ' + params.input)
-        } else if (input.startsWith('  ')) {
-            luceneSearch('m ' + params.input)
-        } else if (input.startsWith(' ')) {
-            findRecords('r :: ' + params.input)
-            findRecords('c :: ' + params.input)
-            findRecords('g :: ' + params.input)
-            findRecords('t :: ' + params.input)
-            findRecords('j :: ' + params.input)
-            findRecords('p :: ' + params.input)
-
-            findRecords('w :: ' + params.input)
-            findRecords('n :: ' + params.input)
-        }
+//        } else if (input.startsWith('  ')) {
+//            luceneSearch('m ' + params.input)
+//        } else if (input.startsWith(' ')) {
+//            findRecords('r :: ' + params.input)
+//            findRecords('c :: ' + params.input)
+//            findRecords('g :: ' + params.input)
+//            findRecords('t :: ' + params.input)
+//            findRecords('j :: ' + params.input)
+//            findRecords('p :: ' + params.input)
+//
+//            findRecords('w :: ' + params.input)
+//            findRecords('n :: ' + params.input)
+//        }
     }
 
 
@@ -1099,6 +1122,22 @@ ll
             render(template: '/layouts/achtung', model: [message: "Record with ID ${id} could not be deleted"])
         }
     }
+def markAsMarkdowned(Long id, String entityCode) {
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+        try {
+            record.withMarkdown = true
+            render 'is ? ' + record.withMarkdown
+            render 'is ? ' + record.id
+            render 'is ? ' + record.hasErrors()
+            record.save()
+            render(template: '/layouts/achtung', model: [message: "Record with ID ${id} has been marked as markdown"])
+//            render(template: '/gTemplates/recordSummary', model: [record: record])
+        }
+        catch (Exception) {
+            render(template: '/layouts/achtung', model: [message: "Record with ID ${id} could not be marked"])
+            println 'Error saving record.'
+        }
+    }
 
     def openRpsFolder() {
 
@@ -1538,16 +1577,16 @@ ll
                     }
 
                     new File(rps1Folder).mkdirs()
-
+/*
                     if (new File(rps2Folder).exists()) {
 
-                        new File(rps2Folder).eachFile() {//Match(~/[\S\s]*\.[\S\s]*/) {
+                        new File(rps2Folder).eachFile() {//Match(~/[\S\s]*\.[\S\s] (star)/) {
 //                        println ' file ' + it
                             if (it.isFile())
                                 filesList.add(it)
                         }
                     }
-
+*/
 
             //        def ant = new AntBuilder()
 
@@ -1747,6 +1786,8 @@ ll
         def id = params.id.substring(1).toLong()
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
+        record.bookmarked = true
+
         if (!record.endDate)
             record.endDate = new Date() + 1
         else
@@ -1762,6 +1803,7 @@ ll
 
 //        if (!record.endDate)
         record.endDate = new Date()
+        record.bookmarked = true
 //        else
 //            record.endDate = record.endDate  - 1
 
@@ -3367,8 +3409,8 @@ ll
             }
         }
         catch (Exception e) {
-            //          render 'Exception in quick add' + e
-            println 'Exception in quick add: ' + e.printStackTrace()
+            render 'Exception in quick add: <b style="color: red">' + input + '</b>'
+            println 'Exception in quick add: ' + input // e.printStackTrace()
         }
 
     }
@@ -5021,7 +5063,7 @@ def addTagToAll(String input) {
         }
 
         // postToBlog(String blogId, String title, String categoriesString, String tags, String fullText) {
-        int r = supportService.postToBlog(record.blog.id, record.code, summary, categories, tags,
+        int r = supportService.postToBlog(record.blog.id, record.code ?: record.id?.toString(), summary, categories, tags,
                 contents, record.shortDescription, params.entityCode, record.publishedNodeId)
 
 
@@ -5166,12 +5208,15 @@ def addTagToAll(String input) {
 
     def appendToScratch(String input) {
 //     ToDo
-        def record = IndexCard.executeQuery('from IndexCard i where i.type.code = ? order by dateCreated desc', ['k'])[0]
+        def record = IndexCard.executeQuery('from IndexCard i where i.summary = ? order by dateCreated desc', ['Quick Drafts'])[0]
+        if (!record)
+            record = new IndexCard([summary: 'Quick Drafts', language: 'en']).save()
 
+        def date = new Date()?.format('EEE dd.MM.yyyy HH:mm')
         if (!record.description)
-            record.description = ('\n' + input)
+            record.description = (date + ':\n' + input)
         else
-            record.description += ('\n' + input)
+            record.description += ('\n\n' + date + ':\n' + input)
 
         render(template: '/gTemplates/recordSummary', model: [record: record])
 
@@ -5587,10 +5632,10 @@ def addTagToAll(String input) {
         def f
         if (r.entityCode() == 'W') {
             f = new File(OperationController.getPath('editBox.path') + '/' +
-                    r.entityCode() + '-' + r.id + '.md') // + ' ' + filename
+                    r.entityCode() + '-' + r.id + '.txt') // + ' ' + filename
         } else if (r.entityCode() == 'N') {
             f = new File(OperationController.getPath('editBox.path') + '/N-' +
-                    r.id + '.md') // + ' ' + filename
+                    r.id + '.txt') // + ' ' + filename
         }
         // + ' ' + filename
 
@@ -5623,12 +5668,29 @@ def addTagToAll(String input) {
 
         def f = new File(OperationController.getPath('root.rps1.path') + '/edit/' + params.name)
         def r
-        if (params.entityCode == 'W')
-            r = Writing.get(params.id.replace('.md', '').toLong())//.replace('W-', ''))
-        else if (params.entityCode == 'N')
-            r = IndexCard.get(params.id.replace('.md', '').toLong())
+        if (params.entityCode == 'W'){
+        r = Writing.get(params.id.replace('.md', '').toLong())//.replace('W-', ''))
+    r.description = (f.text != '' ? f.text : '...')
+    if (r.description == f.text)
+    f.delete()
+    }
+        else if (params.entityCode == 'N') {
+    r = IndexCard.get(params.id.replace('.md', '').toLong())
+    r.description = (f.text != '' ? f.text : '...')
+    if (r.description == f.text)
+        f.delete()
 
-        r.description = (f.text != '' ? f.text : '...')
+}
+ else if (params.entityCode == 'R') {
+    r = Book.get(params.id.replace('.md', '').toLong())
+    r.fullText = (f.text != '' ? f.text : '...')
+            if (r.fullText == f.text)
+                f.delete()
+
+
+}
+
+
 if (1 == 2) {
     def htmlFile = new File(OperationController.getPath('root.rps1.path') + '/edit/' + params.name.replace('.md', '.md.html'))
 
@@ -5655,11 +5717,9 @@ if (1 == 2) {
     }
 }
 //         if contents is correctly set in database, delete file to declutter the editing folder
-        if (r.description == f.text)
-        f.delete()
 
         // changes to DB after file editing
-        r.description = r.description?.replace('< ', '«')?.replace(' >', '»')
+        //r.description = r.description?.replace('< ', '«')?.replace(' >', '»')
 
         if (!r.firstReviewed)
             r.firstReviewed = new Date()
@@ -5669,8 +5729,8 @@ if (1 == 2) {
 
         r.lastReviewed = new Date()
 
-        r.status = WritingStatus.findByCode('repub')
-
+//        if (params.entityCode == 'N' || params.entityCode == 'W')
+//        r.status = WritingStatus.findByCode('repub')
 
         if (!r.reviewCount)
             r.reviewCount = 1

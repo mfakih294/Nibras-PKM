@@ -29,7 +29,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import org.apache.pdfbox.PDFToImage
 
 
-@Secured('ROLE_ADMIN')
+@Secured(['ROLE_ADMIN','ROLE_READER'])
 class OperationController {
 
     static entityMapping = [
@@ -476,6 +476,160 @@ class OperationController {
         }
         catch (Exception e) {
             title = ''
+        }  def download() {
+
+        def path = session[params.id]
+
+        // todo to make it smarter!
+
+        def f = new File(path)
+
+        def corename = f.getName().split(/\./)[0]
+        def entityCode = corename.substring(corename.length() - 1, corename.length())
+        def id = corename.substring(0, corename.length() - 1)
+
+        def title = ''
+        /*       try {
+            switch (entityCode) {
+                case 'a':
+                    title = Book.findById(id.toLong()).title
+                    break
+                case 'r':
+                    title = (Book.findById(id.toLong()).title ?: '') + ' ' + (Book.findById(id.toLong()).legacyTitle ?: '')
+                    break
+                case 'n':
+                    title = Book.findById(id.toLong()).title
+                    break
+                case 'e':
+                    title = Excerpt.findById(id.toLong()).chapters + ' ' + Excerpt.findById(id.toLong()).summary
+                    break
+
+                case 'd':
+                    title = IndexCard.findById(id.toLong()).summary
+                    break
+                case 'c':
+                    title = IndexCard.findById(id.toLong()).summary
+                    break
+
+            }
+            title = title.split(/\./)[0]
+
+        }
+        catch (Exception e) {
+            title = ''
+        }
+    */
+
+        def fileName = f.getName().split(/\./)[0]?.replaceAll(/\./, '-') + '_' + '.' + f.getName().split(/\./)[1]
+        //+ new Date().format('yy') + 'y-' + getSupportService().toWeekDate(new Date())
+        // + ' _ ' + title
+
+//        println title + '  sad ' + entityCode + ' 2nd  ' + URLEncoder.encode(filename, "UTF-8")
+
+        def finaln = fileName//.replaceAll(' ', '-')//URLDecoder.decode(fileName, 'UTF-8')
+//        println URLEncoder.encode(finaln, 'UTF-8')
+
+        if (f.exists()) {
+            response.setCharacterEncoding("UTF-8");
+            //response.setContentType("application/octet-stream")
+//            response.setHeader("Content-disposition", "attachment; filename=\"" + finaln + "\"")
+//            response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + finaln);
+
+            response.setHeader("Content-Disposition",
+                    "inline;filename*=UTF-8''${URLEncoder.encode(finaln, 'UTF-8').replaceAll(/\+/, '%20')}")
+
+            // todo post
+//                response.setHeader("Content-disposition", "attachment; filename=\"${filename}\"")
+            response.outputStream << new FileInputStream(path)
+        }
+
+    }
+
+
+// todo 096.2021
+
+    def filed() {
+
+        def path = session[params.id]
+
+        // todo to make it smarter!
+
+        def f = new File(path)
+
+        def corename = f.getName().split(/\./)[0]
+        def entityCode = corename.substring(corename.length() - 1, corename.length())
+        def id = corename.substring(0, corename.length() - 1)
+
+        def title = ''
+        /*       try {
+            switch (entityCode) {
+                case 'a':
+                    title = Book.findById(id.toLong()).title
+                    break
+                case 'r':
+                    title = (Book.findById(id.toLong()).title ?: '') + ' ' + (Book.findById(id.toLong()).legacyTitle ?: '')
+                    break
+                case 'n':
+                    title = Book.findById(id.toLong()).title
+                    break
+                case 'e':
+                    title = Excerpt.findById(id.toLong()).chapters + ' ' + Excerpt.findById(id.toLong()).summary
+                    break
+
+                case 'd':
+                    title = IndexCard.findById(id.toLong()).summary
+                    break
+                case 'c':
+                    title = IndexCard.findById(id.toLong()).summary
+                    break
+
+            }
+            title = title.split(/\./)[0]
+
+        }
+        catch (Exception e) {
+            title = ''
+        }  def download() {
+
+        def path = session[params.id]
+
+        // todo to make it smarter!
+
+        def f = new File(path)
+
+        def corename = f.getName().split(/\./)[0]
+        def entityCode = corename.substring(corename.length() - 1, corename.length())
+        def id = corename.substring(0, corename.length() - 1)
+
+        def title = ''
+        /*       try {
+            switch (entityCode) {
+                case 'a':
+                    title = Book.findById(id.toLong()).title
+                    break
+                case 'r':
+                    title = (Book.findById(id.toLong()).title ?: '') + ' ' + (Book.findById(id.toLong()).legacyTitle ?: '')
+                    break
+                case 'n':
+                    title = Book.findById(id.toLong()).title
+                    break
+                case 'e':
+                    title = Excerpt.findById(id.toLong()).chapters + ' ' + Excerpt.findById(id.toLong()).summary
+                    break
+
+                case 'd':
+                    title = IndexCard.findById(id.toLong()).summary
+                    break
+                case 'c':
+                    title = IndexCard.findById(id.toLong()).summary
+                    break
+
+            }
+            title = title.split(/\./)[0]
+
+        }
+        catch (Exception e) {
+            title = ''
         }
     */
 
@@ -613,7 +767,7 @@ class OperationController {
         }
     }
 
-
+// todo: simplify getPath
     static def getPath(String code) {
         if (Setting.findByName('appFolder'))
             return Setting.findByName(code)?.value?.replace(/[appFolder]/, Setting.findByName('appFolder')?.value)
@@ -1030,7 +1184,7 @@ date = "${r.year ?: ''}"
         } else if ('GTP'.contains(entity) && field == 'status') {
             WorkStatus.findAll([sort: 'code']).each() {
                 responce += [value: it.id,
-                             text : it.code]
+                             text : it.name]
             }
         } else if ('RTPJ'.contains(entity) && field == 'goal') {
             def n = grailsApplication.classLoader.loadClass(entityMapping[params.entity]).get(params.recordId)
@@ -1093,14 +1247,14 @@ date = "${r.year ?: ''}"
                              text : it * 10]
             }
         } else if (field == 'recurringInterval') {
-            (1..9).each() {
+            (1..40).each() {
                 responce += [value: it,
                              text : it]
             }
-            (1..10).each() {
-                responce += [value: it * 10,
-                             text : it * 10]
-            }
+//            (1..10).each() {
+//                responce += [value: it * 10,
+//                             text : it * 10]
+//            }
         }
         render responce as JSON
     }
@@ -1746,6 +1900,7 @@ past.each(){
 
     def updateSettings() {
         def s = Setting.get(params.id)
+        s.properties = params
         s.value = params.newValue
         render s.value
     }
@@ -1809,7 +1964,7 @@ past.each(){
             j.save(flash: true)
 //            render 'Saved with id: ' + ' ' + j.id + ': ' + j.summary
             //render (template: '/layouts/addToCalendar', model: [record: j])
-            render(template: '/gTemplates/box', model: [record: j])
+            render(template: '/gTemplates/recordSummary', model: [record: j])
         } else {
             render 'Problem saving the entry'
         }
@@ -1911,13 +2066,23 @@ past.each(){
 
         def r = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-        def filename = //entityCode?.toLowerCase() +
+        def filename//
+        if (entityCode == 'R'){
+            filename = (r.course ?
+                    ' c' +  r.course?.code : ' ') +
+                    (r.department ?  ' d' +  r.department?.code : ' ') + '  -- ' +
+                    (r?.title ? r?.title?.replace('\n', ' - ')?.trim() : 'Untitled')
+
+        } else {
+            filename =
+
+        // = //entityCode?.toLowerCase() +
 //                ' p' + (r.priority ?: 2) +
                 (r.course ?
                         ' c' +  r.course?.code : ' ') +
                 (r.department ?  ' d' +  r.department?.code : ' ') + '  -- ' +
-         (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
-
+        (r?.summary ? r?.summary?.replace('\n', ' - ')?.trim() : 'Untitled')
+        }
 
         for (c in '?"/\\*:<>' + '!$^&{}|') {
             filename = filename.replace(c, ' ')
@@ -1925,6 +2090,8 @@ past.each(){
 
         def f
 
+        if (!new File(OperationController.getPath('root.rps1.path') + '/edit/').exists())
+            new File(OperationController.getPath('root.rps1.path') + '/edit/').mkdirs()
 
         f = new File(OperationController.getPath('root.rps1.path') + '/edit/' + entityCode + "-" + id + ' ' +
                 filename + '.txt') // + ' ' + filename
@@ -1946,7 +2113,13 @@ past.each(){
 //        def f2 = new File(OperationController.getPath('editBox.path') + '/' +
 //                r.entityCode() + '/' + r.id + '.out') // + ' ' + filename
 //        if (!f.exists()) {
-        f.write(r?.description ?: '...', 'UTF-8')
+        if (entityCode == 'R'){
+            f.write(r?.fullText ?: '...', 'UTF-8')
+
+        } else {
+
+            f.write(r?.description ?: '...', 'UTF-8')
+        }
 //            f2.write(r?.description ?: '...', 'UTF-8')
 //        render('Text checked out')
         render(template: '/layouts/achtung', model: [message: 'Note text written to disk.'])
@@ -1968,7 +2141,14 @@ past.each(){
 
 
     def processScans = {
-            def list = new File(OperationController.getPath('root.rps1.path') + '/scans/').listFiles().sort()
+            def list = []
+            
+            
+            if (new File(OperationController.getPath('root.rps1.path') + '/scans/').exists()) {
+            
+            
+            list = new File(OperationController.getPath('root.rps1.path') + '/scans/')?.listFiles()?.sort()
+            
         def total = list.size()
         def extension = ''
         if (list.size() > 0) {
@@ -2016,7 +2196,10 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
 
           render(view: '/appProcessor/main', model: [list: list, id: params.id ?: 0, dateFound: dateFound, total: total, extension: extension, name: articleContent])
         }
-        else render 'Folder: '  + OperationController.getPath('root.rps1.path') + '/scans/' + ' is empty.'
+        else render ('Folder: '  + OperationController.getPath('root.rps1.path') + '/scans/' + ' is empty.')
+        
+        }
+        else render ('Folder ' +OperationController.getPath('root.rps1.path') + '/scans/' + ' does not exist.')
     }
 
 

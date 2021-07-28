@@ -6,7 +6,7 @@
         %{--&nbsp; <img src="${resource(dir: 'images', file: 'favicon-transparent.png')}" width="16px;"/>--}%
         %{--&nbsp;--}%
         %{--</td>--}%
-        <td style="padding-right: 1px !important;">
+        <td style="padding-right: 1px !important; text-align: center;">
         &nbsp;
         &nbsp;
             <g:remoteLink controller="report" action="homepageSavedSearches"
@@ -17,9 +17,10 @@
 
 
                 <span style="margin-right: 1px;">
-                    <b style="font-size: 12px; font-family: tahoma, sans-serif;">
-                        ${OperationController.getPath('app.name') ?: 'Nibras'} /Study </b>
-                 &nbsp;&nbsp;&nbsp; <u>  ${record}</u>
+                    <b style="font-size: 1.4em;">
+%{--                        ${OperationController.getPath('app.name') ?: 'Nibras'} /Study </b>--}%
+%{--Course--}%
+                        ${record}</b>
                 </span>
             </g:remoteLink>
 

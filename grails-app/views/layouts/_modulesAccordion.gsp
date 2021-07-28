@@ -2,7 +2,10 @@
 
 <div id="accordionModules"
      style="width: 95%; padding-left: 4px;">
-    <div class="panelCard">
+
+
+    <g:if test="${OperationController.getPath('department.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        <div class="panelCard">
         <h4>
         <span class="D-bkg"
               style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">D</span>
@@ -19,6 +22,9 @@
     </div>
     </div>
 
+    </g:if>
+
+<g:if test="${OperationController.getPath('course.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <div class="panelCard">
      <h4>
         <span class="C-bkg"
@@ -35,6 +41,7 @@
         </ul>
     </div>
     </div>
+    </g:if>
 
 
 
@@ -139,7 +146,7 @@
     <div class="panelCard">
     <h4>
             <span class="K-bkg"
-                  style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">I</span>
+                  style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">K</span>
             ${OperationController.getPath('indicators.label') ?: 'Indicators'}<span
                 class="moduleCount">${IndicatorData.count()}</span>
 
@@ -168,9 +175,7 @@
     <h4><span class="Q-bkg"
                  style="font-family:  'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">Q</span>
         ${OperationController.getPath('payments.label') ?: 'Payments'}
-        <span
-                class="moduleCount">${Payment.count()}</span>
-
+        <span class="moduleCount">${Payment.count()}</span>
     </h4>
 
 
@@ -241,7 +246,7 @@
     </div>
 </g:if>
 
-%{--<g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+<g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <div class="panelCard">
 
     <h4>
@@ -273,9 +278,9 @@
 
     </div>
     </div>
-%{--</g:if>--}%
+</g:if>
 
-%{--<g:if test="${OperationController.getPath('resources.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+<g:if test="${OperationController.getPath('resources.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <div class="panelCard">
 
     <h4>
@@ -300,7 +305,7 @@
            </ul>
     </div>
     </div>
-%{--</g:if>--}%
+</g:if>
 
 <g:if test="${OperationController.getPath('excerpts.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <div class="panelCard">

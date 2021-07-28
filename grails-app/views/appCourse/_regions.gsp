@@ -100,17 +100,26 @@
 
 
 
-                <h4>Notes</h4>
+                <g:render template="/gTemplates/recordSummary" model="[record: record]"/>
+
+
+                <h4>Notes (${IndexCard.countByCourse(record)}) </h4>
+
+
+%{--                        <div style="direction: rtl; text-align: right; ">--}%
+%{--                            <g:render template="/gTemplates/recordListing" model="[list: IndexCard.findAllByCourse(record)]"/>--}%
+%{--                        </div>--}%
+
+
+
                 <g:each in="${IndexCard.findAllByCourseAndWbsParentIsNull(record, [sort: 'orderNumber', order: 'asc'])}"
                         var="n">
-                    <g:render template="/gTemplates/box" model="[record: n]"/>
+                    <g:render template="/gTemplates/recordSummary" model="[record: n]"/>
                     <div style="padding-left: 14px">
                         <g:render template="/appCourse/childrenofNotesBox" model="[record: record, parent: n]"/>
                     </div>
                 </g:each>
 
-
-                <g:render template="/gTemplates/recordSummary" model="[record: record]"/>
 
                 %{--<h2>Notes (${IndexCard.countByCourse(record)})</h2>--}%
 
