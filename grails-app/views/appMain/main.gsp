@@ -36,7 +36,7 @@
 
 
     %{--<link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon-transparent.png')}" type="image/png"/>--}%
-    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'calendar.ico')}" type="image/ico"/>
+    <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon-transparent.png')}" type="image/png"/>
 
 
 
@@ -604,7 +604,7 @@ $("#accordionCenter").accordion({
 
 <body>
 
-<g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips, recentRecords: recentRecords]"/>
+<g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips, recentRecords: recentRecords, types: types]"/>
 <div id="idletimeout"></div>
 
 
