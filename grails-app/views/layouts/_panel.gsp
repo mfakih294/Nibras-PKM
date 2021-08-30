@@ -111,114 +111,6 @@
     %{--<b>أ${cal.get(Calendar.WEEK_OF_YEAR)}</b>--}%
     <td>
 
-<g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
-<br/>
-<br/>
-<b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
-<br/>
-<br/>
-%{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
-<uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
-             name="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
-             controller="import" action="upload" path="${typeSandboxPath}"
-             placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
-             noSound="true"
-             direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1" class="demo">
-    <uploadr:onSuccess>
-        jQuery('#spinner2').hide();
-        jQuery('.info-badge').html('Done uploading files.');
-        </uploadr:onSuccess>
-
-</uploadr:add>
-    </g:if>
-
-<g:if test="${OperationController.getPath('upload-cover.enabled')?.toLowerCase() == 'yes' ? true : false}">
-
-        <br/>
-        <br/>
-
-        <b>Upload cover</b>:
-        <uploadr:add id="uploadCover${record.id}"
-                     name="uploaderCover${new Date()?.format('ddMMyyyyHHmmss')}"
-                     controller="import" action="uploadCover2" path="${coverPath}"
-                     noSound="true"
-                     direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1">
-            <uploader:onSuccess>
-                jQuery('#subUploadInPanel').html('Cover uploaded.')//load('/pkm/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
-            </uploader:onSuccess>
-            Upload...
-        </uploadr:add>
-</g:if>
-
-<g:if test="${OperationController.getPath('open-record-folders.enabled')?.toLowerCase() == 'yes' ? true : false}">
-<br/>
-<br/>
-Open record's folder in repository:
-&nbsp;
-<g:remoteLink controller="generics" action="openRpsFolder"
-              params="${[id: record.id, entityCode: entityCode, repository: 1]}"
-              update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps1 folder: ${OperationController.getPath('root.rps1.path')}">
-    <u><b>&nbsp;1&nbsp;</b></u>
-</g:remoteLink>
-/
-<g:remoteLink controller="generics" action="openRpsFolder"
-              params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
-              update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps2 folder: ${OperationController.getPath('root.rps2.path')}">
-    <u><b>&nbsp;2&nbsp;</b></u>
-</g:remoteLink>
-/
-<g:remoteLink controller="generics" action="openRpsFolder"
-              params="${[id: record.id, entityCode: entityCode,  repository: 3]}"
-              update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps3 folder: ${OperationController.getPath('root.rps3.path')}">
-    <u><b>&nbsp;3&nbsp;</b></u>
-</g:remoteLink>.
-
-        <g:if test="${record.class.declaredFields.name.contains('nbFiles')}">
-        <g:if test="${record.nbFiles}">
-        %{--<g:if test="${record.nbFiles}">--}%
-            <br/>
-            <br/>
-            <b> Nb files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
-        </g:if>
-        <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}" params="[entityCode: entityCode]"
-                      update="${entityCode}Record${record.id}OpenLog" style=""
-                      title="Update files count">
-            <b>&circlearrowright;</b>
-        </g:remoteLink>
-                         &nbsp;
-                <g:remoteLink controller="operation" action="copyToRps1"
-                              params="${[id: record.id, entityCode: entityCode]}"
-                              update="${entityCode}Record${record.id}OpenLog"
-                              title="Copy files from rps2 (${OperationController.getPath('root.rps2.path')}) to rps1 (${OperationController.getPath('root.rps1.path')})">
-                 <b>   &darr;
-                    &darr;</b>
-                </g:remoteLink>
-        <br/>
-        <br/>
-        &nbsp;<span id="${entityCode}Record${record.id}OpenLog"></span>
-    </g:if>
-</g:if>
-%{--&nbsp;/--}%
-%{--&nbsp;--}%
-<g:if test="${1 == 2}">
-<g:if test="${entityCode == 'R'}">
-    <br/>
-    <br/>
-opf    ${OperationController.getPath('root.rps1.path')}R/${record.type.code}/${(record.id / 100).toInteger()}/${record.id}
-    <br/>
-opf    ${OperationController.getPath('root.rps2.path')}R/${record.type.code}/${(record.id / 100).toInteger()}/${record.id}
-</g:if>
-<g:else>
-    <br/>
-    <br/>
-opf    ${OperationController.getPath('root.rps1.path')}${entityCode}/${record.id}
-    <br/>
-opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id}
-</g:else>
-</g:if>
     %{--<h4>Files</h4>--}%
 <g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
 
@@ -1437,6 +1329,120 @@ x
     </g:if>
 
 
+
+
+<g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<br/>
+<br/>
+<b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
+<br/>
+<br/>
+%{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
+<uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
+             name="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
+             controller="import" action="upload" path="${typeSandboxPath}"
+             placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
+             noSound="true"
+             direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1" class="demo">
+    <uploadr:onSuccess>
+        jQuery('#spinner2').hide();
+        jQuery('.info-badge').html('Done uploading files.');
+        </uploadr:onSuccess>
+
+</uploadr:add>
+    </g:if>
+
+<g:if test="${OperationController.getPath('upload-cover.enabled')?.toLowerCase() == 'yes' ? true : false}">
+
+        <br/>
+        <br/>
+
+        <b>Upload cover</b>:
+        <uploadr:add id="uploadCover${record.id}"
+                     name="uploaderCover${new Date()?.format('ddMMyyyyHHmmss')}"
+                     controller="import" action="uploadCover2" path="${coverPath}"
+                     noSound="true"
+                     direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1">
+            <uploader:onSuccess>
+                jQuery('#subUploadInPanel').html('Cover uploaded.')//load('/pkm/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
+            </uploader:onSuccess>
+            Upload...
+        </uploadr:add>
+</g:if>
+
+<g:if test="${OperationController.getPath('open-record-folders.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<br/>
+<br/>
+Open record's folder in repository:
+&nbsp;
+<g:remoteLink controller="generics" action="openRpsFolder"
+              params="${[id: record.id, entityCode: entityCode, repository: 1]}"
+              update="${entityCode}Record${record.id}OpenLog"
+              title="Open rps1 folder: ${OperationController.getPath('root.rps1.path')}">
+    <u><b>&nbsp;1&nbsp;</b></u>
+</g:remoteLink>
+/
+<g:remoteLink controller="generics" action="openRpsFolder"
+              params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
+              update="${entityCode}Record${record.id}OpenLog"
+              title="Open rps2 folder: ${OperationController.getPath('root.rps2.path')}">
+    <u><b>&nbsp;2&nbsp;</b></u>
+</g:remoteLink>
+/
+<g:remoteLink controller="generics" action="openRpsFolder"
+              params="${[id: record.id, entityCode: entityCode,  repository: 3]}"
+              update="${entityCode}Record${record.id}OpenLog"
+              title="Open rps3 folder: ${OperationController.getPath('root.rps3.path')}">
+    <u><b>&nbsp;3&nbsp;</b></u>
+</g:remoteLink>.
+
+        <g:if test="${record.class.declaredFields.name.contains('nbFiles')}">
+        <g:if test="${record.nbFiles}">
+        %{--<g:if test="${record.nbFiles}">--}%
+            <br/>
+            <br/>
+            <b> Nb files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
+        </g:if>
+        <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}" params="[entityCode: entityCode]"
+                      update="${entityCode}Record${record.id}OpenLog" style=""
+                      title="Update files count">
+            <b>&circlearrowright;</b>
+        </g:remoteLink>
+                         &nbsp;
+                <g:remoteLink controller="operation" action="copyToRps1"
+                              params="${[id: record.id, entityCode: entityCode]}"
+                              update="${entityCode}Record${record.id}OpenLog"
+                              title="Copy files from rps2 (${OperationController.getPath('root.rps2.path')}) to rps1 (${OperationController.getPath('root.rps1.path')})">
+                 <b>   &darr;
+                    &darr;</b>
+                </g:remoteLink>
+        <br/>
+        <br/>
+        &nbsp;<span id="${entityCode}Record${record.id}OpenLog"></span>
+    </g:if>
+</g:if>
+%{--&nbsp;/--}%
+%{--&nbsp;--}%
+<g:if test="${1 == 2}">
+<g:if test="${entityCode == 'R'}">
+    <br/>
+    <br/>
+opf    ${OperationController.getPath('root.rps1.path')}R/${record.type.code}/${(record.id / 100).toInteger()}/${record.id}
+    <br/>
+opf    ${OperationController.getPath('root.rps2.path')}R/${record.type.code}/${(record.id / 100).toInteger()}/${record.id}
+</g:if>
+<g:else>
+    <br/>
+    <br/>
+opf    ${OperationController.getPath('root.rps1.path')}${entityCode}/${record.id}
+    <br/>
+opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id}
+</g:else>
+</g:if>
+
+
+
+
     <b>Updated</b> ${record.lastUpdated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
 %{--(<prettytime:display--}%
         %{--date="${record.lastUpdated}"/>)--}%
@@ -1457,6 +1463,8 @@ x
 
 %{--Working--}%
 %{----}%
+
+
 
 
 

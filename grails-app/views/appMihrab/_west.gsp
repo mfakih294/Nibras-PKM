@@ -105,12 +105,22 @@
 
             <div style="direction: rtl; text-align: right; ">
 <ul style=" column-count: 2;  column-gap: 3px;">
-            <g:each in="${Writing.findAllByCourseAndPriorityGreaterThan(Course.findByCode('ذكر'), 2, [sort: 'orderNumber', order: 'asc'])}" var="w">
-     <li>           <g:remoteLink controller="generics" action="showSubChildrenWithRecord"
-                              params="${[id: w.id, entityCode: 'W', childType: 'N']}"
+            %{--<g:each in="${Writing.findAllByCourseAndPriorityGreaterThan(Course.findByCode('ذكر'), 2, [sort: 'orderNumber', order: 'asc'])}" var="w">--}%
+     %{--<li>           <g:remoteLink controller="generics" action="showSubChildrenWithRecord"--}%
+                              %{--params="${[id: w.id, entityCode: 'W', childType: 'N']}"--}%
+                              %{--update="centralArea"--}%
+                              %{--title="Children">--}%
+                        %{--${w} (${app.IndexCard.countByEntityCodeAndRecordId('W', w.id)})--}%
+                %{--</g:remoteLink>--}%
+     %{--</li>--}%
+            %{--</g:each> --}%
+
+    <g:each in="${IndexCard.findAllByCourse(Course.findByCode('ذكر'), [sort: 'orderNumber', order: 'asc'])}" var="w">
+     <li>           <g:remoteLink controller="generics" action="showSummary"
+                              params="${[id: w.id, entityCode: 'N']}"
                               update="centralArea"
-                              title="Children">
-                        ${w} (${app.IndexCard.countByEntityCodeAndRecordId('W', w.id)})
+                              title="Show">
+                        ${w}
                 </g:remoteLink>
      </li>
             </g:each>

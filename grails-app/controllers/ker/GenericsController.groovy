@@ -214,7 +214,6 @@ class GenericsController {
                     [id: 'r', name: 'Resource', code: 'resources'],
                     [id: 'p', name: 'Planner', code: 'planner'],
                     [id: 's', name: 'Contact', code: 'contacts'],
-                    [id: 'p', name: 'Planner', code: 'planner'],
                     [id: 'c', name: 'Course', code: 'courses']
             ].each(){
                 if (OperationController.getPath(it.code + '.enabled') == 'yes')
@@ -231,7 +230,6 @@ class GenericsController {
                     [id: 'r', name: 'Resource', code: 'resources'],
                     [id: 'p', name: 'Planner', code: 'planner'],
                     [id: 's', name: 'Contact', code: 'contacts'],
-                    [id: 'p', name: 'Planner', code: 'planner'],
                     [id: 'c', name: 'Course', code: 'courses']
             ].each(){
                 if (OperationController.getPath(it.code + '.enabled') == 'yes')
@@ -519,6 +517,7 @@ YellowGreen;#9ACD32"""
     }
 
     def batchAdd(String block) {
+
         def metaType = block.trim().split(/[ ]+/)[0]
         if (metaType == 'A') {
             block.split(/\*\*\*/).each() { region ->
@@ -606,7 +605,18 @@ YellowGreen;#9ACD32"""
     }
 
 
-    def commandBarAutocomplete() {
+    def commandBarAutocompleteOneAtATime() {
+
+        def input = params.q.trim()
+        def entityCode
+        def hintResponce = ''
+        def responce = ''
+//        def hint = (params.hint == '1')
+//        println 'size ' + input.length()
+        render(template: '/layouts/hintsOneAtATime', model: [hints: input])
+    }
+
+  def commandBarAutocomplete() {
 
         def input = params.q.trim()
         def entityCode
@@ -3410,7 +3420,7 @@ def markAsMarkdowned(Long id, String entityCode) {
         }
         catch (Exception e) {
             render 'Exception in quick add: <b style="color: red">' + input + '</b>'
-            println 'Exception in quick add: ' + input // e.printStackTrace()
+            println 'Exception in quick add: ' + input + ' \n\n\n' + e.printStackTrace()
         }
 
     }
@@ -5535,6 +5545,7 @@ def addTagToAll(String input) {
 
 
     }
+
 
 
     def viewRecordImage() {

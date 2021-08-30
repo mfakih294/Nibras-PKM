@@ -262,7 +262,7 @@
 </div>
 
 
-<div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">
+<div class="ui-layout-east eastRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;overflow: auto;">
     <div id="3rdPanel">
 
     </div>

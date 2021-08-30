@@ -432,7 +432,7 @@
 
                 <g:textField name="input" value="" id="speedsearch"
                              autocomplete="off"
-                             style="float: right; display: inline;  width: 250px !important; height: 24px; padding: 3px; margin: 1px; font-size: 12px;"
+                             style="float: right; display: inline;  width: 250px !important; height: 24px; padding: 3px; margin: 1px; font: 1.2em Tahoma;"
                              placeholder="Search (Esc)..."
                              class=""/>
 

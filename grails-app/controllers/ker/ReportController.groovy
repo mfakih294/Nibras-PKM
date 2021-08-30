@@ -24,17 +24,20 @@ import mcs.Book
 import mcs.Course
 import mcs.Department
 import mcs.Goal
+import mcs.Planner
 import mcs.Writing
 import mcs.parameters.ResourceStatus
 
 
 import com.intuit.fuzzymatcher.component.MatchService;
 import com.intuit.fuzzymatcher.domain.Document;
-import com.intuit.fuzzymatcher.domain.Element
-
+import com.intuit.fuzzymatcher.domain.Element;
+import static com.intuit.fuzzymatcher.domain.ElementType.ADDRESS;
 import static com.intuit.fuzzymatcher.domain.ElementType.NAME;
-import com.intuit.fuzzymatcher.domain.Match
-
+import com.intuit.fuzzymatcher.domain.Match;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 

@@ -364,7 +364,7 @@ $("#accordionCenter").accordion({
             }
         });
             */
-
+/*
  jQuery.idleTimeout('#importFileCount','#importFileCount', {
             idleAfter: 10,
             pollingInterval: 15,
@@ -385,7 +385,7 @@ $("#accordionCenter").accordion({
                 });
             }
         });
-
+*/
             jQuery('#contactPanel').load('${request.contextPath}/generics/contactCloud');
             jQuery('#tagsPanel').load('${request.contextPath}/generics/tagCloud');
             jQuery('#importFileCount').load('${request.contextPath}/page/importbeat');
@@ -405,7 +405,8 @@ $("#accordionCenter").accordion({
                 jQuery('#accordionCenter').accordion({ active: 3});
             });
 
-            Mousetrap.bindGlobal('f7', function (e) {
+            Mousetrap.bindGlobal('f2', function (e) {
+
 //                jQuery('#accordionCenter').accordion({ active: 0});
                 jQuery('#quickAddTextFieldBottomTop').select();
                 jQuery('#quickAddTextFieldBottomTop').focus();
@@ -455,21 +456,25 @@ $("#accordionCenter").accordion({
             */
 
 
-  Mousetrap.bindGlobal('f2', function (e) {
+  // Mousetrap.bindGlobal('f2', function (e) {
                 // jQuery('#quickAddXcdSubmitExecute').click();
                 // jQuery('#quickAddTextField').select().focus();
 //                jQuery('#quickAddTextField').focus();
-            });
+//             });
 
             Mousetrap.bindGlobal('shift+f2', function (e) {
 //                jQuery('#accordionEast').accordion({ active: 5});
 
                 jQuery('#addXcdFormDaftarSubmit').click();
                 jQuery('#descriptionDaftar').focus();
-                                jQuery('#quickAddRecordTextArea').select().focus();
+//                jQuery('#quickAddRecordTextArea').select().focus();
             });
 //
 //
+
+            Mousetrap.bind('left', function (e) {
+                jQuery('.prevLink').click()
+            });
 
             var collapsed = false;
             Mousetrap.bindGlobal('f9', function (e) {
@@ -488,29 +493,19 @@ $("#accordionCenter").accordion({
 
             });
 
-            Mousetrap.bind('right', function (e) {
-                jQuery('.nextLink').click()
-            });
-
-            Mousetrap.bind('left', function (e) {
-                jQuery('.prevLink').click()
-            });
 
 
-            Mousetrap.bind('ctrl+s', function (e) {
-                jQuery('#addXcdFormDaftarSubmit').click();
-                return false;
-            });
+//            Mousetrap.bind('ctrl+s', function (e) {
+//                jQuery('#addXcdFormDaftarSubmit').click();
+//                return false;
+//            });
 
 
             /*
              For modifier keys you can use shift, ctrl, alt, option, meta, and command.
-
              Other special keys are backspace, tab, enter, return, capslock, esc,
              escape, space, pageup, pagedown, end, home, left, up, right, down, ins, and del.
-
              Any other key you should be able to reference by name like a, /, $, *, or =.
-
              */
 
             jQuery("#quickAddTextField").keypress(function (e) {
@@ -595,6 +590,7 @@ $("#accordionCenter").accordion({
                 $('#spinner2').hide();
             });
 
+//            jQuery('#quickAddTextFieldBottomTop').focus();
             jQuery('#descriptionDaftar').focus();
         });
 

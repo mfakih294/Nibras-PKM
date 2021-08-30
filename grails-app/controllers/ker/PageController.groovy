@@ -309,7 +309,8 @@ class PageController {
 
         def recentRecords = []
         recentClasses.each() {
-            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
+//            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
+            recentRecords += it.findAllByDeletedOnIsNull([sort: 'dateCreated', order: 'desc', max: 3])?.reverse()
         }
 
 //        def filledInDates = ''

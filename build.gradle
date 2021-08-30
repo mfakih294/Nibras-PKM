@@ -2,6 +2,9 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
+//        maven { url "https://mvnrepository.com/artifact/org.grails.plugins/resources"}
+
+
 //        maven { url "https://mvnrepository.com/artifact/com.gravity/goose" }
         // https://mvnrepository.com/artifact/com.gravity/goose
 
@@ -11,13 +14,13 @@ buildscript {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
     //    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1"
-//        runtime ':resources:1.2.14'
+        //runtime 'org.grails.plugins:resources:1.2.14'
         // for ajax uploader
         //classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.5.0'
     }
 }
 
-version "1.5.0"
+version "1.7.0"
 group "nibras"
 
 //apply plugin:"eclipse"
@@ -93,21 +96,22 @@ dependencies {
     compile "org.hibernate:hibernate-core:5.1.16.Final"
     compile "org.grails.plugins:gsp"
 
-
-
     //  compile group: 'com.gravity', name: 'goose', version: '2.1.23'
      //compile group: 'com.github.emmanueltouzery', name: 'crony', version: '1.1.0'
-compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
+    compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
 
     // https://mvnrepository.com/artifact/com.intuit.fuzzymatcher/fuzzy-matcher
     compile group: 'com.intuit.fuzzymatcher', name: 'fuzzy-matcher', version: '1.0.4'
+// compile group: 'org.eclipse.mylyn.docs', name: 'org.eclipse.mylyn.wikitext.markdown.core', version: '2.6.0.v20150901-2143'
+
+    compile 'com.vladsch.flexmark:flexmark-all:0.62.2'
 
 // other plugins
     compile "com.nayidisha.grails.uploadr:grails3-uploadr:3.0"
     compile 'org.grails.plugins:remote-pagination:0.5.0'
     compile 'org.grails.plugins:grails-pretty-time:4.0.0'
     compile 'org.grails.plugins:grails-console:2.1.1'
-    compile 'org.grails.plugins:grails-markdown:3.0.0'
+//    compile 'org.grails.plugins:grails-markdown:3.0.0'
     compile 'org.grails.plugins:iCalendar:0.6.4'
 
     compile 'org.grails.plugins:external-config:1.4.0'
@@ -118,7 +122,9 @@ compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
     compile 'org.grails.plugins:feeds:2.0.0-SNAPSHOT'
 
     compile 'org.grails.plugins:spring-security-core:3.2.3'
- //   compile "org.grails.plugins:resources"
+//    compile "org.grails.plugins:resources:1.2.14"
+
+
 
 
    // compile 'org.grails.plugins:joda-time:2.1.0'
@@ -135,13 +141,13 @@ compile group: 'com.cronutils', name: 'cron-utils', version: '9.0.2'
 
     //compile "com.bertramlabs.plugins:asset-pipeline-grails:2.15.1"
 
-    testCompile "org.grails:grails-gorm-testing-support"
-    testCompile "org.grails.plugins:geb"
-    testCompile "org.grails:grails-web-testing-support"
-    testCompile "org.grails.plugins:geb:1.1.2"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
-    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
-    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
+//    testCompile "org.grails:grails-gorm-testing-support"
+//    testCompile "org.grails.plugins:geb"
+//    testCompile "org.grails:grails-web-testing-support"
+//    testCompile "org.grails.plugins:geb:1.1.2"
+//    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+//    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+//    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
 }
 
 bootRun {

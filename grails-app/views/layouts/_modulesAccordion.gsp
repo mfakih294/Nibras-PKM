@@ -3,47 +3,28 @@
 <div id="accordionModules"
      style="width: 95%; padding-left: 4px;">
 
-
-    <g:if test="${OperationController.getPath('department.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <div class="panelCard">
-        <h4>
-        <span class="D-bkg"
-              style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">D</span>
-        ${OperationController.getPath('department.label') ?: 'Departments'} <span
-                class="moduleCount">
-            ${mcs.Department.count()}
-        </span>
-    </h4>
+            <h4>
+                <span class="T-bkg"
+                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;">T</span>
+                ${OperationController.getPath('tasks.label') ?: 'Tasks'}<span
+                    class="moduleCount">${Task.count()}</span></h4>
 
-    <div>
-        <ul>
-            <g:render template="/layouts/savedSearches" model="[entity: 'D']"/>
-        </ul>
-    </div>
-    </div>
+            <div>
 
+
+                %{--<g:link controller="task" action="expotTodotxt" target="_blank">--}%
+                %{--Export to Todo.txt format--}%
+                %{--</g:link>--}%
+
+                %{--<br/>--}%
+                <ul>
+                    <g:render template="/layouts/savedSearches" model="[entity: 'T']"/>
+                </ul>
+            </div>
+        </div>
     </g:if>
-
-<g:if test="${OperationController.getPath('course.enabled')?.toLowerCase() == 'yes' ? true : false}">
-<div class="panelCard">
-     <h4>
-        <span class="C-bkg"
-              style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">C</span>
-        ${OperationController.getPath('courses.label') ?: 'Courses'} <span
-                class="moduleCount">
-            ${mcs.Course.count()}
-        </span>
-    </h4>
-
-    <div>
-        <ul>
-            <g:render template="/layouts/savedSearches" model="[entity: 'C']"/>
-        </ul>
-    </div>
-    </div>
-    </g:if>
-
-
 
 <g:if test="${OperationController.getPath('goals.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <div class="panelCard">
@@ -61,29 +42,6 @@
         <ul>
             <g:render template="/layouts/savedSearches" model="[entity: 'G']"/>
         </ul>
-    </div>
-    </div>
-</g:if>
-
-<g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
-    <div class="panelCard">
- <h4>
-     <span class="T-bkg"
-           style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;">T</span>
-        ${OperationController.getPath('tasks.label') ?: 'Tasks'}<span
-                class="moduleCount">${Task.count()}</span></h4>
-
-    <div>
-
-
-                %{--<g:link controller="task" action="expotTodotxt" target="_blank">--}%
-                    %{--Export to Todo.txt format--}%
-                %{--</g:link>--}%
-
-             %{--<br/>--}%
-          <ul>
-            <g:render template="/layouts/savedSearches" model="[entity: 'T']"/>
-    </ul>
     </div>
     </div>
 </g:if>
@@ -142,7 +100,82 @@
 
 </g:if>
 
-<g:if test="${OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        <div class="panelCard">
+
+            <h4>
+
+                <span class="N-bkg"
+                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">N</span>
+                ${OperationController.getPath('notes.label') ?: 'Notes'}
+                <span class="moduleCount">${app.IndexCard.count()}</span>
+
+            </h4>
+
+            <div>
+                <ul>
+
+                    %{--<li>--}%
+                    %{--<g:remoteLink controller="report" action="wordsForReview"--}%
+                    %{--update="centralArea"--}%
+                    %{--style=""--}%
+                    %{--title="Review words">--}%
+                    %{--<g:message code="ui.anki"></g:message>--}%
+
+                    %{--</g:remoteLink>--}%
+
+                    %{--</li>--}%
+
+
+                    <g:render template="/layouts/savedSearches" model="[entity: 'N']"/>
+                </ul>
+
+            </div>
+        </div>
+    </g:if>
+
+    <g:if test="${OperationController.getPath('department.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        <div class="panelCard">
+            <h4>
+                <span class="D-bkg"
+                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">D</span>
+                ${OperationController.getPath('department.label') ?: 'Departments'} <span
+                    class="moduleCount">
+                ${mcs.Department.count()}
+            </span>
+            </h4>
+
+            <div>
+                <ul>
+                    <g:render template="/layouts/savedSearches" model="[entity: 'D']"/>
+                </ul>
+            </div>
+        </div>
+
+    </g:if>
+
+    <g:if test="${OperationController.getPath('course.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        <div class="panelCard">
+            <h4>
+                <span class="C-bkg"
+                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">C</span>
+                ${OperationController.getPath('courses.label') ?: 'Courses'} <span
+                    class="moduleCount">
+                ${mcs.Course.count()}
+            </span>
+            </h4>
+
+            <div>
+                <ul>
+                    <g:render template="/layouts/savedSearches" model="[entity: 'C']"/>
+                </ul>
+            </div>
+        </div>
+    </g:if>
+
+
+
+    <g:if test="${OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <div class="panelCard">
     <h4>
             <span class="K-bkg"
@@ -246,39 +279,7 @@
     </div>
 </g:if>
 
-<g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">
-<div class="panelCard">
 
-    <h4>
-
-            <span class="N-bkg"
-                  style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">N</span>
-            ${OperationController.getPath('notes.label') ?: 'Notes'}
-            <span class="moduleCount">${app.IndexCard.count()}</span>
-
-    </h4>
-
-    <div>
-        <ul>
-
-            %{--<li>--}%
-                    %{--<g:remoteLink controller="report" action="wordsForReview"--}%
-                                  %{--update="centralArea"--}%
-                                  %{--style=""--}%
-                                  %{--title="Review words">--}%
-                        %{--<g:message code="ui.anki"></g:message>--}%
-
-                    %{--</g:remoteLink>--}%
-
-            %{--</li>--}%
-
-
-            <g:render template="/layouts/savedSearches" model="[entity: 'N']"/>
-        </ul>
-
-    </div>
-    </div>
-</g:if>
 
 <g:if test="${OperationController.getPath('resources.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <div class="panelCard">

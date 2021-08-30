@@ -4,7 +4,6 @@
 <li>
           
             <g:set var="split" value="\\{"/>
-
             <g:set var="count"
                    value="${i.countQuery ? Task.executeQuery(i.countQuery)[0] : null}"/>
 
@@ -50,6 +49,4 @@
 </li>
     </g:each>
     </sec:ifAnyGranted>
-    
-    
 </g:if>

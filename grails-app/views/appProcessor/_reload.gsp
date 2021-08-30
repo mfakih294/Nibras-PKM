@@ -1,5 +1,6 @@
 
-<br/><br/>
+
+${message.encodeAsHTML()}
 
 <i style="color: green; font-weight: bold;">Done. Reloading...</i>
 
@@ -7,6 +8,6 @@
 
     setTimeout(function() {
                window.location.href = window.location;
-           }, 5 * 1000);
+           }, 2 * 1000);
 
 </script>

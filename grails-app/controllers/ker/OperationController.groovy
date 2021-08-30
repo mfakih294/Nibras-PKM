@@ -23,6 +23,7 @@ import app.parameters.Markup
 import app.parameters.ResourceType
 import cmn.Setting
 import grails.converters.JSON
+import groovy.io.FileType
 import mcs.*
 import mcs.parameters.*
 import grails.plugin.springsecurity.annotation.Secured
@@ -2144,17 +2145,20 @@ past.each(){
             def list = []
             
             
-            if (new File(OperationController.getPath('root.rps1.path') + '/scans/').exists()) {
-            
-            
-            list = new File(OperationController.getPath('root.rps1.path') + '/scans/')?.listFiles()?.sort()
+            if (new File(OperationController.getPath('root.rps1.path') + '/new/').exists()) {
+
+                //?.listFiles()?.sort()
+            new File(OperationController.getPath('root.rps1.path') + '/new/').eachFile (FileType.FILES) { file -> // Recurse
+                list << file
+            }
+                list = list.sort()
             
         def total = list.size()
         def extension = ''
         if (list.size() > 0) {
 
             def articleContent = list[params.id ? params.id?.toInteger() : 0].name;
-			println 'articleContent ' + articleContent
+//			println 'articleContent ' + articleContent
             extension = articleContent?.split(/\./)[1]
 //TODO: too long filename => file not found exception! w156
             def dateFound = ''
@@ -2196,10 +2200,10 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
 
           render(view: '/appProcessor/main', model: [list: list, id: params.id ?: 0, dateFound: dateFound, total: total, extension: extension, name: articleContent])
         }
-        else render ('Folder: '  + OperationController.getPath('root.rps1.path') + '/scans/' + ' is empty.')
+        else render ('Folder: '  + OperationController.getPath('root.rps1.path') + '/new/' + ' is empty.')
         
         }
-        else render ('Folder ' +OperationController.getPath('root.rps1.path') + '/scans/' + ' does not exist.')
+        else render ('Folder ' +OperationController.getPath('root.rps1.path') + '/new/' + ' does not exist.')
     }
 
 
@@ -2212,10 +2216,23 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
       session['lastCourse'] = params.courseId
 //            def course = params.command
 
-      if (params.command && params.command?.length() < 140) {
-          def list = new File(OperationController.getPath('root.rps1.path') + '/scans/').listFiles().sort()
-          def extension = fileName?.split(/\./)[1]
-          def result = command[0].toLowerCase() + ' ' +
+      def ant = new AntBuilder()
+      def list = new File(OperationController.getPath('root.rps1.path') + '/new/').listFiles().sort()
+      def extension = fileName?.split(/\./)[1]
+
+      def result
+
+      if (params.command && params.command?.length() > 0 && params.type == 'Group') {
+          result = command.trim()
+          ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') +
+                  '/' + result + '/' + fileName)
+//          render
+          render(template: '/appProcessor/reload', model: [message: 'Moved to folder: ' +
+                  OperationController.getPath('root.rps1.path') + '/' + result + '/' + fileName + ''])
+      }
+      else if (params.command && params.command?.length() < 140 && params.type == 'New') {
+
+          result = command[0].toLowerCase() + ' ' +
                   ' p' + command[1].toLowerCase() +
                   (params.courseId != 'null' ? ' C' + params.courseId : '') +
                   ' d' + command[2].toLowerCase() +
@@ -2225,18 +2242,12 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
           result = result.trim()
 
 
-          def ant = new AntBuilder()
-          if (params.type == 'New') {
-              ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') + '/' + result + '.' + extension)
-              render '<br/><br/><b></b>File has been moved to <b>: ' +
-                      OperationController.getPath('root.rps1.path') + '/' + result + '</b>'
 
-          } else if (params.type == 'Group') {
-              ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') +
-                      '/' + result + '/' + fileName)
-              render ' <b></b>File has been moved to folder <br/><br/><b> ' +
-                      OperationController.getPath('root.rps1.path') + '/' + result + '/' + fileName + '</b>'
-          }
+//          if () {
+              ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') + '/' + result + '.' + extension)
+
+
+//          }
 
 //          render(5)
 //          sleep(1000)
@@ -2249,8 +2260,21 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
 //          render(1 + ' ')
 //          sleep(1000)
 
-          render(template: '/appProcessor/reload')
-      } else render 'No text entered, or text too long.'
+          render(template: '/appProcessor/reload', model: [message: 'Moved to: ' +
+                  OperationController.getPath('root.rps1.path') + '/' + result + ''])
+      }
+      else if (params.type == 'Delete') {
+          //new File(filePath).delete()
+
+          ant.move(file: filePath, tofile: OperationController.getPath('root.rps1.path') +
+                  '/DELETED/' + fileName)
+//          render
+          render(template: '/appProcessor/reload', model: [message: 'Moved to folder: ' +
+                  OperationController.getPath('root.rps1.path') + '/DELETED/' + fileName + ''])
+
+//          render(template: '/appProcessor/reload', model: [message:'File deleted.'])
+      }
+      else render 'No text entered, or text too long.'
     }
 
 

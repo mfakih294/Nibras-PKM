@@ -213,8 +213,21 @@ class PkmTagLib {
 <a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
                           target="_blank"
                           title="${i.path}">
+"""
+if (i.isFile()){
+                output += """
 <img src='${resource(dir: '/file-icons/32px', file: "${extension}.png")}' style="width: 32px;"
                                      title=""/>
+"""
+}
+else {
+                output += """
+<img src='${resource(dir: '/file-icons/32px', file: "directory.png")}' style="width: 32px;"
+                                     title=""/>
+"""
+
+}
+                output +=  """
                                      <span style="font-size: small; color: gray;" title="${i.path?.replace(i.name, '')}">
 ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
 </span>${i.name}

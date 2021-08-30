@@ -15,8 +15,9 @@
         <a href="${request.contextPath}/report/customReport1" style="" target="_blank">
         Paintings and sculptures report
         </a>
+    <br/>
         </g:if>
-        <br/>
+
 
         <g:render template="/layouts/modulesAccordion"/>
 

@@ -511,6 +511,13 @@
             jQuery('#command').focus();
         });
 
+
+     $(document).ready(function() {
+         $('video').prop('muted',true).play();
+         $('audio').play();
+     });
+
+
     </script>
 
 </head>
@@ -521,19 +528,21 @@
     <img src="${resource(dir: '/images', file: 'Eclipse-1.4s-200px.gif')}" alt="Spinner2"
          style="z-index: 10000 !important"/>
 </div>
+
 <div class="ui-layout-center" style="margin-top: 2px !important; margin-bottom: 2px !important; background: none; overflow: auto;">
     <table>
         <tr>
             <td style="vertical-align: top; width: 99%;">
-                <h2>Processing: <u><${list[id?.toInteger()].name}</u></h2>
+                <h2>Processing: <u>${list[id?.toInteger()].name}</u></h2>
 
                 <div id="scannedPage">
-
+                    <br/>
                 </div>
 
                 <div style="border: 1px solid darkgray; padding: 3px; margin: 3px;">
 
-  <g:formRemote name="qedit" url="[controller: 'operation', action:'saveScanForm']" update="scannedPage" method="post">
+  <g:formRemote name="qedit" url="[controller: 'operation', action:'saveScanForm']"
+                update="scannedPage" method="post">
 
     <div class="dialog">
 
@@ -557,10 +566,7 @@
 
 
                 <td valign="top" class="value">
-                        Type:
-                    <g:select name="type" class="ui-corner-all" style="width: 100px;"
-                              from="${['New', 'Group', 'Delete']}"
-                              value="${session['lastType'] ?: 'New'}"/>
+
                   <span style="float: right">
                     <i>Date found: ${dateFound}</i>
                     </span>
@@ -580,9 +586,14 @@
             </tr>
             <tr>
                 <td colspan="3" valign="top" class="value">
+                    Type:
+                    <g:select name="type" class="ui-corner-all" style="width: 100px;"
+                              from="${['New', 'Group', 'Delete']}"
+                              value="${session['lastType'] && session['lastType'] != 'Delete' ? session['lastType'] : 'New'}"/>
+
                     Text * (e.g. N3A ...)
                     <g:textField
-                            id="command" style="width: 85% !important;"  name="command" class="longInput ui-corner-all"
+                            id="command" style="width: 65% !important;"  name="command" class="longInput ui-corner-all"
                         placehoder="type-priority-dept (optional description)"
                             value="${session['lastType'] == 'Group' ? session['lastCommand'] : (extension != 'jpg' ? name: '')}"/>
 %{--                    list[0].name?.substring(16, list[0].name?.length() - 4)--}%
@@ -630,22 +641,26 @@ Files:
     </div>
       </g:if>
   <g:if test="${'jpg,png,bmp,jpeg,webp'.contains(extension)}">
-    <img style="display:block;"
+    <img style="display:block;  max-height: 600px !important; max-width: 900px !important;"
          src="${createLink(controller: 'operation', action: 'viewScan'
                  , params: [name: list[id?.toInteger()].path])}"/>
       </g:if>
 
       <g:if test="${'mp4,mkv,avi'.contains(extension)}">
-     <video width="320" height="240" controls
+          <center>
+     <video width="620" height="400" controls autoplay="autoplay"
                  source src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}">
               Your browser does not support the video tag.
           </video>
+          </center>
       </g:if>
       <g:if test="${'mp3,aud,'.contains(extension)}">
-     <audio width="320" height="240" controls
+          <center>
+     <audio width="320" height="240" controls autoplay="autoplay"
                  source src="${createLink(controller: 'operation', action: 'viewScan', params: [name: list[id?.toInteger()].path])}">
-              Your browser does not support the video tag.
+              Your browser does not support the audio tag.
           </audio>
+          </center>
       </g:if>
 
 

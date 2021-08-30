@@ -23,7 +23,10 @@
   //         }
   // );
 
-  jQuery.achtung({message: "${message}", timeout: 2, animateClassSwitch: true, showEffectDuration: 500, hideEffectDuration: 700});
+  jQuery.achtung({message: "${message}", timeout: 3,
+    animateClassSwitch: true,
+    showEffectDuration: 500,
+    hideEffectDuration: 1000});
 
 
 

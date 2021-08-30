@@ -675,7 +675,7 @@ class SyncController {
             def c = 0
             def n = new mcs.Journal()
             n.summary = new Date().format('dd.MM.yyyy HH:mm') + ' k'
-            n.description = data?.replace('::', ':\n')
+            n.description = data?.replace('::', '')
             n.type = JournalType.findByCode('usr')
             n.startDate = new Date()
 
@@ -684,7 +684,6 @@ class SyncController {
 
             json = builder.build {
                 result = 'Note saved.'
-
             }
         } else {
             json = builder.build {

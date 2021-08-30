@@ -333,6 +333,12 @@ class IndexCardController { // entity id = 16
     def addXcdFormDaftar() {
         if (params.title || params.description) {
 
+            if (params.title)
+            params.title = params.title.trim()
+
+            if (params.description)
+            params.description = params.description.trim()
+
             /*
 
             def f = new File('/mhi/xcd-add-' + new Date().format('dd.MM.yyyy') + '.txt')
@@ -396,7 +402,10 @@ class IndexCardController { // entity id = 16
                 n = new mcs.Book()
                 n.title = params.title//extractTitleReturn(params.description)
                 n.fullText = params.description //extractDescriptionReturn(params.description)
-                n.type = ResourceType.findByCode((OperationController.getPath('resource.add.type.default') ?: 'nws'))
+                if (params.resourceType && params.resourceType != 'null')
+                n.type = ResourceType.get(params.resourceType.toLong())
+                else
+                    n.type =  ResourceType.findByCode((OperationController.getPath('resource.add.type.default') ?: 'nws'))
 //                n.status = WorkStatus.findByCode('pending')
                 n.save()
             }
@@ -412,24 +421,25 @@ class IndexCardController { // entity id = 16
 
 
         render(template: "/gTemplates/recordSummary", model: [record: n])
+            render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 
 
             def recentRecords = []
-            allClassesWithCourses.each() {
-                recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
-                //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
-            }
+//            allClassesWithCourses.each() {
+//                recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
+//                //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
+//            }
 
             recentRecords = recentRecords.sort({ it.dateCreated })//.reverse()
             //recentRecords.unique()
-            if (recentRecords.size() > 0)
-                render(template: '/gTemplates/recordListing', model: [
-                        title: '',
-                        list : recentRecords - n
-                ])
+
+//            if (recentRecords.size() > 0)
+//                render(template: '/gTemplates/recordListing', model: [
+//                        title: '',
+//                        list : recentRecords - n
+//                ])
 
 
-        render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 //            render('<i style="font-size: tiny">' + params.description + '</i>')
         } else {
 //            render 'No content entered.'

@@ -36,7 +36,7 @@
                         <g:hiddenField name="name" value="${i.name}"></g:hiddenField>
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
-                        <g:hiddenField name="rootPath" value="${rootPath}"></g:hiddenField>
+                        <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
                         <g:actionSubmit value="import"/>
                         <script>
                             jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
@@ -67,7 +67,7 @@
                         <g:hiddenField name="name" value="r #doc -- ${i.name}"></g:hiddenField>
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
-                        <g:hiddenField name="rootPath" value="${rootPath}"></g:hiddenField>
+                        <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
                         <g:actionSubmit value="import"/>
                     </g:formRemote>
                 </div>
@@ -93,7 +93,7 @@
                         <g:hiddenField name="name" value="${i.name}"></g:hiddenField>
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
-                        <g:hiddenField name="rootPath" value="${rootPath}"></g:hiddenField>
+                        <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
                         <g:actionSubmit value="add"/>
                         <script>
                             jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
@@ -122,7 +122,7 @@
                         <g:hiddenField name="name" value="r #doc -- ${i.name}"></g:hiddenField>
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
-                        <g:hiddenField name="rootPath" value="${rootPath}"></g:hiddenField>
+                        <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
                         <g:actionSubmit value="add"/>
                     </g:formRemote>
                 </div>
@@ -154,7 +154,7 @@
                             <g:hiddenField name="name" value="${i.name}"></g:hiddenField>
                             <g:hiddenField name="smart" value="yes"></g:hiddenField>
                             <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
-                            <g:hiddenField name="rootPath" value="${rootPath}"></g:hiddenField>
+                            <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
                             <g:actionSubmit value="import"/>
                             <script>
                                 jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {

@@ -231,6 +231,8 @@
     </sec:ifAnyGranted>
 </sec:ifLoggedIn>
 
+<g:set var="customId"
+       value="${new Date().format('hhmmss')}"/>
 
 
 <script type="text/javascript">
@@ -239,4 +241,14 @@ jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelecti
 %{--jQuery('#editFileCount').load('${request.contextPath}/page/editHeartbeat');--}%
 %{--jQuery('#recentRecordsCount').load('${request.contextPath}/generics/countRecentRecords');--}%
 
+//jQuery(document).ready(function () {
+    %{--document.getElementsByClassName("prevLink")[0].className = "prevLink${customId}";--}%
+    document.getElementsByClassName("nextLink")[0].className = "nextLink${customId}";
+
+    Mousetrap.bind('right', function (e) {
+        jQuery(".nextLink${customId}").click()
+    });
+
+
+//});
 </script>

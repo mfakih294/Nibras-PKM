@@ -2,6 +2,8 @@
 
 %{--<a style="font-size: smaller; color: gray; margin-buttom: 5px; float: right;" onclick="jQuery('#commandBars').removeClass('navHidden')">+script&nbsp; </a>--}%
 
+<div id="hintAreaOneAtATime" style="font-size: 12px; padding: 0px; margin: 0px; "></div>
+
 <div id="commandBars">
     %{--<a onclick="jQuery('#commandBars').addClass('navHidden')" style="font-size: smaller; color: gray; float: right;">Hide &nbsp;</a>--}%
     <div id="top"></div>
@@ -66,12 +68,19 @@
                 %{--dir="rtl"--}%
 
 
+                %{--before one-at-a-time command execution--}%
+                %{--onkeyup="if (jQuery('#quickAddTextField').val().search(';')== -1){jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))}"--}%
+                %{--onblur="jQuery('#hintAreaOneAtATime').html('')"--}%
+
+
+
+
                 <g:textArea cols="120" rows="5" name="block" id="quickAddTextField"
                             autocomplete="off"
                             onkeydown="localStorage['myscratch'] = jQuery('#quickAddTextField').val();"
-                            onkeyup="if (jQuery('#quickAddTextField').val().search(';')== -1){jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))}"
-                            onfocus="jQuery('#hintArea').load('${createLink(controller: 'generics', action: 'commandBarAutocomplete')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))"
-                            onblur="jQuery('#hintArea').html('')"
+                            onkeyup="if (jQuery('#quickAddTextField').val().search(';')== -1){jQuery('#hintAreaOneAtATime').load('${createLink(controller: 'generics', action: 'commandBarAutocompleteOneAtATime')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))}"
+                            onfocus="jQuery('#hintAreaOneAtATime').load('${createLink(controller: 'generics', action: 'commandBarAutocompleteOneAtATime')}?hint=1&q=' + encodeURIComponent(jQuery('#quickAddTextField').val()))"
+
                             class="commandBarTexField"/>
                 <div id="quickAddTextFieldInfoNotes" style="color: darkgreen; font-size: normal; font-style: italic; padding: 5px 5px; display: inline-block"></div>
             </td>
