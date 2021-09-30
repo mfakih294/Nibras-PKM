@@ -323,10 +323,11 @@ class IndexCardController { // entity id = 16
                     }
                 }
             }
+            n.summary = new Date()?.format('EEE dd MMM, yyyy HH:mm')
             n.save()
             render(template: "/gTemplates/recordSummary", model: [record: n])
         } else {
-            render 'No description entered'
+            render 'No text entered.'
         }
     }
 

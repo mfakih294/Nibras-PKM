@@ -177,3 +177,7 @@ war {
 
 
 
+// for development on Windows only
+grails {
+    pathingJar = true
+}

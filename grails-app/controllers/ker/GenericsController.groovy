@@ -502,18 +502,71 @@ YellowGreen;#9ACD32"""
         def prefix = params.prefix //?: (prefixRecord.description ?: '')
 //        println ' params.forEachLine ' + (params.forEachLine != 'null' ? 'on' : 'off')
 //        println ' params.prefix ' + params.prefix
-        if (!prefix.startsWith('A')){//.forEachLine != 'null') {
+        def index = 1
+        if (!prefix && block?.contains('***')){
+            block?.replace('--', ' -- ')?.split(/\*\*\*/).each() {
+                if (it.trim() != '')
+                    if (params.verifyMode != 'on') {
+                        render '#' + index++
+                        batchAdd(it?.trim())
+                    }
+                else {
+                        render(template: '/layouts/verification', model:
+                                [line: it?.trim(), status: verifySmartCommand(it?.trim()), index: index++]) // prefix + ' ' +
+                    }
+            }
+        }
+            else if (!prefix && !block?.contains('***')){
+            block?.replace('--', ' -- ')?.split('\n').each() {
+                if (it.trim() != '')
+                    if (params.verifyMode != 'on') {
+                        render '#' + index++
+                        batchAdd(it?.trim())
+                    }
+                    else {
+//                        render '>>' + it
+                        render(template: '/layouts/verification', model:
+                                [line: it?.trim(), status: verifySmartCommand(it?.trim()), index: index++]) // prefix + ' ' +
+                    }
+            }
+        }
+        else if (prefix && !prefix.startsWith('A')){//.forEachLine != 'null') {
             block?.replace('--', ' -- ')?.eachLine() {
                 if (it.trim() != '' && !it.startsWith('//'))
-                    batchAdd(prefix?.replace('--', ' -- ') + it)
-            }
-        } else
-            batchAdd(prefix?.replace('--', ' -- ') + block.trim())
 
+                    if (params.verifyMode != 'on') {
+                        render '#' + index++
+                        batchAdd(prefix?.replace('--', ' -- ') + it?.trim())
+                    }
+                    else {
+                        render(template: '/layouts/verification', model:
+                                [line: prefix?.replace('--', ' -- ') + it?.trim(),
+                                 status: verifySmartCommand(prefix?.replace('--', ' -- ') + it?.trim()), index: index++]) // prefix + ' ' +
+                    }
+
+
+
+            }
+        } else if (prefix.startsWith('A')) {
+
+            if (params.verifyMode != 'on') {
+                batchAdd(prefix?.replace('--', ' -- ') + block.trim())
+            }
+            else {
+                render(template: '/layouts/verification', model:
+                        [line: prefix?.replace('--', ' -- ') + it?.trim(),
+                         status: verifySmartCommand(prefix?.replace('--', ' -- ') + it?.trim()), index: index++]) // prefix + ' ' +
+            }
+        }
+
+        else
+            render 'No action performed.'
         // block.split(/\*\*\*/).each() { region ->
         //              addWithDescription(region?.trim())
         //          }
         render ''
+
+
     }
 
     def batchAdd(String block) {
@@ -608,12 +661,13 @@ YellowGreen;#9ACD32"""
     def commandBarAutocompleteOneAtATime() {
 
         def input = params.q.trim()
+//        def prefix = params.prefix.trim()
         def entityCode
         def hintResponce = ''
         def responce = ''
 //        def hint = (params.hint == '1')
 //        println 'size ' + input.length()
-        render(template: '/layouts/hintsOneAtATime', model: [hints: input])
+        render(template: '/layouts/hintsOneAtATime', model: [hints: input]) // prefix + ' ' +
     }
 
   def commandBarAutocomplete() {
@@ -5514,9 +5568,9 @@ def addTagToAll(String input) {
 
     }
 
-    def verifySmartCommand(String line) {
+    String verifySmartCommand(String line) {
         def properties
-
+//println 'line ' + line
         try {
             if (line.length() > 2) {
                 properties = transformMcsNotation(line.substring(2))['properties']
@@ -5528,22 +5582,21 @@ def addTagToAll(String input) {
 //                } else {
                     n.properties = properties
                     if (!n.validate()) {
-                        render('wrongCommand')
-//                    println('record has error')
+                        return ('wrongCommand')
+                    println('record has error')
                     } else
-                        render("correctCommand")
+                        return ("correctCommand")
+                    println('record has no error')
                 }
             } else {
                 render ''
             }
         } catch (Exception e) {
-            render("wrongCommand")
+            return("wrongCommand")
             //    e.printStackTrace()
             //return
         }
         //render("correct")
-
-
     }
 
 

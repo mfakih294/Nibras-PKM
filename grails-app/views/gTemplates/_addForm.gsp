@@ -963,9 +963,9 @@
                 <g:checkBox name="calendarEnabled" value="${record?.calendarEnabled}"/> Calendar enabled?
                 </td>
             </g:if>
-            <g:if test="${fields.contains('onMobile')}">
+            <g:if test="${fields.contains('onHomepage')}">
                 <td>
-                    <g:checkBox name="onMobile" value="${record?.onMobile}"/> For mobile?
+                    <g:checkBox name="onMobile" value="${record?.onHomepage}"/> On homepage?
                 </td>
             </g:if>
 

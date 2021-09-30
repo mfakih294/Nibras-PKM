@@ -68,70 +68,12 @@
             <div id="centralArea" class="common" style="">
 %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
 <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>
+
             </div>
 %{--                <div id="centralArea" class="common" style="">--}%
 
 %{--                </div>--}%
-<g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
-                <h4>Quick add records</h4>
-                <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
-                              url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
-                              update="centralArea"
-                              onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
-                              method="post">
-
-                %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
-                %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
-                %{--</code>--}%
-
-                    <g:select name="type" from="${types}"
-                              id="typeField"
-                              tabindex="1"
-                               optionKey="id"
-                                  optionValue="name"
-                              value=""/>
-                    <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                    <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
-                              optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
-                        </g:if>
-
-                    <g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"
-                              value="${OperationController.getPath('default.language')}"
-                    />
-
-
-
-
-
-
-                    <g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                              <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
-                                  optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>
-                        </g:if>
-
-
-
-                    <g:textField name="title" value=""
-                                 tabindex="2" id="summayDaftar"
-                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
-                                 placeholder="Summary * "/>
-
-                    <g:submitButton name="save" value="Add (Shift+F2)"
-                                    style="text-align: center; padding-left: 8px; padding-right: 8px; width: 90px"
-                                    tabindex="4"
-                                    id="addXcdFormDaftarSubmit"
-                                    class="fg-button ui-widget ui-state-default"/>
-
-  <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
-                                tabindex="3"
-                                name="description" id="descriptionDaftar"
-                                value=""
-                                style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
-                </g:formRemote>
-
-
-    </g:if>
 
                 %{--<div id="subDaftarArea">--}%
 %{----}%
@@ -153,7 +95,9 @@
 
 
                     %{--                    render(template: '/reports/heartbeat', model: [dates: dates])--}%
-%{--                <g:render template='/reports/homepageSavedSearches'/>--}%
+
+
+
 
 
                 %{--</span>--}%
@@ -181,6 +125,67 @@
             <div id="2" class="common" style="">
                 <div id="inner2" class="common" style="">
                     %{--<g:render template='/reports/homepageSavedSearches'/>--}%
+
+                    <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
+
+                        <h4>Quick add records</h4>
+                        <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
+                                      url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
+                                      update="centralArea"
+                                      onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
+                                      method="post">
+
+                        %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
+                        %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
+                        %{--</code>--}%
+
+                            <g:select name="type" from="${types}"
+                                      id="typeField"
+                                      tabindex="1"
+                                      optionKey="id"
+                                      optionValue="name"
+                                      value=""/>
+                            <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                                <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+                                          optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+                            </g:if>
+
+                            <g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"
+                                      value="${OperationController.getPath('default.language')}"
+                            />
+
+
+
+
+
+
+                            <g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                                <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
+                                          optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>
+                            </g:if>
+
+
+
+                            <g:textField name="title" value=""
+                                         tabindex="2" id="summayDaftar"
+                                         style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
+                                         placeholder="Summary * "/>
+
+                            <g:submitButton name="save" value="Add (Shift+F2)"
+                                            style="text-align: center; padding-left: 8px; padding-right: 8px; width: 90px"
+                                            tabindex="4"
+                                            id="addXcdFormDaftarSubmit"
+                                            class="fg-button ui-widget ui-state-default"/>
+
+                            <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                                        tabindex="3"
+                                        name="description" id="descriptionDaftar"
+                                        value=""
+                                        style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
+                        </g:formRemote>
+
+
+                    </g:if>
 
                 </div>
     <sec:ifAnyGranted roles="ROLE_ADMIN">
@@ -212,6 +217,10 @@
 
             <div id="3" class="common" style="">
                 <div id="inner3" class="common" style="">
+
+                    <h3>Saved searches</h3>
+                    <g:render template='/reports/homepageSavedSearches'/>
+
                 </div>
                 %{--before="jQuery('#testTitle3').text('[3]: ' + jQuery('#testField3').val());"--}%
     <sec:ifAnyGranted roles="ROLE_ADMIN">
@@ -242,7 +251,7 @@
 
                 <g:if test="${OperationController.getPath('advanced-panel.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <h6 id="h64"><a href="#" id="testTitle4">
-            Scratch panel
+            Batch entry panel
         </a></h6>
 
             <div id="4d" class="common" style="">
@@ -377,6 +386,8 @@
                          class=""/>
 
         </g:formRemote>
+
+
         %{--</sec:ifAnyGranted>--}%
         %{--if (jQuery('#quickAddTextFieldBottomTop').val().search('--')== -1){--}%
         %{--<div style="-moz-column-count: 3; -webkit-column-count:3">--}%

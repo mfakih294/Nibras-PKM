@@ -673,11 +673,11 @@ class SyncController {
         def data = request.JSON.data
         if (data && data?.trim() != '') {
             def c = 0
-            def n = new mcs.Journal()
-            n.summary = new Date().format('dd.MM.yyyy HH:mm') + ' k'
+            def n = new app.IndexCard()//mcs.Journal()
+            n.summary = 'Notes on ' + new Date().format('EEE dd MMM yyyy HH:mm')
             n.description = data?.replace('::', '')
-            n.type = JournalType.findByCode('usr')
-            n.startDate = new Date()
+//            n.type = JournalType.findByCode('usr')
+            n.writtenOn = new Date()
 
             n.bookmarked = true
             n.save(flush: true)

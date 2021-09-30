@@ -1373,13 +1373,15 @@ x
 <g:if test="${OperationController.getPath('open-record-folders.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <br/>
 <br/>
-Open record's folder in repository:
+
+    <div style="background: #e7eeeb; border: 1px #7dba82; margin: 20px 0">
+Open record's folder:
 &nbsp;
 <g:remoteLink controller="generics" action="openRpsFolder"
               params="${[id: record.id, entityCode: entityCode, repository: 1]}"
               update="${entityCode}Record${record.id}OpenLog"
               title="Open rps1 folder: ${OperationController.getPath('root.rps1.path')}">
-    <u><b>&nbsp;1&nbsp;</b></u>
+    <u><b>&nbsp; repo. 1&nbsp;</b></u>
 </g:remoteLink>
 /
 <g:remoteLink controller="generics" action="openRpsFolder"
@@ -1400,27 +1402,33 @@ Open record's folder in repository:
         <g:if test="${record.nbFiles}">
         %{--<g:if test="${record.nbFiles}">--}%
             <br/>
-            <br/>
-            <b> Nb files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
+
+            <b> Number of files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
         </g:if>
+            <br/>
+            <br/>
         <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}" params="[entityCode: entityCode]"
                       update="${entityCode}Record${record.id}OpenLog" style=""
                       title="Update files count">
-            <b>&circlearrowright;</b>
+            Update count <b>&circlearrowright;</b>
         </g:remoteLink>
                          &nbsp;
                 <g:remoteLink controller="operation" action="copyToRps1"
                               params="${[id: record.id, entityCode: entityCode]}"
                               update="${entityCode}Record${record.id}OpenLog"
                               title="Copy files from rps2 (${OperationController.getPath('root.rps2.path')}) to rps1 (${OperationController.getPath('root.rps1.path')})">
-                 <b>   &darr;
+                Out <b>   &darr;
                     &darr;</b>
                 </g:remoteLink>
         <br/>
         <br/>
         &nbsp;<span id="${entityCode}Record${record.id}OpenLog"></span>
-    </g:if>
+
 </g:if>
+</g:if>
+</div>
+
+    <br/>
 %{--&nbsp;/--}%
 %{--&nbsp;--}%
 <g:if test="${1 == 2}">
@@ -1442,8 +1450,8 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
 
 
 
-
-    <b>Updated</b> ${record.lastUpdated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
+<div style="background: #cee2db; border: 1px #206e24">
+<b>Updated</b> ${record.lastUpdated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
 %{--(<prettytime:display--}%
         %{--date="${record.lastUpdated}"/>)--}%
     <br/>
@@ -1451,11 +1459,13 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
     %{--date="${record.dateCreated}"/>)--}%
     %{--by ${record.insertedBy}--}%
     %{--editedBy ${record.editedBy}--}%
-    <b>Created</b> ${record.dateCreated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
+<b>Created</b> ${record.dateCreated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
 %{--(${new PrettyTime()?.format(record.dateCreated)})--}%
     <br/>
-    <b>Version</b> <span style="font-weight: normal">${record.version}</span>
+<b>Version</b> <span style="font-weight: normal">${record.version}</span>
     <br/>
+
+</div>
     <br/>
 </div>
 
