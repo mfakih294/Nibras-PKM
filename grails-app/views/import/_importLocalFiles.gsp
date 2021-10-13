@@ -50,6 +50,8 @@
                     ${i.name}
                 </span>
                 <br/>
+                <hr/>
+                <br/>
             </g:if>
 
 
@@ -75,6 +77,7 @@
                       id="${i.name.encodeAsMD5()}">
                     ${i.name}
                 </span>
+                <hr/>
                 <br/>
             </g:if>
 
@@ -105,6 +108,7 @@
                 <span style="display: inline; font-family: monospace;"
                       id="${i.name.encodeAsMD5()}">${i.name}
                 </span>
+                <hr/>
                 <br/>
             </g:if>
 
@@ -129,6 +133,7 @@
                 <span style="display: inline; font-family: monospace;"
                       id="${i.name.encodeAsMD5()}">${i.name}
                 </span>
+                <hr/>
                 <br/>
             </g:if>
         </g:each>
@@ -179,6 +184,7 @@
             <g:else>
                 <i style="color: red">Setting name 'root.rps${r}.path' is not defined or folder does not exit.
                 </i>
+                <hr/>
                 <br/>
             </g:else>
 </g:each>

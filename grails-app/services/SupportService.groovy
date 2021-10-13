@@ -14,6 +14,7 @@ import cmn.Setting
 import ker.OperationController
 import mcs.Book
 import mcs.Course
+import mcs.Task
 import mcs.parameters.ResourceStatus
 
 //import mcs.parameters.Writing
@@ -644,6 +645,38 @@ class SupportService {
         Date.parse("yyyy-MM-dd HH:mm", year + '-' + (c.get(Calendar.MONTH) + 1) + '-' + c.get(Calendar.DATE) + ' ' + time)
         //        return c.get(Calendar.YEAR) + '-' + (c.get(Calendar.MONTH) + 1) + '-' + c.get(Calendar.DATE)
 
+    }
+
+
+    Task[] getOverdueTasks(){
+        def list =
+ Task.executeQuery('from Task where date(endDate) < current_date() and status.code != ? order by context asc',
+         ['done'])
+        return list
+//        return [Task.get(683)]
+    }
+     Task[] getTasksPile(){
+         def list =
+                 Task.executeQuery('from Task where endDate is null and bookmarked = ? order by context asc', [true])
+         return list
+    }
+     Task[] getTasksTodayInProgress(){
+         def list =
+                 Task.executeQuery('from Task where date(endDate) = current_date() and status.code = ? order by context asc',
+                 ['inp'])
+         return list
+    }
+     Task[] getTasksTodayCompleted(){
+         def list =
+                 Task.executeQuery('from Task where date(endDate) = current_date() and status.code = ? order by context asc',
+                         ['done'])
+         return list
+    }
+     Task[] getTasksTodayNotStarted(){
+         def list =
+                 Task.executeQuery('from Task where date(endDate) = current_date() and status.code != ? and status.code != ? order by context asc',
+                         ['inp', 'done'])
+         return list
     }
 
 

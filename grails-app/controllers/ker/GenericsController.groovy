@@ -203,7 +203,7 @@ class GenericsController {
  queryKey : queryKey,
  title    : entityCode + ': ' + count + ' results.'
  ])}*/
-        render '<h2>Searching titles...</h2>'
+        render '<h2>Search results...</h2><i>Add a space before the term(s) to search inside the contents of the records</i>.<br/>'
 
             [
                     [id: 'j', name: 'Journal', code: 'journal'],
@@ -217,10 +217,13 @@ class GenericsController {
                     [id: 'c', name: 'Course', code: 'courses']
             ].each(){
                 if (OperationController.getPath(it.code + '.enabled') == 'yes')
+                    if (input.startsWith(' '))
+                        findRecords(it.id + ' :: ' + params.input)
+                        else
                     findRecords(it.id + ' -- ' + params.input)
             }
-             render '<h2>Searching contents...</h2>'
-
+//             render '<h2>Searching contents...</h2>'
+/*
             [
                     [id: 'j', name: 'Journal', code: 'journal'],
                     [id: 'n', name: 'Note', code: 'notes'],
@@ -235,7 +238,7 @@ class GenericsController {
                 if (OperationController.getPath(it.code + '.enabled') == 'yes')
                     findRecords(it.id + ' :: ' + params.input)
             }
-
+*/
 //        } else if (input.startsWith('  ')) {
 //            luceneSearch('m ' + params.input)
 //        } else if (input.startsWith(' ')) {
@@ -910,7 +913,7 @@ fr"""
                             }
                                 break
                             case 'د':
-                            case 'Q': PaymentCategory.findAllByCodeLike(filter, [sort: 'name']).each() {
+                            case 'Q': PaymentCategory.findAllByCodeLike(filter, [sort: 'code']).each() {
                                 responce += ('' + it.name + '|' + finalPart + ' @' + it.code + '\n')
                                 hintResponce += ('' + it.code + '\n')
                             }
@@ -2775,10 +2778,12 @@ def markAsMarkdowned(Long id, String entityCode) {
                     break
                 case 'mcs.Planner':
                     statuses = WorkStatus.list([sort: 'name'])
-
                     goals = Goal.list([sort: 'summary'])
                     types = PlannerType.list([sort: 'name'])
+                    break
 
+                case 'app.Payment':
+                    categories = PaymentCategory.list([sort: 'code'])
                     break
 
                 case 'mcs.Journal':
@@ -3459,7 +3464,7 @@ def markAsMarkdowned(Long id, String entityCode) {
 //                n.properties = properties
                 if (!n.hasErrors() && n.save()) {
                     render(template: '/gTemplates/recordSummary', model: [
-                            record: n])
+                            record: n, justSaved: true, justSaved: true])
                 } else {
                     render 'Errors when saving the record<br/>'
                     render(template: '/gTemplates/recordSummary', model: [
@@ -3510,7 +3515,7 @@ def markAsMarkdowned(Long id, String entityCode) {
 
             if (!n.hasErrors() && n.save()) {
                 render(template: '/gTemplates/recordSummary', model: [
-                        record: n])
+                        record: n, justSaved: true])
             } else {
                 render 'Errors when saving the record<br/>'
                 render(template: '/gTemplates/recordSummary', model: [
@@ -3660,9 +3665,12 @@ def markAsMarkdowned(Long id, String entityCode) {
                 break
             case 'mcs.Planner':
                 statuses = WorkStatus.list([sort: 'name'])
-
                 types = PlannerType.list([sort: 'name'])
+                goals = Goal.list([sort: 'summary'])
+                break
 
+             case 'app.Payment':
+                categories = PaymentCategory.list([sort: 'code'])
                 break
 
             case 'mcs.Journal':
@@ -3706,7 +3714,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                     categories      : categories
             ])
         } else if (!n.hasErrors() && params.id && n.save(flush: true)) {
-            render(template: '/gTemplates/recordSummary', model: [savedOk: true, justUpdated: 1,
+            render(template: '/gTemplates/recordSummary', model: [savedOk: true, justUpdated: 1, justSaved: true,
                                                                   record : n])
 
         } else {
@@ -3892,12 +3900,10 @@ def markAsMarkdowned(Long id, String entityCode) {
 
             if (!record.hasErrors() && record.save()) {
                 render(template: '/gTemplates/recordSummary', model: [
-
-                        record: record])
+                        record: record, justSaved: true])
             } else {
                 render 'Errors when saving the record<br/>'
                 render(template: '/gTemplates/recordSummary', model: [
-
                         record: record])
                 record.errors.each() {
                     render it
@@ -3952,12 +3958,10 @@ def markAsMarkdowned(Long id, String entityCode) {
 
             if (!record.hasErrors() && record.save()) {
                 render(template: '/gTemplates/recordSummary', model: [
-
-                        record: record])
+                        record: record, justSaved: true])
             } else {
                 render 'Errors when saving the record<br/>'
                 render(template: '/gTemplates/recordSummary', model: [
-
                         record: record])
                 record.errors.each() {
                     render it
@@ -5582,9 +5586,11 @@ def addTagToAll(String input) {
 //                } else {
                     n.properties = properties
                     if (!n.validate()) {
+                        render ('wrongCommand')
                         return ('wrongCommand')
                     println('record has error')
                     } else
+                        render ("correctCommand")
                         return ("correctCommand")
                     println('record has no error')
                 }
@@ -5592,6 +5598,8 @@ def addTagToAll(String input) {
                 render ''
             }
         } catch (Exception e) {
+	 // todo : command line bar needs a render result! as it used javascript!
+            render("wrongCommand")
             return("wrongCommand")
             //    e.printStackTrace()
             //return

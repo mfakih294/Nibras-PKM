@@ -1,4 +1,27 @@
 <%@ page import="mcs.parameters.ResourceStatus; mcs.Goal; org.apache.commons.lang.StringUtils; mcs.Book; app.parameters.ResourceType; mcs.Writing; mcs.Department; mcs.parameters.WritingType; app.Tag; cmn.Setting; mcs.Course; mcs.Journal; mcs.Planner; app.IndexCard; mcs.Task; ker.OperationController" %>
+
+<style>
+
+    table th {
+        font-weight: bold;
+        font-size: large;
+    }
+    table td {
+        padding: 7px;
+    }
+
+    h2 {
+        color: darkgreen;
+        font-size: 1.3em;
+    }
+
+    h4 {
+        color: #0056b3;
+        font-size: 1.2em;
+        text-align: center;
+    }
+</style>
+
 %{--${ker.OperationController.getPath('app.headers.background') ?: '#5b7a59'}--}%
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
      style="">
@@ -28,7 +51,7 @@
 
 
 <div class="ui-layout-center appBkg"
-     style="margin-top: 2px !important; margin-bottom: 2px !important; background: white; width: 98% !important; overflow: auto"
+     style="margin-top: 2px !important; background: #f6f9f1; margin-bottom: 2px !important; width: 98% !important; overflow: auto"
      onmouseover="jQuery('#hintArea').html('')">
     %{--ToDo: display none?!--}%
     %{--<div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">--}%
@@ -56,6 +79,231 @@
 
         <div id="centralArea" class="common">
         %{--<h3>T / context</h3>--}%
+            <g:if test="${1 == 1}">
+                 <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
+                              url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
+                              update="underArea"
+                              onComplete="jQuery('#summayDaftar').val('');jQuery('#summayDaftar').select();;jQuery('#summayDaftar').focus();"
+                              method="post">
+
+                %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
+                %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
+                %{--</code>--}%
+&nbsp;
+&nbsp;
+&nbsp;
+
+                     <b>Add task</b>
+                     <br/>
+                     &nbsp;
+                     &nbsp;
+                    <g:select name="type" from="${['T', 'G']}"
+                              id="typeField"
+                              style="display: none;"
+                              tabindex="1"
+                              value="T"/>
+                    &nbsp;
+                    @<g:select name="context" id="context" from="${mcs.parameters.Context.list([sort: 'code', order: 'asc'])}"
+                              optionKey="id"
+                               style="width: 80px !important;"
+                               optionValue="code"/>
+                    &nbsp;
+   <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
+                              optionKey="id" class="chosen"
+             noSelection="${['null': 'Course...']}"
+             style="width: 300px !important;" optionValue="summary"/>
+                    &nbsp;
+
+                %{--        todo: parametric language list--}%
+
+                    <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="ar"
+                    />
+
+                    &nbsp;
+                    <g:textField name="title" value=""
+                                 tabindex="2" id="summayDaftar"
+                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma; font-size: 1em; min-width: 50% !important;"
+                                 placeholder="Summary * "
+                                 class=""/>
+                    <g:submitButton name="save" value="Add"
+                                    style="text-align: center; padding-left: 8px; padding-right: 8px;"
+                                    tabindex="4"
+                                    id="addXcdFormDaftarSubmit"
+                                    class="fg-button ui-widget ui-state-default"/>
+
+                %{--        <g:textArea cols="80" rows="12" placeholder="Description / full text ..."--}%
+                %{--                    tabindex="3"--}%
+                %{--                    name="description" id="descriptionDaftar"--}%
+                %{--                    value=""--}%
+                %{--                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>--}%
+                </g:formRemote>
+
+                <div id="underArea" class="common" style="margin: 12px 12px 30px 0px;">
+                    %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
+                </div>
+
+                <g:if test="${1 == 2}">
+
+                    <div style="column-count: ${OperationController.getPath('grouping.column.count') ?: 3}; background: #f9fbf4; padding: 5px;">
+
+
+
+                        <h2 style="text-align: left; font-size:larger; color: darkred;">Uncategorized
+                        (${mcs.Book.executeQuery('select count(*) from Goal p where p.bookmarked = 1 and p.course is null ',
+                        )[0] + mcs.Book.executeQuery('select count(*) from Task p where p.bookmarked = 1 and p.course is null ',
+                        )[0]+ mcs.Book.executeQuery('select count(*) from IndexCard p where p.bookmarked = 1 and p.course is null ',
+                        )[0]})</h2>
+
+                        <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.course is null order by p.priority desc')}"
+                                var="p">
+                            <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
+                        </g:each>
+
+                        <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.course is null  order by p.priority desc')}"
+                                var="p">
+                            <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
+                        </g:each>
+                        <g:each in="${mcs.Book.executeQuery('from IndexCard p where p.bookmarked = 1 and p.course is null  order by p.priority desc')}"
+                                var="p">
+                            <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
+                        </g:each>
+                    %{--                <g:each in="${mcs.Book.executeQuery('from Planner p where p.bookmarked = 1')}"--}%
+                    %{--                        var="p">--}%
+                    %{--                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
+                    %{--                </g:each>--}%
+                    %{--                <g:each in="${mcs.Book.executeQuery('from Journal p where p.bookmarked = 1')}"--}%
+                    %{--                        var="p">--}%
+                    %{--                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
+                    %{--                </g:each>--}%
+
+
+
+                        <g:each in="${courses}" var="d">
+                        %{--                    =${d?.code}--}%
+                            <h2 style="text-align: left; font-size:larger; color: darkred">${d.summary} (${mcs.Book.executeQuery('select count(*) from Goal p where p.bookmarked = 1 and p.course = ?',
+                                    [d])[0] + mcs.Book.executeQuery('select count(*) from Task p where p.bookmarked = 1 and p.course = ?',
+                                    [d])[0]+ mcs.Book.executeQuery('select count(*) from IndexCard p where p.bookmarked = 1 and p.course = ?',
+                                    [d])[0]})</h2>
+
+                        %{--                    <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.course = ? order by orderNumber asc',--}%
+                        %{--                            [d])}"--}%
+                        %{--                            var="p">--}%
+                        %{--                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>--}%
+                        %{--                    </g:each>--}%
+
+                            <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.course = ? order by p.priority desc',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
+                            </g:each>
+
+                            <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.course = ? order by p.priority desc',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
+                            </g:each>
+
+                            <g:each in="${mcs.Book.executeQuery('from IndexCard p where p.bookmarked = 1 and p.course = ? order by p.priority desc',
+                                    [d])}"
+                                    var="p">
+                                <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
+                            </g:each>
+                        %{--                    <g:each in="${mcs.Book.executeQuery('from Planner p where p.bookmarked = 1 and p.course = ?',--}%
+                        %{--                            [d])}"--}%
+                        %{--                            var="p">--}%
+                        %{--                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
+                        %{--                    </g:each>--}%
+                        %{--                    <g:each in="${mcs.Book.executeQuery('from Journal p where p.bookmarked = 1 and p.course = ?',--}%
+                        %{--                            [d])}"--}%
+                        %{--                            var="p">--}%
+                        %{--                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
+                        %{--                    </g:each>--}%
+                        %{--  <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.course = ? and p.priority >= 4',--}%
+                        %{--                            [d])}"--}%
+                        %{--                            var="p">--}%
+                        %{--                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
+                        %{--                    </g:each>--}%
+
+
+                        </g:each>
+
+                    </div>
+                </g:if>
+            </g:if>
+
+
+            <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
+                <thead>
+                <th>Todo</th>
+                <th colspan="3">Today</th>
+
+                </thead>
+            <tr>
+                <td></td>
+                <td>Not started</td>
+                <td>In progress</td>
+                <td>Completed</td>
+            </tr>
+                <tr>
+                    <td style="vertical-align: top">
+                        <br/>
+                        <h2>Overdue</h2>
+                        <br/>
+                        %{--<g:render template="/gTemplates/recordListing" model="[list: overdue ]"></g:render>--}%
+                        <g:each in="${overdue.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                            <g:each in="${overdue.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
+                        </g:each>
+                        <br/>
+                    <h2>Pile</h2>
+                        <br/>
+                        %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
+                        <g:each in="${pile.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                            <g:each in="${pile.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
+                        </g:each>
+                    </td>
+                    <td style="vertical-align: top">
+                             %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
+
+                        <g:each in="${notStarted.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                            <g:each in="${notStarted.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
+                        </g:each>
+
+                        </td>
+                    <td style="vertical-align: top">
+
+
+                        <g:each in="${inProgress.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                        <g:each in="${inProgress.grep{it.context == c}}" var="task" >
+                            <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                        </g:each>
+                        </g:each>
+
+
+                    </td>
+                    <td style="vertical-align: top">
+                             %{--<g:render template="/gTemplates/recordListing" model="[list: completed ]"></g:render>--}%
+                        <g:each in="${completed.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                            <g:each in="${completed.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
+                        </g:each>
+
+                    </td>
+                </tr>
+            </table>
+
+
             <g:if test="${1 == 2}">
                 <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
                     <thead>
@@ -163,151 +411,7 @@
 
                 </table>
             </g:if>
-<g:if test="${1 == 1}">
-</br>
 
-    <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
-                  url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
-                  update="centralArea"
-                  onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus();"
-                  method="post">
-&nbsp;
-    %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
-    %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
-    %{--</code>--}%
-
-        <g:select name="type" from="${['T', 'G']}"
-                  id="typeField"
-                  tabindex="1"
-                  value="T"/>
-        &nbsp;
-        <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
-                  optionKey="id" class="chosen" style="width: 350px !important;" optionValue="summary"/>
-        &nbsp;
-
-    %{--        todo: parametric language list--}%
-
-        <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="en"
-        />
-
-        &nbsp;
-        <g:textField name="title" value=""
-                     tabindex="2" id="summayDaftar"
-                     style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 60% !important;"
-                     placeholder="Summary * "
-                     class=""/>
-
-
-
-
-
-        <g:submitButton name="save" value="Add"
-                        style="text-align: center; padding-left: 8px; padding-right: 8px;"
-                        tabindex="4"
-                        id="addXcdFormDaftarSubmit"
-                        class="fg-button ui-widget ui-state-default"/>
-
-%{--        <g:textArea cols="80" rows="12" placeholder="Description / full text ..."--}%
-%{--                    tabindex="3"--}%
-%{--                    name="description" id="descriptionDaftar"--}%
-%{--                    value=""--}%
-%{--                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>--}%
-    </g:formRemote>
-
-    <br/>
-
-    <div id="centralArea" class="common" style="">
-        %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
-    </div>
-
-    <br/>
-
-
-            <div style="column-count: ${OperationController.getPath('grouping.column.count') ?: 3}; background: #f9fbf4; padding: 5px;">
-
-
-
-                <h2 style="text-align: left; font-size:larger; color: darkred;">Uncategorized
-                (${mcs.Book.executeQuery('select count(*) from Goal p where p.bookmarked = 1 and p.course is null ',
-                )[0] + mcs.Book.executeQuery('select count(*) from Task p where p.bookmarked = 1 and p.course is null ',
-                )[0]+ mcs.Book.executeQuery('select count(*) from IndexCard p where p.bookmarked = 1 and p.course is null ',
-                )[0]})</h2>
-
-                <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.course is null order by p.priority desc')}"
-                        var="p">
-                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
-                </g:each>
-
-                <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.course is null  order by p.priority desc')}"
-                        var="p">
-                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
-                </g:each>
-                <g:each in="${mcs.Book.executeQuery('from IndexCard p where p.bookmarked = 1 and p.course is null  order by p.priority desc')}"
-                        var="p">
-                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
-                </g:each>
-            %{--                <g:each in="${mcs.Book.executeQuery('from Planner p where p.bookmarked = 1')}"--}%
-            %{--                        var="p">--}%
-            %{--                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
-            %{--                </g:each>--}%
-            %{--                <g:each in="${mcs.Book.executeQuery('from Journal p where p.bookmarked = 1')}"--}%
-            %{--                        var="p">--}%
-            %{--                    <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
-            %{--                </g:each>--}%
-
-
-
-                <g:each in="${courses}" var="d">
-%{--                    =${d?.code}--}%
-                    <h2 style="text-align: left; font-size:larger; color: darkred">${d.summary} (${mcs.Book.executeQuery('select count(*) from Goal p where p.bookmarked = 1 and p.course = ?',
-                            [d])[0] + mcs.Book.executeQuery('select count(*) from Task p where p.bookmarked = 1 and p.course = ?',
-                            [d])[0]+ mcs.Book.executeQuery('select count(*) from IndexCard p where p.bookmarked = 1 and p.course = ?',
-                            [d])[0]})</h2>
-
-%{--                    <g:each in="${mcs.Book.executeQuery('from Course p where p.bookmarked = 1 and p.course = ? order by orderNumber asc',--}%
-%{--                            [d])}"--}%
-%{--                            var="p">--}%
-%{--                        <g:render template="/gTemplates/box" model="[record: p]"></g:render>--}%
-%{--                    </g:each>--}%
-
-                    <g:each in="${mcs.Book.executeQuery('from Goal p where p.bookmarked = 1 and p.course = ? order by p.priority desc',
-                            [d])}"
-                            var="p">
-                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
-                    </g:each>
-
-                    <g:each in="${mcs.Book.executeQuery('from Task p where p.bookmarked = 1 and p.course = ? order by p.priority desc',
-                            [d])}"
-                            var="p">
-                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
-                    </g:each>
-
-                    <g:each in="${mcs.Book.executeQuery('from IndexCard p where p.bookmarked = 1 and p.course = ? order by p.priority desc',
-                            [d])}"
-                            var="p">
-                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>
-                    </g:each>
-%{--                    <g:each in="${mcs.Book.executeQuery('from Planner p where p.bookmarked = 1 and p.course = ?',--}%
-%{--                            [d])}"--}%
-%{--                            var="p">--}%
-%{--                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
-%{--                    </g:each>--}%
-%{--                    <g:each in="${mcs.Book.executeQuery('from Journal p where p.bookmarked = 1 and p.course = ?',--}%
-%{--                            [d])}"--}%
-%{--                            var="p">--}%
-%{--                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
-%{--                    </g:each>--}%
-%{--  <g:each in="${mcs.Book.executeQuery('from Book p where p.bookmarked = 1 and p.course = ? and p.priority >= 4',--}%
-%{--                            [d])}"--}%
-%{--                            var="p">--}%
-%{--                        <g:render template="/gTemplates/recordSummary" model="[record: p]"></g:render>--}%
-%{--                    </g:each>--}%
-
-
-                </g:each>
-
-            </div>
-</g:if>
         </div>
 
 

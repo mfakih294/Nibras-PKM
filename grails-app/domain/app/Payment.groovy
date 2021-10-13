@@ -62,7 +62,8 @@ class Payment implements Comparable {  // entity id = 24
 
 
     static constraints = {
-        category(nullable: false)
+
+        category(nullable: true)
         date(nullable: false)
         amount(nullable: false, blank: false)
         description()

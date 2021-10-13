@@ -1791,9 +1791,9 @@ ul.ui-autocomplete.ui-menu {
     text-decoration: none !important;
     border: 0.5px solid darkgray !important;
     border-radius: 3px !important;
-    padding: 1px 2px;
-    margin-left: 2px;
-    margin-right: 2px;
+    padding: 0px 1px;
+    margin: 2px 1px;
+    display: inline-block;
 }
 
 .actionsButtonsStyle a {

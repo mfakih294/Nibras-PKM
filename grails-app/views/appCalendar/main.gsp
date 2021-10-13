@@ -72,10 +72,11 @@
    //   fixedWeekCount: false,
        shouldRedistribute: true,
         headerToolbar : {
-        left: 'prev,next today',
+        left: 'prev next today',
         center: 'title',
         right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,listWeek,dayGridMonth'
       },
+        buttonText: { today: 'today', prev: '<- Previous', next: 'Next ->'},
       views: {
         dayGridMonth: {
           buttonText: 'Month',
@@ -149,9 +150,9 @@
         // day:''  // Monday 19.07
       // },
       // lazyFetching: true,
-       firstHour: '08:00',
+       firstHour: '05:00',
       // minTime: 5,
-      slotMinTime: '08:00',
+      slotMinTime: '05:00',
       slotDuration: '01:00',
       // showNonCurrentDates: false,
       // dayCount: 31,

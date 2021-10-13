@@ -114,6 +114,7 @@ class PageController {
 
     def springSecurityService
 
+    def supportService
 
     def appMain() {
 
@@ -131,12 +132,12 @@ class PageController {
         def types = []
 
         [
-                [id: 'Jy', name: 'Current journal', code: 'journal'],
-                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'G', name: 'Goal', code: 'goals'],
                 [id: 'N', name: 'Note', code: 'notes'],
                 [id: 'W', name: 'Writing', code: 'writings'],
-                [id: 'G', name: 'Goal', code: 'goals'],
-                [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'Jy', name: 'Journal', code: 'journal'],
+//                [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
                 [id: 'R', name: 'Resource', code: 'resources']
         ].each(){
             if (OperationController.getPath(it.code + '.enabled') == 'yes')
@@ -491,8 +492,19 @@ class PageController {
 //                mcs.Book.executeQuery('select p.course from Book p where p.bookmarked = 1 and p.priority >=4')
 
 //        println 'crs +' + courses
+        def overdue = supportService.getOverdueTasks()
+        def pile = supportService.getTasksPile()
+        def todayInProgress = supportService.getTasksTodayInProgress()
+        def todayCompleted = supportService.getTasksTodayCompleted()
+        def todayNotStarted = supportService.getTasksTodayNotStarted()
 
-        render(view: '/appKanban/main', model: [courses: courses.unique().reverse()]) //.sort({i,j -> i.priority.compareTo(j.priority)})
+        render(view: '/appKanban/main', model: [courses: courses.unique().reverse(),
+        overdue: overdue,
+        pile: pile,
+        inProgress: todayInProgress,
+        completed: todayCompleted,
+        notStarted: todayNotStarted
+        ]) //.sort({i,j -> i.priority.compareTo(j.priority)})
 
     }
 
@@ -519,12 +531,13 @@ class PageController {
 
         def types = []
 
-        [        [id: 'Jy', name: 'Current journal', code: 'journal'],
-                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
-                 [id: 'N', name: 'Note', code: 'notes'],
-                 [id: 'W', name: 'Writing', code: 'writings'],
-                 [id: 'G', name: 'Goal', code: 'goals'],
-                 [id: 'T', name: 'Task', code: 'tasks'],
+        [
+                [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'G', name: 'Goal', code: 'goals'],
+                [id: 'N', name: 'Note', code: 'notes'],
+                [id: 'W', name: 'Writing', code: 'writings'],
+                [id: 'Jy', name: 'Journal', code: 'journal'],
+//                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
                  [id: 'R', name: 'Resource', code: 'resources']
         ].each(){
             if (OperationController.getPath(it.code + '.enabled') == 'yes')

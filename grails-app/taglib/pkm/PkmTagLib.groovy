@@ -55,7 +55,7 @@ class PkmTagLib {
     def summarize = { attrs ->
 
         if (attrs.text && attrs.text != '' && attrs.text != '?' ) {
-            def text = attrs.text ? attrs.text : ''
+            def text = attrs.text ? attrs.text.encodeAsHTML() : ''
             def length = attrs.length
 
             out << StringUtils.abbreviate(text, length ? length.toInteger() : 80)?.replaceAll('>', ' ')?.replaceAll('<', ' ')?.encodeAsHTML()?.decodeHTML()

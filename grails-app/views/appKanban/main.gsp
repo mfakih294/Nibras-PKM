@@ -155,6 +155,8 @@ Tasks
 
         jQuery(document).ready(function () {
 
+
+
          //   for (var i = 0; i < localStorage.length; i++) {
                 // do something with localStorage.getItem(localStorage.key(i));
          //       var key = localStorage.key(i)
@@ -318,7 +320,7 @@ $("#accordionCenter").accordion({
      Mousetrap.bindGlobal('esc', function (e) {
 //            jQuery("html, body").animate({ scrollTop: 0 }, "fast");
 //            jQuery('#centralArea').html('');
-                jQuery('#speedsearch').select(); jQuery('#speedsearch').focus();
+         jQuery('#summayDaftar').focus();
 //                jQuery('#quickAddTextFieldBottomTop').select();
 //                jQuery('#3rdPanel').html('');
 //                jQuery('#sandboxPanel').html('');
@@ -441,7 +443,10 @@ $("#accordionCenter").accordion({
                 $('#spinner2').hide();
             });
 
-            jQuery('#descriptionDaftar').focus();
+            jQuery('#summayDaftar').focus();
+
+            myLayout.close('east');
+
         });
 
     </script>
@@ -450,7 +455,13 @@ $("#accordionCenter").accordion({
 
 <body>
 
-<g:render template="/appKanban/regions" model="[htmlContent: htmlContent, courses: courses]"/>
+<g:render template="/appKanban/regions" model="[htmlContent: htmlContent, courses: courses,
+                                                overdue: overdue,
+                                                pile: pile,
+                                                inProgress: inProgress,
+                                                completed: completed,
+                                                notStarted: notStarted
+]"/>
 <div id="idletimeout"></div>
 
 
@@ -467,6 +478,7 @@ $("#accordionCenter").accordion({
     });
 
     //    });
+
 
 </script>
 </body>

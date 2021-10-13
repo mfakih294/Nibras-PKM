@@ -123,6 +123,25 @@
 
         </g:if>
 
+        <g:if test="${fields.contains('category')}">
+            <td>
+                <label>Category</label>
+                <g:select name="category.id" style="width: 150px;"
+                          from="${categories}" optionKey="id"
+                          value="${record?.category?.id}"
+                          id="chosenCategory${record?.id}"
+                          noSelection="${['null': 'No category']}"/>
+            </td>
+
+            <script type="text/javascript">
+                jQuery("#chosenCategory${record?.id}").chosen({
+                    allow_single_deselect: true,
+                    no_results_text: "None found"
+                })
+            </script>
+
+        </g:if>
+
 
         <g:if test="${fields.contains('writing')}">
             <td>
@@ -936,13 +955,13 @@
 
 
 
-        %{--<g:if test="${fields.contains('amount')}">--}%
-        %{--<td>--}%
-        %{--Amount <g:textField id="amount" name="amount" placeholder="Amount" title="Amount"--}%
-        %{--style="width: 90px;" class="ui-corner-all"--}%
-        %{--value="${record?.amount}"/>--}%
-        %{--</td>--}%
-        %{--</g:if>--}%
+        <g:if test="${fields.contains('amount')}">
+        <td>
+        Amount <g:textField id="amount" name="amount" placeholder="Amount" title="Amount"
+        style="width: 90px;" class="ui-corner-all"
+        value="${record?.amount}"/>
+        </td>
+        </g:if>
 
         <g:if test="${fields.contains('publishedNodeId')}">
         <td>

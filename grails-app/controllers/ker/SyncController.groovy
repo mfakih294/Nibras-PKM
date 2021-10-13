@@ -380,9 +380,9 @@ class SyncController {
 
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
-
-        for (i in IndexCard.executeQuery("from Book where type.code != ? and type.code != ? and  bookmarked = ? order by department.orderNumber asc, course.orderNumber asc, orderNumber asc",
-                ['art', 'nws', true])) {
+// order by department.orderNumber asc, course.orderNumber asc, orderNumber asc
+        for (i in IndexCard.executeQuery("from Book where bookmarked = ?",
+                [true])) {
 //            OperationController.countResourceFiles(i.id)
             records += [type    : 'R',
                         id: i.id,
@@ -394,7 +394,7 @@ class SyncController {
                         files   : i.filesList,
                         nbFiles : i.nbFiles,
                         title   : i.title,
-                        body: (i.fullText?.replaceAll(/http[\S\.]*/, '')
+                        body: (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
                     ?.replaceAll(/www[\S\.]*/, '') ?: '') + (i.description ?: '')]
         }
 

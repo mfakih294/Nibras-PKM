@@ -389,6 +389,8 @@ class IndexCardController { // entity id = 16
                 n.summary = params.title//extractTitleReturn(params.description)
                 n.description = params.description //extractDescriptionReturn(params.description)
                 n.status = WorkStatus.findByCode('pending')
+                if (params.context)
+                    n.context = mcs.parameters.Context.get(params.context)
                 n.save()
             }
              else if (params.type == 'G'){
@@ -421,7 +423,7 @@ class IndexCardController { // entity id = 16
         n.bookmarked = true
 
 
-        render(template: "/gTemplates/recordSummary", model: [record: n])
+        render(template: "/gTemplates/recordSummary", model: [record: n, justSaved: true])
             render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 
 

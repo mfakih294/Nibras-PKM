@@ -20,7 +20,7 @@ buildscript {
     }
 }
 
-version "1.7.3"
+version "1.7.5"
 group "nibras"
 
 //apply plugin:"eclipse"
@@ -178,6 +178,6 @@ war {
 
 
 // for development on Windows only
-grails {
-    pathingJar = true
-}
+//grails {
+  //  pathingJar = true
+//}

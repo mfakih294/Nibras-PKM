@@ -1800,15 +1800,15 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .actionsButtons a {
-    color: #0b202f !important;
+    color: #050f16 !important;
     font-style: normal !important;
-    font-size: 0.85em !important;
+    font-size: 0.95em !important;
     text-decoration: none !important;
-    border: 0.5px solid darkgray !important;
+    border: 1px solid darkgray !important;
     border-radius: 3px !important;
     padding: 1px 2px;
-    margin-left: 2px;
-    margin-right: 2px;
+    margin: 4px 2px;
+    display: inline-block;
 }
 
 .actionsButtonsStyle a {
@@ -1816,8 +1816,8 @@ ul.ui-autocomplete.ui-menu {
     color: #0b1336 !important;
     font-style: normal !important;
     text-decoration: underline !important;
-    padding: 2px;
-    margin: 1px;
+    padding: 1px 2px;
+    margin: 3px 1px;
 }
 
 .actionsButtonsStyle {
