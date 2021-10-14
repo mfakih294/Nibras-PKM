@@ -238,6 +238,11 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
                 }')"    title="${i.path}">
   cvr
             </a>
+ &nbsp;<a href="#" title="Generate AblePlayer html file for WebVTT" onclick="jQuery('#logArea').load('${
+                    createLink(controller: 'operation', action: 'generateWebVttHtml', id: recordId, params: [path: i, module: module, type: type, fileName: i.name])
+                }')"    title="${i.path}">
+  vtt
+            </a>
  &nbsp;
  <a title="Copy to rps1" onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFile', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
               &nbsp;    ->

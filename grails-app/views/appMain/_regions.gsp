@@ -67,68 +67,10 @@
             <div id="1" class="common" style="">
             <div id="centralArea" class="common" style="">
 %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
-<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>
+%{--<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>--}%
+
 
             </div>
-%{--                <div id="centralArea" class="common" style="">--}%
-
-%{--                </div>--}%
-
-
-                %{--<div id="subDaftarArea">--}%
-%{----}%
-                %{--</div>--}%
-
-%{--                <br/>--}%
-%{--                <hr style="color: darkgray; background: darkgray"/>--}%
-%{--                <br/>--}%
-
-
-
-
-
-
-                    %{--                <span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
-%{--                title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
-                %{--<h5>Last plan</h5>--}%
-                %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
-
-
-                    %{--                    render(template: '/reports/heartbeat', model: [dates: dates])--}%
-
-
-
-
-
-                %{--</span>--}%
-
-                    %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
-                        %{--<br/>--}%
-                        %{--<br/>--}%
-                        %{--Repository folder not found. Please choose an existing folder:--}%
-                        %{--<br/>--}%
-                        %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
-                    %{--</g:if>--}%
-
-
-                    %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
-                        %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
-                    %{--</g:if>--}%
-%{--                </div>--}%
-
-            </div>
-<g:if test="${OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
-            <h6 style="text-aling: center"><a href="#" id="testTitle2">
-                Panel 2
-            </a></h6>
-
-            <div id="2" class="common" style="">
-                <div id="inner2" class="common" style="">
-                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%
-
-
-
-                </div>
 
                 <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
@@ -192,9 +134,71 @@
 
                     <br/>
                     <div id="underAreaForQuickAdd"></div>
-                </g:if>
+                </g:if
+                >
+%{--                <div id="centralArea" class="common" style="">--}%
 
-    <sec:ifAnyGranted roles="ROLE_ADMIN">
+%{--                </div>--}%
+
+
+                %{--<div id="subDaftarArea">--}%
+%{----}%
+                %{--</div>--}%
+
+%{--                <br/>--}%
+%{--                <hr style="color: darkgray; background: darkgray"/>--}%
+%{--                <br/>--}%
+
+
+
+
+
+
+                    %{--                <span class="focusPSouth" style="text-align: right !important; direction: rtl !important;"--}%
+%{--                title="${Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]?.description}">--}%
+                %{--<h5>Last plan</h5>--}%
+                %{--<g:render template="/gTemplates/recordSummary" model="[record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', [OperationController.getPath('planner.homepage.default-type')],[max: 1])[0]]"></g:render>--}%
+
+
+                    %{--                    render(template: '/reports/heartbeat', model: [dates: dates])--}%
+
+
+
+
+
+                %{--</span>--}%
+
+                    %{--<g:if test="${!new File(OperationController.getPath('root.rps1.path')).exists()}">--}%
+                        %{--<br/>--}%
+                        %{--<br/>--}%
+                        %{--Repository folder not found. Please choose an existing folder:--}%
+                        %{--<br/>--}%
+                        %{--<g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>--}%
+                    %{--</g:if>--}%
+
+
+                    %{--<g:if test="${ker.GenericsController.countRecentRecordsStatic() == 0}">--}%
+                        %{--<g:render template="/layouts/message" model="[messageCode: 'help.recent.records.no']"/>--}%
+                    %{--</g:if>--}%
+%{--                </div>--}%
+
+            </div>
+<g:if test="${OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
+            <h6 style="text-aling: center"><a href="#" id="testTitle2">
+                Panel 2
+            </a></h6>
+
+            <div id="2" class="common" style="">
+                <div id="inner2" class="common" style="">
+                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%
+
+
+
+                </div>
+
+
+
+    %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
 <g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
                 <g:formRemote name="batchAdd2" class="commandBarInPanel"
@@ -215,7 +219,7 @@
                                  class="commandBarTexFieldTop"/>
                 </g:formRemote>
 </g:if>
-    </sec:ifAnyGranted>
+    %{--</sec:ifAnyGranted>--}%
             </div>
             <h6><a href="#" id="testTitle3">
                 Panel 3

@@ -50,10 +50,33 @@ class SupportService {
 //    private static final log = LogFactory.getLog(this)
 
 
-    String getResourcePath(Long id, String type) {
-        if (type == 'r') {
+    String getResourcePath(Long id, String type, Boolean relative) {
+        if (type == 'R') {
             def bookInstance = Book.get(id)
-            return '? todo'
+
+            def record = Book.get(id)//grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+            def typeSandboxPath
+
+            def resourceNestedById = false
+            def resourceNestedByType = false
+
+            if (OperationController.getPath('resourceNestedById') == 'yes')
+                resourceNestedById = true
+
+            if (OperationController.getPath('resourceNestedByType') == 'yes')
+                resourceNestedByType = true
+
+
+                typeSandboxPath = (!relative ? OperationController.getPath('root.rps1.path') : '')  + 'R' + //todo parametric
+                        (resourceNestedByType ?  '/' +  record.type.code : '') +
+                        (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
+                        '/' + record.id
+//            } else { //todo
+//                typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + '' + params.entityCode + '/' + record.id
+//            }
+
+
+            return typeSandboxPath
         } else if (type == 'w') {
 
             return "?"

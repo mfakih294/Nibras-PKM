@@ -2277,5 +2277,73 @@ matches = (articleContent =~ /\d{8}\-\d{6}/)
       else render 'No text entered, or text too long.'
     }
 
+def generateWebVttHtml(){
 
-} // end of class
+    if (params.fileName?.endsWith('.vtt')) {
+        String relativePath = supportService.getResourcePath(params.id.toLong(), params.module, true)
+        String fullPath = supportService.getResourcePath(params.id.toLong(), params.module, false)
+        String fileName = params.fileName
+        //id: recordId, params: [path: i, module: module, type: type]
+
+
+        def file = new File(fullPath + '/' + params.fileName?.replace('.vtt', '') + '.html')
+        def contents = """
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+
+<title>${fileName?.replace('.vtt', '')}</title>
+
+<link href="https://localhost:1441/files/ableplayer/build/ableplayer.min.css" rel="stylesheet" />
+<script src="https://localhost:1441/files/ableplayer/build/jquery.min.js"></script>
+<script src="https://localhost:1441/files/ableplayer/thirdparty/js.cookie.js"></script>
+<script src="https://localhost:1441/files/ableplayer/build/ableplayer.min.js"></script>
+
+<style>
+body {
+	max-width: 32em;
+	margin: 0 auto;
+}
+
+// override for responsive
+.able-wrapper {
+	max-width: 500px !important;
+	max-height: 300px !important;
+}
+
+.able-transcript-caption {
+display: block;
+margin: 5px 2px;
+}
+</style>
+	<script type="application/javascript">
+		if (window.location.protocol == 'file:')
+		document.location = "https://localhost:1441/files/${relativePath}/${fileName?.replace('.vtt', '')}.html"
+	</script>
+</head>
+<body>
+<div id="video-wrapper">
+
+  <video id="video1" preload="auto"  width="480" height="360"
+  data-able-player data-skin="2020" playsinline data-captions-position="overlay">
+    <source type="video/mp4" src="https://localhost:1441/files/${relativePath}/${fileName?.replace('.vtt', '')}.mp4"/>
+	     <track kind="captions" src="https://localhost:1441/files/${relativePath}/${fileName}" srclang="en"/>
+  </video>
+
+</div>
+</body>
+</html>
+
+"""
+
+        file.write(contents, 'UTF8')
+        render 'File geneated'
+    }
+    else
+        render ('This is not a WebVTT file')
+    }
+
+
+
+    } // end of class
