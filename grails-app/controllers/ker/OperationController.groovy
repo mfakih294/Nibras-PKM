@@ -1360,6 +1360,14 @@ date = "${r.year ?: ''}"
 
     def checkoutFile() {
 
+        def b
+        if (params.entityCode == 'R')
+            b = Book.findById(params.id)
+        else
+            b = grailsApplication.classLoader.loadClass(entityMapping[params.module]).get(params.id)
+
+
+
         String pdfPath = params.path
 
         def resourceNestedById = false
@@ -1381,12 +1389,27 @@ date = "${r.year ?: ''}"
             outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.id
 
 
+        def newPath = "/nbr/out/out-${params.module}-${params.module == 'R' ? '' + params.type + '-' : ''}${params.id}-${b.toString()}-${params.name}"
         try {
             // will output "my_image_2.jpg"
             def ant = new AntBuilder()
-            ant.copy(file: pdfPath, tofile: outPath + '/' + params.name)
+            ant.copy(file: pdfPath,
+                    tofile: //outPath + '/' + params.name)
+                            newPath)
 
-            render(template: '/layouts/achtung', model: [message: params.name + ' checked out to: ' + outPath])
+//            def out = new StringBuilder()
+
+            /** working (getting err stream, yet spaces in filename are still a problem. Reverted to the platform-netural and safer method of copying files
+            def sout = new StringBuilder(), serr = new StringBuilder()
+            def proc = """/bin/ln -T ${pdfPath} "/nbr/out/out-${params.module}-${params.module == 'R' ? '-' + params.type : ''}-${params.id}-${b.toString()}'-${params.name}\"""".execute()
+            proc.consumeProcessOutput(sout, serr)
+            proc.waitForOrKill(1000)
+            println "out> $sout\nerr> $serr"
+//            process.waitForProcessOutput(out, new StringBuilder())
+            println """/bin/ln -T ${pdfPath} "/nbr/out/out-${params.module}-${params.module == 'R' ? '-' + params.type : ''}-${params.id}-${b.toString()}-${params.name}" """
+//            println "out: $out"
+             */
+            render(template: '/layouts/achtung', model: [message: params.name + ' copied to: ' + newPath])
         }
         catch (Exception e) {
             render(template: '/layouts/achtung', model: [message: 'Problem while checking out ' + params.name])
@@ -1470,6 +1493,9 @@ date = "${r.year ?: ''}"
 
             filesList.each() { f ->
                 ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
+
+//                println """/usr/bin/ln -T ${f.path} "/nibras/msd/out-${params.entityCode}-${b.id}-${b.toString()}-${f.name}" """
+//                """/usr/bin/ln -T ${f.path} "/nibras/msd/out-${params.entityCode}-${b.id}-${b.toString()}-${f.name}" """.execute()
             }
             render filesList.size() + ' file(s) copied.'
         } else {

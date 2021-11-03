@@ -4,8 +4,9 @@
 
 
 <g:if test="${record.class.declaredFields.name.contains('description')}">
+    <div id="${entityCode}Record${record.id}newText"></div>
     <g:formRemote name="appendText" url="[controller: 'generics', action: 'appendText']"
-                  update="${entityCode}Record${record.id}"
+                  update="${entityCode}Record${record.id}newText"
                   style="display: inline;">
         <g:hiddenField name="id" value="${record.id}"/>
         <g:hiddenField name="entityCode" value="${entityCode}"/>
@@ -19,5 +20,5 @@
 </g:if>
 
 <script type="text/javascript">
-jQuery("#appendTextFor${entityCode}${record.id}").focus();
+%{--jQuery("#appendTextFor${entityCode}${record.id}").focus();--}%
 </script>

@@ -41,6 +41,13 @@
 
 %{--            </a>--}%
 %{--        </td>--}%
+%{--<g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+ <td style="padding-right: 1px !important;">
+            <a href="${createLink(controller: 'page', action:'appPile')}" target="_blank">
+                Pile
+            </a>
+        </td>
+    %{--</g:if>--}%
 <g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">
  <td style="padding-right: 1px !important;">
             <a href="${createLink(controller: 'page', action:'appNotes')}" target="_blank">

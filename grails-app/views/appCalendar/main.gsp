@@ -378,6 +378,9 @@
   .fc-time {
       font-size: larger;
   }
+  .fc .fc-timegrid .fc-daygrid-body {
+      z-index: 1 !important;
+  }
   /*.prompt  {*/
       /*width: 500px;*/
       /*height: 200px;*/
@@ -419,7 +422,7 @@
                                value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'], [offset: random])[0]}"/>
 %{--    <g:set var="aya3"--}%
 %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
-<div style="font-family: 'traditional arabic'; font-size: x-large; margin-bottom: 14px; line-height: 29px;">
+<div style="font-family: 'traditional arabic'; font-size: large; margin-bottom: 10px; line-height: 29px;">
               بسم الله الرحمن الرحيم
 %{--                        ${aya1.shortDescription}--}%
 %{--   (${aya1.orderInWriting})--}%
@@ -433,11 +436,11 @@
 
           </div>
 
-          <b>
-              <b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:
+          %{--<b>--}%
+              %{--<b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:--}%
           %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
-          </b>
-          &nbsp;
+          %{--</b>--}%
+          %{--&nbsp;--}%
 
 %{--          <g:set var="aya"--}%
 %{--                 value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>--}%
@@ -450,15 +453,15 @@
 
 			
 			
-      <g:each in="${prayersText.split('\n')}" var='l'>
-          <span style="margin-left: 15px; margin-top: 15px;">
-              <b>${raw(l)?.split(': ')[0]}</b>:
-              ${raw(l)?.split(': ')[1]}
-          </span>
-      </g:each>
+      %{--<g:each in="${prayersText.split('\n')}" var='l'>--}%
+          %{--<span style="margin-left: 15px; margin-top: 15px;">--}%
+              %{--<b>${raw(l)?.split(': ')[0]}</b>:--}%
+              %{--${raw(l)?.split(': ')[1]}--}%
+          %{--</span>--}%
+      %{--</g:each>--}%
           </div>
       </g:if>
-     <br/>
+     %{--<br/>--}%
     <div id='calendar' ></div>
   </div>
 
@@ -471,7 +474,7 @@
                   update="logAreaModal"
 
                   method="post">
-          <table border="0" style="width: 90%">
+          <table border="0" style="width: 90%; text-align: center;">
               <tr>
                   <td style="text-align: left; margin: 3px; direction: ltr">Type:
                       <br/>
@@ -486,43 +489,44 @@
               </tr>
           </table>
 
-        <br/>
+        <div style="float: left">
         Goal *:
         <br/>
         <g:select name="goal" from="${mcs.Goal.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="goal"
                   optionKey="id" optionValue="summary"
             style="width: 99% !important; direction: rtl; text-align: right;"
                   noSelection="${['null': '']}" value=""/>
-
-        <br/>
+        </div>
+        <div style="float: right">
         Task *:
         <br/>
         <g:select name="task" from="${mcs.Task.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="task"
                   optionKey="id" optionValue="summary"
-                  style="width: 99%  !important; direction: rtl; text-align: right;"
+                  style="width: 95%  !important; direction: rtl; text-align: right;"
                   noSelection="${['null': '']}" value=""/>
-<br/>
+</div>
+        <div style="clear: both;"/>
         Summary or Nibras command*:
         <br/>
         <g:textField name="title" value="" id="title"
-                     style=" text-align: start  !important; unicode-bidi: plaintext !important; display: inline;  font-family: tahoma ; width: 99% !important;"
-
-
+                     style=" text-align: start  !important; unicode-bidi: plaintext !important; display: inline;  font-family: tahoma ; width: 95% !important;"
                      placeholder=""
                      class="commandBarTexFieldTop"/>
                   <br/>
                 Description:
        <g:textArea name="description" value="" id="description" rows="5" columns="80"
                     placeholder=""
-                     style="width: 99% !important; height: 100px; text-align: start  !important; unicode-bidi: plaintext !important;  display: inline;  font-family: tahoma ; "
+                     style="width: 95% !important; height: 100px; text-align: start  !important; unicode-bidi: plaintext !important;  display: inline;  font-family: tahoma ; "
                      class="commandBarTexFieldTop"/>
                   <br/>
                   <br/>
         <g:submitButton name="batch" value="Save"
-                        style="height: 20px  !important; margin: 0px; width: 100% !important;"
+                        style="height: 32px  !important; margin: 3px; width: 30% !important;"
                         id="quickAddXcdSubmitTop3"
                         class="fg-button ui-widget ui-state-default"/>
     </g:formRemote>
+    <br/>
+    <br/>
     <div id="logAreaModal"></div>
               <br/>
               <br/>

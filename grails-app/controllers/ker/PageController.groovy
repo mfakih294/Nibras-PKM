@@ -482,6 +482,9 @@ class PageController {
         render(view: '/appCourse/main', model: [record: mcs.Course.get(params.id)
         ])
     }
+def appPile() {
+        render(view: '/appPile/main', model: [ ])
+    }
 
     def appKanban() {
 

@@ -26,6 +26,10 @@
     text-decoration: underline;
 }
 
+.fc-time-grid {
+    z-index: 1 !important;
+}
+
 .fc-time-grid .fc-slats td {
     height: 1.9em !important;
 }

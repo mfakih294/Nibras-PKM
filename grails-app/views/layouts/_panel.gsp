@@ -595,7 +595,12 @@ Authors: ${authors}
         %{--${WikiParser.renderXHTML(record.description)?.replaceAll('\n', '<br/>')?.decodeHTML()}--}%
 
     </div>
+    <div id="${entityCode}Record${record.id}newText"></div>
+    <g:render template="/gTemplates/recordAppend" model="[record: record]"/>
+
+
 </g:if>
+
 
 
 

@@ -436,6 +436,8 @@ YellowGreen;#9ACD32"""
                             break
                         case 'q': queryRecords(commandBody)
                             break
+                        case 'Q': queryUpdateRecords(commandBody)
+                            break
                         case 'h': adHocQuery(commandBody)
                             break
                         case 's': luceneSearch(commandBody)
@@ -3117,7 +3119,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                             title    : fullquery
                     ])
                 } else {
-                    render 'Result set size is greater than ' + limit + '. Please narrow your search'
+                    render '<br/><br/><b>Result set size is greater than ' + limit + '. Please narrow your search.</b><br/><br/>'
                 }
             } catch (Exception e) {
                 println e.printStackTrace()
@@ -3352,6 +3354,33 @@ def markAsMarkdowned(Long id, String entityCode) {
             ])
 
         }
+
+    }
+
+    def queryUpdateRecords(String input) {
+
+
+
+
+            def fullquery
+            def fullquerySort
+            def queryKey
+
+
+                fullquery = input
+//                fullquerySort = 'select count(*) ' + input
+                queryKey = '_' + new Date().format('ddMMyyHHmmss')
+//                session[queryKey] = fullquery
+
+
+            params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+            def list = Task.executeUpdate(fullquery, [], params)
+            render(template: '/gTemplates/recordListing', model: [
+                    list     : list,
+                    totalHits: list.size(),
+                    queryKey2: queryKey, fullquery: fullquery,
+                    title    : 'HQL Query: ' + fullquery
+            ])
 
     }
 
@@ -4005,8 +4034,8 @@ def markAsMarkdowned(Long id, String entityCode) {
 
 //        record.description += ('\n' + params.text + ' (' + new Date().format('dd.MM.yyyy') + ')')
         record.description += ('\n\n' + params.text)
-
-        render(template: '/gTemplates/recordSummary', model: [record: record])
+render params.text
+//        render(template: '/gTemplates/recordSummary', model: [record: record])
         //render(template: '/gTemplates/recordDetails', model: [record: record])
 
     }

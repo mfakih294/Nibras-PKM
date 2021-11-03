@@ -33,7 +33,7 @@
              %{--onxxxmouseout="jQuery('.temp44').addClass('hiddenActions');"--}%
              %{-->--}%
 
-            <table class="recordLine recordContainer recordCard" style="width: 100% !important; border: 1px darkgray; padding: 0px;  margin: 0px; border-radius: 0px; border-collapse: collapse" id="${entityCode}Record${record.id}">
+            <table class="recordLine recordContainer recordCard" style="width: 100% !important; padding: 0px;  margin: 0px; border-radius: 0px; border-collapse: collapse" id="${entityCode}Record${record.id}">
                 <tbody>
 
                 <tr style="background: #f2f2f2;  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);">
@@ -73,7 +73,7 @@
                                 </div>
                                 <g:remoteLink controller="generics" action="showSummary"
                                               tabindex="-1"
-                                              class="refresh${entityCode}${record.id}"
+                                              class="refresh"
                                               params="${[id: record.id, entityCode: entityCode]}"
                                               update="${entityCode}Record${record.id}"
                                               style="margin-left: 3px;padding-bottom: 1px; display: inline"
@@ -284,7 +284,7 @@
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               style="padding: 2px; font-size: 1em;"
-                                              before="myLayout.open('east');jQuery('.recordSelected').removeClass('recordSelected');jQuery('#${entityCode}Record${record.id}').addClass('recordSelected'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);">
+                                              before="myLayout.open('east'); bindMyKeys${entityCode}${record.id}(); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);">
                                 %{--class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"--}%
                                     <g:if test="${!record.summary}">
                                         ...
@@ -645,7 +645,7 @@
                                                           params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                                           style="padding: 4px; font-size: 1em;"
-                                                          before=" myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0});">
+                                                          before=" myLayout.open('east');jQuery('.recordSelected').removeClass('recordSelected');jQuery('#${entityCode}Record${record.id}').addClass('recordSelected'); jQuery('#accordionEast').accordion({ active: 0});">
 
                                                 <pkm:summarize
                                                         text="${record?.description?.replace('Product Description', '')?.replaceAll("\\<.*?>", "")}"
@@ -956,7 +956,7 @@
         <td>  <a
                 title="Actions"
                 class="fg-button ui-widget ui-state-default ui-corner-all" style="padding: 0px 3px; margin: 2px;"
-                onclick="jQuery('.temp44').addClass('hiddenActions');jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions')">
+                onclick="jQuery('.temp44').addClass('hiddenActions');jQuery('#actionsButtons').removeClass('hiddenActions')">
             &hellip;
         </a>
         </td>
@@ -1062,7 +1062,7 @@
                         %{-- class += hiddenActions--}%
 
 
-                        <div id="actionsButtons${entityCode}${record.id}"
+                        <div id="actionsButtons"
                              class="temp44 hiddenActions actionsButtons"
                              style="text-align: left; direction: ltr; line-height: 20px;font-size: 1em !important; color: darkslategrey !important; column-count: 2">
 
@@ -1128,7 +1128,7 @@
 
                             <g:remoteLink controller="generics" action="fetchQuickAddForm"
                                           style="padding: 2px; font-size: 0.95em;"
-                                          class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}  quickEditButton${entityCode}${record.id}"
+                                          class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}  quickEditButton"
                                           id="${record.id}"
                                           params="[entityController: record.class.name,
                                                    updateRegion    : '3rdPanel',
@@ -1749,78 +1749,85 @@ Parent:
         %{--jQuery("#${entityCode}Record${record.id}").select();--}%
     }
 
-   // console.log('now binding in ' + ${record.id})
+    function bindMyKeys${entityCode}${record.id} () {
+
+        jQuery('.recordSelected').removeClass('recordSelected');
+        jQuery('#${entityCode}Record${record.id}').addClass('recordSelected');
+
+
+        console.log('now binding in ' + ${record.id})
     Mousetrap.bind('space', function (e) {
         jQuery('.temp44').addClass('hiddenActions');
-        jQuery('#actionsButtons${entityCode}${record.id}').removeClass('hiddenActions');
+        jQuery('.recordSelected #actionsButtons').removeClass('hiddenActions');
         return false;
     });
 
     Mousetrap.bind(['e', 'ث'], function (e) {
-        jQuery(".fullEditButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .fullEditButton${entityCode}${record.id}").click();
     });
       Mousetrap.bind('8', function (e) {
-          jQuery("#${entityCode}Record${record.id}").load("${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}")
+          jQuery(".recordSelected #${entityCode}Record${record.id}").load("${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}")
     });
     Mousetrap.bind(['q', 'ض'], function (e) {
-        jQuery(".quickEditButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .quickEditButton").click();
     });
     Mousetrap.bind(['t','ف'], function (e) {
-        jQuery(".addTagButton${entityCode}${record.id}").click();
-        jQuery("#newTagField${entityCode}${record.id}").focus();
+        jQuery(".recordSelected .addTagButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  #newTagField${entityCode}${record.id}").focus();
     });
     Mousetrap.bind(['d','ي'], function (e) {
-        jQuery(".appendToDescription${entityCode}${record.id}").click();
-        jQuery("#appendTextFor${entityCode}${record.id}").focus();
+        jQuery(".recordSelected .appendToDescription${entityCode}${record.id}").click();
+        jQuery(".recordSelected  #appendTextFor${entityCode}${record.id}").focus();
     });
  Mousetrap.bind(['ق','r'], function (e) {
-        jQuery(".openPanelButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .openPanelButton${entityCode}${record.id}").click();
     });
- Mousetrap.bind(['R','shift+ق'], function (e) {
-        jQuery(".refresh${entityCode}${record.id}").click();
-    });
+// Mousetrap.bind(['R','shift+ق'], function (e) {
+        %{--<!--jQuery(".recordSelected  .refresh${entityCode}${record.id}").click();-->--}%
+//    });
  Mousetrap.bind(['D','shift+ي'], function (e) {
-        jQuery(".doneButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .doneButton${entityCode}${record.id}").click();
     });
  Mousetrap.bind('0', function (e) {
-        jQuery("#setToday${record.id}${entityCode}").click();
+        jQuery(".recordSelected  #setToday${record.id}${entityCode}").click();
     });
 
     Mousetrap.bind(['n','ى'], function (e) {
-        jQuery(".appendToNotes${entityCode}${record.id}").click();
-        jQuery("#appendTextFor${entityCode}${record.id}").focus();
+        jQuery(".recordSelected .appendToNotes${entityCode}${record.id}").click();
+        jQuery(".recordSelected  #appendTextFor${entityCode}${record.id}").focus();
     });
 
   Mousetrap.bind(['N','shift+ى'], function (e) {
-        jQuery(".addNoteButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .addNoteButton${entityCode}${record.id}").click();
 
     });
 
     Mousetrap.bind(['l a','م ش'], function (e) {
-        jQuery("#${record.id}-${entityCode}-ar").click();
+        jQuery(".recordSelected  #${record.id}-${entityCode}-ar").click();
     });
     Mousetrap.bind(['l e','م ث'], function (e) {
-        jQuery("#${record.id}-${entityCode}-en").click();
+        jQuery(".recordSelected  #${record.id}-${entityCode}-en").click();
     });
     Mousetrap.bind(['j','ت'], function (e) {
         jQuery(".addJPButton${entityCode}${record.id}").click();
     });
     Mousetrap.bind(['x','ء'], function (e) {
-        jQuery(".dump${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .dump${entityCode}${record.id}").click();
     });
   Mousetrap.bind(['f','ب'], function (e) {
-        jQuery(".openFolderButton${entityCode}${record.id}").click();
+        jQuery(".recordSelected  .openFolderButton${entityCode}${record.id}").click();
     });
 
 
     Mousetrap.bind('=', function (e) {
         %{--jQuery("#priority+${record.id}${entityCode}").click();--}%
-        jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')
+        jQuery('.recordSelected #${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')
     });
     Mousetrap.bind('-', function (e) {
-        jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')
+        jQuery('.recordSelected #${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')
     });
-// }
+
+ }
 
 %{--    unbindMyKeys = function() {--}%
 %{--    console.log('now unbinding in ' + ${record.id})--}%
@@ -1836,5 +1843,30 @@ Parent:
 %{--    Mousetrap.unbind('p =');--}%
 %{--    Mousetrap.unbind('p -');--}%
 %{--}   --}%
+
+    bindMyKeys${entityCode}${record.id}()
+
+
+    Mousetrap.bind('alt+up', function (e) {
+        console.log('now up in ' + ${record.id})
+        let t = jQuery('.recordSelected')//.prevAll('table').eq(-1) //jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0);
+        %{--<!--jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0).addClass('recordSelected');-->--}%
+        jQuery('.recordSelected').prevAll('table').eq(0).addClass('recordSelected');
+        //jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
+       // jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
+//        jQuery('.selectedRecord .refresh').click();
+        t.removeClass('recordSelected');
+    });
+
+    Mousetrap.bind('alt+down', function (e) {
+        console.log('now down in ' + ${record.id})
+        let t = jQuery('.recordSelected')//.prevAll('table').eq(-1) //jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0);
+        %{--<!--jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0).addClass('recordSelected');-->--}%
+        jQuery('.recordSelected').nextAll('table').eq(0).addClass('recordSelected');
+        //jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
+       // jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
+//        jQuery('.selectedRecord .refresh').click();
+        t.removeClass('recordSelected');
+    });
 
 </script>

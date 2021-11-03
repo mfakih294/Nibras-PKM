@@ -2068,9 +2068,9 @@ a :hover {
 }
 
 .recordSelected{
-    border: 1px solid darkgreen;
+    border: 1px darkgreen solid !important;
 }
 
 .recordNotSelected{
-    border: 0px solid darkgreen;
+    border: 0px darkgreen solid !important;
 }
