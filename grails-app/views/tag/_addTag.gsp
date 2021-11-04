@@ -7,6 +7,7 @@
     <g:hiddenField name="id" value="${instance.id}"/>
     <g:hiddenField name="entityCode" value="${entity}"/>
     <g:textField id="newTagField${entity}${instance.id}" name="tag" placeholder="Add tag..."
+                 class="newTagField"
                  style="width:100px; display: inline; " value=""/>
     <g:submitButton name="add" value="add" style="display:none;"
                     class="fg-button  ui-widget ui-state-default ui-corner-all"/>

@@ -74,7 +74,12 @@
 
                 <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
-                    <h4>Quick add records</h4>
+                    <div class="heading">
+                        %{--<h2>Create new record...</h2>--}%
+                        <h4 style="user-focus-pointer: hand; cursor: hand;">Quick add records...</h4>
+                    </div>
+                    <div class="content">
+
                     <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                   url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                                   update="underAreaForQuickAdd"
@@ -134,6 +139,7 @@
 
                     <br/>
                     <div id="underAreaForQuickAdd"></div>
+                    </div>
                 </g:if
                 >
 %{--                <div id="centralArea" class="common" style="">--}%

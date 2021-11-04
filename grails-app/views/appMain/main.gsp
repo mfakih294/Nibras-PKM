@@ -495,6 +495,8 @@ $("#accordionCenter").accordion({
 
 
 
+
+
 //            Mousetrap.bind('ctrl+s', function (e) {
 //                jQuery('#addXcdFormDaftarSubmit').click();
 //                return false;
@@ -521,6 +523,105 @@ $("#accordionCenter").accordion({
             function dosth() {
                 jQuery('#quickAddTextField').removeClass('shiftEnterPressed')
             }
+
+
+
+
+            Mousetrap.bind('space', function (e) {
+                jQuery('.temp44').addClass('hiddenActions');
+                jQuery('.recordSelected #actionsButtons').removeClass('hiddenActions');
+                return false;
+            });
+
+            Mousetrap.bind(['e', 'ث'], function (e) {
+                jQuery(".recordSelected  .fullEditButton").click();
+            });
+            Mousetrap.bind('8', function (e) {
+                jQuery(".recordSelected .quickBookmarkButton").click();
+            });
+            Mousetrap.bind(['q', 'ض'], function (e) {
+                jQuery(".recordSelected  .quickEditButton").click();
+            });
+            Mousetrap.bind(['t','ف'], function (e) {
+                jQuery(".recordSelected .addTagButton").click();
+                jQuery(".recordSelected  .newTagField").focus();
+            });
+            Mousetrap.bind(['d','ي'], function (e) {
+                jQuery(".recordSelected .appendToDescription").click();
+                jQuery(".recordSelected  .appendTextFor}").focus();
+            });
+            Mousetrap.bind(['ق','r'], function (e) {
+                jQuery(".recordSelected  .openPanelButton").click();
+            });
+            Mousetrap.bind(['D','shift+ي'], function (e) {
+                jQuery(".recordSelected  .doneButton").click();
+            });
+            Mousetrap.bind('0', function (e) {
+                jQuery(".recordSelected .setTodayButton").click();
+            });
+
+            Mousetrap.bind(['n','ى'], function (e) {
+                jQuery(".recordSelected .appendToNotes").click();
+                jQuery(".recordSelected  .appendTextFor").focus();
+            });
+
+            Mousetrap.bind(['N','shift+ى'], function (e) {
+                jQuery(".recordSelected  .addNoteButton").click();
+
+            });
+
+            Mousetrap.bind(['l a','م ش'], function (e) {
+                jQuery(".recordSelected .setLanguageArabic").click();
+            });
+            Mousetrap.bind(['l e','م ث'], function (e) {
+                jQuery(".recordSelected .setLanguageEnglish").click();
+            });
+            Mousetrap.bind(['j','ت'], function (e) {
+                jQuery(".addJPButton").click();
+            });
+            Mousetrap.bind(['x','ء'], function (e) {
+                jQuery(".recordSelected  .dump").click();
+            });
+            Mousetrap.bind(['f','ب'], function (e) {
+                jQuery(".recordSelected  .openFolderButton").click();
+            });
+
+
+            Mousetrap.bind('=', function (e) {
+                jQuery('.recordSelected .increasePriorityButton').click()
+            });
+            Mousetrap.bind('-', function (e) {
+                jQuery('.recordSelected .decreasePriorityButton').click()
+            });
+
+
+            Mousetrap.bind('up', function (e) {
+                let t = jQuery('.recordSelected')
+if (jQuery('.recordSelected').prevAll('table').size() >= 1) {
+    jQuery('.recordSelected').prevAll('table').eq(0).addClass('recordSelected');
+    t.removeClass('recordSelected');
+}
+
+                //document.getElementByClass('.recordSelected').scrollIntoView(); //{behavior: 'smooth', block: 'center'}
+                jQuery('.recordSelected').get(0).scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+
+                return false;
+            });
+
+            Mousetrap.bindGlobal('down', function (e) {
+                %{--console.log('now down in ' + ${record.id})--}%
+                let t = jQuery('.recordSelected')
+                if (jQuery('.recordSelected').nextAll('table').size() >= 1) {
+                    jQuery('.recordSelected').nextAll('table').eq(0).addClass('recordSelected');
+//        jQuery('.selectedRecord .refresh').click();
+                    t.removeClass('recordSelected');
+                }
+
+                jQuery('.recordSelected').get(0).scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+
+                return false;
+
+            });
 
 
 
@@ -592,6 +693,20 @@ $("#accordionCenter").accordion({
 
 //            jQuery('#quickAddTextFieldBottomTop').focus();
             jQuery('#descriptionDaftar').focus();
+
+
+//                        if (window.isHidden)
+                            jQuery(".content").hide();
+
+                        jQuery(".heading").click(function() {
+                            jQuery(this).next(".content").slideToggle(200);
+
+                            if (!window.isHidden)
+                                window.isHidden = true;
+                            else
+                                window.isHidden = false;
+                        });
+
         });
 
     </script>

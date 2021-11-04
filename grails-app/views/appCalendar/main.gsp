@@ -490,15 +490,23 @@
           </table>
 
         <div style="float: left">
-        Goal *:
+        Goal:
         <br/>
         <g:select name="goal" from="${mcs.Goal.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="goal"
                   optionKey="id" optionValue="summary"
             style="width: 99% !important; direction: rtl; text-align: right;"
                   noSelection="${['null': '']}" value=""/>
         </div>
+        <div style="float: left">
+        Department:
+        <br/>
+        <g:select name="department" from="${mcs.Department.findAll([sort: 'code', order: 'asc'])}" id="department"
+                  optionKey="id" optionValue="code"
+            style="width: 99% !important; direction: ltr; text-align: left;"
+                  noSelection="${['null': '']}" value=""/>
+        </div>
         <div style="float: right">
-        Task *:
+        Task:
         <br/>
         <g:select name="task" from="${mcs.Task.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="task"
                   optionKey="id" optionValue="summary"

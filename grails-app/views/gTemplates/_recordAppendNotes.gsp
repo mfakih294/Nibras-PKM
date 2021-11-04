@@ -10,7 +10,7 @@
                   style="display: inline; padding: 3px; ">
         <g:hiddenField name="id" value="${record.id}"/>
         <g:hiddenField name="entityCode" value="${entityCode}"/>
-        <g:textArea id="appendTextFor${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
+        <g:textArea id="appendTextFor${entityCode}${record.id}" name="text" class="ui-corner-all appendTextFor" cols="80"
          rows="5"
                      placeholder="Notes..."
                      style="width:98%;  height: 120px; display: inline; " value=""/>

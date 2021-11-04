@@ -33,7 +33,7 @@
              %{--onxxxmouseout="jQuery('.temp44').addClass('hiddenActions');"--}%
              %{-->--}%
 
-            <table class="recordLine recordContainer recordCard" style="width: 100% !important; padding: 0px;  margin: 0px; border-radius: 0px; border-collapse: collapse" id="${entityCode}Record${record.id}">
+            <table class="recordLine recordContainer recordCard" style="width: 100% !important; padding: 0px !important;  margin-bottom: 10px; border-radius: 0px; border-collapse: collapse" id="${entityCode}Record${record.id}">
                 <tbody>
 
                 <tr style="background: #f2f2f2;  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);">
@@ -110,7 +110,7 @@
 
                     <td class="record-summary ${record.class.declaredFields.name.contains('isMerged') && record.isMerged ? 'merged' : '' }  text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
-                        style="width: 98%; font-size: 0.95em; line-height: 20px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 2px; text-align: justify !important;">
+                        style="width: 98%; font-size: 1em; line-height: 20px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 2px; text-align: justify !important;">
 
                     %{--<g:remoteLink controller="generics" action="showDetails"--}%
                     %{--params="${[id: record.id, entityCode: entityCode]}"--}%
@@ -280,11 +280,11 @@
 
                                 <g:remoteLink controller="page" action="panel"
                                               tabindex="-1"
-                                    class="openPanelButton${entityCode}${record.id}"
+                                    class="openPanelButton"
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
-                                              style="padding: 2px; font-size: 1em;"
-                                              before="myLayout.open('east'); bindMyKeys${entityCode}${record.id}(); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);">
+                                              style="padding: 2px; font-size: 1.1em;"
+                                              before="myLayout.open('east'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);">
                                 %{--class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"--}%
                                     <g:if test="${!record.summary}">
                                         ...
@@ -490,7 +490,7 @@
                                               params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
                                               update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                               before="myLayout.open('east');jQuery('.recordSelected').removeClass('recordSelected');jQuery('#${entityCode}Record${record.id}').addClass('recordSelected'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);"
-                                              style="padding: 4px; font-size: 0.95em;">
+                                              style="padding: 4px; font-size: 1em;">
 
 
                                     <pkm:summarize text="${(record.title ?: '...')}"
@@ -938,6 +938,7 @@
     <g:if test="${!record.bookmarked}">
         <a name="bookmark${record.id}${entityCode}"
            title="Toggle bookmark"
+            class="quickBookmarkButton"
            value="${record.bookmarked}"
            onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}')">
             <span class="icon-star-gm"></span>
@@ -1058,10 +1059,11 @@
                     <td colspan="4">
                     <div class="recordContainer"
                          id="2ndLine${entityCode}${record.id}"
-                         style="opacity: 0.9; padding: 0px; padding-top: 0px !important;  margin: 0px;margin-top: 0px; display: inline;">
+                         style="opacity: 0.95; padding: 0px; margin: 0px; display: inline;">
                         %{-- class += hiddenActions--}%
 
-
+                        <div style="margin: 0 0px 0px 0px;" id="below${entityCode}Record${record.id}">
+                        </div>
                         <div id="actionsButtons"
                              class="temp44 hiddenActions actionsButtons"
                              style="text-align: left; direction: ltr; line-height: 20px;font-size: 1em !important; color: darkslategrey !important; column-count: 2">
@@ -1072,11 +1074,10 @@
 
                         <g:if test="${'JPT'.contains(entityCode) && record?.startDate}">
                             <br/>
-                            <span style="margin: 2px; font-size: 1em; padding: 2px; border-radius: 3px; border-bottom: 0px solid darkgray; direction: ltr; text-align: left;"
+                            <span style="margin: 0px; font-size: 1em; padding: 2px; border-radius: 3px; border-bottom: 0px solid darkgray; direction: ltr; text-align: left;"
                                   title="${record?.startDate?.format('HH:mm')} - ${record?.endDate?.format('HH:mm')}">
-                                                                %{--&ang;--}%
-                                                                <b>Due date:</b>
-                                ${record?.startDate?.format('EEE dd.MM.yyyy')}
+                          <b>Due date:</b>
+                                <u>${record?.startDate?.format('EEE dd.MM.yyyy')}</u>
                             </span>
                         %{--(<i><prettytime:display--}%
                         %{--date="${record?.startDate}"></prettytime:display></i>)--}%
@@ -1113,7 +1114,7 @@
                         ID:  <span style="color: darkslategrey; font-size: small;">${record.id}</span>
 <br/>
                         <b>Edit:</b>
-                            <g:remoteLink controller="generics" action="fetchAddForm" class="fullEditButton${entityCode}${record.id}"
+                            <g:remoteLink controller="generics" action="fetchAddForm" class="fullEditButton"
                                           tabindex="-1"
                                           id="${record.id}"
                                           params="[entityController: record.class.name,
@@ -1143,7 +1144,7 @@
                             <g:remoteLink controller="generics" action="showComment" style=""
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
-                                      class="addNoteButton${entityCode}${record.id}"
+                                      class="addNoteButton"
                                           title="Comments">
                                 note (N)
                             </g:remoteLink>
@@ -1152,7 +1153,7 @@
 
                         <g:remoteLink controller="generics" action="showTags"
                                       params="${[id: record.id, entityCode: entityCode]}"
-                                      class="addTagButton${entityCode}${record.id}"
+                                      class="addTagButton"
                                       update="below${entityCode}Record${record.id}"
                                       title="Details">
                             tag (t)
@@ -1509,16 +1510,18 @@ Parent:
 
                                 <g:remoteLink controller="generics" action="setLanguage"
                                 id="${record.id}-${entityCode}-en"
-                                class="setToEn"
+                                class="setLanguageEnglish"
+
                                 params="[entityCode: entityCode]"
                                 update="${entityCode}Record${record.id}"
                                 title="Mark as English">
                                 Set En
-                                </g:remoteLink>  <g:remoteLink controller="generics"
+                                </g:remoteLink>
+                                    <g:remoteLink controller="generics"
                                                                action="setLanguage"
                                                                id="${record.id}-${entityCode}-ar"
                                 params="[entityCode: entityCode]"
-                                                               class="setToAr"
+                                                               class="setLanguageArabic"
                                 update="${entityCode}Record${record.id}"
                                 title="Mark as Arabic">
                                 Set Ar
@@ -1547,6 +1550,7 @@ Parent:
                                 Priority:
                                         &nbsp;          <a name="priority+${record.id}${entityCode}"
                                                            id="priority+${record.id}${entityCode}"
+                                class="increasePriorityButton"
                                                            title="Incraese priority"
                                                    value="${record.priority}"
                                                    style="background: lightgrey"
@@ -1559,7 +1563,7 @@ Parent:
                                 <a
                                         name="priority-${record.id}${entityCode}"
                                         id="priority-${record.id}${entityCode}"
-
+                                        class="decreasePriorityButton"
                                         title="Decrease priority"
                                    value="${record.priority}"
                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')">
@@ -1581,6 +1585,7 @@ Parent:
                                    value="${record.endDate}"
                                    style="background: lightgrey"
                                    title="Set due date to today"
+                                   class="setTodayButton"
                                    id="setToday${record.id}${entityCode}"
                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/makeEndDateToday/${entityCode}${record.id}')">
                                     today  (0)
@@ -1611,7 +1616,7 @@ Parent:
                         <b>Append to record's:</b>
                         <br/>
                             <g:remoteLink controller="generics" action="showAppend"
-                                class="appendToDescription${entityCode}${record.id}"
+                                class="appendToDescription"
                                           params="${[id: record.id, entityCode: entityCode]}"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
@@ -1620,7 +1625,7 @@ Parent:
 
                             <g:remoteLink controller="generics" action="showAppendNotes"
                                           params="${[id: record.id, entityCode: entityCode]}"
-                                          class="appendToNotes${entityCode}${record.id}"
+                                          class="appendToNotes"
                                           update="below${entityCode}Record${record.id}"
                                           title="Details">
                                  notes (n)
@@ -1634,7 +1639,7 @@ Parent:
                                 <br/>
                                 <g:remoteLink controller="generics" action="markCompleted"
                                               id="${record.id}"
-                                              class="doneButton${entityCode}${record.id}"
+                                              class="doneButton"
                                               params="[entityCode: entityCode]"
                                               update="${entityCode}Record${record.id}"
                                               title="Mark completed">
@@ -1656,7 +1661,7 @@ Parent:
                                 <g:if test="${'CTGREW'.contains(entityCode) && (ker.OperationController.getPath('journal.enabled')?.toLowerCase() == 'yes' || ker.OperationController.getPath('planner.enabled')?.toLowerCase() == 'yes')}">
 
                                     <g:remoteLink controller="generics" action="showJP"
-                                        class="addJPButton${entityCode}${record.id}"
+                                        class="addJPButton"
                                                   params="${[id: record.id, entityCode: entityCode]}"
                                                   update="below${entityCode}Record${record.id}"
                                                   title="Details">
@@ -1683,7 +1688,7 @@ Parent:
                         <g:remoteLink controller="generics" action="openRpsFolder"
                                       params="${[id: record.id, entityCode: entityCode, repository: 1]}"
                                       update="${entityCode}CheckoutLog${record.id}"
-                                      class="openFolderButton${entityCode}${record.id}"
+                                      class="openFolderButton"
                                       style="background: lightgreen;"
                                       title="Open rps1 folder">
                             Open record's folder
@@ -1700,15 +1705,16 @@ Parent:
                         />
 
                     </div>
+
+
                     </div>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="10">
-                        <div style="margin: 0 5px 20px 0px;" id="below${entityCode}Record${record.id}">
-                        </div>
-                    </td>
-                </tr>
+                %{--<tr>--}%
+                    %{--<td colspan="10">--}%
+                        %{----}%
+                    %{--</td>--}%
+                %{--</tr>--}%
                 %{--<g:if test="${'CGR'.contains(record.entityCode()) && record.percentCompleted}">--}%
                 %{--<tr>--}%
                 %{--<td colspan="12" style="padding: 0; margin: 0">--}%
@@ -1743,130 +1749,17 @@ Parent:
 <script type="application/javascript">
 
     if ('2340' == "${tabIndex}"){
-        bindMyKeys();
+//        bindMyKeys();
         console.log('valid if ' + ${record.id})
         jQuery("#${entityCode}Record${record.id}").focus();
         %{--jQuery("#${entityCode}Record${record.id}").select();--}%
     }
 
-    function bindMyKeys${entityCode}${record.id} () {
+    %{--function bindMyKeys${entityCode}${record.id} () {--}%
 
         jQuery('.recordSelected').removeClass('recordSelected');
         jQuery('#${entityCode}Record${record.id}').addClass('recordSelected');
 
 
-        console.log('now binding in ' + ${record.id})
-    Mousetrap.bind('space', function (e) {
-        jQuery('.temp44').addClass('hiddenActions');
-        jQuery('.recordSelected #actionsButtons').removeClass('hiddenActions');
-        return false;
-    });
-
-    Mousetrap.bind(['e', 'ث'], function (e) {
-        jQuery(".recordSelected  .fullEditButton${entityCode}${record.id}").click();
-    });
-      Mousetrap.bind('8', function (e) {
-          jQuery(".recordSelected #${entityCode}Record${record.id}").load("${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}")
-    });
-    Mousetrap.bind(['q', 'ض'], function (e) {
-        jQuery(".recordSelected  .quickEditButton").click();
-    });
-    Mousetrap.bind(['t','ف'], function (e) {
-        jQuery(".recordSelected .addTagButton${entityCode}${record.id}").click();
-        jQuery(".recordSelected  #newTagField${entityCode}${record.id}").focus();
-    });
-    Mousetrap.bind(['d','ي'], function (e) {
-        jQuery(".recordSelected .appendToDescription${entityCode}${record.id}").click();
-        jQuery(".recordSelected  #appendTextFor${entityCode}${record.id}").focus();
-    });
- Mousetrap.bind(['ق','r'], function (e) {
-        jQuery(".recordSelected  .openPanelButton${entityCode}${record.id}").click();
-    });
-// Mousetrap.bind(['R','shift+ق'], function (e) {
-        %{--<!--jQuery(".recordSelected  .refresh${entityCode}${record.id}").click();-->--}%
-//    });
- Mousetrap.bind(['D','shift+ي'], function (e) {
-        jQuery(".recordSelected  .doneButton${entityCode}${record.id}").click();
-    });
- Mousetrap.bind('0', function (e) {
-        jQuery(".recordSelected  #setToday${record.id}${entityCode}").click();
-    });
-
-    Mousetrap.bind(['n','ى'], function (e) {
-        jQuery(".recordSelected .appendToNotes${entityCode}${record.id}").click();
-        jQuery(".recordSelected  #appendTextFor${entityCode}${record.id}").focus();
-    });
-
-  Mousetrap.bind(['N','shift+ى'], function (e) {
-        jQuery(".recordSelected  .addNoteButton${entityCode}${record.id}").click();
-
-    });
-
-    Mousetrap.bind(['l a','م ش'], function (e) {
-        jQuery(".recordSelected  #${record.id}-${entityCode}-ar").click();
-    });
-    Mousetrap.bind(['l e','م ث'], function (e) {
-        jQuery(".recordSelected  #${record.id}-${entityCode}-en").click();
-    });
-    Mousetrap.bind(['j','ت'], function (e) {
-        jQuery(".addJPButton${entityCode}${record.id}").click();
-    });
-    Mousetrap.bind(['x','ء'], function (e) {
-        jQuery(".recordSelected  .dump${entityCode}${record.id}").click();
-    });
-  Mousetrap.bind(['f','ب'], function (e) {
-        jQuery(".recordSelected  .openFolderButton${entityCode}${record.id}").click();
-    });
-
-
-    Mousetrap.bind('=', function (e) {
-        %{--jQuery("#priority+${record.id}${entityCode}").click();--}%
-        jQuery('.recordSelected #${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')
-    });
-    Mousetrap.bind('-', function (e) {
-        jQuery('.recordSelected #${entityCode}Record${record.id}').load('${request.contextPath}/generics/decreasePriority/${entityCode}${record.id}')
-    });
-
- }
-
-%{--    unbindMyKeys = function() {--}%
-%{--    console.log('now unbinding in ' + ${record.id})--}%
-%{--    Mousetrap.unbind('space');--}%
-
-%{--    Mousetrap.unbind('e');--}%
-%{--    Mousetrap.unbind('q');--}%
-%{--    Mousetrap.unbind('t');--}%
-%{--    Mousetrap.unbind('d');--}%
-
-%{--    Mousetrap.unbind('shift+n');--}%
-
-%{--    Mousetrap.unbind('p =');--}%
-%{--    Mousetrap.unbind('p -');--}%
-%{--}   --}%
-
-    bindMyKeys${entityCode}${record.id}()
-
-
-    Mousetrap.bind('alt+up', function (e) {
-        console.log('now up in ' + ${record.id})
-        let t = jQuery('.recordSelected')//.prevAll('table').eq(-1) //jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0);
-        %{--<!--jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0).addClass('recordSelected');-->--}%
-        jQuery('.recordSelected').prevAll('table').eq(0).addClass('recordSelected');
-        //jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
-       // jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
-//        jQuery('.selectedRecord .refresh').click();
-        t.removeClass('recordSelected');
-    });
-
-    Mousetrap.bind('alt+down', function (e) {
-        console.log('now down in ' + ${record.id})
-        let t = jQuery('.recordSelected')//.prevAll('table').eq(-1) //jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0);
-        %{--<!--jQuery('#${entityCode}Record${record.id}').prevAll('table').eq(0).addClass('recordSelected');-->--}%
-        jQuery('.recordSelected').nextAll('table').eq(0).addClass('recordSelected');
-        //jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
-       // jQuery('#${entityCode}Record${record.id}').removeClass('recordSelected');
-//        jQuery('.selectedRecord .refresh').click();
-        t.removeClass('recordSelected');
-    });
 
 </script>

@@ -3,7 +3,8 @@
     font-family: 'Lato';
     font-style: normal;
     font-weight: 400;
-    src: url('../fonts/lato-v16-latin-ext_latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */   url('../fonts/lato-v16-latin-ext_latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    src: url('../fonts/lato-v16-latin-ext_latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/lato-v16-latin-ext_latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 /* lato-italic - latin-ext_latin */
@@ -37,7 +38,7 @@
 
 html {
     /*background: #f1f1f1;*/
-    font-family:  Lato !important;
+    font-family:  Lato;
     /*font-weight: ;*/
 }
 
@@ -139,7 +140,7 @@ body {
     color: #333;
     /*line-height: 1.4;*/
     font-size: 1em;
-    font-family:  Lato !important;
+    font-family:  Lato;
 
     background: #D8D4C9 url(../images/bg-main.gif) repeat-x;
     /*font: 12px/20px Verdana, Arial, Tahoma, sans-serif;*/
@@ -421,7 +422,7 @@ tr {
 }
 
 td, th {
-    font: 0.95em Lato, verdana, arial, helvetica, sans-serif;
+    font: 1em Lato, verdana, arial, helvetica, sans-serif;
     line-height: 15px;
     padding: 2px;
     /*text-align: left;*/
@@ -430,7 +431,7 @@ td, th {
 
 th {
     font-family: Lato, tahoma, verdana, arial, helvetica, sans-serif !important;
-    font-size: 0.9em !important;
+    font-size: 1em !important;
     /*font-weight:normal !important;*/
     background: #fff url(../images/skin/shadow.jpg);
     color: #666;
@@ -1194,7 +1195,7 @@ ul.ui-tabs-nav {
 
 .recordLine td {
     vertical-align: middle;
-    padding: 0;
+    padding: 2px;
 }
 
 .D-bkg {
@@ -1301,6 +1302,10 @@ ul.ui-tabs-nav {
     /*border-image: none;*/
     /*border-style: solid;*/
     /*border-width: 1px;*/
+}
+
+.recordContainer td {
+    padding: 3px;
 }
 
 .justUpdated {
@@ -1680,7 +1685,7 @@ ul.ui-autocomplete.ui-menu {
 
 h3, h4 {
     /* Headers & Footer in Center & East panes */
-    font-size: 0.9em;
+    font-size: 1.2em;
     /*background: #D8D4C9;*/
     /*border-bottom: 1px solid #BBB;*/
     border-width: 0 0 1px;
@@ -1703,7 +1708,7 @@ h2 {
 }
 
 .ui-helper-reset {
-    font-size: 0.9em !important;
+    font-size: 1em !important;
 }
 
 ul.ui-autocomplete.ui-menu {
@@ -1802,7 +1807,7 @@ ul.ui-autocomplete.ui-menu {
 .actionsButtons a {
     color: #050f16 !important;
     font-style: normal !important;
-    font-size: 0.95em !important;
+    font-size: 1em !important;
     text-decoration: none !important;
     border: 1px solid darkgray !important;
     border-radius: 3px !important;
@@ -1812,7 +1817,7 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .actionsButtonsStyle a {
-    font-size: 0.85em !important;
+    font-size: 0.95em !important;
     color: #0b1336 !important;
     font-style: normal !important;
     text-decoration: underline !important;
@@ -1908,7 +1913,7 @@ ul.ui-autocomplete.ui-menu {
 
 .commandBarTexField {
     font-family: Lato, tahoma !important;
-    font-size: 0.95em;
+    font-size: 1em;
     width: 98% !important;
     height: 200px;
     background: #dce5e5;
@@ -1948,7 +1953,7 @@ ul.ui-autocomplete.ui-menu {
 .commandBarTexFieldTop {
     background: #eeeeee;
     /*direction: ltr;*/
-    font-size: 0.95em !important;
+    font-size: 1em !important;
     text-align: start;
 }
 
@@ -1975,7 +1980,7 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .footerRegion a {
-    font-size: 0.9em !important;
+    font-size: 0.95em !important;
     font-family: Lato, "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif;
     color: white !important;
 }
@@ -2069,6 +2074,7 @@ a :hover {
 
 .recordSelected{
     border: 1px darkgreen solid !important;
+    border-radius: 5px !important;
 }
 
 .recordNotSelected{

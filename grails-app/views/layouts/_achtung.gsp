@@ -25,8 +25,8 @@
 
   jQuery.achtung({message: "${message}", timeout: 3,
     animateClassSwitch: true,
-    showEffectDuration: 500,
-    hideEffectDuration: 1000});
+    showEffectDuration: 1000,
+    hideEffectDuration: 3000});
 
 
 

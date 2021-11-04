@@ -1969,6 +1969,9 @@ past.each(){
         if (params.task && params.task != 'null')
             j.task = Task.get(params.task.toLong())
 
+        if (params.department && params.department != 'null')
+            j.department = Department.get(params.department.toLong())
+
         if (params.goal && params.goal != 'null')
             j.goal = Goal.get(params.goal.toLong())
 
