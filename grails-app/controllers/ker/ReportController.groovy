@@ -562,7 +562,7 @@ def enterJournalWithType() {
 
     def staticQuranReport() {
 
-        def f = new File(OperationController.getPath('qurani.path') + '/quran.html')
+        def f = new File(OperationController.getPath('root.rps1.path') + '/quran.html')
 //        f.text(g.include([controller: 'report', action: 'quranReportToString']).toString())
         f.write(g.include([controller: 'report', action: 'quranReportToString']).toString(), 'UTF-8')
         render 'Generation done: ' + new Date().format('HH:mm:ss')

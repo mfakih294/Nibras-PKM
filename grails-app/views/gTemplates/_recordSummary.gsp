@@ -274,7 +274,7 @@
                                 <g:if test="${record.class.declaredFields.name.contains('course' +
                                         '') && record.course}">
                                     <span style="padding: 1px 2px; margin: 0px 2px; font-size: small; border-radius: 3px; border: 1px solid darkgray; color: black; font-weight: normal; font-family: monospace">
-                                        ${record.course?.code ?: record.course}</span>
+                                        ${record.course ? record.course?.summary : record.course}</span>
                                 </g:if>
 
 
@@ -1177,8 +1177,15 @@ Type:
                                 ${record?.type?.code ?'#' + record?.type?.code : '#'}
                             </a>
                         %{--</div>--}%
+
+                            %{--todo: success callback not working --}%
+
                             <script type="text/javascript">
-                                jQuery("#2${field}${record.id}").editable();
+                                jQuery("#2${field}${record.id}").editable(
+                                        {showButtons: false, mode: 'popup', placement: 'right', success: function (responce, newValue) {
+                                    jQuery('.selectedRecord .refresh').click();
+                                }}
+                                );
                             </script>
 
                         </g:if>
@@ -1206,7 +1213,9 @@ Type:
                                 </a>
                             </div>
                             <script type="text/javascript">
-                                jQuery("#${field}${record.id}").editable();
+                                jQuery("#${field}${record.id}").editable(
+                                        {showButtons: false, mode: 'popup', placement: 'right'}
+                                );
                             </script>
 
                         </g:if>
@@ -1219,7 +1228,7 @@ Course:
                             <g:set value="course" var="field"></g:set>
 
                             <a href="#" id="${field}${record.id}" class="${field}"
-                               style="color: darkgray; font-size: 12px !important"
+                               style="color: darkgray; font-size: 12px !important; direction: rtl; text-align: right;"
                                data-type="select"
                                data-value="${record[field]?.id}"
                                data-name="${field}-${entityCode}"
@@ -1230,7 +1239,9 @@ Course:
                                 ${record[field] ? (record[field].code ? 'c_' + record[field].code : 'c_' + record.course) : 'c--'}
                             </a>
                             <script type="text/javascript">
-                                jQuery("#${field}${record.id}").editable();
+                                jQuery("#${field}${record.id}").editable(
+                                        {showButtons: false, mode: 'popup', placement: 'right'}
+                                );
                             </script>
                         </g:if>
 
@@ -1507,6 +1518,18 @@ Parent:
                                 %{--                                            '${record.language}--}%
                                 %{--                                        </g:if>--}%
 
+<g:each in="['A', 'B', 'D', 'Y', 'E', 'F', 'L', 'O', 'Z', 'H', 'I', 'V', 'T', 'U', 'S', 'K', 'X']" var="d">
+                                <g:remoteLink controller="generics" action="setDepartment"
+                                id="${record.id}-${entityCode}-${d}"
+                                class="setDepartment${d}"
+                                    style="display: none;"
+                                params="[entityCode: entityCode]"
+                                update="${entityCode}Record${record.id}"
+                                title="Set dept. ${d}">
+                                Set dept. ${d}
+                                </g:remoteLink>
+</g:each>
+
 
                                 <g:remoteLink controller="generics" action="setLanguage"
                                 id="${record.id}-${entityCode}-en"
@@ -1557,6 +1580,19 @@ Parent:
                                                    onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/increasePriority/${entityCode}${record.id}')">
                                 <b>+ (=)</b>
                             </a>
+
+
+                                <g:each in="[0, 1, 2, 3, 4, 5]" var="p">
+                                    &nbsp;
+                                    <a title="Set priority" style="font-size: 14px !important; text-decoration: none; display: none" class="setPriority${p}"
+                                       value="${record.priority}"
+                                       onclick="jQuery('#${entityCode}Record${record.id}'').load('${request.contextPath}/generics/setPriority/${entityCode}${record.id}?p=' + ${p})">
+                                    &nbsp;
+                                        ${p}
+                                    </a>
+
+                                </g:each>
+
                             %{--</g:if>--}%
 
                             %{--<g:if test="${record.class.declaredFields.name.contains('priority')}">--}%
@@ -1757,7 +1793,9 @@ Parent:
 
     %{--function bindMyKeys${entityCode}${record.id} () {--}%
 
+    if (jQuery('.recordSelected').size() > 0)
         jQuery('.recordSelected').removeClass('recordSelected');
+
         jQuery('#${entityCode}Record${record.id}').addClass('recordSelected');
 
 

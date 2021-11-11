@@ -112,7 +112,8 @@
     <td>
 
     %{--<h4>Files</h4>--}%
-<g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
+
+
 
 %{--<uploader:uploader id="addToRecordFolder${record.id}"--}%
                    %{--url="${[controller: 'import', action: 'addToRecordFolder']}"--}%
@@ -462,24 +463,6 @@ Authors: ${authors}
       <br/>${record.stepsHistory?.replace('-', '<br/>')}
             <br/>
         </g:if>
-
-
-
-        <pkm:listPictures fileClass="snsFile"
-                  folder="${OperationController.getPath('root.rps1.path')}/${record.entityCode()}/${record.id}"
-                  initial=""/>
-
-<pkm:listPictures fileClass="snsFile"
-                  folder="${OperationController.getPath('root.rps2.path')}/${record.entityCode()}/${record.id}"
-                  initial=""/>
-
-<pkm:listPictures fileClass="snsFile"
-                  folder="${OperationController.getPath('root.rps1.path')}/${record.entityCode()}"
-                  initial="${record.id}"/>
-
-<pkm:listPictures fileClass="snsFile"
-                  folder="${OperationController.getPath('root.rps2.path')}/${record.entityCode()}"
-                  initial="${record.id}"/>
 
 <g:if test="${record.entityCode() == 'R'}">
 
@@ -918,7 +901,12 @@ Authors: ${authors}
 
 
 
-
+<div class="heading">
+    %{--<h2>Create new record...</h2>--}%
+    <h4 style="user-focus-pointer: hand; cursor: hand;">Actions...</h4>
+    <br/>
+</div>
+<div class="content">
 
         <div class="actionsButtons">
 
@@ -1109,7 +1097,7 @@ Authors: ${authors}
 
 
         <g:if test="${'R'.contains(entityCode) && ker.OperationController.getPath('excerpts.enabled')?.toLowerCase() == 'yes'}">
-            <div dir="ltr">
+            <div dir="ltr"/>
             <br/>
             Add excerpt:
             <g:formRemote name="appendText" url="[controller: 'book', action: 'addExcerpt']"
@@ -1125,7 +1113,7 @@ Authors: ${authors}
                                 class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
                 <br/>
             </g:formRemote>
-            </div>
+            %{--</div>--}%
         </g:if>
 
 
@@ -1180,6 +1168,9 @@ Authors: ${authors}
 <br/>
 <br/>
             </g:if>
+
+
+
 
             <span id="${entityCode}CheckoutLog${record.id}"></span>
 
@@ -1250,7 +1241,7 @@ Authors: ${authors}
 
         <br/>
         </div>
-<div >
+
     <br/>
     <br/>
 
@@ -1294,8 +1285,8 @@ Authors: ${authors}
     %{--<br/>--}%
     </g:if>
 
-    <br/>
-    <br/>
+
+
 <g:if test="${record.class.declaredFields.name.contains('completedOn') && record.completedOn}">
 
     <b>Completed on</b> ${record.completedOn?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
@@ -1332,11 +1323,41 @@ x
        <br/>
 
     </g:if>
+</div>
+</div>
+
+
+<div class="heading">
+    %{--<h2>Create new record...</h2>--}%
+    <h4 style="user-focus-pointer: hand; cursor: hand;">Files...</h4>
+    <br/>
+</div>
+<div class="content">
+
+
+    <g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
+
+
+    <pkm:listPictures fileClass="snsFile"
+                      folder="${OperationController.getPath('root.rps1.path')}/${record.entityCode()}/${record.id}"
+                      initial=""/>
+
+    <pkm:listPictures fileClass="snsFile"
+                      folder="${OperationController.getPath('root.rps2.path')}/${record.entityCode()}/${record.id}"
+                      initial=""/>
+
+    <pkm:listPictures fileClass="snsFile"
+                      folder="${OperationController.getPath('root.rps1.path')}/${record.entityCode()}"
+                      initial="${record.id}"/>
+
+    <pkm:listPictures fileClass="snsFile"
+                      folder="${OperationController.getPath('root.rps2.path')}/${record.entityCode()}"
+                      initial="${record.id}"/>
 
 
 
 
-<g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
+    <g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <br/>
 <br/>
 <b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
@@ -1433,6 +1454,8 @@ Open record's folder:
 </g:if>
 </div>
 
+</div>
+
     <br/>
 %{--&nbsp;/--}%
 %{--&nbsp;--}%
@@ -1495,4 +1518,16 @@ opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id
         <script type="text/javascript">
 //jQuery('.uploadr[name=uploader]').data('uploadr').set('path', 'd:/test');
 jQuery('#spinner2').hide();
+
+jQuery(".content").hide();
+
+jQuery(".heading").click(function() {
+    jQuery(this).next(".content").slideToggle(200);
+
+    if (!window.isHidden)
+        window.isHidden = true;
+    else
+        window.isHidden = false;
+});
+
 </script>

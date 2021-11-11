@@ -738,7 +738,7 @@ div.calendar {
 }
 
 #rssList td a {
-    font-size: 12px !important;
+    font-size: 0.95em !important;
     font-family: Lato, "Segoe UI", verdana, Geneva, Arial, Helvetica, sans-serif !important;
     color: white !important;
     text-decoration: none;
@@ -750,7 +750,7 @@ div.calendar {
     text-align: start;
     margin-right: -1px;
     padding-top: 0em;
-    font-size: 12px;
+    font-size: 0.95em;
     /*font-family: arial;*/
     /*list-style: none outside none;*/
 }
@@ -759,7 +759,7 @@ div.calendar {
     float: left;
     margin-right: -1px;
     padding-top: 0.4em;
-    font-size: 10px;
+    font-size: 0.95em;
     list-style: none outside none;
 }
 

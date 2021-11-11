@@ -1389,7 +1389,8 @@ date = "${r.year ?: ''}"
             outPath = OperationController.getPath('root.rps1.path') + '/' + params.module + '/' + params.id
 
 
-        def newPath = "/nbr/out/out-${params.module}-${params.module == 'R' ? '' + params.type + '-' : ''}${params.id}-${b.toString()}-${params.name}"
+        def newPath =  (OperationController.getPath('out.path') ?:  (OperationController.getPath('root.rps1.path') +  "/out/")) +
+                "out-${params.module}-${params.module == 'R' ? '' + params.type + '-' : ''}${params.id}-${b.toString()}-${params.name}"
         try {
             // will output "my_image_2.jpg"
             def ant = new AntBuilder()
@@ -1415,7 +1416,6 @@ date = "${r.year ?: ''}"
             render(template: '/layouts/achtung', model: [message: 'Problem while checking out ' + params.name])
             e.printStackTrace()
         }
-
     }
 
 

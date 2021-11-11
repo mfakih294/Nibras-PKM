@@ -73,17 +73,18 @@
             </div>
 
                 <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
-
+                <br/>
                     <div class="heading">
                         %{--<h2>Create new record...</h2>--}%
                         <h4 style="user-focus-pointer: hand; cursor: hand;">Quick add records...</h4>
+                        <br/>
                     </div>
                     <div class="content">
 
                     <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                   url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                                   update="underAreaForQuickAdd"
-                                  onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus();"
+                                  onComplete="jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', }); jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus(); "
                                   method="post">
 
                     %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
@@ -105,10 +106,6 @@
                         <g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"
                                   value="${OperationController.getPath('default.language')}"
                         />
-
-
-
-
 
 
                         <g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">

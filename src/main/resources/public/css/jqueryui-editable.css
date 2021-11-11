@@ -145,9 +145,14 @@
 .editable-pre-wrapped {
    white-space: pre-wrap;
 }
+.editable-popup {
+    location: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+}
 .editable-container.editable-popup {
-    max-width: none !important; /* without this rule poshytip/tooltip does not stretch */
-}  
+    max-width: 20% !important; /* without this rule poshytip/tooltip does not stretch */
+}
 
 .editable-container.popover {
     width: auto; /* without this rule popover does not stretch */

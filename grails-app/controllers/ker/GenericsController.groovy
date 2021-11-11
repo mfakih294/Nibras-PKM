@@ -1914,6 +1914,15 @@ def markAsMarkdowned(Long id, String entityCode) {
         record.language = params.id.split('-')[2]
         render(template: '/gTemplates/recordSummary', model: [record: record])
     }
+
+    def setDepartment() {
+        def entityCode = params.id.split('-')[1]//.substring(0, 1)
+        def id = params.id.split('-')[0].toLong()
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+        record.department = Department.findByCode(params.id.split('-')[2])
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+    }
 /*
     def setArabic() {
         def entityCode = params.entityCode//.substring(0, 1)

@@ -15,6 +15,8 @@
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-ui-1.10.4.custom.min.js')}"></script>
 
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'jqueryui-editable.min.js')}"></script>
+
 
   <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'jquery.qtip.css')}"/>
   <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'jquery.modal.css')}"/>
@@ -277,8 +279,13 @@
 
 
 
+      $.fn.editable.defaults.mode = 'inline';
+      $.fn.editable.defaults.showbuttons = false;
 
-  setInterval(function() {
+
+
+
+      setInterval(function() {
 
       jQuery.ajax({
           type: 'GET',

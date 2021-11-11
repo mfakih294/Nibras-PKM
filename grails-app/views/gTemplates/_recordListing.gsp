@@ -243,11 +243,13 @@ jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelecti
 
 //jQuery(document).ready(function () {
     %{--document.getElementsByClassName("prevLink")[0].className = "prevLink${customId}";--}%
+if (jQuery(".nextLink").size() > 0) {
     document.getElementsByClassName("nextLink")[0].className = "nextLink${customId}";
 
     Mousetrap.bind('right', function (e) {
-        jQuery(".nextLink${customId}").click()
+        jQuery(".nextLink${customId}").click();
     });
+}
 
 
 //});
