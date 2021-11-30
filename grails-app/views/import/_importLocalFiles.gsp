@@ -19,8 +19,8 @@
         <td style="vertical-align: top">
 <g:each in="${1..3}" var="r">
     <g:if test="${Setting.findByName('root.rps' + r + '.path') && new File(OperationController.getPath('root.rps' + r + '.path')).exists()}">
-        <h4>Folders and files in <b>${OperationController.getPath('root.rps' + r + '.path')}</b>:</h4>
-        <g:each in="${new java.io.File(OperationController.getPath('root.rps' + r + '.path')).listFiles()}" var="i">
+        <h4>Folders and files in <b>${OperationController.getPath('root.rps' + r + '.path')}/new</b>:</h4>
+        <g:each in="${new java.io.File(OperationController.getPath('root.rps' + r + '.path') + '/new').listFiles()}" var="i">
 
             <g:if test="${i.isFile() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*\.[\S]*/ && i.name?.contains('--')}">
                 <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
@@ -182,7 +182,7 @@
 
 
             <g:else>
-                <i style="color: red">Setting name 'root.rps${r}.path' is not defined or folder does not exit.
+                <i style="color: red">Setting name 'root.rps${r}.path' /new is not defined or folder does not exit.
                 </i>
                 <hr/>
                 <br/>

@@ -425,7 +425,7 @@ class ExportController {
 
         def c = Course.get(params.id)
 
-        def path = OperationController.getPath('editBox.path') + "/out-C-" + (c.code?: c.id) + '.tex'
+        def path = (OperationController.getPath('editBox.path') && new File(OperationController.getPath('editBox.path')).exists() ?: OperationController.getPath('root.rps1.path')) + "/out-C-" + (c.code?: c.id) + '.tex'
 
         def file = new File(path)
 
@@ -450,12 +450,13 @@ class ExportController {
 
         file.write(text, 'UTF-8')
         render('Course chapters combined')
+        render(template: '/layouts/achtung', model: [message: 'Course notes exported in markdown format to : ' + path])
     }
 def combineCourseWritings() {
 
         def c = Course.get(params.id)
 
-        def path = OperationController.getPath('editBox.path') + "/out-C-" + (c.code?: c.id) + '.md'
+        def path = (OperationController.getPath('editBox.path') && new File(OperationController.getPath('editBox.path')).exists() ?: OperationController.getPath('root.rps1.path')) + "/out-C-" + (c.code?: c.id) + '.md'
 
         def file = new File(path)
 
@@ -474,7 +475,7 @@ def combineCourseWritings() {
 
 
         file.write(text, 'UTF-8')
-        render('Course chapters combined')
+    render(template: '/layouts/achtung', model: [message: 'Course notes exported in markdown format to : ' + path])
     }
 
     def combineWritingNotes() {

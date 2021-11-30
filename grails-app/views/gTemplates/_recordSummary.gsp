@@ -948,6 +948,7 @@
             <a name="bookmark${record.id}${entityCode}"
                title="Toggle bookmark"
                value="${record.bookmarked}"
+               class="quickBookmarkButton"
                onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/quickBookmark/${entityCode}-${record.id}')">
                 <span class="icon-starred-gm"></span>
             </a>
@@ -957,7 +958,7 @@
         <td>  <a
                 title="Actions"
                 class="fg-button ui-widget ui-state-default ui-corner-all" style="padding: 0px 3px; margin: 2px;"
-                onclick="jQuery('.temp44').addClass('hiddenActions');jQuery('#actionsButtons').removeClass('hiddenActions')">
+                onclick="jQuery('.temp44').addClass('hiddenActions');jQuery('#actionsButtons${entityCode}Record${record.id}').removeClass('hiddenActions')">
             &hellip;
         </a>
         </td>
@@ -1064,7 +1065,7 @@
 
                         <div style="margin: 0 0px 0px 0px;" id="below${entityCode}Record${record.id}">
                         </div>
-                        <div id="actionsButtons"
+                        <div id="actionsButtons${entityCode}Record${record.id}"
                              class="temp44 hiddenActions actionsButtons"
                              style="text-align: left; direction: ltr; line-height: 20px;font-size: 1em !important; color: darkslategrey !important; column-count: 2">
 

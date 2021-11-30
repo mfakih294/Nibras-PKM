@@ -74,12 +74,12 @@
 
                 <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 <br/>
-                    <div class="heading">
+                    <div class="">
                         %{--<h2>Create new record...</h2>--}%
                         <h4 style="user-focus-pointer: hand; cursor: hand;">Quick add records...</h4>
                         <br/>
                     </div>
-                    <div class="content">
+                    <div class="">
 
                     <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                   url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
@@ -121,7 +121,7 @@
                                      placeholder="Summary * "/>
 
                         <g:submitButton name="save" value="Add (Shift+F2)"
-                                        style="text-align: center; padding-left: 8px; padding-right: 8px; width: 90px"
+                                        style="text-align: center; padding-left: 8px; padding-right: 8px; width: 120px"
                                         tabindex="4"
                                         id="addXcdFormDaftarSubmit"
                                         class="fg-button ui-widget ui-state-default"/>

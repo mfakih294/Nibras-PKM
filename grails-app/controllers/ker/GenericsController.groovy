@@ -4118,7 +4118,11 @@ render params.text
                         if (it.trim().length() == 1) {
 //                              properties['type'] = null
                             queryCriteria.add("priority = null")
-                        } else {
+                        } else if (it.trim() == 'p-') {
+                            properties['priority'] = null
+                            queryCriteria.add("priority = null")
+                        }
+                        else {
 
                             properties['priority'] = it.substring(1, 2).toInteger()
                             queryCriteria.add('priority = ' + it.substring(1, 2))
