@@ -110,7 +110,7 @@
 
                     <td class="record-summary ${record.class.declaredFields.name.contains('isMerged') && record.isMerged ? 'merged' : '' }  text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')} ${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
 
-                        style="width: 98%; font-size: 1em; line-height: 20px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 2px; text-align: justify !important;">
+                        style="width: 98%; font-size: 1em; vertical-align: middle; line-height: 20px; color: #105CB6; padding-right: 4px; padding-left: 4px; padding-bottom: 0px; padding-top: 2px; text-align: justify !important;">
 
                     %{--<g:remoteLink controller="generics" action="showDetails"--}%
                     %{--params="${[id: record.id, entityCode: entityCode]}"--}%
@@ -971,14 +971,15 @@
                     </td>
 
 
-                    <g:if test="${new File(OperationController.getPath('module.sandbox.' + entityCode + '.path') + '/' + record.id + 'j.jpg')?.exists() || new File(OperationController.getPath('module.sandbox.' + entityCode + '.path') + '/' + record.id + entityCode.toLowerCase() + '.jpg')?.exists()}">
+                    %{--<g:if test="${new File(OperationController.getPath('root.rps1.path') + '/' + entityCode + '/' + record.id + '/' +  'cover.jpg')?.exists() ||--}%
+                            %{--new File(OperationController.getPath('root.rps2.path') + '/' + entityCode + '/' + record.id + '/' +  'cover.jpg')?.exists()}">--}%
 
                         <td style="width: 95px !important;">
 
                             <ul class="product-gallery">
 
                                 <li class="gallery-img" id="recordImage${record.id}">
-                                    <img class="Photo" style="width: 90px; height: 90px; display:inline"
+                                    <img class="Photo" style="width: 90px; height: 90px; display:inline" onerror="this.style.display='none'"
                                          src="${createLink(controller: 'generics', action: 'viewRecordImage', id: record.id, params: [entityCode: entityCode, date: new Date()])}"/>
 
                                 </li>
@@ -989,8 +990,8 @@
 
                         </td>
 
-                    </g:if>
-
+                    %{--</g:if>--}%
+%{--legacy case--}%
                     <g:if test="${entityCode == 'R'}">
                         <g:if test="${(new File(OperationController.getPath('root.rps1.path') + "/${entityCode}/cvr/" +
                                 '/' + record.id + '')?.exists() ||
@@ -1587,7 +1588,7 @@ Parent:
                                     &nbsp;
                                     <a title="Set priority" style="font-size: 14px !important; text-decoration: none; display: none" class="setPriority${p}"
                                        value="${record.priority}"
-                                       onclick="jQuery('#${entityCode}Record${record.id}'').load('${request.contextPath}/generics/setPriority/${entityCode}${record.id}?p=' + ${p})">
+                                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/setPriority/${entityCode}${record.id}?p=' + ${p})">
                                     &nbsp;
                                         ${p}
                                     </a>

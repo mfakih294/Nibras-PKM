@@ -1812,7 +1812,8 @@ def markAsMarkdowned(Long id, String entityCode) {
 
         record.priority = params.p?.toInteger()
         record.save(flush: true)
-        render('<b>' + params.p + '</b>')
+//        render('<b>' + params.p + '</b>')
+        render(template: '/gTemplates/recordSummary', model: [record: record])
     }
 
 
@@ -5649,25 +5650,51 @@ def addTagToAll(String input) {
         //render("correct")
     }
 
+    String[] getRecordPaths(String entityCode, Long id){
 
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
+        def path1, path2
+        def resourceNestedById = false
+        def resourceNestedByType = false
+        if (OperationController.getPath('resourceNestedById') == 'yes')
+            resourceNestedById = true
+        if (OperationController.getPath('resourceNestedByType') == 'yes')
+            resourceNestedByType = true
+        if (entityCode == 'R') {
+            path1 = OperationController.getPath('root.rps1.path') + '/R' +
+                    (resourceNestedByType ?  '/' +  record.type.code : '') +
+                    (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
+                    '/' + record.id
+           path2 = OperationController.getPath('root.rps2.path') + '/R' +
+                    (resourceNestedByType ?  '/' +  record.type.code : '') +
+                    (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
+                    '/' + record.id
+        } else {
+            path1 = OperationController.getPath('root.rps1.path') + '' + entityCode + '/' + id
+            path2 = OperationController.getPath('root.rps2.path') + '' + entityCode + '/' + id
+        }
+        return [path1, path2]
+    }
     def viewRecordImage() {
 
 
+        def paths = getRecordPaths(params.entityCode, params.id.toLong())
         def f
-//		def f2
-        def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+        paths.each(){
+            f = new File(it + '/' +  'cover.jpg')
 
 
-        f = new File(OperationController.getPath('module.sandbox.' + record.entityCode() + '.path') + '/' + record.id + record.entityCode().toLowerCase() + '.jpg')
 
-//		f2 = new File(OperationController.getPath('module.sandbox.' + record.entityCode() + '.path') + '/' + record.id + 'n.jpg')
 
 
         if (f?.exists()) {
             byte[] image = f.readBytes()
             response.outputStream << image
+            }
         }
+//        f2 = new File(OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/' + record.id + '/' +  'cover.jpg')
+//		f2 = new File(OperationController.getPath('module.sandbox.' + record.entityCode() + '.path') + '/' + record.id + 'n.jpg')
 //		else if (f2?.exists()) {
 //            byte[] image = f2.readBytes()
 //            response.outputStream << image
