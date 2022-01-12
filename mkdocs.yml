@@ -3,9 +3,7 @@ site_url: https://nibras-pkm.readthedocs.io/
 site_description: A web-based open-source system for the long-term management of personal information for prolific people.
 site_author: Mohamad Fakih
 repo_url: https://github.com/mfakih294/Nibras-PKM
-
 use_directory_urls: true #The default style of use_directory_urls: true creates more user friendly URLs, and is usually what you'll want to use. The alternate style (edit: use_directory_urls: false) can occasionally be useful if you want your documentation to remain properly linked when opening pages directly from the file system, because it creates links that point directly to the target file rather than the target directory.
-
 nav:
   - Home: index.md
   - Features: features.md
