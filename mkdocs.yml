@@ -8,7 +8,7 @@ use_directory_urls: true #The default style of use_directory_urls: true creates 
 
 nav:
   - Home: index.md
-  - Features: 01.md
+  - Features: features.md
   - Installation and Configuration: 10.md
   - Backup and restore: 09.md
   - Interface: 02.md
