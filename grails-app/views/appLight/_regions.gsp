@@ -75,7 +75,7 @@
                 %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
                 %{--</code>--}%
 
-                    <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
+                    <g:select name="type" from="${['J', 'N', 'W', 'T', 'G', 'R']}"
                               id="typeField"
                               tabindex="1"
                               value="N"/>

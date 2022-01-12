@@ -189,7 +189,7 @@ class Book implements Comparable {  // entity id = 134
         publisher()
         publicationDate()
         resourceType(nullable: true)
-        type(nullable: false)
+        type(nullable: true)
         excerpts()
 
         notes()

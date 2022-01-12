@@ -1328,6 +1328,7 @@ date = "${r.year ?: ''}"
         render(['ok'] as JSON)
     }
 
+    /*
 
     def generateCover() {
 
@@ -1343,7 +1344,7 @@ date = "${r.year ?: ''}"
         args_2[2] = "-endPage";
         args_2[3] = "1";
         args_2[4] = "-outputPrefix"
-        args_2[5] = OperationController.getPath('root.rps1.path') + '/cvr/' + (params.type ? '/' + params.type : '') + '/' + params.id;
+        args_2[5] = OperationController.getPath('root.rps1.path') + '/' + /' + (params.type ? '/' + params.type : '') + '/' + params.id;
         args_2[6] = pdfPath;
 
         try {
@@ -1357,6 +1358,7 @@ date = "${r.year ?: ''}"
             e.printStackTrace()
         }
     }
+    */
 
     def checkoutFile() {
 
@@ -2372,6 +2374,8 @@ margin: 5px 2px;
     else
         render ('This is not a WebVTT file')
     }
+
+
 
 
 

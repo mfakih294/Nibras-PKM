@@ -84,6 +84,8 @@ class PageController {
             'S'  : 'app.Contact',
             'Tag': 'app.Tag',
 
+            'O'            : 'mcs.Operation',
+
             'Y'  : 'cmn.Setting',
             'X'  : 'mcs.parameters.SavedSearch'
     ]
@@ -136,7 +138,7 @@ class PageController {
                 [id: 'G', name: 'Goal', code: 'goals'],
                 [id: 'N', name: 'Note', code: 'notes'],
                 [id: 'W', name: 'Writing', code: 'writings'],
-                [id: 'Jy', name: 'Journal', code: 'journal'],
+                [id: 'J', name: 'Journal', code: 'journal'],
 //                [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
                 [id: 'R', name: 'Resource', code: 'resources']
         ].each(){
@@ -539,7 +541,7 @@ def appPile() {
                 [id: 'G', name: 'Goal', code: 'goals'],
                 [id: 'N', name: 'Note', code: 'notes'],
                 [id: 'W', name: 'Writing', code: 'writings'],
-                [id: 'Jy', name: 'Journal', code: 'journal'],
+                [id: 'J', name: 'Journal', code: 'journal'],
 //                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
                  [id: 'R', name: 'Resource', code: 'resources']
         ].each(){
@@ -631,10 +633,13 @@ def appPile() {
 //         prayersText += (prayerNames.get(6) + ": " + prayerTimes.get(6) + '\n')
 //     }
 
+        def max = 1
+        if (ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes')
+ max = app.IndexCard.executeQuery('select count(*) from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'])[0].toInteger()
 
         render(view: '/appCalendar/main', model: [
                 prayersText: prayersText,
-                random: Math.floor(Math.random()* 400)
+                random: Math.floor(Math.random() * max)
         ])
     }
   def appMobileCalendar() {

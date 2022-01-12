@@ -330,6 +330,30 @@ class IndexCardController { // entity id = 16
             render 'No text entered.'
         }
     }
+ def addQuickOperation() {
+        if (params.description) {
+
+            /*
+              def f = new File('/mhi/mdd/log/xcd-add-' + new Date().format('dd.MM.yyyy') + '.txt')
+           if(!f.exists()){
+             f.write ''
+       //	  print ' No add log file found'
+           }
+              f.text += ('>>> ' +  params.summary + '\n' + params.description + '\n\n')
+
+           */
+
+            def n = new mcs.Operation(params)
+
+            n.description = n.description + '\n***'
+
+            n.summary = 'A n p2 d- (' + new Date()?.format('dd.MM.yyyy_HHmm') + ' -- '
+            n.save()
+            render(template: "/gTemplates/recordSummary", model: [record: n])
+        } else {
+            render 'No text entered.'
+        }
+    }
 
     def addXcdFormDaftar() {
         if (params.title || params.description) {
@@ -366,7 +390,7 @@ class IndexCardController { // entity id = 16
 //            n.writtenOn = new Date()
             n.save()
         }
-            else if (params.type == 'Jy'){
+            else if (params.type == 'J'){
                 n = new Journal()
                 n.summary = params.title//extractTitleReturn(params.description)
                 n.description = params.description //extractDescriptionReturn(params.description)

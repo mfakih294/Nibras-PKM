@@ -103,11 +103,11 @@
 }
 
 .ui-widget .ui-widget {
-    font-size: 1em;
+    font-size: 0.95em;
 }
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
-    font-family: tahoma, Arial,  Lucida Grande, Lucida Sans, sans-serif;
+    font-family: Lato, tahoma, Arial,  Lucida Grande, Lucida Sans, sans-serif;
     /*font-size: 1.1em;*/
 }
 
@@ -1151,7 +1151,7 @@
 }
 .ui-accordion .ui-accordion-header a {
     display: block;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: normal;
     /*direction: ltr;*/
     text-align: start;

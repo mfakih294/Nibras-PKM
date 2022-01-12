@@ -33,9 +33,9 @@ import org.springframework.util.FileCopyUtils
 
 import grails.plugin.springsecurity.annotation.Secured
 
-//import com.gravity.goose.Article
-//import com.gravity.goose.Configuration
-//import com.gravity.goose.Goose
+import com.gravity.goose.Article
+import com.gravity.goose.Configuration
+import com.gravity.goose.Goose
 
 
 @Secured(['ROLE_ADMIN','ROLE_READER'])
@@ -693,42 +693,50 @@ class ImportController {
         println params.dump()
     }
 
-   /*
+
     def scrapHtmlPage() {
-        def r = Book.get(params.id)
-        String url = r.url
 
-        Configuration configuration = new Configuration()
-        configuration.setMinBytesForImages(4500)
-        configuration.setLocalStoragePath("/tmp/goose")
-        // i don't care about the image, just want text, this is much faster!
-        configuration.setEnableImageFetching(false);
-        //   configuration.setImagemagickConvertPath("/opt/local/bin/convert");
-        Goose goose = new Goose(configuration);
+        try {
 
-        Article article = goose.extractContent(url)
-        r.fullText = article.cleanedArticleText()
-        //r.publishedOn = article.publishDate()
-        r.title = article.title()
-        r.notes = article.metaDescription()
-        r.textTags = article.metaKeywords()
-        r.imageUrl = article.topImage().getImageSrc()
+            def r = Book.get(params.id)
+            String url = r.url
+
+            Configuration configuration = new Configuration()
+            configuration.setMinBytesForImages(4500)
+            configuration.setLocalStoragePath("/tmp/goose")
+            // i don't care about the image, just want text, this is much faster!
+            configuration.setEnableImageFetching(false);
+            //   configuration.setImagemagickConvertPath("/opt/local/bin/convert");
+            Goose goose = new Goose(configuration);
+
+            Article article = goose.extractContent(url)
+            r.fullText = article.cleanedArticleText()
+            //r.publishedOn = article.publishDate()
+            r.title = article.title()
+            r.notes = article.metaDescription()
+            r.textTags = article.metaKeywords()
+            r.imageUrl = article.topImage().getImageSrc()
 
 
-        if (r.imageUrl) {
+            if (r.imageUrl) {
 
-            def path = OperationController.getPath('covers.sandbox.path')// + '/' + r.type?.code
+                def path = OperationController.getPath('covers.sandbox.path')// + '/' + r.type?.code
 
-            def t = new File(path + '/' + r.id + '.jpg')
-            if (t.exists()) t.renameTo(new File(path + '/' + r.id + '-old.jpg'))
-            try {
-                t << new URL(r.imageUrl.substring(0, r.imageUrl.length() - 6)).openStream()
+                def t = new File(path + '/' + r.id + '.jpg')
+                if (t.exists()) t.renameTo(new File(path + '/' + r.id + '-old.jpg'))
+                try {
+                    t << new URL(r.imageUrl.substring(0, r.imageUrl.length() - 6)).openStream()
+                }
+                catch (Exception e) {
+                    e.printStackTrace()
+                }
             }
-            catch (Exception e) {
-                e.printStackTrace()
-            }
+            render(template: '/gTemplates/recordSummary', model: [record: r, expandedView: true])
         }
-        render(template: '/gTemplates/recordSummary', model: [record: r, expandedView: true])
+            catch (Exception e){
+                println 'Error while scrapping: ' + e
+        }
+
     }
 
     def scrapHtmlAll() {
@@ -767,5 +775,5 @@ class ImportController {
             }
         }
     }
-    */
+
     } // end of class

@@ -20,5 +20,5 @@
 </g:if>
 
 <script type="text/javascript">
-%{--jQuery("#appendTextFor${entityCode}${record.id}").focus();--}%
+ // jQuery("#appendTextFor${entityCode}${record.id}").focus();
 </script>

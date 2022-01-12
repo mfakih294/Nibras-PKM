@@ -698,6 +698,7 @@ A HORIZONTAL event
 .fc-daygrid-day-frame,
 .fc-daygrid-day-events,
 .fc-daygrid-event-harness { /* for event top/bottom margins */
+
 }
 .fc-daygrid-day-frame:before, .fc-daygrid-day-events:before, .fc-daygrid-event-harness:before {
   content: "";
@@ -773,6 +774,13 @@ A HORIZONTAL event
   /* event harness */
 
 }
+.fc-daygrid-event-harness {
+    border: 1px solid darkgray;
+    border-radius: 6px;
+    margin: 2px; /* modification for the dashboard view */
+
+  }
+
 .fc .fc-daygrid-event-harness {
     position: relative;
   }
@@ -871,7 +879,7 @@ A HORIZONTAL event
   }
 .fc-daygrid-event { /* make root-level, because will be dragged-and-dropped outside of a component root */
   position: relative; /* for z-indexes assigned later */
-  white-space: nowrap;
+  white-space: wrap;
   border-radius: 3px; /* dot event needs this to when selected */
   font-size: .85em;
   font-size: var(--fc-small-font-size, .85em);
@@ -896,7 +904,7 @@ A HORIZONTAL event
     flex-shrink: 1;
     min-width: 0; /* important for allowing to shrink all the way */
     overflow: hidden;
-    font-weight: bold;
+    font-weight: normal;
   }
 .fc-daygrid-dot-event:hover,
   .fc-daygrid-dot-event.fc-event-mirror {
@@ -951,11 +959,14 @@ A VERTICAL event
     flex-direction: column;
   }
 
-.fc-v-event .fc-event-time {
+.fc-event-time {
     flex-grow: 0;
     flex-shrink: 0;
     max-height: 100%;
     overflow: hidden;
+    font-weight: bold;
+    margin: 2px;
+    font-size: 1.2em;
   }
 
 .fc-v-event .fc-event-title-container { /* a container for the sticky cushion */
@@ -1167,6 +1178,7 @@ A VERTICAL event
   }
 .fc-media-screen .fc-timegrid-event-harness {
     position: absolute; /* top/left/right/bottom will all be set by JS */
+
   }
 .fc {
 

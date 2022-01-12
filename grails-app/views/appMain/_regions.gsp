@@ -84,7 +84,7 @@
                     <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                   url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                                   update="underAreaForQuickAdd"
-                                  onComplete="jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', }); jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus(); "
+                                  onComplete=" jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus(); jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', });"
                                   method="post">
 
                     %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
@@ -96,6 +96,7 @@
                                   tabindex="1"
                                   optionKey="id"
                                   optionValue="name"
+                                  onchange="if (this.value == 'Resource') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
                                   value="N"/>
 
                         <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
@@ -457,5 +458,5 @@
 
     });
 
-
+jQuery('#resourceType').prop('disabled',true);
 </script>

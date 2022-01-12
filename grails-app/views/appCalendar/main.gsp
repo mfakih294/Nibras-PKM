@@ -26,7 +26,9 @@
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.qtip.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'moment.min.js')}"></script>
 
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'simpleSlider.css')}"/>
 
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'am2_SimpleSlider.js')}"></script>
 
 %{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main5.js')}"></script>--}%
 %{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main1.js')}"></script>--}%
@@ -54,6 +56,11 @@
     <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'main-calendar.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'personalization.css')}"/>
+
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'mousetrap.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'mousetrap-global-bind.min.js')}"></script>
+
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'mybindings.js')}"></script>
 
 
     <script>
@@ -309,6 +316,15 @@
   }, ${ker.OperationController.getPath('calendar.reload.interval').toInteger()});
 
 
+ var clearFormFields = function () {
+
+        jQuery('#goal').val('')
+        jQuery('#department').val('')
+        jQuery('#task').val('')
+        jQuery('#title').val('')
+        jQuery('#description').val('')
+    }
+
 
   </script>
 <style>
@@ -434,8 +450,8 @@
 %{--                        ${aya1.shortDescription}--}%
 %{--   (${aya1.orderInWriting})--}%
 
-              {${aya2.shortDescription}}
-              (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2.orderInWriting})
+              {${aya2?.shortDescription}}
+              (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2?.orderInWriting})
 %{--              ${aya3.shortDescription}--}%
 %{--              (${aya3.orderInWriting})--}%
 
@@ -479,7 +495,7 @@
     <g:formRemote name="batchAdd2" class="commandBarInPanel"
                   url="[controller: 'operation', action: 'addFromCalendar']"
                   update="logAreaModal"
-
+                  onComplete="clearFormFields();"
                   method="post">
           <table border="0" style="width: 90%; text-align: center;">
               <tr>

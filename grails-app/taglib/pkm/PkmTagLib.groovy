@@ -234,7 +234,7 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
             </a>
 	    	<span class="testhide">
 		<a href="#" title="Extract cover from first page" onclick="jQuery('#logArea').load('${
-                    createLink(controller: 'operation', action: 'generateCover', id: recordId, params: [path: i, module: module, type: type])
+                    createLink(controller: 'generics', action: 'generateCover', id: recordId, params: [path: i, module: module, type: type])
                 }')"    title="${i.path}">
   cvr
             </a>

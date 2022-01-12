@@ -246,9 +246,15 @@ jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelecti
 if (jQuery(".nextLink").size() > 0) {
     document.getElementsByClassName("nextLink")[0].className = "nextLink${customId}";
 
-    Mousetrap.bind('right', function (e) {
+    Mousetrap.bind(['n','ى', 'next'], function (e) {
         jQuery(".nextLink${customId}").click();
     });
+
+    Mousetrap.bind(['shift+a', 'shift+ش'], function (e) {
+        jQuery(".recordSelected .quickBookmarkButton").click();
+        jQuery(".nextLink${customId}").click();
+    });
+
 }
 
 

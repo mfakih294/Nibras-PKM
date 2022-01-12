@@ -251,7 +251,7 @@ ul {
 input,select, textarea {
     background-color: #fafafa;
     border: 1px solid #ccc;
-    font: 1em Lato, tahoma, verdana, arial, helvetica, sans-serif;
+    font: 0.9em Lato, tahoma, verdana, arial, helvetica, sans-serif;
     margin: 2px 2px !important;
     padding: 4px 8px !important;
     min-width: 20px !important;
@@ -1639,7 +1639,7 @@ ul.ui-tabs-nav {
 
 .notice-body h3 {
     margin: 0;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .notice-body p {
@@ -1708,7 +1708,7 @@ h2 {
 }
 
 .ui-helper-reset {
-    font-size: 1em !important;
+    font-size: 0.95em !important;
 }
 
 ul.ui-autocomplete.ui-menu {
@@ -2073,8 +2073,8 @@ a :hover {
 }
 
 .recordSelected{
-    border: 1px darkgreen solid !important;
-    border-radius: 5px !important;
+    border: 2px darkolivegreen solid !important;
+    border-radius: 7px !important;
 }
 
 .recordNotSelected{

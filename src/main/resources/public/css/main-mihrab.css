@@ -380,7 +380,7 @@ tr {
 
 td, th {
     font: 12px tahoma, verdana, arial, helvetica, sans-serif;
-    line-height: 15px;
+    line-height: 1.2em;
     padding: 2px;
     text-align: left;
     vertical-align: middle;

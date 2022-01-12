@@ -1,8 +1,8 @@
-cd /nbr/dev/pkm/
+cd /nibras/dev/pkm/
 
 
-export PATH=/nbr/dev/grails-3.3.10/bin:$PATH
-export GRAILS_HOME=/nbr/dev/grails-3.3.10/
+export PATH=/nibras/dev/grails-3.3.10/bin:$PATH
+export GRAILS_HOME=/nibras/dev/grails-3.3.10/
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export CATALINA="-server"
 export JAVA_OPTS="-server"
@@ -10,8 +10,7 @@ export JAVA_OPTS="-server"
 #grails clean
 #grails war
 
-./gradlew bootRun
-#--offline
+./gradlew  bootRun
 
 
 # grails -https -disable.auto.recompile=false -Dgrails.gsp.enable.reload=true run-app

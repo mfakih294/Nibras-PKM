@@ -15,7 +15,7 @@
             %{--<span class="ui-icon ui-icon-calendar"></span>--}%
 
                 <span style="margin-right: 1px;">
-                    <b style="font-size: 12px; font-family: tahoma, sans-serif;">
+                    <b style="font-size: 1em; font-family: Lato, sans-serif;">
                         ${OperationController.getPath('app.name') ?: 'Nibras'}</b>
                     <i>
                         &nbsp;
@@ -415,15 +415,12 @@
 %{--                        noSelection="${['null': '']}"--}%
                         <g:select name="resultType"
                                   from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"
-                                  style="direction: ltr; text-align: left; padding: 0; margin: 0;  height: 24px;"
+                                  style="direction: ltr; text-align: left; padding: 2px; margin: 0;"
                                   onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
                                   value="${cmn.Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
                         <span id="notificationArea" style=""></span>
                         <span style="display: none" id="notificationAreaHidden"></span>
 
-                    
-                    
-                    
 %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
             <g:formRemote name="batchAdd3"
                           url="[controller: 'generics', action: 'quickTextSearch']"
@@ -437,9 +434,16 @@
                                 id=" "
                                 class="ui-widget ui-state-default"/>
 
+                <g:select name="resultType"
+                          from="${[[id: '*']] + types}"
+                    optionKey="id"
+                    optionValue="id"
+                          style="float: right;direction: ltr; text-align: left; padding: 2px; margin: 0;"
+                          value="N"/>
+
                 <g:textField name="input" value="" id="speedsearch"
                              autocomplete="off"
-                             style="float: right; display: inline;  width: 250px !important; height: 24px; padding: 3px; margin: 1px; font: 1.2em Tahoma;"
+                             style="float: right; display: inline;  width: 250px !important; padding: 2px; margin: 1px;"
                              placeholder="Search (Esc)..."
                              class=""/>
 

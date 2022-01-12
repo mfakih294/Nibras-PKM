@@ -416,7 +416,7 @@
                         style="text-align: center; margin: 0px; width: 84% !important; background: #efece0"
                         id="addXcdFormDaftarSubmit"
                         class="fg-button ui-widget ui-state-default"/>
-        <g:select name="type" from="${['Jy', 'Jt', 'N', 'W', 'T', 'G', 'R']}"
+        <g:select name="type" from="${['J', 'N', 'W', 'T', 'G', 'R']}"
                   id="typeField"
                   value="N"/>
 

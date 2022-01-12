@@ -2,6 +2,7 @@ package ker
 
 import app.IndexCard
 import app.parameters.*
+import mcs.Operation
 import mcs.parameters.*
 import grails.converters.XML
 import grails.converters.JSON
@@ -259,7 +260,7 @@ class SyncController {
                         date    : i?.startDate?.format('dd-MM-yyyy'),
                         datediff    : i?.startDate - new Date(),
                         color   : 'darkblue',
-                        title   : '[' + i.task + '] ' + i.summary,
+                        title   : (i.task ? ('[' + i.task + '] ') : '') + i.summary,
                         language: i.language,
                         body    : i.description ? i.description?.replace('\n', '<br/>') : '']
         }
@@ -333,7 +334,7 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
-        for (i in Task.executeQuery("from Task t where  t.bookmarked = ? order by t.context.code asc, t.priority desc", [true])) {
+        for (i in Task.executeQuery("from Task t where  t.bookmarked = ? order by t.id desc", [true])) { // t.context.code asc, t.priority todo: fix
             records += [type    : (i.isTodo == true ? 'Todo' : 'T'), id: i.id, ecode: 'T',
                         meta    : (i.context ? '@' + i.context?.code : '-') + ' ' + (i.priority ? priorityMap[i.priority] : ''),
                         color   : 'lightgreen',
@@ -415,7 +416,7 @@ class SyncController {
 
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
-        for (i in Task.executeQuery("from Goal g where g.bookmarked = ? order by g.department.code asc, g.priority desc", [true])) {
+        for (i in Task.executeQuery("from Goal g where g.bookmarked = ? order by g.id desc", [true])) { // g.department.code asc, g.priority desc todo:
             records += [type    : 'G', id: i.id, ecode: 'G',
                         meta    : (i.department ? 'd' + i.department?.code : '-') + ' ' + (i.type ? '#' + i.type?.code : '') +
                                 ' ' + (i.priority ? priorityMap[i.priority] : ''),
@@ -673,14 +674,24 @@ class SyncController {
         def data = request.JSON.data
         if (data && data?.trim() != '') {
             def c = 0
-            def n = new app.IndexCard()//mcs.Journal()
-            n.summary = 'Notes on ' + new Date().format('EEE dd MMM yyyy HH:mm')
-            n.description = data?.replace('::', '')
+//            def n = new app.IndexCard()//mcs.Journal()
+//            n.summary = 'Notes on ' + new Date().format('EEE dd MMM yyyy HH:mm')
+//            n.description = data?.replace('::', '')
 //            n.type = JournalType.findByCode('usr')
-            n.writtenOn = new Date()
+//            n.writtenOn = new Date()
 
-            n.bookmarked = true
-            n.save(flush: true)
+//            n.bookmarked = true
+
+
+            for (b in data?.replace('::', '').split(/\n\*\*\*/)){
+                if (b?.trim() != '')
+                    new Operation([summary: b.split('--')[0], description: b.split('--')[1], bookmarked: true]).save()
+            }
+
+            println data?.replace('::', '').split(/\n\*\*\*/).size() + ' operations found.'
+
+
+//            n.save(flush: true)
 
             json = builder.build {
                 result = 'Note saved.'

@@ -333,7 +333,7 @@ Authors: ${authors}
 
 
 
-    <g:if test="${record?.type?.code == 'link' && record?.url}">
+    <g:if test="${record?.url}">
     <br/>
     <g:remoteLink controller="import" action="scrapHtmlPage" id="${record.id}"
     update="RRecord${record.id}"
@@ -597,7 +597,7 @@ Authors: ${authors}
             %{--<br/>--}%
             %{----}%
 
-            <div style="padding: 1px; font-size: 13px; text-align: justify !important; margin: 1px; line-height: 20px; ; white-space: wrap;">
+            <div style="padding: 1px; font-size: 1.1em; text-align: justify !important; margin: 1px; line-height: 20px; ; white-space: wrap;">
 
                 <g:if test="${record.class.declaredFields.name.contains('notes') && record.notes}">
                     %{--<br/>--}%
@@ -617,7 +617,7 @@ Authors: ${authors}
             %{--<br/>--}%
 
                 <g:if test="${'R'.contains(record.entityCode())}">
-                    <div style="font-family: tahoma; text-align: justify; line-height: 20px; font-size: 16px; margin: 4px;">
+                    <div style="font-family: Lato; text-align: justify; line-height: 20px; font-size: 1.1em; margin: 4px;">
                         <g:if test="${record.highlights}">
                             <div class="text${record.class.declaredFields.name.contains('language') ? record.language : ''}">
 
@@ -1117,7 +1117,7 @@ Authors: ${authors}
         </g:if>
 
 
-    <g:if test="${entityCode == 'N' && ker.OperationController.getPath('convert-records.enabled')?.toLowerCase() == 'yes'}">
+    <g:if test="${'NO'.contains(entityCode) && ker.OperationController.getPath('convert-records.enabled')?.toLowerCase() == 'yes'}">
     <br/>
     <br/>
     &nbsp; &nbsp;<b>Convert to:</b>
@@ -1126,12 +1126,12 @@ Authors: ${authors}
         <g:remoteLink controller="generics" action="convertNoteToRecord"
                       params="${[id: record.id, entityCode: entityCode, type: t]}"
                       update="${entityCode}Record${record.id}"
-                      class="fg-button ui-widget ui-state-default ui-corner-all"
+                      class="fg-button ui-widget ui-state-default ui-corner-all convertButton${t}"
                       title="Convert note to ${t}">
             &nbsp;${t} &nbsp;
         </g:remoteLink>
     </g:each>
-</g:if>
+    </g:if>
 
 
 <g:if test="${cmn.Setting.findByName('aws.secret.key') && entityCode == 'R' && record.isbn}">
@@ -1156,7 +1156,7 @@ Authors: ${authors}
                data-type="select"
                data-value="${record[field]?.id}"
                data-name="${field}-${entityCode}"
-               style=" border-radius: 3px; font-size: 10px; font-style: italic; padding-left: 1px; padding-right: 1px;"
+               style=" border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"
                data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                data-title="Edit ${field}">
@@ -1167,6 +1167,22 @@ Authors: ${authors}
             </script>
 <br/>
 <br/>
+
+            <g:if test="${record.blog?.code && record.descriptionHTML}">
+                <g:remoteLink controller="generics" action="publish" id="${record.id}"
+                              params="[entityCode: entityCode]"
+                              update="postResult${record?.id}"
+                              title="Publish record"
+                              class="fg-button ui-widget ui-state-default ui-corner-all">
+                    Publish on <b>${record.blog?.code}</b>
+                </g:remoteLink>
+            </g:if>
+            <div id="postResult${record.id}" style="display: inline">
+            </div>
+            <g:if test="${record.publishedNodeId}">
+                Published with ID: (${record.publishedNodeId})
+            </g:if>
+
             </g:if>
 
 
@@ -1177,6 +1193,8 @@ Authors: ${authors}
 
 
             <g:if test="${(entityCode == 'W') || entityCode == 'N'}">
+
+
             %{--|| entityCode == 'N'--}%
             %{--<g:remoteLink--}%
             %{--url="[controller: 'generics', action: 'convertMarkupToHtml', id: record.id, params: [entityCode: entityCode]]"--}%
@@ -1187,7 +1205,14 @@ Authors: ${authors}
             %{--==--}%
             %{--</g:remoteLink>--}%
 
-                <g:remoteLink controller="generics" action="checkoutRecordText"
+                <g:remoteLink controller="generics" action="notes2Operations"
+                              id="${record.id}"
+                              params="[entityCode: entityCode]"
+                              update="${entityCode}CheckoutLog${record.id}"
+                              title="Checkout record">
+                    to operations &crarr;
+                </g:remoteLink>
+      <g:remoteLink controller="generics" action="checkoutRecordText"
                               id="${record.id}"
                               params="[entityCode: entityCode]"
                               update="${entityCode}CheckoutLog${record.id}"
@@ -1219,20 +1244,7 @@ Authors: ${authors}
 %{--            </g:remoteLink>--}%
 %{--                            &nbsp;--}%
 
-                <g:if test="${record.blog?.code && record.descriptionHTML}">
-                    <g:remoteLink controller="generics" action="publish" id="${record.id}"
-                                  params="[entityCode: entityCode]"
-                                  update="postResult${record?.id}"
-                                  title="Publish record"
-                                  class="fg-button ui-widget ui-state-default ui-corner-all">
-                        Publish on <b>${record.blog?.code}</b>
-                    </g:remoteLink>
-                </g:if>
-            <div id="postResult${record.id}" style="display: inline">
-            </div>
-            <g:if test="${record.publishedNodeId}">
-                Published with ID: (${record.publishedNodeId})
-            </g:if>
+
         %{--<g:if test="${entityCode == 'W' && !record.code}">--}%
         %{--<b style="color: red">No code</b>--}%
         %{--</g:if>--}%
@@ -1326,13 +1338,15 @@ x
 </div>
 </div>
 
-
-<div class="heading">
+%{--heading--}%
+<div class="">
     %{--<h2>Create new record...</h2>--}%
     <h4 style="user-focus-pointer: hand; cursor: hand;">Files...</h4>
+    <hr/>
     <br/>
 </div>
-<div class="content">
+%{--content--}%
+<div class="">
 
 
     <g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
@@ -1360,8 +1374,9 @@ x
     <g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
 <br/>
 <br/>
-<b>Upload files to record <i>rps1</i> folder (${typeSandboxPath}):</b>
-<br/>
+<b>Upload files to record <i>rps1</i> folder:</b>
+        %{--(${typeSandboxPath})--}%
+%{--<br/>--}%
 <br/>
 %{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
 <uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
@@ -1378,7 +1393,7 @@ x
 </uploadr:add>
     </g:if>
 
-<g:if test="${OperationController.getPath('upload-cover.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<g:if test="${1 == 2 && OperationController.getPath('upload-cover.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
         <br/>
         <br/>
@@ -1455,7 +1470,8 @@ Open record's folder:
 </div>
 
 </div>
-
+<hr/>
+<br/>
     <br/>
 %{--&nbsp;/--}%
 %{--&nbsp;--}%

@@ -41,6 +41,7 @@ import grails.converters.JSON
 
 
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.pdfbox.PDFToImage
 
 
 @Secured(['ROLE_ADMIN','ROLE_READER'])
@@ -82,6 +83,7 @@ class GenericsController {
             'Y'            : 'cmn.Setting',
             'X'            : 'mcs.parameters.SavedSearch',
             'A'            : 'app.parameters.CommandPrefix',
+            'O'            : 'mcs.Operation',
 //todo for all params
             'ResourceType' : 'app.parameters.ResourceType',
             'WorkStatus'   : 'mcs.parameters.WorkStatus',
@@ -204,7 +206,8 @@ class GenericsController {
  title    : entityCode + ': ' + count + ' results.'
  ])}*/
         render '<h2>Search results...</h2><i>Add a space before the term(s) to search inside the contents of the records</i>.<br/>'
-
+//println 'type' + params.resultType
+        if (params.resultType == '*') {
             [
                     [id: 'j', name: 'Journal', code: 'journal'],
                     [id: 'n', name: 'Note', code: 'notes'],
@@ -215,13 +218,22 @@ class GenericsController {
                     [id: 'p', name: 'Planner', code: 'planner'],
                     [id: 's', name: 'Contact', code: 'contacts'],
                     [id: 'c', name: 'Course', code: 'courses']
-            ].each(){
+            ].each() {
                 if (OperationController.getPath(it.code + '.enabled') == 'yes')
                     if (input.startsWith(' '))
                         findRecords(it.id + ' :: ' + params.input)
-                        else
-                    findRecords(it.id + ' -- ' + params.input)
+                    else
+                        findRecords(it.id + ' -- ' + params.input)
             }
+        }
+        else {
+                    if (input.startsWith(' '))
+                        findRecords(params.resultType.toLowerCase() + ' :: ' + params.input)
+                    else
+                        findRecords(params.resultType.toLowerCase() + ' -- ' + params.input)
+            }
+
+
 //             render '<h2>Searching contents...</h2>'
 /*
             [
@@ -474,11 +486,15 @@ YellowGreen;#9ACD32"""
                         case 'x': batchPhysicallyDeleteRecords(commandBody)
                             break
                         case 'e': executeSavedSearch(
-                                SavedSearch.findByCode(commandBody.substring(1))?.id ?:
-                                        (commandBody.substring(1).isInteger() ? SavedSearch.get(commandBody.substring(1))?.id : null))
+                                SavedSearch.findByCode(commandBody)?.id)
+                                        //?:
+                                        // (commandBody.substring(1).isInteger() ? SavedSearch.get(commandBody.substring(1))?.id : null))
                             break
                         case '+': appendToScratch(commandBody)
                             break
+                        case '!': updateRecordsByQuery(commandBody) // todo: two places for such dispatch?!
+                            break
+
                         default:
                             render '<br/><b>Wrong input!</b>'
                     }
@@ -701,7 +717,8 @@ c : Convert dates yyyy-MM-dd / WWd[.yy]
 t : batch add tag to selected records of type ? (t r tag2)
 x : physical delete
 + : append to scratch note
-. : execute saved search
+e : execute saved search
+! : execute update/delete HQL query
 '''
 
             //v : Find aya (suray # aya #)
@@ -734,6 +751,8 @@ r (resource)
                             break
                         case 'U': hintResponce = '<module> ID <query in Nibras format>'
                             break
+                         case '!': hintResponce = 'HQL update or detele query'
+                            break
                         case 'p': hintResponce = '<module> <t|g> <query in Nibras format to add plans>'
                             break
 //                        case '=': hintResponce = '<module><id>'
@@ -752,18 +771,20 @@ r (resource)
                             break
                         case 'x': hintResponce = 'x entity_code [selected records]'
                             break
-                        case 'e': hintResponce = '. saved search id or code <br/>'
-
+                        case 'e': hintResponce = 'e saved search code <br/>'
 if (input.length() < 3){
                             SavedSearch.findAll().each(){
                                 hintResponce+= it.id + (it.code ? ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '<br/>'
                             }
 } else {
+
+    // todo: first, if length < 4, and so here the code is not reached!! (.e.g e tdln)
+
 //    println 'hhhhhhhhhhhhhhh' + input
-    SavedSearch.findAllByCodeLike(input.substring(1) + '%', [sort: 'code']).each() {
+    SavedSearch.findAllByCodeLike(input.substring(1)?.trim() + '%', [sort: 'code']).each() {
 //        responce += (it.toString() + '|' + finalPart + ' =' + it.code + ' -- \n')
 //        println 'eeeeeeeeeeeeeeeeeeee' + it.id
-        hintResponce += (it.id + (it.code ?  ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '\n')
+        hintResponce += ((it.code ?  ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '\n')
     }
 }
                             break
@@ -1007,12 +1028,12 @@ ll
                             hintResponce += (it.toString() + '|' + finalPart + ' d' + it.code + ' -- \n')
                         }
                             break
-                        case '.':
+                        case 'e':
 
 
 //                            SavedSearch.findAllByCodeLike(input.substring(1) + '%', [sort: 'code']).each() {
 //        responce += (it.toString() + '|' + finalPart + ' =' + it.code + ' -- \n')
-//        println 'eeeeeeeeeeeeeeeeeeee' + it.id
+//        println 'eeeeeeeeeeeeeeeeeeee' // + it.id
 //                                hintResponce += (it.id + (it.code ? ' =' + it.code : '') + ' - ' + it.summary + '\n')
 //                            }
 
@@ -1162,9 +1183,26 @@ ll
 
     def showSummary(Long id, String entityCode) {
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
-        if (record)
+
+
+        if (record) {
+
+            if (entityCode == 'O'){
+                if (verifySmartCommand(record?.summary + ' -- ' + record.description?.trim()) == 'correctCommand') {
+                    record.validOn = true
+                }
+                else {
+                    record.validOn = false
+                }
+                record.save()
+            }
+
             render(template: '/gTemplates/recordSummary', model: [record: record, showFull: 'on', mobileView: params.mobileView])
+
+        }
         else render 'Record not found'
+
+
     }
 
     def logicalDelete(Long id, String entityCode) {
@@ -1302,104 +1340,115 @@ def markAsMarkdowned(Long id, String entityCode) {
     def convertNoteToRecord() {
         def oldRecord = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
         try {
-            def newRecord
-            if (params.type == 'J') {
-                newRecord = new Journal()
-                newRecord.summary = oldRecord.summary
-                newRecord.description = oldRecord.description
-                newRecord.startDate = oldRecord.writtenOn
-                newRecord.priority = oldRecord.priority
-                newRecord.bookmarked = oldRecord.bookmarked
-                newRecord.save()
-//            newRecord.dateCreated = oldRecord.dateCreated
-                oldRecord.delete()
 
-            } else if (params.type == 'P') {
-                newRecord = new Planner()
-                newRecord.summary = oldRecord.summary
-                newRecord.description = oldRecord.description
-                newRecord.startDate = oldRecord.writtenOn
-                newRecord.priority = oldRecord.priority
-                newRecord.bookmarked = oldRecord.bookmarked
-                newRecord.save()
-//            newRecord.dateCreated = oldRecord.dateCreated
-                //oldRecord.delete()
-                oldRecord.isMerged = true
-                oldRecord.mergedOn = new Date()
-                oldRecord.entityCode = params.type
-                oldRecord.recordId = newRecord.id
-
-            } else if (params.type == 'T') {
-                newRecord = new Task()
-                newRecord.summary = oldRecord.summary
-                newRecord.description = oldRecord.description
-                newRecord.startDate = oldRecord.writtenOn
-                newRecord.priority = oldRecord.priority
-                newRecord.bookmarked = oldRecord.bookmarked
-                newRecord.language = oldRecord.language
-                newRecord.save()
-//            newRecord.dateCreated = oldRecord.dateCreated
-              //  oldRecord.delete()
-                oldRecord.isMerged = true
-                oldRecord.mergedOn = new Date()
-                oldRecord.entityCode = params.type
-                oldRecord.recordId = newRecord.id
-            }  else if (params.type == 'G') {
-                newRecord = new Goal()
-                newRecord.summary = oldRecord.summary
-                newRecord.description = oldRecord.description
-                newRecord.priority = oldRecord.priority
-                newRecord.bookmarked = oldRecord.bookmarked
-                newRecord.language = oldRecord.language
-                newRecord.save()
-//            newRecord.dateCreated = oldRecord.dateCreated
-              //  oldRecord.delete()
-                oldRecord.isMerged = true
-                oldRecord.mergedOn = new Date()
-                oldRecord.entityCode = params.type
-                oldRecord.recordId = newRecord.id
-            } else if (params.type == 'R') {
-                newRecord = new Book()
-                newRecord.course = oldRecord.course
-                newRecord.title = oldRecord.summary ?: '...'
-                newRecord.type = ResourceType.findByCode('art')
-                newRecord.description = oldRecord.description
-                newRecord.url = oldRecord.sourceFree
-                newRecord.publicationDate = oldRecord.writtenOn
-                newRecord.priority = oldRecord.priority
-                newRecord.bookmarked = oldRecord.bookmarked
-                newRecord.language = oldRecord.language
-                newRecord.save()
-                //oldRecord.delete()
-                oldRecord.isMerged = true
-                oldRecord.mergedOn = new Date()
-                oldRecord.entityCode = params.type
-                oldRecord.recordId = newRecord.id
-//            newRecord.dateCreated = oldRecord.dateCreated
-
-            } else if (params.type == 'W') {
-                newRecord = new Writing()
-                newRecord.course = oldRecord.course
-                newRecord.summary = oldRecord.summary ?: '...'
-                newRecord.description = oldRecord.description
-                newRecord.source = oldRecord.sourceFree
-                newRecord.priority = oldRecord.priority
-                newRecord.language = oldRecord.language
-                newRecord.bookmarked = oldRecord.bookmarked
-                newRecord.save()
-                //oldRecord.delete()
-                oldRecord.isMerged = true
-                oldRecord.mergedOn = new Date()
-                oldRecord.entityCode = params.type
-                oldRecord.recordId = newRecord.id
-
-//            newRecord.dateCreated = oldRecord.dateCreated
-
-
+            if (params.entityCode == 'O'){
+                if (oldRecord.summary) {
+                    oldRecord.summary = 'A ' + params.type?.toLowerCase() + oldRecord.summary?.substring(3)
+                    render(template: '/gTemplates/recordSummary', model: [record: oldRecord])
+                }
+                else
+                    render 'Summary field is empty'
             }
+            else {
+                def newRecord
+                if (params.type == 'J') {
+                    newRecord = new Journal()
+                    newRecord.summary = oldRecord.summary
+                    newRecord.description = oldRecord.description
+                    newRecord.startDate = oldRecord.writtenOn
+                    newRecord.priority = oldRecord.priority
+                    newRecord.bookmarked = oldRecord.bookmarked
+                    newRecord.save()
+//            newRecord.dateCreated = oldRecord.dateCreated
+                    oldRecord.delete()
+
+                } else if (params.type == 'P') {
+                    newRecord = new Planner()
+                    newRecord.summary = oldRecord.summary
+                    newRecord.description = oldRecord.description
+                    newRecord.startDate = oldRecord.writtenOn
+                    newRecord.priority = oldRecord.priority
+                    newRecord.bookmarked = oldRecord.bookmarked
+                    newRecord.save()
+//            newRecord.dateCreated = oldRecord.dateCreated
+                    //oldRecord.delete()
+                    oldRecord.isMerged = true
+                    oldRecord.mergedOn = new Date()
+                    oldRecord.entityCode = params.type
+                    oldRecord.recordId = newRecord.id
+
+                } else if (params.type == 'T') {
+                    newRecord = new Task()
+                    newRecord.summary = oldRecord.summary
+                    newRecord.description = oldRecord.description
+                    newRecord.startDate = oldRecord.writtenOn
+                    newRecord.priority = oldRecord.priority
+                    newRecord.bookmarked = oldRecord.bookmarked
+                    newRecord.language = oldRecord.language
+                    newRecord.save()
+//            newRecord.dateCreated = oldRecord.dateCreated
+                    //  oldRecord.delete()
+                    oldRecord.isMerged = true
+                    oldRecord.mergedOn = new Date()
+                    oldRecord.entityCode = params.type
+                    oldRecord.recordId = newRecord.id
+                } else if (params.type == 'G') {
+                    newRecord = new Goal()
+                    newRecord.summary = oldRecord.summary
+                    newRecord.description = oldRecord.description
+                    newRecord.priority = oldRecord.priority
+                    newRecord.bookmarked = oldRecord.bookmarked
+                    newRecord.language = oldRecord.language
+                    newRecord.save()
+//            newRecord.dateCreated = oldRecord.dateCreated
+                    //  oldRecord.delete()
+                    oldRecord.isMerged = true
+                    oldRecord.mergedOn = new Date()
+                    oldRecord.entityCode = params.type
+                    oldRecord.recordId = newRecord.id
+                } else if (params.type == 'R') {
+                    newRecord = new Book()
+                    newRecord.course = oldRecord.course
+                    newRecord.title = oldRecord.summary ?: '...'
+                    newRecord.type = ResourceType.findByCode('art')
+                    newRecord.description = oldRecord.description
+                    newRecord.url = oldRecord.sourceFree
+                    newRecord.publicationDate = oldRecord.writtenOn
+                    newRecord.priority = oldRecord.priority
+                    newRecord.bookmarked = oldRecord.bookmarked
+                    newRecord.language = oldRecord.language
+                    newRecord.save()
+                    //oldRecord.delete()
+                    oldRecord.isMerged = true
+                    oldRecord.mergedOn = new Date()
+                    oldRecord.entityCode = params.type
+                    oldRecord.recordId = newRecord.id
+//            newRecord.dateCreated = oldRecord.dateCreated
+
+                } else if (params.type == 'W') {
+                    newRecord = new Writing()
+                    newRecord.course = oldRecord.course
+                    newRecord.summary = oldRecord.summary ?: '...'
+                    newRecord.description = oldRecord.description
+                    newRecord.source = oldRecord.sourceFree
+                    newRecord.priority = oldRecord.priority
+                    newRecord.language = oldRecord.language
+                    newRecord.bookmarked = oldRecord.bookmarked
+                    newRecord.save()
+                    //oldRecord.delete()
+                    oldRecord.isMerged = true
+                    oldRecord.mergedOn = new Date()
+                    oldRecord.entityCode = params.type
+                    oldRecord.recordId = newRecord.id
+
+//            newRecord.dateCreated = oldRecord.dateCreated
+
+
+                }
 
 //        render(template: '/layouts/achtung', model: [message: "Record with ID ${id} deleted"])
-            render(template: '/gTemplates/recordSummary', model: [record: newRecord])
+                render(template: '/gTemplates/recordSummary', model: [record: newRecord])
+            }
         }
         catch (Exception e) {
             render(template: '/layouts/achtung', model: [message: "Record with ID ${params.id} could not be converted"])
@@ -1556,19 +1605,40 @@ def markAsMarkdowned(Long id, String entityCode) {
     }
 
 
+//   static def markCompletedStatic(Long id, String entityCode) {
+//
+//
+//       return record.id
+//
+//    }
+    /* old
     def markDismissed(Long id, String entityCode) {
 
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
+        if (!'RP'.contains(entityCode) && record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
+            record.bookmarked = false
+
+        if ('GTP'.contains(entityCode)) {
+            record.deletedOn = new Date()
+//        record.percentComplete = new Date()
+            record.status = WorkStatus.findByCode('dismissed ')
+        }
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+        render(template: '/layouts/achtung', model: [message: 'Record marked as dismissed'])
+    }
+*/
+
+    def markDismissed(Long id, String entityCode) {
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
         if ('GTP'.contains(entityCode)) {
 //            record.completedOn = new Date()
             record.bookmarked = false
 //        record.percentComplete = new Date()
             record.status = WorkStatus.findByCode('dismissed')
-        } else if ('RE'.contains(entityCode)) {
-
         }
-
+//        else if ('RE'.contains(entityCode)) {
+//        }
 
         render(template: '/gTemplates/recordSummary', model: [record: record])
         render(template: '/layouts/achtung', model: [message: 'Record marked as dismissed'])
@@ -3073,6 +3143,8 @@ def markAsMarkdowned(Long id, String entityCode) {
     }
 
     def findRecords(String input) {
+//println 'offset ' + params.offset
+
 
         if (input.contains(' ++')) {
             params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
@@ -3099,9 +3171,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                 def queryHead = 'from ' + entityMapping[entityCode]
                 def queryCriteria = transformMcsNotation(input.substring(0, input.length() - 2))['queryCriteria']
 
-                def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+                def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by lastUpdated desc, id desc'
                 // println 'fq ' + fullquery
-                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc', [], params)
+                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc, id desc', [], params)
                 def r
                 def limit = ker.OperationController.getPath('updateResultSet.max-items')?.toInteger() ?: 100
                 if (list.size() < limit) {
@@ -3120,7 +3192,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                     session[queryKey] = fullquery
 
 //                    println '-> ' + Task.executeQuery(fullquerySort)[0]
-                    params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+                    params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 3
                     render(template: '/gTemplates/recordListing', model: [
                             totalHits: Task.executeQuery(fullquerySort)[0].toLong(), //.size(),
                             list     : list,
@@ -3137,7 +3209,11 @@ def markAsMarkdowned(Long id, String entityCode) {
 
         }
         else {
-            params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 5
+            params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 3
+
+//            println 'max ' + params.max + '\n\n'
+
+
             if (input.contains(' {')) {
 
                 def groupBy = input.split(/ \{/)[1]
@@ -3207,7 +3283,7 @@ def markAsMarkdowned(Long id, String entityCode) {
 
 
                 render(template: '/reports/genericGrouping', model: [
-                        items : Task.executeQuery(queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by lastUpdated desc', []),
+                        items : Task.executeQuery(queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by lastUpdated desc, id desc', []),
                         groups: groups, groupBy: groupBy,
                         title : 'HQL Query: ' + input]
                 )
@@ -3219,7 +3295,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                     fullquery = session[input]
                     fullquerySort = 'select count(*) ' + fullquery
                     queryKey = input
-                } else {
+//                    println 'fullquery ' + fullquery + '\n\n'
+                }
+                else {
                     def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
 //        input = params.input.substring(params.input.indexOf(' '))
@@ -3229,14 +3307,14 @@ def markAsMarkdowned(Long id, String entityCode) {
 
                     def queryParams = ''
 
-                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')  + ' order by lastUpdated desc, id desc'
                     fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
                     queryKey = '_' + entityCode + '-' + new Date().format('ddMMyyHHmmss')
                     session[queryKey] = fullquery
 
                 }
 
-                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc', [], params)
+                def list = Task.executeQuery(fullquery, [], params)
 //            if (OperationController.getPath('enable.autoselectResults') == 'yes'){
 //                selectedRecords.keySet().each() {
 //                    session[it] = 0
@@ -3428,8 +3506,6 @@ def markAsMarkdowned(Long id, String entityCode) {
     def updateRecordsByQuery(String input) {
 
         try {
-
-
             render(Task.executeUpdate(input, []))//    title: 'HQL Query ' + input
 
         } catch (Exception e) {
@@ -3977,6 +4053,8 @@ def markAsMarkdowned(Long id, String entityCode) {
 //                summary = lines[0]?.trim()
 //            else {
                 record.properties = transformMcsNotation(line1.substring(line1.indexOf(' ')).trim())['properties']
+
+                record.bookmarked = true
 //                }
 
                 description = ''
@@ -4124,7 +4202,6 @@ render params.text
                             queryCriteria.add("priority = null")
                         }
                         else {
-
                             properties['priority'] = it.substring(1, 2).toInteger()
                             queryCriteria.add('priority = ' + it.substring(1, 2))
                         }
@@ -5183,7 +5260,7 @@ def addTagToAll(String input) {
             record.publishedOn = new Date()
             record.status = WritingStatus.findByCode('pub')
             record.save(flush: true)
-            render 'Published with id : ' + r + ' class ' + r.class
+            render 'Published with id : ' + r //+ ' class ' + r.class
             render(template: '/layouts/achtung', model: [message: "Record published with id " + r])
         } else "Problem posting the record"
 
@@ -5615,6 +5692,7 @@ def addTagToAll(String input) {
 
     }
 
+
     String verifySmartCommand(String line) {
         def properties
 //println 'line ' + line
@@ -5650,18 +5728,54 @@ def addTagToAll(String input) {
         //render("correct")
     }
 
+    def generateCover() {
+
+        println 'here 555'
+
+        String pdfPath = params.path
+
+        if (params.module == 'E')
+            params.type = 'exr'
+
+        //config option 2:convert page 1 in pdf to image
+        String[] args_2 = new String[7];
+        args_2[0] = "-startPage";
+        args_2[1] = "1"
+        args_2[2] = "-endPage";
+        args_2[3] = "1";
+        args_2[4] = "-outputPrefix"
+        args_2[5] = getRecordPaths(params.module, params.id.toLong())[0] + '/cover.jpg' //.getPath('root.rps1.path') + '/' + /' + (params.type ? '/' + params.type : '') + '/' + params.id;
+        args_2[6] = pdfPath;
+
+        try {
+            // will output "my_image_2.jpg"
+            PDFToImage.main(args_2);
+            def ant = new AntBuilder()
+            ant.move(file: args_2[5] + '1.jpg', tofile: (args_2[5] + ''))
+
+        }
+        catch (Exception e) {
+            e.printStackTrace()
+        }
+    }
+
+
     String[] getRecordPaths(String entityCode, Long id){
 
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
         def path1, path2
+
         def resourceNestedById = false
         def resourceNestedByType = false
+
         if (OperationController.getPath('resourceNestedById') == 'yes')
             resourceNestedById = true
+
         if (OperationController.getPath('resourceNestedByType') == 'yes')
             resourceNestedByType = true
-        if (entityCode == 'R') {
+
+        if (entityCode == 'R' && record.type) {
             path1 = OperationController.getPath('root.rps1.path') + '/R' +
                     (resourceNestedByType ?  '/' +  record.type.code : '') +
                     (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
@@ -5670,12 +5784,14 @@ def addTagToAll(String input) {
                     (resourceNestedByType ?  '/' +  record.type.code : '') +
                     (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
                     '/' + record.id
-        } else {
+        } else if (entityCode != 'R'){
             path1 = OperationController.getPath('root.rps1.path') + '' + entityCode + '/' + id
             path2 = OperationController.getPath('root.rps2.path') + '' + entityCode + '/' + id
         }
+
         return [path1, path2]
     }
+
     def viewRecordImage() {
 
 
@@ -5683,18 +5799,18 @@ def addTagToAll(String input) {
         def f
         paths.each(){
             f = new File(it + '/' +  'cover.jpg')
-
-
-
-
-
-        if (f?.exists()) {
-            byte[] image = f.readBytes()
-            response.outputStream << image
+            if (f?.exists()) {
+                byte[] image = f.readBytes()
+                response.outputStream << image
             }
         }
+
 //        f2 = new File(OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/' + record.id + '/' +  'cover.jpg')
+
 //		f2 = new File(OperationController.getPath('module.sandbox.' + record.entityCode() + '.path') + '/' + record.id + 'n.jpg')
+
+
+
 //		else if (f2?.exists()) {
 //            byte[] image = f2.readBytes()
 //            response.outputStream << image
@@ -5804,6 +5920,53 @@ def addTagToAll(String input) {
 
     }
 
+   def notes2Operations(Long id, String entityCode) {
+
+        def r = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+        for (b in r.description.split(/\n\*\*\*/)){
+            if (b?.trim() != '')
+            new Operation([summary: b.split('--')[0], description: b.split('--')[1]]).save()
+        }
+
+       render r.description.split(/\n\*\*\*/).size() + ' operations found.'
+
+    }
+
+//    def verifyOperation(Long id){
+//
+//        Operation o = Operation.get(id)
+//
+//            render(template: '/layouts/verification', model:
+//                    [line: o.description?.trim(), status: verifySmartCommand(o.description.trim()), index: 0]) // prefix + ' ' +
+//    }
+
+   def executeOperation(Long id){
+
+        Operation o = Operation.get(id)
+       String body = ''
+
+       if (o.summary)
+           body = o.summary + ' -- ' + o.description
+       else body = o.description
+
+       if (body.split('\n').size() == 1)
+       body = body + '\n...'
+
+       body = body + '\n***'
+
+       o.deletedOn = new Date()
+       o.bookmarked = false
+       o.save(flush: true)
+       render(template: '/gTemplates/recordSummary', model: [record: o])
+
+       batchAddPreprocessor(null, body)
+
+//            render(template: '/layouts/verification', model:
+//                    [line: o.description?.trim(), status: verifySmartCommand(o.description.trim()), index: 0]) // prefix + ' ' +
+    }
+
+
 
     def commitTextChanges() {
 
@@ -5906,5 +6069,25 @@ if (1 == 2) {
         return c
     }
 
+
+    def verifyAllOperations() {
+def body
+        Operation.list().each() {
+            if (it.summary)
+        body = (it.summary + ' -- ' + it.description)?.trim()
+            else body = it.description
+
+            it.language = 'ar'
+            if (verifySmartCommand(body) == 'correctCommand') {
+                it.validOn = true
+                render 'Ok '  + it.id
+            }
+            else {
+                it.validOn = false
+                render 'Wrong '  + it.description + '<br/><br/>'
+            }
+            it.save()
+        }
+    }
 
 }

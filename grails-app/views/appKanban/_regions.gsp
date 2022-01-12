@@ -539,7 +539,7 @@
 
 </div>
 <script type="text/javascript">
-    jQuery(".chosen").chosen({allow_single_deselect: true, no_results_text: "None found"});
+    jQuery(".chosen").chosen({allow_single_deselect: true, search_contains: true, no_results_text: "None found"});
     jQuery("#chosenTags").chosen({allow_single_deselect: true, no_results_text: "None found"});
     jQuery("#chosenTagsArt").chosen({allow_single_deselect: true, no_results_text: "None found"});
 
