@@ -188,6 +188,8 @@
 
             });
 
+            myLayout.close('west');
+            myLayout.close('east');
 
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.showbuttons = false;

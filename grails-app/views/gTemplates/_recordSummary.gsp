@@ -33,6 +33,31 @@
              %{--onxxxmouseout="jQuery('.temp44').addClass('hiddenActions');"--}%
              %{-->--}%
 
+<g:if test="${expanded}">
+
+<div style="line-height: 30px;" class="text${record.class.declaredFields.name.contains('language') ? record.language : (entityCode == 'E' ? record?.book?.language : '')}">
+                             [${entityCode}${record.id}]
+                                <g:if test="${record.class.declaredFields.name.contains('summary') && record.summary}">
+                                    <b>${record.summary}</b>
+                                    </g:if>
+    <g:if test="${record.class.declaredFields.name.contains('title') && record.title}">
+        <b>${record.title}</b>
+    </g:if>
+        <g:if test="${record.class.declaredFields.name.contains('description') && record.description}">
+            <br/>        desc               ${raw(record.description?.replaceAll('\n', '<br/>'))}
+                                    </g:if>
+    <g:if test="${record.class.declaredFields.name.contains('fullText') && record.fullText}">
+        <br/>full${record.fullText?.replaceAll('\n', '<br/>')}
+    </g:if>
+     <g:if test="${record.class.declaredFields.name.contains('notes') && record.notes}">
+         <br/>       notes <i>${record.notes?.replaceAll('\n', '<br/>')?.decodeHTML()}</i>
+    </g:if>
+        <br/>
+        <br/>
+        <hr/>
+    </div>
+    </g:if>
+<g:else>
             <table class="recordLine recordContainer recordCard" style="width: 100% !important; padding: 0px !important;  margin-bottom: 10px; border-radius: 0px; border-collapse: collapse" id="${entityCode}Record${record.id}">
                 <tbody>
 
@@ -274,7 +299,7 @@
                                 <g:if test="${record.class.declaredFields.name.contains('course' +
                                         '') && record.course}">
                                     <span style="padding: 1px 2px; margin: 0px 2px; font-size: small; border-radius: 3px; border: 1px solid darkgray; color: black; font-weight: bold; font-family: monospace">
-                                        ${record.course ? record.course?.summary : record.course}</span>
+                                        ${record.course?.code ? record.course?.code : record.course}</span>
                                 </g:if>
 
 
@@ -300,6 +325,9 @@
                                             <g:elseif  test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code == 'repub'}">
                                                 <span style="font-size: 0.95em; color: darkred"> &copy; </span>
                                             </g:elseif>
+                                            <g:if  test="${record.class.declaredFields.name.contains('context') && record.context}">
+                                                <span style="background: 1px solid darkyellow; font-size: 0.95em; font-weight: bold;color: darkgreen"> @${record.context?.code} </span>
+                                            </g:if>
                                         %{--<bdi>--}%
                                             <pkm:summarize text="${record.summary ?: ''}"
                                                            length="${OperationController.getPath('summary.summarize.threshold')?.toInteger()}"/>
@@ -634,7 +662,6 @@
                                                             text="${record?.description?.replace('Product Description', '')?.replaceAll("\\<.*?>", "")}"
                                                             length="${OperationController.getPath('description.summarize.threshold')?.toInteger()}"/>
                                                     (${record.description?.count(' ')})
-
                                                 </g:remoteLink>
                                             </span>
 
@@ -1832,7 +1859,7 @@ Parent:
                 </tbody>
             </table>
 
-
+</g:else>
 
         %{--</div>--}%
 
@@ -1866,6 +1893,7 @@ Parent:
 
         jQuery('#${entityCode}Record${record.id}').addClass('recordSelected');
 
-
+	// to test w033.22
+	jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
 
 </script>

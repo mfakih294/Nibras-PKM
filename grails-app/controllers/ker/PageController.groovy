@@ -434,6 +434,22 @@ class PageController {
         def ip
         def interf
 
+        def types = []
+
+        [
+                [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'G', name: 'Goal', code: 'goals'],
+                [id: 'N', name: 'Note', code: 'notes'],
+                [id: 'W', name: 'Writing', code: 'writings'],
+                [id: 'J', name: 'Journal', code: 'journal'],
+//                [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'R', name: 'Resource', code: 'resources']
+        ].each(){
+            if (OperationController.getPath(it.code + '.enabled') == 'yes')
+                types += it
+        }
+
+
         def interfaces = NetworkInterface.getNetworkInterfaces()
 
         while (interfaces.hasMoreElements()) {
@@ -451,6 +467,7 @@ class PageController {
         def user = springSecurityService.currentUser
         render(view: '/appLight/main', model: [htmlContent: null,
                                                ips        : ips,
+                types: types,
                                                username   : user.username
         ])
     }

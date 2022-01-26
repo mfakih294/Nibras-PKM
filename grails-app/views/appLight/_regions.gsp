@@ -6,7 +6,7 @@
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
      style="">
     %{--<g:render template="/layouts/north" model="[]"/>--}%
-    <g:render template="/appMain/north"/>
+    <g:render template="/appMain/northLight"/>
 </div>
 
 %{--<div class="ui-layout-west westRegion appBkg" style="padding-top: 0px !important;padding-bottom: 0px !important;">--}%
@@ -19,7 +19,7 @@
 
 <div class="ui-layout-south footerRegion"
      style="font-size: 12px; margin-top: 10px; margin-left: 20px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
-    <g:render template="/appMain/south" model="[ips: ips]"/>
+    %{--<g:render template="/appMain/south" model="[ips: ips]"/>--}%
 
 </div>
 
@@ -28,7 +28,7 @@
 
     %{--<div class="ui-layout-content ui-widget-content">--}%
 
-    <g:render template="/appLight/east"/>
+    %{--<g:render template="/appLight/east"/>--}%
 
     </div>
 
@@ -42,6 +42,7 @@
         <div id="logRegion"></div>
 
         <div id="logArea"></div>
+
 
 
         <div id="searchArea" class="nonPrintable">
@@ -65,46 +66,8 @@
             </a></h6>
 
             <div id="inner1" class="common" style="">
-                <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
-                              url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
-                              update="centralArea"
-                              onComplete="jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus();"
-                              method="post">
 
-                %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
-                %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
-                %{--</code>--}%
-
-                    <g:select name="type" from="${['J', 'N', 'W', 'T', 'G', 'R']}"
-                              id="typeField"
-                              tabindex="1"
-                              value="N"/>
-                    <g:textField name="title" value="" id="title"
-                                 tabindex="2" id="summayDaftar"
-                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 77% !important;"
-                                 placeholder="Summary * "
-                                 class=""/>
-
-
-                    <g:submitButton name="save" value="Add"
-                                    style="text-align: center; padding-left: 8px; padding-right: 8px;"
-                                    tabindex="4"
-                                    id="addXcdFormDaftarSubmit"
-                                    class="fg-button ui-widget ui-state-default"/>
-
-                    <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
-                                tabindex="3"
-                                name="description" id="descriptionDaftar"
-                                value=""
-                                style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
-                </g:formRemote>
-                %{--<div id="subDaftarArea">--}%
-%{----}%
-                %{--</div>--}%
-
-                <br/>
-                <hr style="color: darkgray; background: darkgray"/>
-                <br/>
+                <div id="3rdPanel"></div>
 
                 <div id="centralArea" class="common" style="">
 
@@ -133,137 +96,6 @@
                 </div>
 
             </div>
-
-            <h6 style="text-aling: center"><a href="#" id="testTitle2">
-                Panel 2
-            </a></h6>
-
-            <div id="2" class="common" style="">
-                <div id="inner2" class="common" style="">
-                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%
-
-                </div>
-                %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
-                <g:formRemote name="batchAdd2" class="commandBarInPanel"
-                              url="[controller: 'generics', action: 'actionDispatcher']"
-                              update="centralArea" style="display: inline"
-
-                              method="post">
-                    <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
-                    <g:submitButton name="batch" value="Execute"
-                                    style="height: 30px; margin: 0px; width: 100px !important; display: none"
-                                    id="quickAddXcdSubmitTop3"
-                                    class="fg-button ui-widget ui-state-default"/>
-
-                    <g:textField name="input" value="" id="testField2"
-                                 autocomplete="off"
-                                 style="display: inline; padding-left: 5px; font-family: tahoma ; width: 100% !important; border: 1px solid darkgray"
-                                 placeholder=""
-                                 class="commandBarTexFieldTop"/>
-                </g:formRemote>
-
-            </div>
-
-        <h6 id="h64"><a href="#" id="testTitle4">
-            Advanced panel
-        </a></h6>
-
-            <div id="4d" class="common" style="">
-                <div id="inner4" class="common" style="">
-                </div>
-
-                %{--<br/>--}%
-%{--                <sec:ifAnyGranted roles="ROLE_ADMIN">--}%
-                    <g:render template="/layouts/commandbar" model="[]"/>
-%{--                </sec:ifAnyGranted>--}%
-
-                %{--first commented one below was in action 14.03.2019 --}%
-                %{--<g:formRemote name="batchAdd2"  class="commandBarInPanel"--}%
-                %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-                %{--update="centralArea" style="display: inline"--}%
-                %{--before="jQuery('#testTitle4').text('[4]: ' + jQuery('#testField4').val());"--}%
-                %{--method="post">--}%
-                %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-                %{--<g:submitButton name="batch" value="Execute"--}%
-                %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
-                %{--id="quickAddXcdSubmitTop5"--}%
-                %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-                %{--<g:textField name="input"  value="" id="testField4"--}%
-                %{--autocomplete="off"--}%
-                %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-                %{--placeholder=""--}%
-                %{--class="commandBarTexFieldTop"/>--}%
-                %{--</g:formRemote>--}%
-
-
-
-
-                %{--<g:formRemote name="batchAdd2"--}%
-                %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-                %{--update="centralArea" style="display: inline"--}%
-                %{--method="post">--}%
-                %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-                %{--<g:submitButton name="batch" value="Execute"--}%
-                %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
-                %{--id="quickAddXcdSubmitTop6"--}%
-                %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-                %{--<g:textField name="input"  value=""--}%
-                %{--autocomplete="off"--}%
-                %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-                %{--placeholder=""--}%
-                %{--class="commandBarTexFieldTop"/>--}%
-                %{--</g:formRemote>--}%
-
-                %{--<g:formRemote name="batchAdd2"--}%
-                %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-                %{--update="centralArea" style="display: inline"--}%
-                %{--method="post">--}%
-                %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-                %{--<g:submitButton name="batch" value="Execute"--}%
-                %{--style="height: 20px; margin: 0px; width: 100px !important; display: none"--}%
-                %{--id="quickAddXcdSubmitTop7"--}%
-                %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-                %{--<g:textField name="input" value=""--}%
-                %{--autocomplete="off"--}%
-                %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-                %{--placeholder=""--}%
-                %{--class="commandBarTexFieldTop"/>--}%
-                %{--</g:formRemote>--}%
-
-            </div>
-
-            %{--<h6 style="text-aling: center"><a href="#" id="testTitle5">--}%
-            %{--5--}%
-            %{--</a></h6>--}%
-
-            %{--<div id=5 class="common" style="">--}%
-            %{--<div id="inner5" class="common" style="">--}%
-            %{--</div>--}%
-
-            %{--<g:formRemote name="batchAdd5"  class="commandBarInPanel"--}%
-            %{--url="[controller: 'generics', action: 'actionDispatcher']"--}%
-            %{--update="centralArea" style="display: inline"--}%
-            %{--before="jQuery('#testTitle5').text('[5]: ' + jQuery('#testField5').val());"--}%
-            %{--method="post">--}%
-            %{--<g:hiddenField name="sth5" value="${new java.util.Date()}"/>--}%
-            %{--<g:submitButton name="batch" value="Execute"--}%
-            %{--style="height: 30px; margin: 0px; width: 100px !important; display: none"--}%
-
-            %{--id="quickAddXcdSubmitTop8"--}%
-            %{--class="fg-button ui-widget ui-state-default"/>--}%
-
-            %{--<g:textField name="input"  value=""--}%
-            %{--autocomplete="off"--}%
-            %{--id="testField5"--}%
-            %{--style="display: inline;  font-family: tahoma ; width: 100% !important;"--}%
-            %{--placeholder=""--}%
-            %{--class="commandBarTexFieldTop"/>--}%
-            %{--</g:formRemote>--}%
-
-            %{--</div>--}%
 
         </div>
         %{--<hr/>--}%

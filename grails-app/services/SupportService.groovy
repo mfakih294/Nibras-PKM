@@ -77,11 +77,13 @@ class SupportService {
 
 
             return typeSandboxPath
-        } else if (type == 'w') {
-
-            return "?"
-        } else if (type == 'e') {
-            return "?"
+        } else {
+            def typeSandboxPath = (!relative ? OperationController.getPath('root.rps1.path') : '')  + '/' + type + //todo parametric
+                    '/' + id
+//            } else { //todo
+//                typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + '' + params.entityCode + '/' + record.id
+//            }
+            return typeSandboxPath
         }
     }
 
@@ -673,7 +675,7 @@ class SupportService {
 
     Task[] getOverdueTasks(){
         def list =
- Task.executeQuery('from Task where date(endDate) < current_date() and status.code != ? order by context asc',
+ Task.executeQuery('from Task where date(endDate) < current_date() and status.code != ? and bookmarked = true order by context asc',
          ['done'])
         return list
 //        return [Task.get(683)]

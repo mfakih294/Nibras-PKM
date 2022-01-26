@@ -126,7 +126,7 @@ t.removeClass('recordSelected');
 }
 
 	//document.getElementByClass('.recordSelected').scrollIntoView(); //{behavior: 'smooth', block: 'center'}
-	//jQuery('.recordSelected').scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+	jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
 
 	return false;
 });
@@ -139,6 +139,7 @@ Mousetrap.bindGlobal('down', function (e) {
 		t.removeClass('recordSelected');
 	}
 	//jQuery('.recordSelected').scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+	jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
 	return false;
 
 });

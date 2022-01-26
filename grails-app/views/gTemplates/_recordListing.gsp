@@ -198,12 +198,13 @@
 <g:if test="${session['showLine1Only'] == 'on'}">
 <g:each in="${list}" status="i" var="record">
 
-    <g:render template="/gTemplates/recordSummary" model="[record: record, tabIndex: i]"/>
+    <g:render template="/gTemplates/recordSummary" model="[record: record, tabIndex: i, expanded: expanded]"/>
 </g:each>
 </g:if>
 <g:else>
     <g:each in="${list}" status="i" var="record">
         <g:render template="/gTemplates/recordSummary" model="[
+                expanded: expanded,
                 record: (record.entityCode() == 'R' ? mcs.Book.findById(record.id): record),
                 tabIndex: i,
                 context: (highlights && highlights[i] ? highlights[i] : null)]"/>

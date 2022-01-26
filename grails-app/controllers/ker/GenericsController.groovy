@@ -32,6 +32,7 @@ import mcs.parameters.*
 import mcs.parameters.Context
 import org.apache.commons.lang.StringUtils
 import grails.converters.JSON
+import java.nio.file.*
 
 //import org.eclipse.mylyn.wikitext.core.parser.MarkupParser
 //import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder
@@ -3205,9 +3206,63 @@ def markAsMarkdowned(Long id, String entityCode) {
                 }
             } catch (Exception e) {
                 println e.printStackTrace()
+                render e.printStackTrace()
             }
 
         }
+
+        else if (input.endsWith(' &')) {
+            try {
+
+                def fullquery
+                def fullquerySort
+                def queryKey
+                    def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
+
+//        input = params.input.substring(params.input.indexOf(' '))
+
+                    def queryHead = 'from ' + entityMapping[entityCode]
+                    def queryCriteria = transformMcsNotation(input)['queryCriteria']
+
+                    def queryParams = ''
+
+                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')  + ' order by lastUpdated desc, id desc'
+                    fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
+
+                def list = Task.executeQuery(fullquery, [], params)
+//            if (OperationController.getPath('enable.autoselectResults') == 'yes'){
+//                selectedRecords.keySet().each() {
+//                    session[it] = 0
+//                }
+//                selectedRecords = [:]
+//
+//                for (r in list) {
+//                selectedRecords[r.entityCode() + r.id] = 1
+//                session[r.entityCode() + r.id] = 1
+//            }
+//            }
+
+                render(template: '/gTemplates/recordListing', model: [
+                        expanded: true,
+                        totalHits: Task.executeQuery(fullquerySort)[0], //.size(),
+                        list     : list,
+                        entity: fullquery?.split('where')[0]?.replace('from', '').trim(),
+                        queryKey : queryKey,
+                        fullquery: fullquery,
+                        title    : fullquery.split(' ')[1]?.split(/\./).last() + ': ' + transformMcsNotation(input)['properties']// + ' ('+ Task.executeQuery(fullquerySort)[0] + ' result(s))'
+                ])
+
+
+
+
+                ///
+
+            } catch (Exception e) {
+                println e.printStackTrace()
+                render e.printStackTrace()
+            }
+
+        } // ends case of &
         else {
             params.max = Setting.findByNameLike('savedSearch.pagination.max.link') ? Setting.findByNameLike('savedSearch.pagination.max.link').value.toInteger() : 3
 
@@ -3287,7 +3342,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                         groups: groups, groupBy: groupBy,
                         title : 'HQL Query: ' + input]
                 )
-            } else {
+            }
+
+            else {
                 def fullquery
                 def fullquerySort
                 def queryKey
@@ -5759,6 +5816,56 @@ def addTagToAll(String input) {
         }
     }
 
+    def symbolicLinkAllBookmarkedRecords() {
+
+        String relativePath
+        String fullPath
+
+        def outPath = OperationController.getPath('root.out.path')
+        def target
+        def entityCode
+
+        def results = []
+        [//mcs.Course,
+         mcs.Goal,
+         mcs.Task,
+         mcs.Planner,
+         mcs.Journal,
+
+         mcs.Writing,
+         app.IndexCard,
+
+         mcs.Book,
+         mcs.Excerpt//
+         // ,
+         //app.Contact
+        ].each() { c ->
+            c.findAllByBookmarked(true).each() { r->
+                try {
+//                    println 'in record ' + r
+                    entityCode = r.entityCode()
+                    relativePath = supportService.getResourcePath(r.id, entityCode, true)
+                    fullPath = supportService.getResourcePath(r.id, entityCode, false)
+                    target = outPath + '/' + relativePath
+
+         //                               render 'target ' + target  + '<br/>'
+         //           render 'source ' + fullPath  + '<br/>'
+                    render ' count is ' +  Files.list(Paths.get(fullPath)).count() + '<br/>'
+
+                    if (new File(fullPath).exists() && Files.list(Paths.get(fullPath)).count() > 0) {
+                        Files.createDirectories(Paths.get(target).getParent())
+                        java.nio.file.Files.createSymbolicLink(Paths.get(target), Paths.get(fullPath))
+                    }
+                    else
+                        render 'directory is empty or not exists ' + Files.list(Paths.get(fullPath)).count() + '<br/>'
+
+                }
+                catch(Exception e){
+                    println e.getMessage()//printStackTrace()
+                }
+            }
+        }
+    }
 
     String[] getRecordPaths(String entityCode, Long id){
 

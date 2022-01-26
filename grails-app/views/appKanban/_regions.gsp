@@ -83,6 +83,7 @@
                  <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                               url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                               update="underArea"
+                     style="margin:  2px; padding: 3px 0px; border: 1px solid darkgray; line-height: 30px;"
                               onComplete="jQuery('#summayDaftar').val('');jQuery('#summayDaftar').select();;jQuery('#summayDaftar').focus();"
                               method="post">
 
@@ -102,7 +103,7 @@
                               style="display: none;"
                               tabindex="1"
                               value="T"/>
-                    &nbsp;
+
                     @<g:select name="context" id="context" from="${mcs.parameters.Context.list([sort: 'code', order: 'asc'])}"
                               optionKey="id"
                                style="width: 80px !important;"
@@ -119,12 +120,13 @@
                     <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="ar"
                     />
 
-                    &nbsp;
+                    <br/>
                     <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
-                                 style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma; font-size: 1em; min-width: 50% !important;"
+                                 style="background: #f8f9fa; margin: 3px; text-align: right; font-family: Tahoma; font-size: 1em; min-width: 70% !important;"
                                  placeholder="Summary * "
                                  class=""/>
+                     &nbsp;
                     <g:submitButton name="save" value="Add"
                                     style="text-align: center; padding-left: 8px; padding-right: 8px;"
                                     tabindex="4"
@@ -138,10 +140,9 @@
                 %{--                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>--}%
                 </g:formRemote>
 
-                <div id="underArea" class="common" style="margin: 12px 12px 30px 0px;">
+                <div id="underArea" class="common" style="margin: 2px 2px 5px 5px;">
                     %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
                 </div>
-
                 <g:if test="${1 == 2}">
 
                     <div style="column-count: ${OperationController.getPath('grouping.column.count') ?: 3}; background: #f9fbf4; padding: 5px;">
@@ -232,44 +233,19 @@
             </g:if>
 
 
-            <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
-                <thead>
-                <th>Todo</th>
-                <th colspan="3">Today</th>
+            <table border="0" style="margin: 5px; width: 98%; border: #496779; border-collapse: collapse;">
 
-                </thead>
-            <tr>
-                <td></td>
-                <td>Not started</td>
-                <td>In progress</td>
-                <td>Completed</td>
-            </tr>
-                <tr>
-                    <td style="vertical-align: top">
-                        <br/>
-                        <h2>Overdue</h2>
-                        <br/>
-                        %{--<g:render template="/gTemplates/recordListing" model="[list: overdue ]"></g:render>--}%
-                        <g:each in="${overdue.context.unique()}" var="c">
-                            <h4>@${c}</h4>
-                            <g:each in="${overdue.grep{it.context == c}}" var="task" >
-                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                            </g:each>
-                        </g:each>
-                        <br/>
-                    <h2>Pile</h2>
-                        <br/>
-                        %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
-                        <g:each in="${pile.context.unique()}" var="c">
-                            <h4>@${c}</h4>
-                            <g:each in="${pile.grep{it.context == c}}" var="task" >
-                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                            </g:each>
-                        </g:each>
-                    </td>
-                    <td style="vertical-align: top">
-                             %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
+            %{--<tr>--}%
+                %{--<td></td>--}%
+                %{--<td>Not started</td>--}%
+                %{--<td>In progress</td>--}%
+                %{--<td>Completed</td>--}%
+            %{--</tr>--}%
+                <g:if test="${notStarted.size() >= 1}">
+                    <tr>
 
+                    <td style="vertical-align: top">
+                    %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
                         <g:each in="${notStarted.context.unique()}" var="c">
                             <h4>@${c}</h4>
                             <g:each in="${notStarted.grep{it.context == c}}" var="task" >
@@ -277,21 +253,32 @@
                             </g:each>
                         </g:each>
 
-                        </td>
+                    </td>
+
+
+
+                </tr>
+                </g:if>
+<g:if test="${inProgress.size() >= 1}">
+                <tr>
                     <td style="vertical-align: top">
 
 
                         <g:each in="${inProgress.context.unique()}" var="c">
                             <h4>@${c}</h4>
-                        <g:each in="${inProgress.grep{it.context == c}}" var="task" >
-                            <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                        </g:each>
+                            <g:each in="${inProgress.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
                         </g:each>
 
 
                     </td>
+                </tr>
+</g:if>
+    <g:if test="${completed.size() >= 1}">
+                <tr>
                     <td style="vertical-align: top">
-                             %{--<g:render template="/gTemplates/recordListing" model="[list: completed ]"></g:render>--}%
+                    %{--<g:render template="/gTemplates/recordListing" model="[list: completed ]"></g:render>--}%
                         <g:each in="${completed.context.unique()}" var="c">
                             <h4>@${c}</h4>
                             <g:each in="${completed.grep{it.context == c}}" var="task" >
@@ -300,6 +287,34 @@
                         </g:each>
 
                     </td>
+                </tr>
+    </g:if>
+<g:if test="${overdue.size() >= 1}">
+                <tr>
+                    <td style="vertical-align: top">
+                        <h2>Overdue</h2>
+                        %{--<g:render template="/gTemplates/recordListing" model="[list: overdue ]"></g:render>--}%
+                        <g:each in="${overdue.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                            <g:each in="${overdue.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
+                        </g:each>
+                      </td>
+    </tr>
+</g:if>
+    <tr>
+        <td>
+                    <h2>Pile</h2>
+                        %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
+                        <g:each in="${pile.context.unique()}" var="c">
+                            <h4>@${c}</h4>
+                            <g:each in="${pile.grep{it.context == c}}" var="task" >
+                                <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                            </g:each>
+                        </g:each>
+                    </td>
+
                 </tr>
             </table>
 
@@ -333,7 +348,6 @@
             <g:if test="${1 == 2}">
                 <h2>T* G* C* / D*</h2>
                 <table border="1" style="margin: 10px; width: 98%; border: #496779; border-collapse: collapse;">
-
                     <thead>
                     <th>\ D*</th>
                     <g:each in="${mcs.Department.findAllByBookmarked(true, [sort: 'code'])}" var="d">
