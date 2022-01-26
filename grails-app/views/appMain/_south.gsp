@@ -29,16 +29,6 @@
 %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
 %{--<g:message code="ui.menu.RSS"></g:message>--}%
 </g:remoteLink>
-<g:remoteLink controller="generics" action="verifyAllOperations"
-              update="centralArea"
-              title="Verify operations">
-    Verify op.
-%{--دقات--}%
-%{--</g:remoteLink>--}%
-%{--style="" target="_blank">--}%
-%{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
-%{--<g:message code="ui.menu.RSS"></g:message>--}%
-</g:remoteLink>
 
 
 
