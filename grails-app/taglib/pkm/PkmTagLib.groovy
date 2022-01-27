@@ -193,7 +193,7 @@ class PkmTagLib {
             c++
 
             if (isStatic == 'yes') {
-                output += """<li>
+                output += """<li class="fileItem">
 			<div class="showhim">
 <a href="${i.path?.replace('\\' + (OperationController.getPath('rootFolder') ?: 'mhi') + '\\mcd', '.')}" class="${fileClass}"
                           target="_blank"

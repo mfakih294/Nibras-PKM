@@ -244,10 +244,18 @@ jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelecti
 
 //jQuery(document).ready(function () {
     %{--document.getElementsByClassName("prevLink")[0].className = "prevLink${customId}";--}%
+if (jQuery(".prevLink").size() > 0) {
+    document.getElementsByClassName("prevLink")[0].className = "prevLink${customId}";
+
+    Mousetrap.bind(['p','ح', 'left'], function (e) {
+        jQuery(".prevLink${customId}").click();
+    });
+}
+
 if (jQuery(".nextLink").size() > 0) {
     document.getElementsByClassName("nextLink")[0].className = "nextLink${customId}";
 
-    Mousetrap.bind(['n','ى', 'next'], function (e) {
+    Mousetrap.bind(['n','ى', 'right'], function (e) {
         jQuery(".nextLink${customId}").click();
     });
 
@@ -255,7 +263,6 @@ if (jQuery(".nextLink").size() > 0) {
         jQuery(".recordSelected .quickBookmarkButton").click();
         jQuery(".nextLink${customId}").click();
     });
-
 }
 
 

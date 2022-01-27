@@ -55,6 +55,8 @@ class Writing implements Comparable {  // entity id = 144
     String code // slug
     Boolean isPage = true
 
+    Boolean withMarkdown = false   // description is in markdown format
+
 
     String language = 'ar'
 

@@ -4,17 +4,23 @@
 
 
             <h3><a href="#">
-                 Pile (${IndexCard.countByBookmarked(true) + Writing.countByBookmarked(true) + Journal.countByBookmarked(true) + Planner.countByBookmarked(true) +Task.countByBookmarked(true)})
+                 Pile (${IndexCard.countByBookmarked(true) + Writing.countByBookmarked(true) +
+                         Journal.countByBookmarked(true) + Planner.countByBookmarked(true) + Task.countByBookmarked(true) + Book.countByBookmarked(true)})
             </a></h3>
 
                 <div style="">
-     <g:render template="/gTemplates/recordListing" model="[list: IndexCard.findAllByBookmarked(true)]"/>
-     <g:render template="/gTemplates/recordListing" model="[list: Writing.findAllByBookmarked(true)]"/>
-     <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByBookmarked(true)]"/>
-    <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByBookmarked(true)]"/>
-    <g:render template="/gTemplates/recordListing" model="[list: Task.findAllByBookmarked(true)]"/>
-                %{--<g:render template="/gTemplates/recordListing" model="[list: Goal.findAllByBookmarked(true)]"/>--}%
 
+                    <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByBookmarked(true),
+                                                                           totalHits: Planner.countByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByBookmarked(true),
+                                                                           totalHits: Journal.countByBookmarked(true)]"/>
+                    %{--todo: repeat--}%
+                    <g:render template="/gTemplates/recordListing" model="[list: Task.findAllByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: IndexCard.findAllByBookmarked(true),
+                                                                           totalHits: IndexCard.countByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Writing.findAllByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Book.findAllByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Goal.findAllByBookmarked(true)]"/>
             </div>
 
                 </div>
