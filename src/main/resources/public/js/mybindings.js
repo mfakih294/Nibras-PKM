@@ -1,4 +1,9 @@
 
+Mousetrap.bind(['ctrl+enter'], function (e) {
+	jQuery('#summayDaftar').click();
+});
+
+
 
 Mousetrap.bind('space', function (e) {
 	jQuery('.temp44').addClass('hiddenActions');
@@ -65,6 +70,7 @@ Mousetrap.bind(['ق','r'], function (e) {
 Mousetrap.bind(['D','shift+ي'], function (e) {
 	jQuery(".recordSelected  .doneButton").click();
 });
+
 
 Mousetrap.bind(['ctrl+X','ctrol+ْ'], function (e) {
 	jQuery(".recordSelected  .dismissedButton").click();

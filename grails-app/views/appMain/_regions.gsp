@@ -77,14 +77,14 @@
                     <div class="">
                         %{--<h2>Create new record...</h2>--}%
                         <h4 style="user-focus-pointer: hand; cursor: hand;">Quick add records...</h4>
-                        <br/>
+                        %{--<br/>--}%
                     </div>
                     <div class="">
 
                     <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                   url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                                   update="underAreaForQuickAdd"
-                                  onComplete=" jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#descriptionDaftar').focus(); jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', });"
+                                  onComplete=" jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus(); jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', });"
                                   method="post">
 
                     %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
@@ -99,20 +99,20 @@
                                   onchange="if (this.value == 'Resource') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
                                   value="N"/>
 
-                        <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                            <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
-                                      optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
-                        </g:if>
+                        %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+                            %{--<g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"--}%
+                                      %{--optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>--}%
+                        %{--</g:if>--}%
 
-                        <g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"
-                                  value="${OperationController.getPath('default.language')}"
-                        />
+                        %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
+                                  %{--value="${OperationController.getPath('default.language')}"--}%
+                        %{--/>--}%
 
 
-                        <g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                            <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
-                                      optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>
-                        </g:if>
+                        %{--<g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+                            %{--<g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"--}%
+                                      %{--optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>--}%
+                        %{--</g:if>--}%
 
 
 
@@ -121,9 +121,10 @@
                                      style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
                                      placeholder="Summary * "/>
 
-                        <g:submitButton name="save" value="Add (Shift+F2)"
-                                        style="text-align: center; padding-left: 8px; padding-right: 8px; width: 120px"
+                        <g:submitButton name="save" value="Add"
+                                        style="text-align: center; padding-left: 8px; padding-right: 8px; width: 40px"
                                         tabindex="4"
+                            title="Add record (ctrl+enter)"
                                         id="addXcdFormDaftarSubmit"
                                         class="fg-button ui-widget ui-state-default"/>
 
@@ -131,7 +132,7 @@
                                     tabindex="3"
                                     name="description" id="descriptionDaftar"
                                     value=""
-                                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>
+                                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 96%; height: 80px !important;"/>
                     </g:formRemote>
 
 

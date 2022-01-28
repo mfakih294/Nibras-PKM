@@ -466,7 +466,7 @@ $("#accordionCenter").accordion({
             });
 
 //            jQuery('#quickAddTextFieldBottomTop').focus();
-            jQuery('#descriptionDaftar').focus();
+            jQuery('#summayDaftar').focus();
 
 
 //                        if (window.isHidden)

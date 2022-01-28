@@ -694,7 +694,7 @@ class SyncController {
 //            n.save(flush: true)
 
             json = builder.build {
-                result = 'Note saved.'
+                result = 'Notes exported.'
             }
         } else {
             json = builder.build {

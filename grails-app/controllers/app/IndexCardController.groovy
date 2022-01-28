@@ -443,8 +443,12 @@ class IndexCardController { // entity id = 16
             n.save()
         }
 
+            if (params.language)
         n.language = params.language
-        n.bookmarked = true
+            else
+                n.language = detectLanguage(params.title + params.description)
+
+//        n.bookmarked = true
 
 
         render(template: "/gTemplates/recordSummary", model: [record: n, justSaved: true])
@@ -595,5 +599,18 @@ class IndexCardController { // entity id = 16
     }
     def sortNotes(){
         render(template: "/appCourse/sortNotes", model: [record: mcs.Course.get(params.id)])
+    }
+
+    String detectLanguage(String t){
+        String result
+        'ابتثحجدرزدذسشطظعغفقكلمنهوي'.each(){
+            println 'trying ' + it
+            if (t.contains(it))
+                result = 'ar'
+        }
+        if (!result)
+            result = 'en'
+
+        return result
     }
 } // end of class
