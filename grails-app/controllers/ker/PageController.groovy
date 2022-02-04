@@ -408,8 +408,12 @@ class PageController {
         }
 
 
+        def tasksActiveNotStarted = supportService.getTasksActiveNotStarted()
+
 
         def user = springSecurityService.currentUser
+
+
         render(view: '/appMain/main', model: [
                 htmlContent      : null,
                 ips              : ips,
@@ -419,6 +423,7 @@ class PageController {
                 username         : user.username,
                 reviewPileSize   : resources.size() + excerpts.size(),
                 types: types,
+                tasksActiveNotStarted: tasksActiveNotStarted,
 //                environment: environment
                 //,
 //                filledInDates: filledInDates?.trim(),
@@ -519,6 +524,7 @@ def appPile() {
         def todayInProgress = supportService.getTasksTodayInProgress()
         def todayCompleted = supportService.getTasksTodayCompleted()
         def todayNotStarted = supportService.getTasksTodayNotStarted()
+
 
         render(view: '/appKanban/main', model: [courses: courses.unique().reverse(),
         overdue: overdue,

@@ -604,7 +604,7 @@ class IndexCardController { // entity id = 16
     String detectLanguage(String t){
         String result
         'ابتثحجدرزدذسشطظعغفقكلمنهوي'.each(){
-            println 'trying ' + it
+//            println 'trying ' + it
             if (t.contains(it))
                 result = 'ar'
         }
@@ -613,4 +613,5 @@ class IndexCardController { // entity id = 16
 
         return result
     }
+
 } // end of class

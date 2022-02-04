@@ -1483,7 +1483,28 @@ def markAsMarkdowned(Long id, String entityCode) {
 //        operation/countResourceFiles/15544?entityCode=R
 
 //        operation/copyToRps1/15544?entityCode=R
-        record.save(flush: true)
+
+        // count rps1 folder files
+        def rps1Folder = getRecordPaths(params.entityCode, params.id.toLong())[0]
+
+            if (new File(rps1Folder).exists() && Files.list(Paths.get(rps1Folder)).count() > 0) {
+                record.filesCount = 0
+                record.filesList = ''
+
+                def filesCount = 0
+                def filesList = ''
+                new File(rps1Folder).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
+                    filesCount++
+                    filesList += it.name + '\n'
+                }
+                record.filesCount = filesCount
+                record.filesList = filesList
+            }
+        else
+                render "Record's folder is empty or not found. Counting operation halted."
+        // end counting
+
+            record.save(flush: true)
 
         render(template: '/gTemplates/recordSummary', model: [record: record])
     }
@@ -4466,7 +4487,7 @@ render params.text
                     } else if (it.startsWith('?')) {
                         if (it.trim() == '?-') {
 //                        if (it.trim().length() == 1) {
-//                              properties['type'] = null
+                            properties['status'] = null
                             queryCriteria.add("status = null")
                         } else {
 
@@ -4486,8 +4507,9 @@ render params.text
                     if (it.startsWith('@') && 'T'.contains(entityCode)) {
                         if (it.trim() == '@-') {
 //                        if (it.trim().length() == 1) {
-//                              properties['type'] = null
-                            queryCriteria.add("context = null")
+                           properties['context'] = null
+                           queryCriteria.add("context = null")
+
                         } else {
 
                             def id = Context.findByCode(it.substring(1)).id

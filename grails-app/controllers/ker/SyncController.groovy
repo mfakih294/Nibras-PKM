@@ -90,6 +90,7 @@ class SyncController {
         }
     }
 
+    /*
     def rssPile() {
         render(feedType: "rss", feedVersion: "2.0") {
             title = "PKM RSS"
@@ -180,7 +181,7 @@ class SyncController {
         render t
 
     }
-
+*/
     def exportJson = {
         def builder = new JSONBuilder()
 

@@ -277,6 +277,9 @@
                         %{--</g:if>--}%
 
 
+                            <g:if test="${record.class.declaredFields.name.contains('status') && record.status}">
+                                <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 1px solid darkgray; color: darkorange; font-style: italic; font-weight: normal;">${record.status?.code}</span>
+                            </g:if>
 
 
                             <g:if test="${record.class.declaredFields.name.contains('summary')}">
@@ -298,7 +301,7 @@
 
                                 <g:if test="${record.class.declaredFields.name.contains('course' +
                                         '') && record.course}">
-                                    <span style="padding: 1px 2px; margin: 0px 2px; font-size: small; border-radius: 3px; border: 1px solid darkgray; color: black; font-weight: bold; font-family: monospace">
+                                    <span style="padding: 1px 2px; margin: 0px 2px; font-size: small; border-radius: 3px; border-bottom: 1px solid darkgray; color: black; font-weight: bold; font-family: monospace">
                                         ${record.course?.code ? record.course?.code : record.course}</span>
                                 </g:if>
 
@@ -406,9 +409,6 @@
 
 %{--                                <br/>--}%
 
-<g:if test="${record.class.declaredFields.name.contains('status') && record.status}">
-                        <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 0px solid darkgray; color: darkorange; font-weight: normal;font-size: normal">?${record.status?.code}</span>
-                        </g:if>
 
 
                                 <g:if test="${record.class.declaredFields.name.contains('task') && record.task}">

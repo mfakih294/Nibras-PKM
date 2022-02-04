@@ -704,5 +704,12 @@ class SupportService {
          return list
     }
 
+    Task[] getTasksActiveNotStarted(){
+         def list =
+                 Task.executeQuery('from Task where bookmarked = true and ((status.code != ? and status.code != ?) or status = null)',
+                         ['inp', 'done'])
+         return list
+    }
+
 
 }

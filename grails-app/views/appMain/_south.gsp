@@ -83,7 +83,7 @@
 <g:if test="${OperationController.getPath('copyright.show')?.toLowerCase() == 'yes' ? true : false}">
                     
 &nbsp; &nbsp; 
-   2020 &copy; khuta.org
+   ${new Date().format('yyyy')} &copy; khuta.org
     &nbsp; &nbsp; |&nbsp; &nbsp;
     </g:if>
 
