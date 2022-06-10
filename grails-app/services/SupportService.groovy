@@ -77,7 +77,30 @@ class SupportService {
 
 
             return typeSandboxPath
-        } else {
+        } else if (type == 'O') {
+            def operation = mcs.Operation.get(id)
+            def date = operation.summary?.split(/\(/)[1]
+            def path = (!relative ? OperationController.getPath('root.rps1.path') : '')  + '/' + type + //todo parametric
+                    '/' + id
+
+            /** code for later - to import operations from mobile
+
+            new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${date}_[\S\s] (todo add star here, removed for the comment stars) /) { f ->
+                println 'inside new '
+            path = f.path
+                println 'found ' + f.path
+            }
+            */
+
+//            def typeSandboxPath = (!relative ? OperationController.getPath('root.rps1.path') : '')  + '/new/' + //todo parametric
+//                    '/' +
+//            } else { //todo
+//                typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + '' + params.entityCode + '/' + record.id
+//            }
+            return path
+        }
+        else {
+
             def typeSandboxPath = (!relative ? OperationController.getPath('root.rps1.path') : '')  + '/' + type + //todo parametric
                     '/' + id
 //            } else { //todo
@@ -369,7 +392,7 @@ class SupportService {
         if (i.path)
             result = countFolder(i.path, i.extensions)
         else if (i.query)
-            result = Goal.executeQuery("select count(*) " + i.query)[0]
+            result = Goal.executeQuery("" + i.query)[0]
 
         return result
     }
@@ -682,7 +705,7 @@ class SupportService {
     }
      Task[] getTasksPile(){
          def list =
-                 Task.executeQuery('from Task where endDate is null and bookmarked = ? order by context asc', [true])
+                 Task.executeQuery('from Task where (endDate is null or date(endDate) != current_date()) and bookmarked = ? order by context asc', [true])
          return list
     }
      Task[] getTasksTodayInProgress(){
@@ -706,8 +729,9 @@ class SupportService {
 
     Task[] getTasksActiveNotStarted(){
          def list =
-                 Task.executeQuery('from Task where bookmarked = true and ((status.code != ? and status.code != ?) or status = null)',
-                         ['inp', 'done'])
+//                 Task.executeQuery('from Task where bookmarked = true and ((status.code != ? and status.code != ?) or status = null)',   ['inp', 'done'])
+                 Task.executeQuery('from Task where bookmarked = true order by context asc')
+//        println 'list: ' + list
          return list
     }
 

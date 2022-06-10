@@ -10,7 +10,7 @@ export JAVA_OPTS="-server"
 grails clean
 
 #./gradlew assemble
-./gradlew  --offline  assemble 
+./gradlew  assemble 
 
 #grails war
 

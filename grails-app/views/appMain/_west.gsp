@@ -12,30 +12,34 @@
 
     <div>
 
+
+
         <div id="currentTaskArea"></div>
 
 <g:if test="${tasksActiveNotStarted.size() >= 1}">
     %{--<tr>--}%
         %{--<td style="vertical-align: top">--}%
         %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
-            <g:each in="${tasksActiveNotStarted.context.unique()}" var="c">
-                <h4>@${c}</h4>
-                <ul>
-                <g:each in="${tasksActiveNotStarted.grep{it.context == c}}" var="task">
-                    <li>
+            %{--<g:each in="${tasksActiveNotStarted?.context?.unique()}" var="c">--}%
+                %{--<h4 style="text-align: center">@${c}</h4>--}%
+                <ul style="direction: rtl;text-align: center; width: 90%; padding: 3px;;">
+                    %{--.grep{it.context == c}--}%
+                <g:each in="${tasksActiveNotStarted}" var="task">
+                    <li class="text${task.language}" style="border: 1px solid darkgray; border-radius: 5px; padding: 3px; margin: 6px 2px; list-style-type: none;">
 
                         <g:remoteLink controller="generics" action="showSummary" id="${task.id}" params="[entityCode: 'T']"
                                       update="currentTaskArea"
                                       title="Show task  ">
+                            <b>${task.context?.code}</b>
                             ${task.summary}
                         </g:remoteLink>
 
-
                     </li>
+
                     %{--<g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>--}%
                 </g:each>
                 </ul>
-            </g:each>
+            %{--</g:each>--}%
 
         %{--</td>--}%
 
@@ -656,7 +660,7 @@
     </a></h3>
 
     <div id='addXcd'>
-
+<g:if test="${1 == 2}">
         <g:formRemote name="addXcdFormNgs" id="addXcdFormNgs"
                       url="[controller: 'indexCard', action: 'addXcdFormNgs']"
                       update="centralArea"
@@ -764,6 +768,120 @@
             <br/>
 
             <g:submitButton name="save" value="Save"
+
+                            style="height: 35px; margin: 0px; width: 100% !important; background: #efece0"
+                            id="45634523"
+                            class="fg-button ui-widget ui-state-default"/>
+        </g:formRemote>
+    </g:if>
+
+     <g:formRemote name="addXcdToWriting" id="addXcdToWriting"
+                      url="[controller: 'indexCard', action: 'addXcdToWriting']"
+                      update="centralArea"
+                      onComplete="jQuery('#description').val('')"
+                      method="post">
+
+        %{--            <g:select name="language" from="${['ar', 'fr', 'en', 'de', 'fa']}"--}%
+        %{--                      id="language"--}%
+        %{--                      value="ar"--}%
+        %{--                      noSelection="${['null': '']}"/>--}%
+
+        %{--            <g:select name="priority" from="${(1..4)}"--}%
+        %{--                      id="priorityNote"--}%
+        %{--                      value="${2}"/>--}%
+
+
+        %{--            <g:select name="department.id" from="${Department.list([sort: 'code'])}"--}%
+        %{--                      optionKey="id" id="department"--}%
+        %{--                      optionValue="code"--}%
+        %{--                      noSelection="${['null': 'd-']}"/>--}%
+
+        %{--            <g:select name="course.id"--}%
+        %{--                      from="${Course.executeQuery('from Course c where c.bookmarked = true order by c.department.orderNumber asc, c.orderNumber asc')}"--}%
+        %{--                      optionKey="id"--}%
+        %{--                      id="courseNote"--}%
+        %{--                      class="chosen chosen-rtl"--}%
+        %{--                      optionValue="summary"--}%
+        %{--                      noSelection="${['null': 'No course']}"/>--}%
+        %{--            <br/>--}%
+        %{--            <pkm:datePicker name="writtenOn" placeholder="Date" id="34563453" value="${new Date()}"/>--}%
+        %{--~<g:checkBox name="approximateDate" id="approximateDate" value=""/>--}%
+
+        %{--            <g:select name="type.id" from="${WritingType.list([sort: 'code'])}"--}%
+        %{--                      optionKey="id"--}%
+        %{--                      id="typeNote"--}%
+        %{--                      class="chosen chosen-rtl"--}%
+        %{--                      optionValue="code"--}%
+        %{--                      value="${WritingType.findByCode('usr')?.id}"--}%
+        %{--                      noSelection="${['null': 'No type']}"/>--}%
+
+        %{--            <a onclick="clearFormFields()">Clear</a>--}%
+
+        %{--            <br/>--}%
+
+        <g:select name="writing.id"
+        from="${Writing.executeQuery('from Writing w where w.type.code != ? order by summary asc', 'surah')}"
+        optionKey="id"
+        id="writingNote"
+        optionValue="summary"
+        class="chosen chosen-rtl"
+        style="width: 95%; text-align: right; direction:rtl"
+        value="${null}"
+        noSelection="${['null': 'No writing']}"/>
+        %{----}%
+
+
+
+        %{--<g:select name="contact.id"--}%
+        %{--from="${app.Contact.executeQuery('from Contact c order by c.summary asc')}"--}%
+        %{--optionKey="id"--}%
+        %{--id="contactNote"--}%
+        %{--optionValue="summary"--}%
+        %{--class="chosen chosen-rtl"--}%
+        %{--style="width: 48%; text-align: right; direction:rtl"--}%
+        %{--value="${null}"--}%
+        %{--noSelection="${['null': '']}"/>--}%
+
+
+        %{----}%
+        %{--<br/>--}%
+        %{--<g:select name="book.id"--}%
+        %{--from="${Book.executeQuery('from Book r where r.status.code = ? order by r.course.department.orderNumber asc, r.course.orderNumber asc, r.orderNumber asc', ['mkt'])}"--}%
+        %{--id="bookId"--}%
+        %{--optionKey="id"--}%
+        %{--optionValue="title"--}%
+        %{--class="chosen chosen-rtl"--}%
+        %{--style="width: 99%; text-align: right; direction:rtl"--}%
+        %{--value="${null}"--}%
+        %{--noSelection="${['null': '']}"/>--}%
+
+        %{----}%
+
+        %{--            <g:textField placeholder="Summary" name="summary" id="summary" value=""--}%
+        %{--                         style="background: #e8efe7; width: 100%; ;" dir="auto"/>--}%
+
+            <g:textArea cols="80" rows="12" placeholder="Description" name="description" id="description"
+                        value="" dir="auto"
+                        style="font-family: tahoma; font-size: small; background: #f7fff6; width: 95%; height: 100px !important;"/>
+        %{--            <br/>--}%
+
+        %{--            R ID: <g:textField placeholder="book.id" name="book.id" id="book.id" value="" style="width: 70%;"/>--}%
+
+        %{--            Pg. <g:textField placeholder="pages" name="pages" id="pages" value="" style="width: 30%;"/>--}%
+        %{--            <br/>--}%
+        %{--            <g:textField placeholder="url" name="url" id="url" value="" placehoder="url" style="width: 100%;"/>--}%
+        %{--<br/>--}%
+        %{--<br/>--}%
+        %{--<g:select name="chosenTags" from="${Tag.list()}" multiple=""--}%
+        %{--size="80" style="min-width: 200px; min-height: 50px;"--}%
+        %{--value="" optionKey="id"--}%
+        %{--class="chosen chosen-rtl" id="chosenTags"--}%
+        %{--optionValue="name"--}%
+        %{--noSelection="${['null': '']}"/>--}%
+
+            <br/>
+
+            <g:submitButton name="add" value="Add"
 
                             style="height: 35px; margin: 0px; width: 100% !important; background: #efece0"
                             id="45634523"
@@ -887,6 +1005,7 @@
         <div>
 
             <ul class="settingsUL">
+
                 <li>
                     Configuration
                     <ul>
@@ -952,7 +1071,7 @@
                     </ul>
                     %{--</sec:ifAnyGranted>--}%
 
-
+%{--todo: text only version--}%
                 <li>
                     Record presentation
                     <ul>
@@ -1214,6 +1333,21 @@
                 </h4>
 
             %{--<div>--}%
+                <g:remoteLink controller="export" action="currentBookToScreen"
+                              update="centralArea"
+                              title="">
+                    Current book to screen
+                </g:remoteLink>
+
+                &nbsp;
+                <g:remoteLink controller="export" action="currentBookToFile"
+                              update="centralArea"
+                              title="">
+                    to file
+                </g:remoteLink>
+
+                <br/>
+
 
                 <g:remoteLink controller="operation" action="generateStaticBlogMenu" update="centralArea">
                     Static blog menu
@@ -1269,6 +1403,11 @@
                 </g:remoteLink>
                 <br/>
 
+                <g:remoteLink controller="generics" action="settleAllOperations"
+                              update="centralArea" title="Mark all operations as settled">
+                    <b>Mark all operations as settled</b>
+                </g:remoteLink>
+                <br/>
             %{--<g:link controller="report" action="staticQuranReport"--}%
             %{--target="_blank"--}%
             %{--title="Qurani new tab">--}%

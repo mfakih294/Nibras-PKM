@@ -119,7 +119,7 @@ dependencies {
     compile 'org.grails.plugins:quartz:2.0.13'
 
     //compile "org.grails.plugins:feeds:1.6"
-//    compile 'org.grails.plugins:feeds:2.0.0-SNAPSHOT'
+    compile 'org.grails.plugins:feeds:2.0.0-SNAPSHOT'
 
     compile 'org.grails.plugins:spring-security-core:3.2.3'
 //    compile "org.grails.plugins:resources:1.2.14"

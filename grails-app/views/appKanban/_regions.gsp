@@ -94,19 +94,25 @@
 &nbsp;
 &nbsp;
 
-                     <b>Add task</b>
+                     <b>Add task/goal</b>
                      <br/>
                      &nbsp;
                      &nbsp;
                     <g:select name="type" from="${['T', 'G']}"
                               id="typeField"
-                              style="display: none;"
+                              style="border-radius: 5px;"
                               tabindex="1"
                               value="T"/>
-
-                    @<g:select name="context" id="context" from="${mcs.parameters.Context.list([sort: 'code', order: 'asc'])}"
-                              optionKey="id"
+&nbsp;
+                     p <g:select name="priority" from="${(1..5)}"
+                               id="priority"
+                               tabindex="1"
+                               value="${2}"/>
+                     &nbsp;
+                     @ <g:select name="context" id="context" from="${mcs.parameters.Context.list([sort: 'code', order: 'asc'])}"
+                              optionKey="id" class="chosen"
                                style="width: 80px !important;"
+                               noSelection="${['null': 'Context...']}"
                                optionValue="code"/>
                     &nbsp;
    <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
@@ -117,13 +123,11 @@
 
                 %{--        todo: parametric language list--}%
 
-                    <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="ar"
-                    />
-
-                    <br/>
+                    %{--<g:select name="language" id="language" class="chosen" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="ar"/>--}%
+                    %{--<br/>--}%
                     <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
-                                 style="background: #f8f9fa; margin: 3px; text-align: right; font-family: Tahoma; font-size: 1em; min-width: 70% !important;"
+                                 style="background: #f8f9fa; margin: 3px; text-align: right; font-family: Tahoma; font-size: 1em; min-width: 40% !important;"
                                  placeholder="Summary * "
                                  class=""/>
                      &nbsp;
@@ -247,7 +251,7 @@
                     <td style="vertical-align: top">
                     %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
                         <g:each in="${notStarted.context.unique()}" var="c">
-                            <h4>@${c}</h4>
+                            %{--<h4>@${c}</h4>--}%
                             <g:each in="${notStarted.grep{it.context == c}}" var="task" >
                                 <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
                             </g:each>
@@ -262,8 +266,6 @@
 <g:if test="${inProgress.size() >= 1}">
                 <tr>
                     <td style="vertical-align: top">
-
-
                         <g:each in="${inProgress.context.unique()}" var="c">
                             <h4>@${c}</h4>
                             <g:each in="${inProgress.grep{it.context == c}}" var="task" >
@@ -285,17 +287,16 @@
                                 <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
                             </g:each>
                         </g:each>
-
                     </td>
                 </tr>
     </g:if>
 <g:if test="${overdue.size() >= 1}">
                 <tr>
                     <td style="vertical-align: top">
-                        <h2>Overdue</h2>
+                        %{--<h2>Overdue</h2>--}%
                         %{--<g:render template="/gTemplates/recordListing" model="[list: overdue ]"></g:render>--}%
                         <g:each in="${overdue.context.unique()}" var="c">
-                            <h4>@${c}</h4>
+                            %{--<h4>@${c}</h4>--}%
                             <g:each in="${overdue.grep{it.context == c}}" var="task" >
                                 <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
                             </g:each>
@@ -305,10 +306,12 @@
 </g:if>
     <tr>
         <td>
-                    <h2>Pile</h2>
+                    %{--<h2>Pile</h2>--}%
+            <hr/>
+            <br/>
                         %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
                         <g:each in="${pile.context.unique()}" var="c">
-                            <h4>@${c}</h4>
+                            %{--<h4>@${c}</h4>--}%
                             <g:each in="${pile.grep{it.context == c}}" var="task" >
                                 <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
                             </g:each>

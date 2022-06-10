@@ -5,8 +5,9 @@
 
 <g:if test="${record.class.declaredFields.name.contains('description')}">
     <div id="${entityCode}Record${record.id}newText"></div>
+
     <g:formRemote name="appendText" url="[controller: 'generics', action: 'appendText']"
-                  update="${entityCode}Record${record.id}newText"
+                  update="${entityCode}Record${record.id}"
                   style="display: inline;">
         <g:hiddenField name="id" value="${record.id}"/>
         <g:hiddenField name="entityCode" value="${entityCode}"/>
@@ -14,7 +15,7 @@
                      placeholder="Append to description..."
                      rows="5"
                      style="width:98%;  display: inline; height: 70px;" value=""/>
-        <g:submitButton name="add" value="+" style=""
+        <g:submitButton name="add" value="Append text" style=""
                         class="fg-button ui-widget ui-state-default ui-corner-all"/>
     </g:formRemote>
 </g:if>

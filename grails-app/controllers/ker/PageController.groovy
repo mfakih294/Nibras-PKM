@@ -313,7 +313,7 @@ class PageController {
         def recentRecords = []
         recentClasses.each() {
 //            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
-            recentRecords += it.findAllByDeletedOnIsNull([sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
+            recentRecords += it.findAll([sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
         }
 
 //        def filledInDates = ''
@@ -443,6 +443,7 @@ class PageController {
 
         [
                 [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'P', name: 'Plan', code: 'plans'],
                 [id: 'G', name: 'Goal', code: 'goals'],
                 [id: 'N', name: 'Note', code: 'notes'],
                 [id: 'W', name: 'Writing', code: 'writings'],
@@ -541,7 +542,7 @@ def appPile() {
         def recentRecords = []
 
         allClassesWithCourses.each() {
-            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date()+1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
+            recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
             //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
         }
 
@@ -556,18 +557,18 @@ def appPile() {
 //            render(template: '/layouts/message', model: [messageCode: 'help.recent.records.no'])
 
 
-
         def types = []
 
         [
                 [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'P', name: 'Plan', code: 'plans'],
                 [id: 'G', name: 'Goal', code: 'goals'],
                 [id: 'N', name: 'Note', code: 'notes'],
                 [id: 'W', name: 'Writing', code: 'writings'],
                 [id: 'J', name: 'Journal', code: 'journal'],
 //                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
-                 [id: 'R', name: 'Resource', code: 'resources']
-        ].each(){
+                [id: 'R', name: 'Resource', code: 'resources']
+        ].each() {
             if (OperationController.getPath(it.code + '.enabled') == 'yes')
                 types += it
         }
@@ -660,9 +661,26 @@ def appPile() {
         if (ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes')
  max = app.IndexCard.executeQuery('select count(*) from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'])[0].toInteger()
 
+
+        def overdue = supportService.getOverdueTasks()
+        def pile = supportService.getTasksPile()
+        def todayInProgress = supportService.getTasksTodayInProgress()
+        def todayCompleted = supportService.getTasksTodayCompleted()
+        def todayNotStarted = supportService.getTasksTodayNotStarted()
+
+
+//        render(view: '/appKanban/main', model: [courses: courses.unique().reverse(),
+
+
         render(view: '/appCalendar/main', model: [
                 prayersText: prayersText,
-                random: Math.floor(Math.random() * max)
+                random: Math.floor(Math.random() * max),
+                overdue: overdue,
+                pile: pile,
+                inProgress: todayInProgress,
+                courses: mcs.Course.findAllByBookmarked(true),
+                completed: todayCompleted,
+                notStarted: todayNotStarted
         ])
     }
   def appMobileCalendar() {
@@ -821,13 +839,23 @@ if (record.entityCode() == 'R' && record.withMarkdown) {
 //htmlText = writer.toString();
 //            println 'hhtmlText' + htmlText
 
+	    // changes for the operation module w08.2022
+            if (params.entityCode != 'O') {
+                render(template: '/layouts/panel', model: [entityCode     : params.entityCode, record: record,
+                                                           mobileView     : params.mobileView,
+                                                           typeSandboxPath: typeSandboxPath,
+                                                           coverPath      : coverPath + '-' + record.id,
+                                                           source         : source, authors: authors, htmlText: htmlText, htmlFullText: htmlFullText
+                ])
+            }
+            else {
+                render(template: '/gTemplates/addQuickForm', model: [entityController: 'mcs.Operation',
+                                                                     fields          : grailsApplication.classLoader.loadClass('mcs.Operation').declaredFields.name,
+                                                                     updateRegion    : '3rdPanel',
+                                                                     record          : record
+                ])
+            }
 
-            render(template: '/layouts/panel', model: [entityCode: params.entityCode, record: record,
-                                                       mobileView: params.mobileView,
-                                                       typeSandboxPath: typeSandboxPath,
-                                                       coverPath: coverPath + '-' + record.id,
-                                                       source    : source, authors: authors, htmlText: htmlText, htmlFullText: htmlFullText
-            ])
         } else render 'Record not found'
     }
 

@@ -34,11 +34,17 @@ class Operation implements Comparable {  // entity id =
 
     Boolean bookmarked
     Integer priority = 2
+    String module = 'n'
+    String type
+    Date date
+
+
   
 
     String description
     String language = 'ar'
     Boolean validOn
+    Boolean newSystem = false
 
  
     String notes

@@ -1198,6 +1198,11 @@ ul.ui-tabs-nav {
     padding: 2px;
 }
 
+.O-bkg {
+    background: #81c68c;
+    padding: 4px;
+}
+
 .D-bkg {
     background: #36c699;
     padding: 4px;
@@ -2046,8 +2051,8 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .wrongCommand {
-    background: lightred !important;
-    border: 1px solid red;
+    /*background: lightred !important;*/
+    border: 2px solid red;
 }
 
 .correctCommand {

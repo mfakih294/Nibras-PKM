@@ -221,16 +221,18 @@ class GenericsController {
                     [id: 'c', name: 'Course', code: 'courses']
             ].each() {
                 if (OperationController.getPath(it.code + '.enabled') == 'yes')
-                    if (input.startsWith(' '))
+                   if (input.startsWith(' '))
                         findRecords(it.id + ' :: ' + params.input)
                     else
                         findRecords(it.id + ' -- ' + params.input)
             }
         }
         else {
-                    if (input.startsWith(' '))
+            if (input?.trim()?.isInteger())
+                findRecords(params.resultType.toLowerCase() + ' i' + params.input?.trim())
+            else if (input.startsWith(' '))
                         findRecords(params.resultType.toLowerCase() + ' :: ' + params.input)
-                    else
+            else
                         findRecords(params.resultType.toLowerCase() + ' -- ' + params.input)
             }
 
@@ -268,7 +270,7 @@ class GenericsController {
     }
 
 
-    def actionDispatcher(String input) {
+    Long actionDispatcher(String input) {
         try {
             if (input && input.trim() != '') {
 
@@ -435,11 +437,11 @@ YellowGreen;#9ACD32"""
 //                                println 'Could not write to Nibras log file'
 //                            }
 
-                            quickAdd(commandBody)
+                            return quickAdd(commandBody)
 
                             break
                         case 'ا':
-                            quickAdd(commandBody)
+                            return quickAdd(commandBody)
                             break
                         case 'f': findRecords(commandBody)
                             break
@@ -509,7 +511,7 @@ YellowGreen;#9ACD32"""
     }
 
     // this now the used action dispatcher
-    def batchAddPreprocessor(Long commandPrefix, String block) {
+    Long batchAddPreprocessor(Long commandPrefix, String block) {
 
         /*
            def f = new File('/mhi/mdd/log/batch-add-' + new Date().format('dd.MM.yyyy') + '.txt')
@@ -526,15 +528,16 @@ YellowGreen;#9ACD32"""
 //        println ' params.prefix ' + params.prefix
         def index = 1
         if (!prefix && block?.contains('***')){
-            block?.replace('--', ' -- ')?.split(/\*\*\*/).each() {
-                if (it.trim() != '')
+            for (b in block?.replace('--', ' -- ')?.split(/\*\*\*/)){
+                if (b.trim() != '')
                     if (params.verifyMode != 'on') {
-                        render '#' + index++
-                        batchAdd(it?.trim())
+//                        render '#' + index++
+                      return batchAdd(b?.trim())
                     }
                 else {
                         render(template: '/layouts/verification', model:
-                                [line: it?.trim(), status: verifySmartCommand(it?.trim()), index: index++]) // prefix + ' ' +
+
+                                [line: b?.trim(), status: verifySmartCommand(b?.trim()), index: index++]) // prefix + ' ' +
                     }
             }
         }
@@ -543,7 +546,7 @@ YellowGreen;#9ACD32"""
                 if (it.trim() != '')
                     if (params.verifyMode != 'on') {
                         render '#' + index++
-                        batchAdd(it?.trim())
+                       return batchAdd(it?.trim())
                     }
                     else {
 //                        render '>>' + it
@@ -558,7 +561,7 @@ YellowGreen;#9ACD32"""
 
                     if (params.verifyMode != 'on') {
                         render '#' + index++
-                        batchAdd(prefix?.replace('--', ' -- ') + it?.trim())
+                        return batchAdd(prefix?.replace('--', ' -- ') + it?.trim())
                     }
                     else {
                         render(template: '/layouts/verification', model:
@@ -572,7 +575,8 @@ YellowGreen;#9ACD32"""
         } else if (prefix.startsWith('A')) {
 
             if (params.verifyMode != 'on') {
-                batchAdd(prefix?.replace('--', ' -- ') + block.trim())
+                //println 'this line has been reached 2222'
+                return batchAdd(prefix?.replace('--', ' -- ') + block.trim())
             }
             else {
                 render(template: '/layouts/verification', model:
@@ -591,12 +595,13 @@ YellowGreen;#9ACD32"""
 
     }
 
-    def batchAdd(String block) {
+    Long batchAdd(String block) {
 
         def metaType = block.trim().split(/[ ]+/)[0]
         if (metaType == 'A') {
-            block.split(/\*\*\*/).each() { region ->
-                addWithDescription(region?.trim())
+            for (region in block.split(/\*\*\*/)){
+                //println 'invoked this time ok so far'
+                return addWithDescription(region?.trim())
             }
         } else {
             block.eachLine { input ->
@@ -623,7 +628,7 @@ YellowGreen;#9ACD32"""
 //                                } catch (Exception e) {
 //                                    println 'cound not write to mcs-dev-actions.txt'
 //                                }
-                                quickAdd(commandBody)
+                                return quickAdd(commandBody)
 
                                 break
                             case 'f': findRecords(commandBody)
@@ -1186,6 +1191,7 @@ ll
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
 
+
         if (record) {
 
             if (entityCode == 'O'){
@@ -1193,9 +1199,29 @@ ll
                     record.validOn = true
                 }
                 else {
+
                     record.validOn = false
                 }
                 record.save()
+
+//                def fullPath = supportService.getResourcePath(record.id, 'O', false)
+//
+//                java.nio.file.Files.createSymbolicLink(
+//                        Paths.get('/home/maitham/new/' + ' '  + record.summary?.split(/\(/)[1] +
+//                                record.description?.split('\n')[0]),
+//                Paths.get(fullPath))
+            }
+
+            else {
+
+                def fullPath = supportService.getResourcePath(record.id, entityCode, false)
+                Files.createDirectories(Paths.get(fullPath))
+                if (new File(fullPath).exists()) {
+                    new File('/home/maitham/current').delete()
+                    java.nio.file.Files.createSymbolicLink(Paths.get('/home/maitham/current'), Paths.get(fullPath))
+
+                }
+
             }
 
             render(template: '/gTemplates/recordSummary', model: [record: record, showFull: 'on', mobileView: params.mobileView])
@@ -1270,13 +1296,31 @@ def markAsMarkdowned(Long id, String entityCode) {
                     (resourceNestedByType ?  '/' +  record.type.code : '') +
                     (resourceNestedById ?  '/' +   (record.id / 100).toInteger() : '') +
                     '/' + record.id
-        } else {
-            typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + '' + params.entityCode + '/' + record.id
+
+            folder = new File(typeSandboxPath?.trim()?.replace('\n', ' '))
+            if (!folder.exists())
+                folder.mkdirs()
+
+        } else if (params.entityCode == 'O'){
+            typeSandboxPath = OperationController.getPath('root.rps1.path') + '/new/' + record.summary?.split(/\(/)[1] + '_' + record.description?.split('\n')[0]?.trim()?.replace(' ', '_')
+
+            folder = new File(typeSandboxPath?.trim()?.replace('\n', ' '))
+            if (!folder.exists())
+                folder.mkdir()
+
         }
-        folder = new File(typeSandboxPath)
-        if (!folder.exists())
-            folder.mkdirs()
-//         println "dopus ${typeSandboxPath}"
+        else {
+            typeSandboxPath = OperationController.getPath('root.rps' + params.repository + '.path') + '' + params.entityCode + '/' + record.id
+
+            folder = new File(typeSandboxPath?.trim()?.replace('\n', ' '))
+            if (!folder.exists())
+                folder.mkdirs()
+
+        }
+
+
+
+      //  println "dopus ${typeSandboxPath}"
 
 //        if (System.properties['os.name'].toLowerCase().contains('windows')) {
 //            println "it's Windows"
@@ -2708,6 +2752,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                     Context.list([sort: 'name']).each() {
                         locations.add([id: it.id, value: it.name + ' (' + Task.countByContext(it) + ')'])
                     }
+                    Contact.list([sort: 'summary']).each() {
+                        sources.add([id: it.id, value: it.summary + ' (' + Task.countByContact(it) + ')'])
+                    }
                     Task.executeQuery("select count(*), t.course from Task t group by t.course order by t.course.code asc").each() {
                         courses.add([id: it[1].id, value: it[1].toString() + ' (' + it[0] + ')'])
                     }
@@ -2874,6 +2921,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                     locations = Location.list([sort: 'name'])
                     contexts = Context.list([sort: 'name'])
                     goals = Goal.list([sort: 'summary'])
+                    sources = Contact.list([sort: 'summary'])
                     break
                 case 'mcs.Goal':
                     statuses = WorkStatus.list([sort: 'name'])
@@ -3658,6 +3706,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                 if (!n.hasErrors() && n.save()) {
                     render(template: '/gTemplates/recordSummary', model: [
                             record: n, justSaved: true, justSaved: true])
+                    return n.id
                 } else {
                     render 'Errors when saving the record<br/>'
                     render(template: '/gTemplates/recordSummary', model: [
@@ -3683,8 +3732,9 @@ def markAsMarkdowned(Long id, String entityCode) {
 
 //        def input = params.input.substring(params.input.indexOf(' '))
         def properties
+
         try {
-            properties = transformMcsNotation(input)['properties']
+                properties = transformMcsNotation(input)['properties']
 //        def queryCriteria = transformMcsNotation(input)['queryCriteria']
 //        def queryHead = 'from ' + entityMapping[entityCode] + ' where '
 //        def queryParams = ''
@@ -3734,8 +3784,20 @@ def markAsMarkdowned(Long id, String entityCode) {
         savedOk = true
 
         if (!n.hasErrors() && n.save()) {
-            render(template: '/layouts/panel', model: [entityCode: entityCode, record: n])
+//            render(template: '/layouts/panel', model: [entityCode: entityCode, record: n])
+// changes for the operation module w08.2022
+            render(template: '/gTemplates/addQuickForm', model: [entityController: params.entityController,
+                                                                 fields          : grailsApplication.classLoader.loadClass(params.entityController).declaredFields.name,
+                                                                 updateRegion    : '3rdPanel',
+                                                                 record          : n
+            ])
+
+            render 'Saved'
+
         } else render "Problem occurred."
+
+
+
     }
 
     def savePayment() {
@@ -4044,7 +4106,7 @@ def markAsMarkdowned(Long id, String entityCode) {
 
     }
 
-    def quickAddRecord(String block) {
+    Long quickAddRecord(String block) {
 
         if (block && block.trim() != '') {
 
@@ -4094,6 +4156,7 @@ def markAsMarkdowned(Long id, String entityCode) {
             if (!record.hasErrors() && record.save()) {
                 render(template: '/gTemplates/recordSummary', model: [
                         record: record, justSaved: true])
+                return record.id
             } else {
                 render 'Errors when saving the record<br/>'
                 render(template: '/gTemplates/recordSummary', model: [
@@ -4111,7 +4174,7 @@ def markAsMarkdowned(Long id, String entityCode) {
     }
 
 
-    def addWithDescription(String block) {
+    Long addWithDescription(String block) {
         if (block && block.trim() != '') {
 
             def summary = '?'
@@ -4132,7 +4195,9 @@ def markAsMarkdowned(Long id, String entityCode) {
 //            else {
                 record.properties = transformMcsNotation(line1.substring(line1.indexOf(' ')).trim())['properties']
 
-                record.bookmarked = true
+//                record.bookmarked = true
+
+
 //                }
 
                 description = ''
@@ -4154,6 +4219,8 @@ def markAsMarkdowned(Long id, String entityCode) {
             if (!record.hasErrors() && record.save()) {
                 render(template: '/gTemplates/recordSummary', model: [
                         record: record, justSaved: true])
+                //println 'this line has been reached ' + record.id
+                return record.id
             } else {
                 render 'Errors when saving the record<br/>'
                 render(template: '/gTemplates/recordSummary', model: [
@@ -4198,10 +4265,14 @@ def markAsMarkdowned(Long id, String entityCode) {
         if (!record.description)
             record.description = ''
 
-//        record.description += ('\n' + params.text + ' (' + new Date().format('dd.MM.yyyy') + ')')
-        record.description += ('\n\n' + params.text)
-render params.text
-//        render(template: '/gTemplates/recordSummary', model: [record: record])
+        record.description += ('\n' + params.text + ' (' + new Date().format('dd.MM.yyyy') + ')')
+//        record.description += ('\n\n' + params.text)
+
+        render params.text
+        render '<br/>'
+        render '<br/>'
+
+        render(template: '/gTemplates/recordSummary', model: [record: record])
         //render(template: '/gTemplates/recordDetails', model: [record: record])
 
     }
@@ -5531,7 +5602,7 @@ def addTagToAll(String input) {
     }
 
     def updateAyatHeads(String input) {
-        println 'input ' + input
+        //println 'input ' + input
         try {
             def ayat = input.split(' ')[1..input.split(' ').size() - 1]
 //
@@ -5786,11 +5857,11 @@ def addTagToAll(String input) {
 //                } else {
                     n.properties = properties
                     if (!n.validate()) {
-                        render ('wrongCommand')
+//                        render ('wrongCommand')
                         return ('wrongCommand')
                     println('record has error')
                     } else
-                        render ("correctCommand")
+//                        render ("correctCommand")
                         return ("correctCommand")
                     println('record has no error')
                 }
@@ -5799,7 +5870,7 @@ def addTagToAll(String input) {
             }
         } catch (Exception e) {
 	 // todo : command line bar needs a render result! as it used javascript!
-            render("wrongCommand")
+//            render("wrongCommand")
             return("wrongCommand")
             //    e.printStackTrace()
             //return
@@ -5809,7 +5880,7 @@ def addTagToAll(String input) {
 
     def generateCover() {
 
-        println 'here 555'
+        //println 'here 555'
 
         String pdfPath = params.path
 
@@ -6070,27 +6141,87 @@ def addTagToAll(String input) {
 //                    [line: o.description?.trim(), status: verifySmartCommand(o.description.trim()), index: 0]) // prefix + ' ' +
 //    }
 
+    // xx
    def executeOperation(Long id){
 
         Operation o = Operation.get(id)
-       String body = ''
 
-       if (o.summary)
-           body = o.summary + ' -- ' + o.description
-       else body = o.description
+//       String summary
+//       Boolean bookmarked
+//       Integer priority = 2
+//       String module = 'n'
+//       String type
+//       String description
+//       Date date
 
-       if (body.split('\n').size() == 1)
-       body = body + '\n...'
 
-       body = body + '\n***'
+       def date
+       long newId
+       def newPath
 
-       o.deletedOn = new Date()
-       o.bookmarked = false
-       o.save(flush: true)
-       render(template: '/gTemplates/recordSummary', model: [record: o])
+       if (o.newSystem){
+           date = o.date?.format('dd.MM.yyyy_HH:mm ss')
+           def record = grailsApplication.classLoader.loadClass(entityMapping[o.rtype]).newInstance()
+           record.summary = o.summary
+           record.bookmarked = false
+           record.priority = o.priority
+           record.date = o.date
+           record.description = o.description
 
-       batchAddPreprocessor(null, body)
+           newId = record.save(flush: true)
+           newPath = supportService.getResourcePath(newId, o.type.toUpperCase(), false)
+       }
+       else {
+           String body = ''
 
+           if (o.summary)
+               body = o.summary + ' -- ' + o.description
+           else body = o.description
+
+           if (body.split('\n').size() == 1)
+               body = body + '\n...'
+
+           body = body + '\n***'
+
+           o.deletedOn = new Date()
+           o.bookmarked = false
+           o.save(flush: true)
+
+
+           date = o.summary?.split(/\(/)[1]
+
+
+           newId = batchAddPreprocessor(null, body)
+//           batchAddPreprocessor(null, body)
+           newPath = supportService.getResourcePath(newId, o.summary?.split(' ')[1].toUpperCase(), false)
+
+       }
+
+
+       def path
+       if (new File(OperationController.getPath('root.rps1.path') + '/new').exists()){
+       new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${date} [\S\s]*/) { f ->
+           path = f.path
+       }
+
+       if (path) {
+           //println 'found a folder for this operation'
+           //OperationController.getPath('root.rps1.path') + '/O/' + o.id
+           new File(newPath).mkdirs()
+           def ant = new AntBuilder()
+           new File(path).eachFile() {
+               ant.copy(file: it.path,
+                       tofile: newPath + '/' + it.name)
+           }
+       }
+//           ant.move(todir: new File(OperationController.getPath('root.rps1.path') + '/O/' + o.id,
+//                   overwrite: true, force: true, flatten: false) //{
+//               fileset(dir: path, includes: '**/*')
+
+//                        regexpmapper(from: '(.*)foo(.*)', to: '\\1bar\\2', handledirsep: true)
+           //}
+       }
+//       render(template: '/gTemplates/recordSummary', model: [record: o])
 //            render(template: '/layouts/verification', model:
 //                    [line: o.description?.trim(), status: verifySmartCommand(o.description.trim()), index: 0]) // prefix + ' ' +
     }
@@ -6104,21 +6235,21 @@ def addTagToAll(String input) {
         if (params.entityCode == 'W'){
         r = Writing.get(params.id.replace('.md', '').toLong())//.replace('W-', ''))
     r.description = (f.text != '' ? f.text : '...')
-    if (r.description == f.text)
-    f.delete()
+//    if (r.description == f.text)
+//    f.delete()
     }
         else if (params.entityCode == 'N') {
     r = IndexCard.get(params.id.replace('.md', '').toLong())
     r.description = (f.text != '' ? f.text : '...')
-    if (r.description == f.text)
-        f.delete()
+//    if (r.description == f.text)
+//        f.delete()
 
 }
  else if (params.entityCode == 'R') {
     r = Book.get(params.id.replace('.md', '').toLong())
     r.fullText = (f.text != '' ? f.text : '...')
-            if (r.fullText == f.text)
-                f.delete()
+//            if (r.fullText == f.text)
+//                f.delete()
 
 
 }
@@ -6175,7 +6306,7 @@ if (1 == 2) {
 //        f2.write(f?.text ?: '...', 'UTF-8')
 
         render(template: '/gTemplates/recordSummary', model: [record: r])
-        render(template: '/layouts/achtung', model: [message: "Changes saved to database and files deleted."])
+        render(template: '/layouts/achtung', model: [message: "Changes saved to database."]) //and files deleted
     }
 //TODO: remove
 //    def sajaList() {
@@ -6209,14 +6340,25 @@ def body
             it.language = 'ar'
             if (verifySmartCommand(body) == 'correctCommand') {
                 it.validOn = true
-                render 'Ok '  + it.id
+                // render 'Ok '  + it.id
             }
             else {
                 it.validOn = false
-                render 'Wrong '  + it.description + '<br/><br/>'
+                render 'Wrong '  + it.id + ' ' + it.description + '<br/><br/>'
             }
             it.save()
         }
+    }
+    def settleAllOperations() {
+        Operation.list().each() {
+            it.deletedOn = new Date()
+            it.save()
+
+            render it.id + ' '
+
+        }
+
+        render "All operations have been marked as settled"
     }
 
 }

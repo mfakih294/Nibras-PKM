@@ -10,7 +10,18 @@
 
                 <div style="">
 
-                    <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByBookmarked(true),
+                    <h2>${mcs.Operation.executeQuery('select count(*) from mcs.Operation where deletedOn = null and bookmarked = true order by id desc')[0]} pending operation(s)</h2>
+                    <g:render template="/gTemplates/recordListing" model="[list: mcs.Operation.executeQuery('from mcs.Operation where deletedOn = null and bookmarked = true order by id desc'),
+                                                                           totalHits: mcs.Operation.executeQuery('select count(*) from mcs.Operation where deletedOn = null and bookmarked = true order by id desc')[0]]"/>
+
+<g:remoteLink controller="generics" action="settleAllOperations"
+              update="centralArea" title="Mark all operations as settled">
+    <b>Mark all operations as settled</b>
+    </g:remoteLink>
+
+
+
+                   <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByBookmarked(true),
                                                                            totalHits: Planner.countByBookmarked(true)]"/>
                     <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByBookmarked(true),
                                                                            totalHits: Journal.countByBookmarked(true)]"/>

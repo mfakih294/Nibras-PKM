@@ -1,0 +1,4 @@
+[${record.id}]<g:if test="${record.class.declaredFields.name.contains('title') && record.title}">${record.title}</g:if> <g:if test="${record.class.declaredFields.name.contains('summary') && record.summary}">${record.summary}</g:if> <g:if test="${record.class.declaredFields.name.contains('author') && record.author}">${record.author}</g:if>
+
+<g:if test="${record.entityCode() != 'R' && record.class.declaredFields.name.contains('description') && record.description}">${raw(record.description?.replace('\n','\n\n'))}</g:if>
+%{--<g:if test="${record.class.declaredFields.name.contains('notes') && record.notes}">${record.notes}</g:if>--}%

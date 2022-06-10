@@ -1,4 +1,4 @@
-<%@ page import="ker.OperationController; java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
+<%@ page import="mcs.Goal; ker.OperationController; java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -69,7 +69,7 @@
     var calendarEl = document.getElementById('calendar');
 
     calendar = new FullCalendar.Calendar(calendarEl, {
-      direction: 'rtl',
+      direction: 'ltr',
     //  locale: 'ar',
     //  plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list'],
       //  aspectRatio: 1,
@@ -83,18 +83,22 @@
         headerToolbar : {
         left: 'prev next today',
         center: 'title',
-        right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,listWeek,dayGridMonth'
+//        right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,dayGridMonth,agenda'
+        right: 'timeGridDay,agenda,dayGrid,timeGridWeek,dayGridWeek,dayGridMonth'
+            // listWeek
       },
         buttonText: { today: 'today', prev: '<- Previous', next: 'Next ->'},
       views: {
         dayGridMonth: {
           buttonText: 'Month',
           columnHead: true
-        },timeGridWeek: {
-          buttonText: 'Grid Week',
+        },
+          timeGridWeek: {
+          buttonText: 'G-week',
           columnHead: true
-        },dayGridWeek: {
-          buttonText: 'List Week',
+        },
+          dayGridWeek: {
+          buttonText: 'L-week',
           columnHead: true
         }
 //        ,listWeek: {
@@ -106,7 +110,7 @@
           columnHead: true
         },
           dayGrid: {
-          buttonText: 'Dashboard',
+          buttonText: 'L-agenda',
           columnHead: true,
           visibleRange: function(currentDate) {
                   // Generate a new date for manipulating in the next step
@@ -114,16 +118,35 @@
                   var endDate = new Date(currentDate.valueOf());
 
                   // Adjust the start & end dates, respectively
-                  startDate.setDate(startDate.getDate() - 2); // One day in the past
-                  endDate.setDate(endDate.getDate() + 2); // Three days into the future
+                  startDate.setDate(startDate.getDate() - 1); // One day in the past
+                  endDate.setDate(endDate.getDate() + 1); // Three days into the future
 
                   return { start: startDate, end: endDate }
               }
           },
-          listWeek: {
-          buttonText: 'Week Column',
-          columnHead: true
+
+          agenda: {
+          buttonText: 'G-Agenda',
+              type: 'timeGrid',
+//              duration: { days: 4 },
+          columnHead: true,
+          visibleRange: function(currentDate) {
+                  // Generate a new date for manipulating in the next step
+                  var startDate = new Date(currentDate.valueOf());
+                  var endDate = new Date(currentDate.valueOf());
+
+                  // Adjust the start & end dates, respectively
+                  startDate.setDate(startDate.getDate() - 1); // One day in the past
+                  endDate.setDate(endDate.getDate() + 1); // Three days into the future
+
+                  return { start: startDate, end: endDate }
+              }
           }
+          //,
+//          listWeek: {
+//          buttonText: 'Week Column',
+//          columnHead: true
+//          }
 //        ,
 //        basicDay: {
 //          buttonText: 'basicDay',
@@ -131,7 +154,7 @@
       },
 
 
-        initialView : 'timeGridWeek',
+        initialView : 'agenda',
       allDaySlot: true,
       nowIndicator: true,
       timeGridEventMinHeight: true,
@@ -427,66 +450,142 @@
 <div class="body">
 
 </div>
+<table border="0" style="border: 0px;">
+    <tr>
+        <td style="vertical-align: top; width: 70%;">
+            <div id="calendar-container" style="margin: 10px; text-align: left; height: 99%">
 
-  <div id="calendar-container" style="margin: 10px; text-align: left; height: 99%">
+                <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
-      <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
-      
-      
-      
-      
-          <div style="direction: rtl; text-align: center; ">
 
-	  
 
-%{--   <g:set var="aya1"--}%
-%{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random - 1])[0]}"/>--}%
-    <g:set var="aya2"
+
+                    <div style="direction: rtl; text-align: center; ">
+
+
+
+                        %{--   <g:set var="aya1"--}%
+                        %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random - 1])[0]}"/>--}%
+                        <g:set var="aya2"
                                value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'], [offset: random])[0]}"/>
-%{--    <g:set var="aya3"--}%
-%{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
-<div style="font-family: 'traditional arabic'; font-size: large; margin-bottom: 10px; line-height: 29px;">
-              بسم الله الرحمن الرحيم
-%{--                        ${aya1.shortDescription}--}%
-%{--   (${aya1.orderInWriting})--}%
+                        %{--    <g:set var="aya3"--}%
+                        %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
+                        <div style="font-family: 'traditional arabic'; font-size: large; margin-bottom: 10px; line-height: 29px;">
+                            بسم الله الرحمن الرحيم
+                            %{--                        ${aya1.shortDescription}--}%
+                            %{--   (${aya1.orderInWriting})--}%
 
-              {${aya2?.shortDescription}}
-              (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2?.orderInWriting})
-%{--              ${aya3.shortDescription}--}%
-%{--              (${aya3.orderInWriting})--}%
+                            {${aya2?.shortDescription}}
+                            (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2?.orderInWriting})
+                            %{--              ${aya3.shortDescription}--}%
+                            %{--              (${aya3.orderInWriting})--}%
 
 
 
-          </div>
+                        </div>
 
-          %{--<b>--}%
-              %{--<b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:--}%
-          %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
-          %{--</b>--}%
-          %{--&nbsp;--}%
+                        %{--<b>--}%
+                        %{--<b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:--}%
+                        %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
+                        %{--</b>--}%
+                        %{--&nbsp;--}%
 
-%{--          <g:set var="aya"--}%
-%{--                 value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>--}%
-%{--          {--}%
-%{--          ${aya.shortDescription}--}%
-%{--          }--}%
-%{--          (${mcs.Writing.get(aya.recordId)?.summary}--}%
-%{--          ${aya.orderInWriting})--}%
-%{--      --}%
+                        %{--          <g:set var="aya"--}%
+                        %{--                 value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>--}%
+                        %{--          {--}%
+                        %{--          ${aya.shortDescription}--}%
+                        %{--          }--}%
+                        %{--          (${mcs.Writing.get(aya.recordId)?.summary}--}%
+                        %{--          ${aya.orderInWriting})--}%
+                        %{--      --}%
 
-			
-			
-      %{--<g:each in="${prayersText.split('\n')}" var='l'>--}%
-          %{--<span style="margin-left: 15px; margin-top: 15px;">--}%
-              %{--<b>${raw(l)?.split(': ')[0]}</b>:--}%
-              %{--${raw(l)?.split(': ')[1]}--}%
-          %{--</span>--}%
-      %{--</g:each>--}%
-          </div>
-      </g:if>
-     %{--<br/>--}%
-    <div id='calendar' ></div>
-  </div>
+
+
+                        %{--<g:each in="${prayersText.split('\n')}" var='l'>--}%
+                        %{--<span style="margin-left: 15px; margin-top: 15px;">--}%
+                        %{--<b>${raw(l)?.split(': ')[0]}</b>:--}%
+                        %{--${raw(l)?.split(': ')[1]}--}%
+                        %{--</span>--}%
+                        %{--</g:each>--}%
+                    </div>
+                </g:if>
+            %{--<br/>--}%
+                <div id='calendar' ></div>
+            </div>
+        </td>
+        <td style="vertical-align: top; ">
+<div style="padding:4px 4px; overflow-x:hidden; overflow-y:auto; height: 580px;">
+    <g:if test="${notStarted.size() >= 1}">
+                %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
+                <g:each in="${notStarted.context.unique()}" var="c">
+                %{--<h4>@${c}</h4>--}%
+                    <g:each in="${notStarted.grep{it.context == c}}" var="task" >
+                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                    </g:each>
+                </g:each>
+    </g:if>
+    <g:if test="${inProgress.size() >= 1}">
+                <g:each in="${inProgress.context.unique()}" var="c">
+                    <h4>@${c}</h4>
+                    <g:each in="${inProgress.grep{it.context == c}}" var="task" >
+                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                    </g:each>
+                </g:each>
+    </g:if>
+    <g:if test="${completed.size() >= 1}">
+            %{--<g:render template="/gTemplates/recordListing" model="[list: completed ]"></g:render>--}%
+                <g:each in="${completed.context.unique()}" var="c">
+                    <h4>@${c}</h4>
+                    <g:each in="${completed.grep{it.context == c}}" var="task" >
+                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                    </g:each>
+                </g:each>
+    </g:if>
+    <g:if test="${overdue.size() >= 1}">
+                %{--<h2>Overdue</h2>--}%
+                %{--<g:render template="/gTemplates/recordListing" model="[list: overdue ]"></g:render>--}%
+                <g:each in="${overdue.context.unique()}" var="c">
+                %{--<h4>@${c}</h4>--}%
+                    <g:each in="${overdue.grep{it.context == c}}" var="task" >
+                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+                    </g:each>
+                </g:each>
+    </g:if>
+
+    <hr/>
+    <br/>
+    %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
+    <g:each in="${pile.context.unique()}" var="c">
+    %{--<h4>@${c}</h4>--}%
+        <g:each in="${pile.grep{it.context == c}}" var="task" >
+            <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
+        </g:each>
+    </g:each>
+
+    <hr/>
+    <br/>
+    %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
+    <g:each in="${mcs.Goal.findAllByBookmarked(true)}" var="r">
+    %{--<h4>@${c}</h4>--}%
+        %{--<g:each in="${pile.grep{it.context == c}}" var="task" >--}%
+            <g:render template="/gTemplates/recordSummary" model="[record: r]"></g:render>
+        %{--</g:each>--}%
+    </g:each>
+   <hr/>
+    <br/>
+    %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
+    <g:each in="${courses}" var="r">
+    %{--<h4>@${c}</h4>--}%
+        %{--<g:each in="${pile.grep{it.context == c}}" var="task" >--}%
+            <g:render template="/gTemplates/recordSummary" model="[record: r]"/>
+        %{--</g:each>--}%
+    </g:each>
+
+</div>
+        </td>
+    </tr>
+</table>
+
 
 <div id="login-form" class="modal" style="z-index:1000; height: 500px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
     %{--Event title or command (e.g. p -- title):--}%
@@ -682,13 +781,6 @@
 </g:if>
 
 
+</body>
 
-
-
-
-
-
-
-
-
-</body></html>
+</html>

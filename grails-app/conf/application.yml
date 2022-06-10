@@ -21,11 +21,11 @@ grails:
 info:
     app:
         name: nibras
-        version: 1.8.0
+        version: 1.9.1
         grailsVersion: '@info.app.grailsVersion@'
 server:
-    contextPath: '/nibras'
-    port: 1442 # The port to listen on
+    contextPath: '/'
+    port: 1441 # The port to listen on
     session:
         timeout: 720000  # 20 hours (in ms)
     ssl:
@@ -142,7 +142,7 @@ environments:
     development:
         dataSource:
             dbCreate: update
-            url: jdbc:mysql://localhost:3306/db_nibras_s
+            url: jdbc:mysql://localhost:3306/db_nibras?serverTimezone=Asia/Beirut
             driverClassName: com.mysql.cj.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
             username: nibras

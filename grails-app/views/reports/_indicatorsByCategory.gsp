@@ -2,10 +2,10 @@
 
 <div style="-moz-column-count: 3">
     <ul style="font-size: 14px; line-height: 25px;">
-        <g:each in="${(1..12)}" var="c">
-            <b>${c}</b>
-            <br/>
-        <g:each in="${Indicator.findAllByCategory(c, [sort: 'name', order: 'asc'])}" var="t">
+        %{--<g:each in="${(1..12)}" var="c">--}%
+            %{--<b>${c}</b>--}%
+            %{--<br/>--}%
+        <g:each in="${Indicator.findAll([sort: 'name', order: 'asc'])}" var="t">
             <li>
                 <g:remoteLink controller="indicator" action="showEvolution" id="${t.id}"
                               update="centralArea">
@@ -14,6 +14,6 @@
                 </g:remoteLink>
             </li>
         </g:each>
-        </g:each>
+        %{--</g:each>--}%
     </ul>
 </div>

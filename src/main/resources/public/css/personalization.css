@@ -1,9 +1,12 @@
 
 .fileCard {
-    border: 1px solid darkgray;
-    background: #eaeaea;
-    padding: 4px;
-    margin: 4px;
+    border-bottom: 1px solid darkgreen;
+    border-radius: 5px;
+    /*background: #eaeaea;*/
+    padding: 2px;
+    margin: 2px;
+    text-align: left;
+    direction: ltr;
 }
 .merged {
     text-decoration: line-through;
@@ -16,4 +19,9 @@
     background: palegreen;
     padding: 3px;
     margin: 3px;
+}
+
+.fg-button:hover {
+    cursor: pointer;
+    border: 1px solid darkgreen;
 }

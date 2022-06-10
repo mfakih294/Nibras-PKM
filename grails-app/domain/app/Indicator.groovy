@@ -49,7 +49,7 @@ class Indicator implements Comparable {  // entity id = 22
 
     String scale
 
-    String frequency
+    String frequency = 'daily'
 
     Date startDate
 
@@ -57,7 +57,7 @@ class Indicator implements Comparable {  // entity id = 22
 
 
 
-    Integer category
+//    Integer category
 
     String language = 'ar'
 
@@ -70,10 +70,10 @@ class Indicator implements Comparable {  // entity id = 22
     Date deletedOn
 
     static constraints = {
-        code(nullable: false, blank: true)
-        name(nullable: false, blank: true)
+        code()
+        name()
         scale()
-        frequency(nullable: false, blank: true)
+        frequency()
         startDate()
         endDate()
         description()

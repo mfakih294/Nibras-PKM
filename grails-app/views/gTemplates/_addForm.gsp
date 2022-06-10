@@ -1,4 +1,4 @@
-<%@ page import="ker.OperationController; app.parameters.Blog;mcs.Department; mcs.parameters.WorkStatus;" %>
+<%@ page import="app.Contact; ker.OperationController; app.parameters.Blog;mcs.Department; mcs.parameters.WorkStatus;" %>
 
 <g:if test="${record}">
     <g:render template="/gTemplates/recordSummary" model="[record: record]"/>

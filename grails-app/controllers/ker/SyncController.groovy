@@ -11,6 +11,8 @@ import mcs.Book
 import mcs.Goal
 import mcs.Task
 import mcs.Writing
+import grails.converters.JSON
+import org.grails.web.json.JSONObject
 import org.json.JSONArray
 import org.springframework.http.HttpRequest
 import sun.reflect.generics.factory.GenericsFactory
@@ -67,6 +69,8 @@ class SyncController {
 
     ]
 
+    def supportService
+
 //    def restClient
     def syncNote() {
         def response = request
@@ -90,7 +94,6 @@ class SyncController {
         }
     }
 
-    /*
     def rssPile() {
         render(feedType: "rss", feedVersion: "2.0") {
             title = "PKM RSS"
@@ -116,11 +119,12 @@ class SyncController {
                 //def title =
                 def style = r.language == 'ar' ? "text-align: right; direction: rtl" : ''
 
-                entry((r.priority ? 'p' + r.priority + ' ' : 'p2 ' ) + (r.class.declaredFields.name.contains('summary') ? r.summary : '') + ' ' + (r.class.declaredFields.name.contains('title') && r.title ? r.title : '') + "") {
+                entry((r.priority ? 'p' + r.priority + ' ' : 'p2 ') + (r.class.declaredFields.name.contains('summary') ? r.summary : '') + ' ' + (r.class.declaredFields.name.contains('title') && r.title ? r.title : '') + "") {
 //  entry(article.title + ' (' + article.type.toString() + ' / ' + article.writingStatus.toString() + ' - ' + (article?.body ? article?.body?.count(' ') : '0') + ' words)') {
                     link = "https://localhost:1442/nibras/page/rssPage/${r.id}-${r.entityCode()}"
                     publishedDate = r.dateCreated
-                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: r.course?.summary])]//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
+                    categories = [new com.sun.syndication.feed.synd.SyndCategoryImpl([name: r.course?.summary])]
+//,new com.sun.syndication.feed.synd.SyndCategoryImpl("cat2")]
                     author = r.entityCode() + (r.class.declaredFields.name.contains('type') && r.type ? ' #' + r.type?.code : '') +
                             (r.class.declaredFields.name.contains('context') && r.context ? ' @' + r.context : '')
 //                    content(type: 'text/html', value: 'tst')
@@ -181,7 +185,7 @@ class SyncController {
         render t
 
     }
-*/
+
     def exportJson = {
         def builder = new JSONBuilder()
 
@@ -259,8 +263,10 @@ class SyncController {
             records += [type    : 'P', id: i.id, ecode: 'P',
                         meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
                         date    : i?.startDate?.format('dd-MM-yyyy'),
-                        datediff    : i?.startDate - new Date(),
+                        datediff: i?.startDate - new Date(),
                         color   : 'darkblue',
+                        files   : i.filesList,
+                        nbFiles : i.nbFiles,
                         title   : (i.task ? ('[' + i.task + '] ') : '') + i.summary,
                         language: i.language,
                         body    : i.description ? i.description?.replace('\n', '<br/>') : '']
@@ -275,18 +281,22 @@ class SyncController {
         render(status: 200, contentType: 'application/json', text: json)
     }
 
-  def exportJsonJ = {
+    def exportJsonJ = {
         def builder = new JSONBuilder()
 
         def records = []
         for (i in mcs.Planner.executeQuery("from Journal where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
                 [new Date() - 14, new Date() + 7, true])) {
-            records += [type    : 'J', id: i.id, ecode: 'J',
-                        meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
-                        color   : 'darkblue',
-                        title   : i.summary,
-                        language: i.language,
-                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+            records += [type       : 'J',
+                        id         : i.id,
+                        ecode      : 'J',
+                        meta       : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
+                        color      : 'darkblue',
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+                        summary    : i.summary,
+                        language   : i.language,
+                        description: i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
 //println 'records' + records
@@ -335,13 +345,18 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
-        for (i in Task.executeQuery("from Task t where  t.bookmarked = ? order by t.id desc", [true])) { // t.context.code asc, t.priority todo: fix
-            records += [type    : (i.isTodo == true ? 'Todo' : 'T'), id: i.id, ecode: 'T',
-                        meta    : (i.context ? '@' + i.context?.code : '-') + ' ' + (i.priority ? priorityMap[i.priority] : ''),
-                        color   : 'lightgreen',
-                        title   : i.summary,
-                        language: i.language,
-                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+        for (i in Task.executeQuery("from Task t where  t.bookmarked = ? order by t.priority desc, t.id desc", [true])) {
+            // t.context.code asc, t.priority todo: fix
+            records += [type       : (i.isTodo == true ? 'Todo' : 'T'),
+                        id         : i.id,
+                        ecode      : 'T',
+                        meta       : (i.context ? '@' + i.context?.code : '-') + ' ' + (i.priority ? priorityMap[i.priority] : ''),
+                        color      : 'lightgreen',
+                        summary    : i.summary,
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+                        language   : i.language,
+                        description: i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
         def json = builder.build {
@@ -383,21 +398,21 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 // order by department.orderNumber asc, course.orderNumber asc, orderNumber asc
-        for (i in IndexCard.executeQuery("from Book where bookmarked = ?",
+        for (i in IndexCard.executeQuery("from Book where bookmarked = ? order by priority desc, id desc",
                 [true])) {
 //            OperationController.countResourceFiles(i.id)
-            records += [type    : 'R',
-                        id: i.id,
-                        rtype   : i?.type?.code,
-                        ecode: 'R',
-                        meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
-                        color   : 'DarkSlateBlue',
-                        language: i.language,
-                        files   : i.filesList,
-                        nbFiles : i.nbFiles,
-                        title   : i.title,
-                        body: (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
-                    ?.replaceAll(/www[\S\.]*/, '') ?: '') + (i.description ?: '')]
+            records += [type        : 'R',
+                        id          : i.id,
+                        resourceType: i?.type?.code,
+                        ecode       : 'R',
+                        meta        : '#' + i.type?.code + (i.publishedOn ? ' ' + i.publishedOn?.format('yyyy') + '' : ''),
+                        color       : 'DarkSlateBlue',
+                        language    : i.language,
+                        filesList   : i.filesList,
+                        nbFiles     : i.nbFiles,
+                        summary     : i.title + (i.legacyTitle ? ' [' + i.legacyTitle + ' ]' : ''),
+                        description : (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
+                                ?.replaceAll(/www[\S\.]*/, '') ?: '') + (i.description ?: '')]
         }
 
         def json = builder.build {
@@ -417,14 +432,20 @@ class SyncController {
 
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
-        for (i in Task.executeQuery("from Goal g where g.bookmarked = ? order by g.id desc", [true])) { // g.department.code asc, g.priority desc todo:
-            records += [type    : 'G', id: i.id, ecode: 'G',
-                        meta    : (i.department ? 'd' + i.department?.code : '-') + ' ' + (i.type ? '#' + i.type?.code : '') +
+        for (i in Task.executeQuery("from Goal g where g.bookmarked = ? order by g.priority desc, g.id desc", [true])) {
+            // g.department.code asc, g.priority desc todo:
+            records += [type       : 'G',
+                        id         : i.id,
+                        ecode      : 'G',
+                        meta       : (i.department ? 'd' + i.department?.code : '-') + ' ' + (i.type ? '#' + i.type?.code : '') +
                                 ' ' + (i.priority ? priorityMap[i.priority] : ''),
-                        color   : 'darkgreen',
-                        language: i.language,
-                        title   : i.summary,
-                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+                        color      : 'darkgreen',
+                        language   : i.language,
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+                        summary    : i.summary,
+
+                        description: i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
 //println 'records' + records
@@ -446,16 +467,16 @@ class SyncController {
         for (i in IndexCard.executeQuery("from Book where type.code = ? and bookmarked = ? and fullText is not null order by priority desc, lastUpdated desc", ['art', true])) {
             records += [
                     type    : 'Art',
-                    rtype    : 'art',
-                    id: i.id,
-                        ecode: 'R',
+                    rtype   : 'art',
+                    id      : i.id,
+                    ecode   : 'R',
 
-                        meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
-                        color   : 'DarkSlateBlue',
-                        language: i.language,
-                        title   : i.title,
-                    body: i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
-                    ?.replaceAll(/www[\S\.]*/, '') ?: '']
+                    meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
+                    color   : 'DarkSlateBlue',
+                    language: i.language,
+                    title   : i.title,
+                    body    : i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
+                            ?.replaceAll(/www[\S\.]*/, '') ?: '']
         }
 
         def json = builder.build {
@@ -473,9 +494,9 @@ class SyncController {
 
         for (i in IndexCard.executeQuery("from Book where type.code = ? and bookmarked = ? order by priority desc, lastUpdated desc", ['nws', true])) {
             records += [type    : 'Nws',
-                        rtype    : 'nws',
-                        id: i.id,
-                        ecode: 'R',
+                        rtype   : 'nws',
+                        id      : i.id,
+                        ecode   : 'R',
                         meta    : '#' + i.type?.code + (i.publishedOn ? ' (' + i.publishedOn?.format('dd.MM.yyyy') + '' : ''),
                         color   : 'DarkSlateBlue',
                         language: i.language,
@@ -499,12 +520,14 @@ class SyncController {
 
 
         for (i in IndexCard.executeQuery("from Writing where  bookmarked = ? order by lastUpdated desc", [true])) {
-            records += [type    : 'W', id: i.id, ecode: 'W',
-                        meta    : (i.department ? 'd' + i.department?.code : '-'),
-                        color   : 'lightorange',
-                        title   : i.summary,
-                        language: i.language,
-                        body    : (i.description ? i.description?.replace('\n', '<br/>') : '') +
+            records += [type       : 'W',
+                        id         : i.id,
+                        ecode      : 'W',
+                        meta       : (i.department ? 'd' + i.department?.code : '-'),
+                        color      : 'lightorange',
+                        summary    : i.summary,
+                        language   : i.language,
+                        description: (i.description ? i.description?.replace('\n', '<br/>') : '') +
                                 (i.notes ? '<br/>===<br/>' + i.notes?.replace('\n', '<br/>')?.replace('__________________________________________________', '---') : '')]
         }
 
@@ -522,14 +545,54 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
-        for (i in IndexCard.executeQuery("from IndexCard where  bookmarked = ? order by lastUpdated desc", [true])) {
-            records += [type    : 'N', id: i.id, ecode: 'N',
-                        meta    : (i.department ? 'd' + i.department?.code : '-'),
-                        color   : 'darkorange',
-                        title   : i.summary,
-                        language: i.language,
-                        body    : (i.description ? i.description?.replace('\n', '<br/>') : '') +
+        for (i in IndexCard.executeQuery("from IndexCard where  bookmarked = ? order by priority desc, lastUpdated desc", [true])) {
+            records += [type       : 'N',
+                        id         : i.id,
+                        ecode      : 'N',
+                        meta       : (i.department ? 'd' + i.department?.code : '-'),
+                        color      : 'darkorange',
+                        summary    : i.summary,
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+                        language   : i.language,
+                        description: (i.description ? i.description?.replace('\n', '<br/>') : '') +
                                 (i.notes ? '<br/>===<br/>' + i.notes?.replace('\n', '<br/>')?.replace('__________________________________________________', '---') : '')]
+        }
+
+        def json = builder.build {
+            result = "ok"
+            data = records
+        }
+
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+    def exportJsonO = {
+        def builder = new JSONBuilder()
+
+        def records = []
+        def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
+
+        for (i in IndexCard.executeQuery("from Operation where  bookmarked = ? and deletedOn is null order by lastUpdated desc", [true])) {
+            // todo
+            if (i.newSystem)
+                records += [type       : i.type, id: i.id, ecode: 'O',
+                            meta       : i.type + ' ' + i?.date?.format('dd.MM.yyyy_HHmm'),
+                            color      : 'darkgreen',
+                            summary    : i.summary,
+                            files      : '',
+                            nbFiles    : '',
+                            language   : 'ar',
+                            description: i.description]
+            else
+                records += [type       : 'O', id: i.id, ecode: 'O',
+                            meta       : i?.summary?.split(/\(/)[1],
+                            color      : 'darkgreen',
+                            summary    : i.description?.split('\n')[0],
+                            filesList  : '',
+                            nbFiles    : '',
+                            language   : 'ar',
+                            description: (i.description ? i.description?.replace('\n', '<br/>') : '') + '<br/>']
+
         }
 
         def json = builder.build {
@@ -573,14 +636,14 @@ class SyncController {
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
         for (i in IndexCard.executeQuery("from Excerpt i where  bookmarked = ? order by lastUpdated desc", [true])) {
-            records += [type    : 'E', id: i.id, ecode: 'E',
-                        meta    : (i.book?.department ? 'd' + i.book?.department?.code : '-'),
-                        color   : 'darkred',
-                        title   : i.summary,
-                        files   : i.filesList,
-                        nbFiles : i.nbFiles,
-                        language: i.language,
-                        body    : (i.description ? i.description?.replace('\n', '<br/>') : '') +
+            records += [type       : 'E', id: i.id, ecode: 'E',
+                        meta       : (i.book?.department ? 'd' + i.book?.department?.code : '-'),
+                        color      : 'darkred',
+                        summary    : i.summary,
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+                        language   : i.language,
+                        description: (i.description ? i.description?.replace('\n', '<br/>') : '') +
                                 (i.notes ? '<br/>===<br/>' + i.notes?.replace('\n', '<br/>')?.replace('__________________________________________________', '---') : '')]
         }
 
@@ -594,16 +657,30 @@ class SyncController {
 
 
     def mobilePush() {
+
+        def builder = new JSONBuilder()
+        def json
+        //new File('d:/test.log').write(request.JSON.data, 'UTF-8')
+
+        def data = request.JSON.data
+
+//println 'new data '  + data
+
         def c = 0
-        if (params.tosyncText && params.tosyncText?.contains(','))
-        params.tosyncText.split(',').each() { r ->
-            if (r.trim() != '' && r != 'null') {
-                //println 'r ' + r
+//        println 'in mobile push json ' + params.dump()
+        //      println 'in mobile push json ' + params.tosyncText
+//println 'dump ' +        params.dump()
+        if (params.tosyncText)
+//println 'array ' +        params.tosyncText
+            JSON.parse(data)['data'].each() { r ->
+
+//            r = JSON.parse(r)
+//println ' processing row ' + r
                 c++
                 //     println GenericsController.markCompletedStatic(r.substring(1).toLong(), r.substring(0, 1).toUpperCase())
 
-                def entityCode = r.substring(0, 1).toUpperCase()
-                def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(r.substring(1).toLong())
+                def entityCode = r['ecode']
+                def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(r.id)
 
                 if (record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
                     record.bookmarked = false
@@ -621,7 +698,7 @@ class SyncController {
                     t.summary = 'rc: ' + t.summary
                     t.description = 'rc: ' + t.description
                     if (record.endDate)
-                    t.endDate = record.endDate + record.recurringInterval
+                        t.endDate = record.endDate + record.recurringInterval
                     else
                         t.endDate = new Date() + record.recurringInterval
                     t.recurringInterval = record.recurringInterval
@@ -661,8 +738,82 @@ class SyncController {
                     record.lastReviewed = new Date()
                     record.status = WritingStatus.findByCode('revised')
                 }
+
             }
-        }
+
+        render c
+    }
+
+    def mobilePush0() {
+        def c = 0
+        if (params.tosyncText && params.tosyncText?.contains(','))
+            params.tosyncText.split(',').each() { r ->
+                if (r.trim() != '' && r != 'null') {
+//                println 'r ' + r
+                    c++
+                    //     println GenericsController.markCompletedStatic(r.substring(1).toLong(), r.substring(0, 1).toUpperCase())
+
+                    def entityCode = r.substring(0, 1).toUpperCase()
+                    def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(r.substring(1).toLong())
+
+                    if (record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
+                        record.bookmarked = false
+
+                    if ('GTP'.contains(entityCode)) {
+                        record.completedOn = new Date()
+
+//        record.percentComplete = new Date()
+                        record.status = mcs.parameters.WorkStatus.findByCode('done')
+                    }
+
+                    if (1 == 2 && 'T'.contains(entityCode) && record.isRecurring) {
+                        def t = new Task()
+//            t.properties = record.properties
+                        t.summary = 'rc: ' + t.summary
+                        t.description = 'rc: ' + t.description
+                        if (record.endDate)
+                            t.endDate = record.endDate + record.recurringInterval
+                        else
+                            t.endDate = new Date() + record.recurringInterval
+                        t.recurringInterval = record.recurringInterval
+                        t.isRecurring = true
+                        t.completedOn = null
+                        t.actualEndDate = null
+
+                        t.status = WorkStatus.findByCode('not-s')
+
+                        record.status = WorkStatus.findByCode('done')
+                        record.actualEndDate = new Date()
+//            println 'the new t: ' + t.dump()
+
+                        t.save(flush: true)
+                    }
+
+                    if ('REN'.contains(entityCode)) {
+
+                        if (!record.readOn) {
+                            record.readOn = new Date()
+                        }
+                    }
+                    if ('R'.contains(entityCode)) {
+
+                        //todo
+                        record.status = mcs.parameters.ResourceStatus.findByCode('read')
+                    }
+                    if ('W'.contains(entityCode)) {
+
+                        if (!record.firstReviewed) {
+                            record.firstReviewed = new Date()
+                        }
+                        if (!record.reviewCount) {
+                            record.reviewCount = 1
+                        } else record.reviewCount++
+
+                        record.lastReviewed = new Date()
+                        record.status = WritingStatus.findByCode('revised')
+                    }
+                }
+            }
 
         render c
     }
@@ -684,18 +835,160 @@ class SyncController {
 //            n.bookmarked = true
 
 
-            for (b in data?.replace('::', '').split(/\n\*\*\*/)){
+            for (b in data?.replace('::', '').split(/\n\*\*\*/)) {
                 if (b?.trim() != '')
-                    new Operation([summary: b.split('--')[0], description: b.split('--')[1], bookmarked: true]).save()
+                    def op = new Operation([summary: b.split('--')[0], description: b.split('--')[1], bookmarked: true]).save()
+
+
             }
 
             println data?.replace('::', '').split(/\n\*\*\*/).size() + ' operations found.'
-
 
 //            n.save(flush: true)
 
             json = builder.build {
                 result = 'Notes exported.'
+            }
+        } else {
+            json = builder.build {
+                result = 'Nothing to save.'
+
+            }
+        }
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+
+    def mobileWritingsNew() {
+        def builder = new JSONBuilder()
+        def json
+        //new File('d:/test.log').write(request.JSON.data, 'UTF-8')
+        def data = request.JSON.data
+//       println 'data is ' + data
+        if (data) {
+            def c = 0
+//            def n = new app.IndexCard()//mcs.Journal()
+//            n.summary = 'Notes on ' + new Date().format('EEE dd MMM yyyy HH:mm')
+//            n.description = data?.replace('::', '')
+//            n.type = JournalType.findByCode('usr')
+//            n.writtenOn = new Date()
+
+//            n.bookmarked = true
+
+
+            data.each() { b ->
+//                if (b?.trim() != '')
+//                 [[rtype:t, meta:4, id:2022_06.06.1506_21, type:t, title:new title, body:new body, priority:4, ecode:n]]
+
+                def op = new Operation([newSystem : true, summary: b.summary, description: b.description, priority: b.priority, type: b.module,
+                                        bookmarked: true, date: Date.parse('dd.MM.yyyy_HH:mm', b.date)]).save()
+
+
+            }
+
+            println data.size() + ' records found.'
+
+//            n.save(flush: true)
+
+            json = builder.build {
+                result = 'Notes exported.'
+            }
+        } else {
+            json = builder.build {
+                result = 'Nothing to save.'
+
+            }
+        }
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+
+    def commitMobileRecord() {
+        def builder = new JSONBuilder()
+        def json
+        //new File('d:/test.log').write(request.JSON.data, 'UTF-8')
+        def data = request.JSON.data
+        println 'data is ' + data
+        if (data) {
+            def c = 0
+//            def n = new app.IndexCard()//mcs.Journal()
+//            n.summary = 'Notes on ' + new Date().format('EEE dd MMM yyyy HH:mm')
+//            n.description = data?.replace('::', '')
+//            n.type = JournalType.findByCode('usr')
+//            n.writtenOn = new Date()
+
+//            n.bookmarked = true
+
+
+            def o = data//.each(){b->
+//                if (b?.trim() != '')
+//                 [[rtype:t, meta:4, id:2022_06.06.1506_21, type:t, title:new title, body:new body, priority:4, ecode:n]]
+
+//                def op = new Operation([newSystem: true, summary: b.title, description: b.body, priority: b.priority, type: b.type,
+//                                            bookmarked: true, date:  Date.parse('dd.MM.yyyy_HHmm', b.textDate)]).save()
+
+
+            def module = o.module
+            def record = grailsApplication.classLoader.loadClass(entityMapping[module?.toUpperCase()]).newInstance()
+
+
+            if (module == 'r') {
+                record.title = o.summary?.trim() //inconsistancy
+                record.resourceType = ResourceType.findByCode('doc')
+            } else {
+                record.summary = o.summary?.trim()
+            }
+
+            record.bookmarked = true
+            record.priority = o.priority
+            record.nbFiles = o.nbFiles
+            record.filesList = o.filesList?.join(',')
+
+            if (module == 'j' || module == 'p')
+                record.startDate = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
+            else if (module == 't')
+                record.endDate = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
+            else if (module == 'q')
+                record.date = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
+
+            else if (module == 'n')
+                record.writtenOn = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
+
+            else if (module == 'r')
+                record.publishedOn = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
+
+            record.description = o.description?.trim()
+
+            def savedRecord = record.save(flush: true)
+
+            def newPath = supportService.getResourcePath(savedRecord.id, module.toUpperCase(), false)
+
+            def path
+            if (new File(OperationController.getPath('root.rps1.path') + '/new').exists()) {
+                new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${
+                    o.operationId
+                } [\S\s]*/) { f ->
+                    path = f.path
+                }
+
+                if (path) {
+                    //println 'found a folder for this operation'
+                    //OperationController.getPath('root.rps1.path') + '/O/' + o.id
+                    new File(newPath).mkdirs()
+                    def ant = new AntBuilder()
+                    new File(path).eachFile() {
+                        ant.copy(file: it.path,
+                                tofile: newPath + '/' + it.name)
+                    }
+                }
+
+
+            }
+
+//            println data.size() + ' records found.'
+
+//            n.save(flush: true)
+
+            json = builder.build {
+                result = 'Record committed with id ' + savedRecord.id
             }
         } else {
             json = builder.build {

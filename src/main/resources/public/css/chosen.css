@@ -1,12 +1,12 @@
 /* @group Base */
 .chzn-container {
-    font-size: 12px;
+    font-size: 1em;
     position: relative;
     display: inline-block;
     vertical-align: middle;
     /*width: 350px !important;*/
     text-align: right;
-    padding: 2px;
+    padding: 1px;
     zoom: 1;
     *display: inline;
 }

@@ -216,7 +216,9 @@
     </g:if>
 <g:else>
     <br/>
-    <i style="color: darkgray">No matching ${entity?.toLowerCase()?.split(/\./)[1]} records found.</i>
+    <i style="color: darkgray">No matching
+    %{--todo fix ${entity?.toLowerCase()?.split(/\./)[1]}--}%
+    records found.</i>
 </g:else>
 
 <sec:ifLoggedIn>
@@ -246,8 +248,8 @@ jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelecti
     %{--document.getElementsByClassName("prevLink")[0].className = "prevLink${customId}";--}%
 if (jQuery(".prevLink").size() > 0) {
     document.getElementsByClassName("prevLink")[0].className = "prevLink${customId}";
-
-    Mousetrap.bind(['p','ح', 'left'], function (e) {
+//todo change p
+    Mousetrap.bind(['b','لا', 'left'], function (e) {
         jQuery(".prevLink${customId}").click();
     });
 }

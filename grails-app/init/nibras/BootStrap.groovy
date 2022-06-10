@@ -46,7 +46,7 @@ class BootStrap {
         println ' *                                                          *'
         println ' * Nibras has launched. You can access it from:             *'
         println ' *                                                          *'
-        println ' * https://localhost:1441/nibras                            *'
+        println ' * https://localhost:1441/                            *'
         println ' *                                                          *'
 //	println ' * Note: To stop Nibras, press ctrl+c in this window, or          *'
 //	println ' * run ./scripts/stop script.                               *'
@@ -56,9 +56,9 @@ class BootStrap {
         println ''
 
         if (org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS) {
-            """c:\\windows\\explorer  "" https://localhost:1441/nibras/""".execute()
+            """c:\\windows\\explorer  "" https://localhost:1441/""".execute()
         } else if (org.apache.commons.lang.SystemUtils.IS_OS_LINUX){
-            """/usr/bin/xdg-open https://localhost:1441/nibras/""".execute()
+            """/usr/bin/xdg-open https://localhost:1441/""".execute()
         }
 
 

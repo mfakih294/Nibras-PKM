@@ -65,7 +65,100 @@ class PkmTagLib {
     }
 
 
- def listRecordFiles = { attrs ->
+ def operationRecordFiles = { attrs ->
+
+
+        def recordId = attrs.recordId
+        def filesList = []
+def record = mcs.Operation.get(recordId)
+
+     try {
+         def folders = []
+
+         new File(OperationController.getPath('root.rps1.path') + '/new/').eachFileMatch(~/${record.summary?.split(/\(/)[1]} [\S\s]*/) {f ->
+                 folders+= f.path
+       //      println 'found path ' + f.path
+         }
+//         folders += (OperationController.getPath('root.rps1.path') + '/O/' + recordId)
+
+             folders.each() { folder ->
+                 if (folder && new File(folder).exists()) {
+                     new File(folder).eachFile() {
+                         filesList.add(it)
+                     }
+                 }
+             }
+        }
+        catch (Exception e) {
+            out << ''
+            print 'Problem in listing record folder: ' + e.printStackTrace()
+        }
+        def output = filesList.size() > 0 ? "<ul style=';margin: 2px; border-bottom: 0px darkgray solid;list-style: none; font-family: tahoma; font-size: 1em; text-decoration: none;'>" : ''
+        def c = 1
+        for (i in filesList) {
+            def fileId = new Date().format('HHmmssSSS') + c //Math.floor(Math.random()*1000)
+            c++
+
+
+                session[fileId] = i.path
+                def extension = i.name?.split(/\./)?.size() > 0 ? i.name?.split(/\./)?.last()?.toLowerCase() : ''
+
+
+//            <b>${i.path?.replace(i.name, '')}</b>:
+//<br/>
+
+                    output += """<li style='bullet-style: none;'>
+			<div class="fileCard" id="file${fileId}">
+
+<a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}"
+                          target="_blank"
+                          title="${i.path}">
+"""
+if (i.isFile()){
+                output += """
+<img src='${resource(dir: '/file-icons/32px', file: "${extension}.png")}' style="width: 32px;"
+                                     title=""/>
+"""
+}
+else {
+                output += """
+<img src='${resource(dir: '/file-icons/32px', file: "directory.png")}' style="width: 32px;"
+                                     title=""/>
+"""
+
+}
+                output +=  """
+                                     <div style=" display: inline;font-size: small; color: gray;" title="${i.path?.replace(i.name, '')?.replace('/', '-')}">
+${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
+</div>${i.name}
+            </a>
+
+			</span>
+			
+			</div>
+</li>"""
+
+
+                // removed 28.11.2019
+//                &nbsp;
+//                <a onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFileOut', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
+//                        &nbsp;    out
+//                </a>
+
+
+                //${i.path ? i.path?.replaceAll('/mhi', 'Z:')?.replaceAll('/host', 'D:') : ''}
+
+
+        }
+
+        output += "</ul>"
+
+        out << output.decodeHTML()
+//            }
+//    out << ''
+    }
+
+    def listRecordFiles = { attrs ->
         def module = attrs.module
         def fileClass = attrs.fileClass
         def recordId = attrs.recordId
@@ -177,7 +270,7 @@ class PkmTagLib {
             //        }
             //    }
 
-    
+
 
 
             }
@@ -252,7 +345,7 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
               &nbsp;    x
                  </a>
 			</span>
-			
+
 			</div>
 </li>"""
 

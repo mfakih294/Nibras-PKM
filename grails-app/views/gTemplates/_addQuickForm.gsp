@@ -5,6 +5,7 @@
 %{--</g:if>--}%
 
 <g:formRemote name="genericSearch" id="genericSearch22" url="[controller: 'generics', action: 'saveViaQuickForm']"
+
               update="${updateRegion}" method="post" style="display: inline;" onComplete="">
 
     <g:hiddenField name="entityController" value="${entityController}"/>
@@ -15,16 +16,13 @@
 
     <table>
 
-
-
-
-
             <g:if test="${fields.contains('name')}">
                 <tr>
                     <td>
                         Name:<br/>
                     <g:textField name="name" placeholder="Name" title="Name" class="ui-corner-all"
                                  style="width: 99%;"
+                                 onblur="jQuery('#submitUpdate').click();"
                                  value="${record?.name}"/>
                 </td>
                 </tr>
@@ -40,6 +38,7 @@
                                 style="width: 99%;"
                                 class="ui-corner-all"
                                 rows="5" cols="80"
+                                onblur="jQuery('#submitUpdate').click();"
                                 value="${record?.value}"/>
                 </td>
                 </tr>
@@ -52,10 +51,12 @@
                     Code:<br/>
                         <g:textField name="code" placeholder="Code" title="Code" class="ui-corner-all"
                                      style="width: 10%;"
+                                     onblur="jQuery('#submitUpdate').click();"
                                      value="${record?.code}"/>
                     </g:if>
 Summary: <br/>
                     <g:textField id="sumamryField" name="summary" title="summary" value="${record?.summary}" placeholder="Summary"
+                                 onblur="jQuery('#submitUpdate').click();"
                                  style="width: 89%;"/>
                 </td>
 
@@ -70,6 +71,7 @@ Summary: <br/>
                                  title="recurring Cron expression"
                                  value="${record?.recurringCron}"
                                  placeholder="Recurring Unix cron expression"
+                                 onblur="jQuery('#submitUpdate').click();"
                                  style="width: 99%;"/>
                 </td>
 
@@ -84,7 +86,7 @@ Summary: <br/>
                 <tr>      <td>
                     Title:<br/>
                     <g:textField placeholder="Title" name="title" title="title" value="${record?.title}"
-
+                                 onblur="jQuery('#submitUpdate').click();"
                                  style="width: 99%;"/>
 
                 %{--<g:if test="${fields.contains('authorInfo')}">--}%
@@ -104,6 +106,7 @@ Summary: <br/>
                     Short description:<br/>
                     <g:textArea cols="80" rows="5" placeholder="Short description" title="Short description" name="shortDescription"
                                 value="${record?.shortDescription}"
+                                onblur="jQuery('#submitUpdate').click();"
                                 style="width: 99%; height: 60px;"/>
                 </td></tr>
             </g:if>
@@ -114,7 +117,8 @@ Summary: <br/>
                     Description:<br/>
                     <g:textArea cols="80" rows="5" placeholder="Description" title="Description" name="description"
                                 value="${record?.description}"
-                                style="width: 99%; height: 160px;"/>
+                                onblur="jQuery('#submitUpdate').click();"
+                                style="width: 99%; height: 200px;"/>
                 </td></tr>
             </g:if>
 
@@ -134,7 +138,8 @@ Summary: <br/>
                     Full text:<br/>
                     <g:textArea cols="80" rows="5" placeholder="Full text" title="Full text" name="fullText"
                                 value="${record?.fullText}"
-                                style="width: 99%;  height: 100px;"/>
+                                onblur="jQuery('#submitUpdate').click();"
+                                style="width: 99%;  height: 160px;"/>
                 </td>
             </g:if>
 
@@ -202,6 +207,7 @@ Summary: <br/>
                     Notes:<br/>
                     <g:textArea cols="80" rows="5" id="notes" placeholder="Notes" title="Notes"
                                 name="notes" style="width: 99%;" class="ui-corner-all"
+                                onblur="jQuery('#submitUpdate').click();"
                                 value="${record?.notes}"/>
                 </td>
 
@@ -213,6 +219,7 @@ Summary: <br/>
                     Highlights:<br/>
                     <g:textArea cols="80" rows="5" id="mainHighlights" placeholder="Highlights" title="mainHighlights"
                                 name="mainHighlights" style="width: 99%; background: lightgreen;" class="ui-corner-all"
+                                onblur="jQuery('#submitUpdate').click();"
                                 value="${record?.mainHighlights}"/>
                 </td>
 
@@ -258,9 +265,13 @@ Summary: <br/>
     <g:submitButton class="fg-button ui-icon-left ui-widget ui-state-default ui-corner-all" name="submit"
                     style="width: 99%; height: 25px; text-align: center; background: #f0f0f0;"
                     value="Update"
+        id="submitUpdate"
                     onsubmit=""/>
 </g:formRemote>
 
 %{--<g:if test="${savedRecord && !record}">--}%
     %{--<g:render template="/gTemplates/recordSummary" model="[record: savedRecord]"/>--}%
 %{--</g:if>--}%
+
+
+<div id="underQuickEditForm"></div>

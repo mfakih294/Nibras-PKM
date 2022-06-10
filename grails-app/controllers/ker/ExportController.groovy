@@ -577,6 +577,19 @@ This presentation aims to give an overview of Pomegranate PKM system.
 
     }
 
+  def currentBookToScreen() {
+        render(template: '/reports/currentBook')
+    }
+
+
+    def currentBookToFile() {
+
+        def f = new File('/' + (OperationController.getPath('root.rps1.path') ?: '') + '/currentBook.md')
+        f.write(g.include([controller: 'export', action: 'currentBookToScreen']).toString(), 'UTF-8')
+        render 'Generation done: ' + new Date().format('HH:mm:ss')
+
+    }
+
 
     def exportTxtToBeamer() {
         // config

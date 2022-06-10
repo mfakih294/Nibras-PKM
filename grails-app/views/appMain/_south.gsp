@@ -88,8 +88,17 @@
     </g:if>
 
 
+<pkm:checkFolder name='rps1' path="${OperationController.getPath('root.rps1.path')}"/>
+&nbsp;
 
-<span id="onlineLog"></span>
+    <pkm:checkFolder name='rps2' path="${OperationController.getPath('root.rps2.path')}"/>
+&nbsp;
+
+    <pkm:checkFolder name='edit' display='Edit'
+                     path="${OperationController.getPath('editBox.path')}"/>
+&nbsp;
+
+    <span id="onlineLog"></span>
 <g:if test="${OperationController.getPath('IPs.show')?.toLowerCase() == 'yes' ? true : false}">
  &nbsp;
   IPs:  &nbsp;

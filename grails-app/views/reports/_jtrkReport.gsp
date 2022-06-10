@@ -23,7 +23,7 @@
             <th>${d.code}</th>
         </g:each>
         </thead>
-        <g:each in="${Indicator.findAllByCategory(19, [sort: 'code', order: 'desc'])}" var="i">
+        <g:each in="${Indicator.findAll([sort: 'code', order: 'desc'])}" var="i">
 
             <tr>
                 <td>

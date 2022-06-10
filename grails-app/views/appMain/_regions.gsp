@@ -65,12 +65,15 @@
             </a></h6>
 
             <div id="1" class="common" style="">
-            <div id="centralArea" class="common" style="">
+
+                <div id="centralArea" class="common" style="">
 %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
-%{--<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>--}%
+<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>
 
 
             </div>
+                <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
+                   onclick="jQuery('#centralArea').html('');" style="float: right; color: darkgray; margin-right: 4px;">Clear</a>
 
 
 %{--                <div id="centralArea" class="common" style="">--}%
@@ -119,10 +122,38 @@
                     %{--</g:if>--}%
 %{--                </div>--}%
 
+                <g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <br/>
+                    <g:formRemote name="batchAdd2" class="commandBarInPanel"
+                                  url="[controller: 'generics', action: 'actionDispatcher']"
+                                  update="centralArea" style="display: inline"
+
+                                  method="post">
+                        <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
+                        <g:submitButton name="batch" value="Execute"
+                                        style="height: 30px; margin: 0px; width: 120px !important; display: none"
+                                        id="quickAddXcdSubmitTop1"
+                                        class="fg-button ui-widget ui-state-default"/>
+
+                        <g:textField name="input" value="" id="testField1"
+                                     autocomplete="off"
+                                     style="display: inline; padding-left: 5px; font-family: tahoma ; width: 100% !important; border: 1px solid darkgray"
+                                     placeholder="Command bar"
+                                     class="commandBarTexFieldTop"/>
+                    </g:formRemote>
+                </g:if>
+
+
             </div>
+
 <g:if test="${OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
             <h6 style="text-aling: center"><a href="#" id="testTitle2">
-                Add panel
+                Quick add panel
             </a></h6>
 
             <div id="2" class="common" style="">
@@ -136,12 +167,16 @@
 
                 <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
                     <br/>
-                    <div class="">
-                        %{--<h2>Create new record...</h2>--}%
-                        <h4 style="user-focus-pointer: hand; cursor: hand;">Quick add records...</h4>
-                        %{--<br/>--}%
-                    </div>
-                    <div class="">
+                %{--<hr/>--}%
+                %{--<br/>--}%
+                %{--<div class="">--}%
+                %{--<h2>Create new record...</h2>--}%
+                %{--<h4 style="user-focus-pointer: hand; cursor: hand;"></h4>--}%
+                %{--<br/>--}%
+                %{--</div>--}%
+                    <div style="border: 1px solid darkgreen; padding: 6px;">
+
+
 
                         <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                       url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
@@ -153,18 +188,35 @@
                         %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
                         %{--</code>--}%
 
+                            <b>Quick add record: </b>
+                            &nbsp;
                             <g:select name="type" from="${types}"
-                                      id="typeField"
-                                      tabindex="1"
-                                      optionKey="id"
-                                      optionValue="name"
-                                      onchange="if (this.value == 'Resource') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
-                                      value="N"/>
+                                                                    id="typeField"
+                                                                    tabindex="1"
+                                                                    optionKey="id"
+                                                                    optionValue="name"
+                                                                    onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
+                                                                    value="N"/>
+                            &nbsp;
+                                                        p <g:select name="priority" from="${(1..5)}" style="border-radius: 5px;"
+                                       id="priority"
+                                       tabindex="1"
+                                       value="${2}"/>
+&nbsp;
 
-                        %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
-                        %{--<g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"--}%
-                        %{--optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>--}%
-                        %{--</g:if>--}%
+                            <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                                <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+                                    class="chosen"
+
+                                          optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+                                %{--disabled="true"--}%
+                            </g:if>
+<br/>
+                             <g:checkBox name="addOperation" id="addOperation" checked="checked"/>Operation
+                            <g:checkBox name="addFolder" id="addFolder" checked="checked"/>Make folder
+                             <g:checkBox name="grabAllFiles" id="grabAllFiles"/>Move new files
+
+
 
                         %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
                         %{--value="${OperationController.getPath('default.language')}"--}%
@@ -176,44 +228,56 @@
                         %{--optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>--}%
                         %{--</g:if>--}%
 
-
+<br/>
 
                             <g:textField name="title" value=""
                                          tabindex="2" id="summayDaftar"
-                                         style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
+                                         style="background: #f8f9fa; border: 1px solid darkgray; border-radius: 5px;padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 99% !important;"
                                          placeholder="Summary * "/>
-
-                            <g:submitButton name="save" value="Add"
-                                            style="text-align: center; padding-left: 8px; padding-right: 8px; width: 40px"
-                                            tabindex="4"
-                                            title="Add record (ctrl+enter)"
-                                            id="addXcdFormDaftarSubmit"
-                                            class="fg-button ui-widget ui-state-default"/>
 
                             <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
                                         tabindex="3"
                                         name="description" id="descriptionDaftar"
                                         value=""
-                                        style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 96%; height: 80px !important;"/>
+                                        style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 9px 3px; width: 99%; height: 90px !important;"/>
+                            <br/>
+                            <br/>
+                            <g:submitButton name="save" value="Add"
+                                            style="background: #e0f4bf; border: 1px solid darkgray; text-align: center; padding-left: 8px; padding-right: 8px; width: 99%"
+                                            tabindex="4"
+                                            title="Add record (ctrl+enter)"
+                                            id="addXcdFormDaftarSubmit"
+                                            class="fg-button ui-widget ui-state-default"/>
+                            <br/>
+
                         </g:formRemote>
 
 
                         <br/>
                         <div id="underAreaForQuickAdd"></div>
                     </div>
+
                 </g:if>
 
-    %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
+
+
+            %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
 <g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
-                <g:formRemote name="batchAdd2" class="commandBarInPanel"
+    <br/>
+    <br/>
+    <br/>
+
+    <br/>
+    <g:formRemote name="batchAdd2" class="commandBarInPanel"
                               url="[controller: 'generics', action: 'actionDispatcher']"
                               update="centralArea" style="display: inline"
 
                               method="post">
                     <g:hiddenField name="sth2" value="${new java.util.Date()}"/>
+
                     <g:submitButton name="batch" value="Execute"
-                                    style="height: 30px; margin: 0px; width: 120px !important; display: none"
+                                    style="height: 30px; margin: 0px; width: 120px !important; display: none;"
                                     id="quickAddXcdSubmitTop3"
                                     class="fg-button ui-widget ui-state-default"/>
 

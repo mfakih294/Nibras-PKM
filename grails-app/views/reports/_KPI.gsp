@@ -3,11 +3,11 @@
 
 <ul style="-moz-column-count: 4">
 
-    <g:each in="${(1..8)}" var="cat">
-        <li><a>Type ${cat}</a>
+    %{--<g:each in="${(1..8)}" var="cat">--}%
+        <li><a>Type</a>
 
             <ul>
-                <g:each in="${Indicator.executeQuery('from Indicator where category = ? order by name', cat)}"
+                <g:each in="${Indicator.executeQuery('from Indicator order by name')}"
                         var="t">
                     <li>
                         <a onclick="jQuery('#centralArea').load('${contextPath}/indicator/showEvolution/${t.id}')">
@@ -19,6 +19,6 @@
                 </g:each>
             </ul>
         </li>
-    </g:each>
+    %{--</g:each>--}%
 
 </ul>

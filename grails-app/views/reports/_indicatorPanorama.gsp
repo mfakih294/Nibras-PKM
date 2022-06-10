@@ -1,6 +1,11 @@
 <%@ page import="app.Indicator" %>
 
-<h4>Update indicators</h4>
+<h4>Add indicator data</h4>
+<i>Only indicators with updated data are shown.</i>
+<br/>
+<br/>
+
+
 <table border="1" style="width: 98%; border: #496779; border-collapse: collapse;">
     <thead>
     <th>K</th>
@@ -10,15 +15,15 @@
     <th>Log</th>
     </thead>
 
-    <g:each in="${Indicator.findAllByBookmarked(true, [sort: 'category'])}" var="i">
+    <g:each in="${Indicator.findAll([sort: 'summary'])}" var="i">
         <g:if test="${SupportService.indicatorLastSavedValue(i.id) != SupportService.indicatorCurrentValue(i.id)}">
              <tr>
-                 <td>${i.category}</td>
+                 %{--<td>${i.category}</td>--}%
                  <td>
                         <b>
                             ${i.code}
                         </b>
-                     ${i.name}
+                     ${i.summary}
                  </td>
                  <td>${SupportService.indicatorLastSavedDate(i.id)?.format('dd.MM.yyyy')}
                      :

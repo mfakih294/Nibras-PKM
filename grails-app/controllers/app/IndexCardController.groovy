@@ -330,6 +330,34 @@ class IndexCardController { // entity id = 16
             render 'No text entered.'
         }
     }
+
+    def addXcdToWriting() {
+        if (params.description) {
+
+            /*
+              def f = new File('/mhi/mdd/log/xcd-add-' + new Date().format('dd.MM.yyyy') + '.txt')
+           if(!f.exists()){
+             f.write ''
+       //	  print ' No add log file found'
+           }
+              f.text += ('>>> ' +  params.summary + '\n' + params.description + '\n\n')
+
+           */
+
+//            def n = new IndexCard(params)
+            if (params['writing.id']) {
+                def w = Writing.get(params['writing.id'])
+                if (!w.description)
+                    w.description = ''
+
+                w.description += w.description + '\n\n' + params.description
+                w.save()
+                render(template: "/gTemplates/recordSummary", model: [record: w])
+            }
+        } else {
+            render 'No text entered.'
+        }
+    }
  def addQuickOperation() {
         if (params.description) {
 
@@ -356,6 +384,10 @@ class IndexCardController { // entity id = 16
     }
 
     def addXcdFormDaftar() {
+
+
+ //   println params.dump()
+
         if (params.title || params.description) {
 
             if (params.title)
@@ -374,7 +406,40 @@ class IndexCardController { // entity id = 16
             f.text += ('>>> \n' + params.description + '\n\n')
             */
                  def n
-            if (params.type == 'N'){
+
+            if (params.addOperation == 'on') {
+//                println ' in add operation'
+                def date = new Date()?.format('dd.MM.yyyy_HHmm ss')
+                n = new mcs.Operation()
+
+                n.summary = "A ${params.type?.toLowerCase()} ${params.resourceType ? ' #' + params.resourceType : ''} p2 d- (" + date
+                n.description = params.title + '\n' + (params.description ?: '')
+                n.save(flush: true)
+                if (params.addFolder == 'on') {
+//println 'its path should be '  + supportService.getResourcePath(n.id, 'O', false) + ' ' + params.title
+                    new File(OperationController.getPath('root.rps1.path') + '/new/' + date + ' ' + params.title?.replace('?', '')).mkdir()
+
+                    if (params.grabAllFiles == 'on') {
+
+                        def newPath =
+//                                supportService.getResourcePath(n.id, o.summary?.split(' ')[1].toUpperCase(), false)
+                        OperationController.getPath('root.rps1.path') + '/new/' + date + ' ' + params.title
+                        new File(newPath).mkdirs()
+
+                        new File(OperationController.getPath('root.rps1.path') + '/new/').eachFile(){
+                            println 'reading ' + it.name
+                            def ant = new AntBuilder()
+                            if (it.isFile())
+                            ant.move(file: it.path,
+                                    tofile: newPath + '/' + it.name)
+                        }
+
+
+                    } // end of grab files
+
+                } // end of add folder
+            }
+            else if (params.type == 'N'){
                n = new IndexCard()
             n.summary = params.title ?: '...'//extractTitleReturn(params.description)
             n.description = params.description //extractDescriptionReturn(params.description)
@@ -394,7 +459,7 @@ class IndexCardController { // entity id = 16
                 n = new Journal()
                 n.summary = params.title//extractTitleReturn(params.description)
                 n.description = params.description //extractDescriptionReturn(params.description)
-                n.startDate = new Date() - 1
+                n.startDate = new Date()
                 n.level = 'i'
                 n.type = JournalType.findByCode('act')
                 n.save()
@@ -413,6 +478,7 @@ class IndexCardController { // entity id = 16
                 n.summary = params.title//extractTitleReturn(params.description)
                 n.description = params.description //extractDescriptionReturn(params.description)
                 n.status = WorkStatus.findByCode('pending')
+                n.bookmarked = true
                 if (params.context)
                     n.context = mcs.parameters.Context.get(params.context)
                 n.save()
@@ -423,6 +489,7 @@ class IndexCardController { // entity id = 16
                 n.description = params.description //extractDescriptionReturn(params.description)
                 n.type = GoalType.findByCode('goal')
                 n.status = WorkStatus.findByCode('pending')
+                n.bookmarked = true
                 n.save()
             }
           else if (params.type == 'R'){
@@ -448,20 +515,21 @@ class IndexCardController { // entity id = 16
             else
                 n.language = detectLanguage(params.title + params.description)
 
-//        n.bookmarked = true
+            if (params.priority)
+                n.priority = params.priority?.toInteger()
 
 
         render(template: "/gTemplates/recordSummary", model: [record: n, justSaved: true])
             render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 
 
-            def recentRecords = []
+        //    def recentRecords = []
 //            allClassesWithCourses.each() {
 //                recentRecords += it.findAllByDateCreatedLessThanAndDateCreatedGreaterThan(new Date() + 1, new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])
 //                //    recentRecords += it.findAllByLastUpdatedGreaterThan(new Date() - 7, [max: 7])
 //            }
 
-            recentRecords = recentRecords.sort({ it.dateCreated })//.reverse()
+          //  recentRecords = recentRecords.sort({ it.dateCreated })//.reverse()
             //recentRecords.unique()
 
 //            if (recentRecords.size() > 0)

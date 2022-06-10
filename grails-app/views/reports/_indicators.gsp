@@ -9,10 +9,10 @@
 
     </script>
 
-<g:each in="${1..13}" var="c">
+%{--<g:each in="${1..13}" var="c">--}%
     %{--<h1># ${c}</h1>--}%
-    <g:if test="${app.Indicator.countByBookmarkedAndCategory(true, c) > 0}">
-    <g:each in="${app.Indicator.findAllByBookmarkedAndCategory(true, c)}" var="r">
+    <g:if test="${app.Indicator.countByBookmarked(true) > 0}">
+    <g:each in="${app.Indicator.findAllByBookmarked(true)}" var="r">
 
         <div style="float: left; border: 1px solid lightgrey; padding: 5px">
             <b style="padding-left: 15px;">${r.name}</b>
@@ -63,7 +63,7 @@
     </g:if>
     <div style="clear: both"/>
 
-</g:each>
+%{--</g:each>--}%
 
 <br/>
 <br/>
