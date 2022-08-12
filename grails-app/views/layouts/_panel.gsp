@@ -1160,7 +1160,7 @@ Authors: ${authors}
                data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                data-title="Edit ${field}">
-                ${record[field] ? (record[field].code ? 'blog-' + record[field].code : 'blog' + record.blog) : 'blog-'}
+                ${record[field] ? (record[field]?.code ? 'blog-' + record[field]?.code : 'blog' + record.blog) : 'blog-'}
             </a>
             <script type="text/javascript">
                 jQuery("#${field}${record.id}").editable();
@@ -1168,13 +1168,13 @@ Authors: ${authors}
 <br/>
 <br/>
 
-            <g:if test="${record.blog?.code && record.descriptionHTML}">
+            <g:if test="${record?.blog?.code && record.descriptionHTML}">
                 <g:remoteLink controller="generics" action="publish" id="${record.id}"
                               params="[entityCode: entityCode]"
                               update="postResult${record?.id}"
                               title="Publish record"
                               class="fg-button ui-widget ui-state-default ui-corner-all">
-                    Publish on <b>${record.blog?.code}</b>
+                    Publish on <b>${record?.blog?.code}</b>
                 </g:remoteLink>
             </g:if>
             <div id="postResult${record.id}" style="display: inline">
@@ -1479,9 +1479,9 @@ Open record's folder:
 <g:if test="${entityCode == 'R'}">
     <br/>
     <br/>
-opf    ${OperationController.getPath('root.rps1.path')}R/${record.type.code}/${(record.id / 100).toInteger()}/${record.id}
+opf    ${OperationController.getPath('root.rps1.path')}R/${record.type?.code}/${(record.id / 100).toInteger()}/${record.id}
     <br/>
-opf    ${OperationController.getPath('root.rps2.path')}R/${record.type.code}/${(record.id / 100).toInteger()}/${record.id}
+opf    ${OperationController.getPath('root.rps2.path')}R/${record.type?.code}/${(record.id / 100).toInteger()}/${record.id}
 </g:if>
 <g:else>
     <br/>

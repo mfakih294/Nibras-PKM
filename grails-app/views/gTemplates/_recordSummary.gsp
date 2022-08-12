@@ -1301,16 +1301,17 @@ Course:
                                data-type="select"
                                data-value="${record[field]?.id}"
                                data-name="${field}-${entityCode}"
-                               style=" border-radius: 3px; font-size: 0.95em; font-style: italic; padding-left: 3px; padding-right: 3px;"
                                data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&rid=${record.id}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                data-title="Edit ${field}">
                                 ${record[field] ? (record[field].code ? 'c_' + record[field].code : 'c_' + record.course) : 'c--'}
                             </a>
                             <script type="text/javascript">
+
                                 jQuery("#${field}${record.id}").editable(
                                         {showButtons: false, mode: 'popup', placement: 'right'}
                                 );
+
                             </script>
                         </g:if>
 
@@ -1343,7 +1344,13 @@ Course:
                                 ${record[field]?.code ? '@' + record[field]?.code : '@'}
                             </a>
                             <script>
-                                jQuery("#${field}${record.id}").editable();
+                                %{--<!--jQuery("#${field}${record.id}").editable();-->--}%
+
+                                jQuery("#${field}${record.id}").editable(
+                                        {showButtons: false, mode: 'popup', placement: 'right'}
+                                );
+                            </script>
+
                             </script>
 
 

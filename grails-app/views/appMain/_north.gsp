@@ -56,7 +56,7 @@
         </td>
     </g:if>
 
-<g:if test="${OperationController.getPath('scans.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<g:if test="${1 == 2 && OperationController.getPath('scans.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
         <td style="padding-right: 1px !important;">
             <a href="${createLink(controller: 'operation', action:'processScans')}" target="_blank">
@@ -65,13 +65,13 @@
         </td>
     </g:if>
 
-<g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
-        <td style="padding-right: 1px !important;">
-            <a href="${createLink(controller: 'page', action:'appKanban')}" target="_blank">
-                Tasks
-            </a>
-        </td>
-    </g:if>
+%{--<g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+        %{--<td style="padding-right: 1px !important;">--}%
+            %{--<a href="${createLink(controller: 'page', action:'appKanban')}" target="_blank">--}%
+                %{--Tasks--}%
+            %{--</a>--}%
+        %{--</td>--}%
+    %{--</g:if>--}%
 
 
   <!--td style="padding-right: 1px !important;">
@@ -410,14 +410,16 @@
         <td style="padding: 1px !important; margin-left: 2px; color: white; min-height: 30px; min-width: 200px;">
         
         
-    Records per page
+    %{--Records per page--}%
           
 %{--                        noSelection="${['null': '']}"--}%
-                        <g:select name="resultType"
-                                  from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"
-                                  style="direction: ltr; text-align: left; padding: 2px; margin: 0;"
-                                  onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
-                                  value="${cmn.Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
+
+
+                        %{--<g:select name="resultType"--}%
+                                  %{--from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"--}%
+                                  %{--style="direction: ltr; text-align: left; padding: 2px; margin: 0;"--}%
+                                  %{--onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"--}%
+                                  %{--value="${cmn.Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>--}%
                         <span id="notificationArea" style=""></span>
                         <span style="display: none" id="notificationAreaHidden"></span>
 

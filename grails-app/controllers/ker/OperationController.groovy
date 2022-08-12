@@ -1117,11 +1117,11 @@ date = "${r.year ?: ''}"
             def n = grailsApplication.classLoader.loadClass(entityMapping[params.entity]).get(params.rid)
             def courses
             if (n.department) {
-                courses = Course.executeQuery('from Course c where c.department = ? order by c.orderNumber asc',
+                courses = Course.executeQuery('from Course c where c.department = ? order by c.summary asc',
                         n.department)
             }
                 else {
-                courses = Course.executeQuery('from Course c where c.bookmarked = true order by c.orderNumber asc')
+                courses = Course.executeQuery('from Course c order by c.summary asc')
             }
 
                 courses.each() {

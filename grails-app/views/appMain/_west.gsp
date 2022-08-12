@@ -4,46 +4,18 @@
 
 <div id="accordionWest" class="basic">
 
-    <h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">
+    %{--<h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">--}%
         %{--<g:message code="ui.lists0"></g:message>--}%
         %{--todo:  message code--}%
-        Current tasks
-    </a></h3>
+        %{--Current tasks--}%
+    %{--</a></h3>--}%
 
-    <div>
+    %{--<div>--}%
 
 
 
-        <div id="currentTaskArea"></div>
+        %{--<div id="currentTaskArea"></div>--}%
 
-<g:if test="${tasksActiveNotStarted.size() >= 1}">
-    %{--<tr>--}%
-        %{--<td style="vertical-align: top">--}%
-        %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
-            %{--<g:each in="${tasksActiveNotStarted?.context?.unique()}" var="c">--}%
-                %{--<h4 style="text-align: center">@${c}</h4>--}%
-                <ul style="direction: rtl;text-align: center; width: 90%; padding: 3px;;">
-                    %{--.grep{it.context == c}--}%
-                <g:each in="${tasksActiveNotStarted}" var="task">
-                    <li class="text${task.language}" style="border: 1px solid darkgray; border-radius: 5px; padding: 3px; margin: 6px 2px; list-style-type: none;">
-
-                        <g:remoteLink controller="generics" action="showSummary" id="${task.id}" params="[entityCode: 'T']"
-                                      update="currentTaskArea"
-                                      title="Show task  ">
-                            <b>${task.context?.code}</b>
-                            ${task.summary}
-                        </g:remoteLink>
-
-                    </li>
-
-                    %{--<g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>--}%
-                </g:each>
-                </ul>
-            %{--</g:each>--}%
-
-        %{--</td>--}%
-
-</g:if>
         %{--<ul>--}%
             %{--<g:each in="${mcs.Task.findAllBy.SavedSearch.findAllByCalendarEnabled(true, [sort: 'code'])}" var="s">--}%
                 %{--<li>--}%
@@ -59,44 +31,39 @@
 
         %{--</ul>--}%
 
-    </div>
-
-    <h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">
-        <g:message code="ui.lists0"></g:message>
-    </a></h3>
-
-    <div>
-
-        <g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
-
-        <g:if test="${OperationController.getPath('customReport.paintings.enabled')?.toLowerCase() == 'yes' ? true : false}">
-            <br/>
-            <a href="${request.contextPath}/report/customReport1" style="" target="_blank">
-                Paintings and sculptures report
-            </a>
-            <br/>
-        </g:if>
-
-
-        <g:render template="/layouts/modulesAccordion"/>
-
-    </div>
-
-%{--<g:if test="${Setting.findByName('courses.enabled')?.value == 'yes'}">--}%
-%{--<h4><a href="#">Courses</a></h4>--}%
-
-%{--<div>--}%
-%{--<g:render template="/layouts/coursesAccordion"/>--}%
-%{--</div>--}%
-
-%{--</g:if>--}%
-
+    %{--</div>--}%
     <g:if test="${OperationController.getPath('calendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <h3 class="accordionPanelBrowse"><a href="#">
             <g:message code="ui.calendar"></g:message>
         </a></h3>
 
         <div>
+
+             <h4>Browse records by date or range of dates</h4>
+            <g:if test="${OperationController.getPath('rangeCalendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                <span id="dateRange1" style="">
+                    <input type="hidden" class="startDate" id="range_start">
+                    <input type="hidden" class="endDate" id="range_end">
+                </span>
+            %{--<br/>--}%
+            %{--Calendar report includes:--}%
+                <br/>
+                Show: <g:each in="['JP', 'P', 'J', 'Kanban', 'Jtrk', 'Qtrans', 'Qacc', 'log']" var="type">
+
+                <g:remoteLink controller="report" action="setJPReportType" id="${type}"
+                              update="${type}ResultSpan"
+                              title="Toggle ${type}">
+                    <span id="${type}ResultSpan" style="font-weight: ${session[type] == 1 ? 'bold' : 'normal'}">
+                        ${type}
+                    </span>
+                </g:remoteLink>
+            </g:each>
+            %{--</div>--}%
+                <br/>
+            %{--<hr/>--}%
+            %{--<br/>--}%
+
+            </g:if>
 
             <h4 style="">Kanbans:</h4>
 
@@ -161,38 +128,46 @@
 
             <br/>
             <br/>
-            <h4>Browse records by date or range of dates</h4>
-            <g:if test="${OperationController.getPath('rangeCalendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                <span id="dateRange1" style="">
-                    <input type="hidden" class="startDate" id="range_start">
-                    <input type="hidden" class="endDate" id="range_end">
-                </span>
-            %{--<br/>--}%
-            %{--Calendar report includes:--}%
-                <br/>
-                Show: <g:each in="['JP', 'P', 'J', 'Kanban', 'Jtrk', 'Qtrans', 'Qacc', 'log']" var="type">
 
-                <g:remoteLink controller="report" action="setJPReportType" id="${type}"
-                              update="${type}ResultSpan"
-                              title="Toggle ${type}">
-                    <span id="${type}ResultSpan" style="font-weight: ${session[type] == 1 ? 'bold' : 'normal'}">
-                        ${type}
-                    </span>
-                </g:remoteLink>
-            </g:each>
-            %{--</div>--}%
-                <br/>
-            %{--<hr/>--}%
-            %{--<br/>--}%
 
-            </g:if>
 
-        %{--<g:render template="/gTemplates/recordSummary"--}%
+            %{--<g:render template="/gTemplates/recordSummary"--}%
         %{--model="[abridged: 'yes', record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]]"/>--}%
         %{--<g:render template="/layouts/coursesAccordionOnePanel"></g:render>--}%
         </div>
 
     </g:if>
+
+    <h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">
+        <g:message code="ui.lists0"></g:message>
+    </a></h3>
+
+    <div>
+
+        <g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
+
+        <g:if test="${OperationController.getPath('customReport.paintings.enabled')?.toLowerCase() == 'yes' ? true : false}">
+            <br/>
+            <a href="${request.contextPath}/report/customReport1" style="" target="_blank">
+                Paintings and sculptures report
+            </a>
+            <br/>
+        </g:if>
+
+
+        <g:render template="/layouts/modulesAccordion"/>
+
+    </div>
+
+%{--<g:if test="${Setting.findByName('courses.enabled')?.value == 'yes'}">--}%
+%{--<h4><a href="#">Courses</a></h4>--}%
+
+%{--<div>--}%
+%{--<g:render template="/layouts/coursesAccordion"/>--}%
+%{--</div>--}%
+
+%{--</g:if>--}%
+
 
     <g:if test="${OperationController.getPath('course.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <h3 class="accordionPanelBrowse"><a href="#">
@@ -1004,7 +979,20 @@
 
         <div>
 
-            <ul class="settingsUL">
+
+                Records per page
+
+                %{--                        noSelection="${['null': '']}"--}%
+                <g:select name="resultType"
+                          from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"
+                          style="direction: ltr; text-align: left; padding: 2px; margin: 0;"
+                          onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
+                          value="${cmn.Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
+                <span id="notificationArea" style=""></span>
+                <span style="display: none" id="notificationAreaHidden"></span>
+
+
+                <ul class="settingsUL">
 
                 <li>
                     Configuration

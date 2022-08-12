@@ -984,7 +984,13 @@
             </g:if>
             <g:if test="${fields.contains('onHomepage')}">
                 <td>
-                    <g:checkBox name="onMobile" value="${record?.onHomepage}"/> On homepage?
+                    <g:checkBox name="onHomepage" value="${record?.onHomepage}"/> On homepage?
+                </td>
+            </g:if>
+
+ <g:if test="${fields.contains('onMobile')}">
+                <td>
+                    <g:checkBox name="onMobile" value="${record?.onMobile}"/> On mobile?
                 </td>
             </g:if>
 

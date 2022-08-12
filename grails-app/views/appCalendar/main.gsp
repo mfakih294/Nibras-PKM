@@ -11,6 +11,8 @@
 
   <link rel="shortcut icon" href="${resource(dir: 'images/icons', file: 'calendar.ico')}" type="image/ico"/>
 
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'chosen.css')}"/>
+
 
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-1.11.0_min.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery-ui-1.10.4.custom.min.js')}"></script>
@@ -21,6 +23,7 @@
   <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'jquery.qtip.css')}"/>
   <link rel="stylesheet" href="${createLinkTo(dir: 'css', file: 'jquery.modal.css')}"/>
 
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'chosen.jquery.min.js')}"></script>
 
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.modal.js')}"></script>
   <script type="text/javascript" src="${resource(dir: 'js', file: 'jquery.qtip.js')}"></script>
@@ -84,33 +87,33 @@
         left: 'prev next today',
         center: 'title',
 //        right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,dayGridMonth,agenda'
-        right: 'timeGridDay,agenda,dayGrid,timeGridWeek,dayGridWeek,dayGridMonth'
+        right: 'timeGridDay,agenda,dayGrid,timeGridWeek,dayGridMonth'
             // listWeek
       },
-        buttonText: { today: 'today', prev: '<- Previous', next: 'Next ->'},
+        buttonText: { today: '*', prev: '<- P', next: 'N ->'},
       views: {
         dayGridMonth: {
           buttonText: 'Month',
           columnHead: true
         },
           timeGridWeek: {
-          buttonText: 'G-week',
+          buttonText: 'Week',
           columnHead: true
         },
-          dayGridWeek: {
-          buttonText: 'L-week',
-          columnHead: true
-        }
+//          dayGridWeek: {
+//          buttonText: '7 days',
+//          columnHead: true
+//        }
 //        ,listWeek: {
 //          buttonText: 'Week (list)',
 //          columnHead: true
 //        }
-        , timeGridDay: {
+        timeGridDay: {
           buttonText: 'Day',
           columnHead: true
         },
           dayGrid: {
-          buttonText: 'L-agenda',
+          buttonText: 'Agenda',
           columnHead: true,
           visibleRange: function(currentDate) {
                   // Generate a new date for manipulating in the next step
@@ -126,7 +129,7 @@
           },
 
           agenda: {
-          buttonText: 'G-Agenda',
+          buttonText: '3 days',
               type: 'timeGrid',
 //              duration: { days: 4 },
           columnHead: true,
@@ -185,7 +188,7 @@
        firstHour: '05:00',
       // minTime: 5,
       slotMinTime: '05:00',
-      slotDuration: '01:00',
+      slotDuration: '00:30',
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,
@@ -453,7 +456,7 @@
 <table border="0" style="border: 0px;">
     <tr>
         <td style="vertical-align: top; width: 70%;">
-            <div id="calendar-container" style="margin: 10px; text-align: left; height: 99%">
+            <div id="calendar-container" style="margin: 10px; text-align: left; height: 95vh">
 
                 <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
@@ -470,7 +473,7 @@
                                value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'], [offset: random])[0]}"/>
                         %{--    <g:set var="aya3"--}%
                         %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
-                        <div style="font-family: 'traditional arabic'; font-size: large; margin-bottom: 10px; line-height: 29px;">
+                        <div style="font-family: 'verdana tahoma'; font-size: large; margin-bottom: 10px; line-height: 29px;">
                             بسم الله الرحمن الرحيم
                             %{--                        ${aya1.shortDescription}--}%
                             %{--   (${aya1.orderInWriting})--}%
@@ -514,7 +517,70 @@
             </div>
         </td>
         <td style="vertical-align: top; ">
-<div style="padding:4px 4px; overflow-x:hidden; overflow-y:auto; height: 580px;">
+<div style="padding:4px 4px; overflow-x:hidden; overflow-y:auto; height: 90vh;">
+    %{--todo: dynamic height --}%
+
+    <b>Add task/goal</b>
+    <br/>
+    <br/>
+    <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
+                  url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
+                  update="underArea"
+                  style="direction: ltr; text-align: left; margin:  2px; padding: 3px 0px; border: 1px solid darkgray; line-height: 30px;"
+                  onComplete="jQuery('#summayDaftar').val('');jQuery('#summayDaftar').select();;jQuery('#summayDaftar').focus();"
+                  method="post">
+
+        <g:select name="type" from="${['T', 'G']}"
+              id="typeField"
+              style="border-radius: 5px;"
+              tabindex="1"
+              value="T"/>
+    &nbsp;
+    p <g:select name="priority" from="${(1..5)}"
+                id="priority"
+                tabindex="1"
+                value="${2}"/>
+    &nbsp;
+    @ <g:select name="context" id="context" from="${mcs.parameters.Context.list([sort: 'code', order: 'asc'])}"
+                optionKey="id" class="chosen"
+                style="width: 80px !important;"
+                noSelection="${['null': 'Context...']}"
+                optionValue="code"/>
+    &nbsp;
+    <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'summary', order: 'asc'])}"
+              optionKey="id" class="chosen"
+              noSelection="${['null': 'Course...']}"
+              style="width: 300px !important;" optionValue="summary"/>
+    <br/>
+
+    %{--        todo: parametric language list--}%
+
+    %{--<g:select name="language" id="language" class="chosen" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="ar"/>--}%
+    %{--<br/>--}%
+    <g:textField name="title" value=""
+                 tabindex="2" id="summayDaftar"
+                 style="background: #f8f9fa; margin: 3px; text-align: right; font-family: Tahoma; font-size: 1em; width: 90% !important;"
+                 placeholder="Summary *"
+                 class=""/>
+    %{--&nbsp;--}%
+    <g:submitButton name="save" value="Add"
+                    style="text-align: center; padding-left: 8px; padding-right: 8px; display: none;"
+                    tabindex="4"
+                    id="addXcdFormDaftarSubmit"
+                    class="fg-button ui-widget ui-state-default"/>
+
+    %{--        <g:textArea cols="80" rows="12" placeholder="Description / full text ..."--}%
+    %{--                    tabindex="3"--}%
+    %{--                    name="description" id="descriptionDaftar"--}%
+    %{--                    value=""--}%
+    %{--                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>--}%
+    </g:formRemote>
+
+    <div id="underArea" class="common" style="margin: 2px 2px 5px 5px;">
+        %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
+    </div>
+
+
     <g:if test="${notStarted.size() >= 1}">
                 %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
                 <g:each in="${notStarted.context.unique()}" var="c">
@@ -783,4 +849,7 @@
 
 </body>
 
+<script>
+    jQuery(".chosen").chosen({allow_single_deselect: true, search_contains: true, no_results_text: "None found"});
+</script>
 </html>

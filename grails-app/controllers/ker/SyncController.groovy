@@ -265,9 +265,9 @@ class SyncController {
                         date    : i?.startDate?.format('dd-MM-yyyy'),
                         datediff: i?.startDate - new Date(),
                         color   : 'darkblue',
-                        files   : i.filesList,
+                        filesList   : i.filesList,
                         nbFiles : i.nbFiles,
-                        title   : (i.task ? ('[' + i.task + '] ') : '') + i.summary,
+                        summary   : (i.task ? ('[' + i.task?.summary + '] ') : '') + i.summary,
                         language: i.language,
                         body    : i.description ? i.description?.replace('\n', '<br/>') : '']
         }
@@ -906,7 +906,7 @@ class SyncController {
         def json
         //new File('d:/test.log').write(request.JSON.data, 'UTF-8')
         def data = request.JSON.data
-        println 'data is ' + data
+//        println 'data is ' + data
         if (data) {
             def c = 0
 //            def n = new app.IndexCard()//mcs.Journal()
@@ -932,7 +932,7 @@ class SyncController {
 
             if (module == 'r') {
                 record.title = o.summary?.trim() //inconsistancy
-                record.resourceType = ResourceType.findByCode('doc')
+                record.type = ResourceType.findByCode('doc')
             } else {
                 record.summary = o.summary?.trim()
             }
@@ -963,9 +963,7 @@ class SyncController {
 
             def path
             if (new File(OperationController.getPath('root.rps1.path') + '/new').exists()) {
-                new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${
-                    o.operationId
-                } [\S\s]*/) { f ->
+                new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${o.operationId} [\S\s]*/) { f ->
                     path = f.path
                 }
 

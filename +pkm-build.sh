@@ -7,7 +7,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export CATALINA="-server"
 export JAVA_OPTS="-server"
 
-grails clean
+#grails clean
 
 #./gradlew assemble
 ./gradlew  assemble 

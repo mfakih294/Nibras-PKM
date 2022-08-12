@@ -20,16 +20,16 @@ Mousetrap.bind('space', function (e) {
 Mousetrap.bind(['e', 'ث'], function (e) {
 	jQuery(".recordSelected  .fullEditButton").click();
 });
-Mousetrap.bind(['', 'ث'], function (e) {
-	jQuery(".recordSelected  .fullEditButton").click();
-});
+//Mousetrap.bind(['', 'ث'], function (e) {
+//	jQuery(".recordSelected  .fullEditButton").click();
+//});
 
 
 Mousetrap.bind('8', function (e) {
 	jQuery(".recordSelected .quickBookmarkButton").click();
 });
 
-Mousetrap.bind('c', function (e) {
+Mousetrap.bind(['c', 'ؤ'], function (e) {
 	//jQuery('.temp44').addClass('hiddenActions');
 	//jQuery('.recordSelected #actionsButtons').removeClass('hiddenActions');
 	jQuery(".recordSelected .course").editable('show');
@@ -37,8 +37,12 @@ Mousetrap.bind('c', function (e) {
 
 });
 
-Mousetrap.bind('#', function (e) {
-	jQuery(".recordSelected .type").editable('show');
+//Mousetrap.bind('C', function (e) {
+//	jQuery(".recordSelected .course").editable('show');
+//});
+
+Mousetrap.bind('@', function (e) {
+	jQuery(".recordSelected .context").editable('show');
 });
 
 Mousetrap.bind('?', function (e) {
@@ -167,7 +171,7 @@ array.forEach( i => {
 )
 const arrayConversion = ['J', 'R', 'W', 'G', 'T', 'P', 'N']
 arrayConversion.forEach( i => {
-	Mousetrap.bind('c ' + i.toLowerCase(), function (e) {
+	Mousetrap.bind('v ' + i.toLowerCase(), function (e) {
 //                                    console.log('in dept set: ' + 's ' + i.toLowerCase());
 		jQuery('.recordSelected .convertButton' + i).click();
 	});

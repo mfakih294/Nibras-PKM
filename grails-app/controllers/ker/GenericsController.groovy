@@ -1214,16 +1214,15 @@ ll
 
             else {
 
+
                 def fullPath = supportService.getResourcePath(record.id, entityCode, false)
+                def currentPath = OperationController.getPath('currentFolder.path')
                 Files.createDirectories(Paths.get(fullPath))
                 if (new File(fullPath).exists()) {
-                    new File('/home/maitham/current').delete()
-                    java.nio.file.Files.createSymbolicLink(Paths.get('/home/maitham/current'), Paths.get(fullPath))
-
+                    new File(currentPath + '/current').delete()
+                    java.nio.file.Files.createSymbolicLink(Paths.get(currentPath + '/current'), Paths.get(fullPath))
                 }
-
             }
-
             render(template: '/gTemplates/recordSummary', model: [record: record, showFull: 'on', mobileView: params.mobileView])
 
         }

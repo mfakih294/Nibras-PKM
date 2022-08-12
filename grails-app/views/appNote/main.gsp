@@ -504,12 +504,9 @@
         <tr>
             <td style="vertical-align: top; width: 70%;">
 
-                <div id="centralArea" class="common" style="">
-                    <g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>
-                </div>
 
 
-                <h2>Add new record</h2>
+                <h2 style="color: white;">Add new record</h2>
                 <div style="border: 1px solid darkgray; padding: 10px; margin: 10px;">
 
                     <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
@@ -526,14 +523,21 @@
                                   id="typeField"
                                   tabindex="1" optionKey="id"
                                   optionValue="name"
+                                  onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
                                   value="N"/>
+                    %{--class="chosen"--}%
+                        # <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+
+                                  optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+
 
                         <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
-                                  optionKey="id" class="chosen" style="width: 350px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>
+                                  optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>
 
-                        <g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"
-                                  value="${OperationController.getPath('default.language')}"
-                        />
+
+                        %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
+                                  %{--value="${OperationController.getPath('default.language')}"--}%
+                        %{--/>--}%
 
 
                         <g:textField name="title" value=""
@@ -547,6 +551,7 @@
                                     name="description" id="descriptionDaftar"
                                     value=""
                                     style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 99%; height: 80px !important;"/>
+
                         <g:submitButton name="save" value="Add (F2)"
                                         style="text-align: center;  width: 99%"
                                         tabindex="4"
@@ -556,12 +561,15 @@
                     </g:formRemote>
                 </div>
 
+                <div id="centralArea" class="common" style="">
+                    %{--<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Recent records']"></g:render>--}%
+                </div>
 
 
             </td>
 
-            <td style="vertical-align: top">
-                <div id="3rdPanel" style="background: white; padding: 7px;">
+            <td style="vertical-align: top; background: transparent;">
+                <div id="3rdPanel" style="background: transparent; padding: 7px;">
                 </div>
             </td>
         </tr>

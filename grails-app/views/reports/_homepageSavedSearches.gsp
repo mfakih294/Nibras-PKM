@@ -2,7 +2,7 @@
 
 
 <g:each in="${SavedSearch.findAllByOnHomepage(true, [sort: 'entity', order: 'desc'])}" var="s">
-
+ss ${s.id}==
     <g:if test="${s.queryType == 'hql'}">
         <g:render template='/gTemplates/recordListing' model="[
                 list: Task.executeQuery(s.query, [max: 7]), ssId: s.id,

@@ -88,6 +88,8 @@
                               id="typeField"
                               tabindex="1"
                               value=""/>
+
+
                     <g:textField name="title" value=""
                                  tabindex="2" id="summayDaftar"
                                  style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; min-width: 80% !important;"
@@ -97,8 +99,12 @@
                     <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"
                               optionKey="id" class="chosen" style="width: 350px !important;" optionValue="summary"
                               />
+                    <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+                              class="chosen"
 
-      <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}"
+                              optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+
+                    <g:select name="language" id="language" from="${['ar', 'en', 'fr', 'fa', 'de']}"
                               />
 
 

@@ -10,7 +10,7 @@ export JAVA_OPTS="-server"
 #grails clean
 #grails war
 
-./gradlew  bootRun
+./gradlew  --offline -offline bootRun #--offline -offline 
 
 
 # grails -https -disable.auto.recompile=false -Dgrails.gsp.enable.reload=true run-app

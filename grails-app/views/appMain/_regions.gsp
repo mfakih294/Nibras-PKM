@@ -68,10 +68,42 @@
 
                 <div id="centralArea" class="common" style="">
 %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
-<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>
+%{--<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>--}%
+
+                    <g:render template='/reports/homepageSavedSearches'/>
+
+                    <g:if test="${tasksActiveNotStarted.size() >= 1000}">
+                    %{--<tr>--}%
+                    %{--<td style="vertical-align: top">--}%
+                    %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
+                    %{--<g:each in="${tasksActiveNotStarted?.context?.unique()}" var="c">--}%
+                    %{--<h4 style="text-align: center">@${c}</h4>--}%
+                        <ul style="direction: rtl;text-align: center; width: 90%; padding: 3px;;">
+                        %{--.grep{it.context == c}--}%
+                            <g:each in="${tasksActiveNotStarted}" var="task">
+                                <li class="text${task.language}" style="border: 1px solid darkgray; border-radius: 5px; padding: 3px; margin: 6px 2px; list-style-type: none;">
+
+                                    <g:remoteLink controller="generics" action="showSummary" id="${task.id}" params="[entityCode: 'T']"
+                                                  update="currentTaskArea"
+                                                  title="Show task  ">
+                                        <b>${task.context?.code}</b>
+                                        ${task.summary}
+                                    </g:remoteLink>
+
+                                </li>
+
+                            %{--<g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>--}%
+                            </g:each>
+                        </ul>
+                    %{--</g:each>--}%
+
+                    %{--</td>--}%
+
+                    </g:if>
 
 
-            </div>
+
+                </div>
                 <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
                    onclick="jQuery('#centralArea').html('');" style="float: right; color: darkgray; margin-right: 4px;">Clear</a>
 
@@ -158,7 +190,7 @@
 
             <div id="2" class="common" style="">
                 <div id="inner2" class="common" style="">
-                    %{--<g:render template='/reports/homepageSavedSearches'/>--}%
+
 
 
 
@@ -195,23 +227,27 @@
                                                                     tabindex="1"
                                                                     optionKey="id"
                                                                     optionValue="name"
-                                                                    onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
+                                      onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
                                                                     value="N"/>
+                            %{--console.log('now sel: ', this.value);--}%
                             &nbsp;
+
+                        %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+                            <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+                                      optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+                        %{--disabled="true"--}%
+                        %{--</g:if>--}%
+
                                                         p <g:select name="priority" from="${(1..5)}" style="border-radius: 5px;"
                                        id="priority"
                                        tabindex="1"
                                        value="${2}"/>
 &nbsp;
 
-                            <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                                <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
-                                    class="chosen"
 
-                                          optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
-                                %{--disabled="true"--}%
-                            </g:if>
-<br/>
+%{--<br/>--}%
+                            &nbsp;
+
                              <g:checkBox name="addOperation" id="addOperation" checked="checked"/>Operation
                             <g:checkBox name="addFolder" id="addFolder" checked="checked"/>Make folder
                              <g:checkBox name="grabAllFiles" id="grabAllFiles"/>Move new files
@@ -240,7 +276,6 @@
                                         name="description" id="descriptionDaftar"
                                         value=""
                                         style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 9px 3px; width: 99%; height: 90px !important;"/>
-                            <br/>
                             <br/>
                             <g:submitButton name="save" value="Add"
                                             style="background: #e0f4bf; border: 1px solid darkgray; text-align: center; padding-left: 8px; padding-right: 8px; width: 99%"
@@ -527,5 +562,5 @@
 
     });
 
-jQuery('#resourceType').prop('disabled',true);
+//jQuery('#resourceType').prop('disabled',true);
 </script>
