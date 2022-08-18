@@ -414,9 +414,11 @@ class PageController {
         def user = springSecurityService.currentUser
 
 
+//        def rpsSize = '/home/maitham/job/rps1/bin/rps0size.sh'.execute().text
         render(view: '/appMain/main', model: [
                 htmlContent      : null,
                 ips              : ips,
+//                rpsSize              : rpsSize,
                 selectBasketCount: GenericsController.selectedRecords.size(),
                 editFileCount    : 0, // todo: fix
                 dates: datesHb,

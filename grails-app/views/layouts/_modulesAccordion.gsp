@@ -1,52 +1,9 @@
 <%@ page import="mcs.Operation; ker.OperationController; mcs.parameters.JournalType; mcs.parameters.PlannerType; mcs.Book; mcs.Writing; app.Payment; app.IndicatorData; mcs.Journal; cmn.Setting; mcs.Planner; mcs.Task; mcs.Goal; app.Tag" %>
 
-<div id="accordionModules"
-     style="width: 95%; padding-left: 4px;">
+%{--<div id="accordionModules"--}%
+     %{--style="width: 95%; padding-left: 4px;">--}%
 
-    <g:if test="${OperationController.getPath('operations.enabled')?.toLowerCase() == 'yes' ? true : false}">
-        <div class="panelCard">
-            <h4>
-                <span class="O-bkg"
-                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;">O</span>
-                ${OperationController.getPath('operations.label') ?: 'Operations'}<span
-                    class="moduleCount">${mcs.Operation.count()}</span></h4>
 
-            <div>
-                %{--<g:link controller="task" action="expotTodotxt" target="_blank">--}%
-                %{--Export to Todo.txt format--}%
-                %{--</g:link>--}%
-
-                %{--<br/>--}%
-                <ul>
-                    <g:render template="/layouts/savedSearches" model="[entity: 'O']"/>
-
-                <li>
-                <g:remoteLink controller="generics" action="verifyAllOperations"
-                              update="centralArea"
-                              title="Verify operations">
-                    Verify operations
-                %{--دقات--}%
-                %{--</g:remoteLink>--}%
-                %{--style="" target="_blank">--}%
-                %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
-                %{--<g:message code="ui.menu.RSS"></g:message>--}%
-                </g:remoteLink>
-                </li> <li>
-                <g:remoteLink controller="generics" action="symbolicLinkAllBookmarkedRecords"
-                              update="centralArea"
-                              title="Verify operations">
-                    Link bookmarked folders to ${OperationController.getPath('root.out.path')}
-                %{--دقات--}%
-                %{--</g:remoteLink>--}%
-                %{--style="" target="_blank">--}%
-                %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
-                %{--<g:message code="ui.menu.RSS"></g:message>--}%
-                </g:remoteLink>
-                </li>
-                </ul>
-            </div>
-        </div>
-    </g:if>
 
     <g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <div class="panelCard">
@@ -144,6 +101,51 @@
     </div>
 
 </g:if>
+
+    <g:if test="${OperationController.getPath('operations.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        <div class="panelCard">
+            <h4>
+                <span class="O-bkg"
+                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;">O</span>
+                ${OperationController.getPath('operations.label') ?: 'Operations'}<span
+                    class="moduleCount">${mcs.Operation.count()}</span></h4>
+
+            <div>
+                %{--<g:link controller="task" action="expotTodotxt" target="_blank">--}%
+                %{--Export to Todo.txt format--}%
+                %{--</g:link>--}%
+
+                %{--<br/>--}%
+                <ul>
+                    <g:render template="/layouts/savedSearches" model="[entity: 'O']"/>
+
+                    <li>
+                        <g:remoteLink controller="generics" action="verifyAllOperations"
+                                      update="centralArea"
+                                      title="Verify operations">
+                            Verify operations
+                        %{--دقات--}%
+                        %{--</g:remoteLink>--}%
+                        %{--style="" target="_blank">--}%
+                        %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
+                        %{--<g:message code="ui.menu.RSS"></g:message>--}%
+                        </g:remoteLink>
+                    </li> <li>
+                    <g:remoteLink controller="generics" action="symbolicLinkAllBookmarkedRecords"
+                                  update="centralArea"
+                                  title="Verify operations">
+                        Link bookmarked folders to ${OperationController.getPath('root.out.path')}
+                    %{--دقات--}%
+                    %{--</g:remoteLink>--}%
+                    %{--style="" target="_blank">--}%
+                    %{--<span style="color: white" class="ui-icon ui-icon-signal"></span>--}%
+                    %{--<g:message code="ui.menu.RSS"></g:message>--}%
+                    </g:remoteLink>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </g:if>
 
     <g:if test="${OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <div class="panelCard">
@@ -395,4 +397,4 @@
     <br/>
 </g:if>
 
-</div>
+%{--</div>--}%

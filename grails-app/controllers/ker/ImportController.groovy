@@ -692,6 +692,10 @@ class ImportController {
         render(template: '/reports/editBoxShow')
     }
 
+    def advancedRecordImport() {
+        render(template: '/layouts/commandbar')
+    }
+
     def addToRecordFolder2() {
         println params.dump()
     }

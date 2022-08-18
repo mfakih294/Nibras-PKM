@@ -1827,6 +1827,16 @@ switch (entityCode){
             render(template: '/reports/tagCloud', model: [])
 
     }
+ def filterContacts() {
+        if (params.value && params.value.length() > 1)
+            render(template: '/reports/contactCloud', model: [filter: params.value])
+        else if (params.value && params.value.length() == 1) {
+            render('Please enter at least two characters.')
+            render(template: '/reports/contactCloud', model: [])
+        } else// if (params.value == '' || !params.value || params.value == 'null')
+            render(template: '/reports/contactCloud', model: [])
+
+    }
 
     def generateCitationsInline() {
 

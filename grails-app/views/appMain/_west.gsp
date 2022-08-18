@@ -32,117 +32,24 @@
         %{--</ul>--}%
 
     %{--</div>--}%
-    <g:if test="${OperationController.getPath('calendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
-        <h3 class="accordionPanelBrowse"><a href="#">
-            <g:message code="ui.calendar"></g:message>
-        </a></h3>
 
-        <div>
+    <h3 class="accordionPanelBrowse" style="margin-top: 5px;">
 
-             <h4>Browse records by date or range of dates</h4>
-            <g:if test="${OperationController.getPath('rangeCalendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                <span id="dateRange1" style="">
-                    <input type="hidden" class="startDate" id="range_start">
-                    <input type="hidden" class="endDate" id="range_end">
-                </span>
-            %{--<br/>--}%
-            %{--Calendar report includes:--}%
-                <br/>
-                Show: <g:each in="['JP', 'P', 'J', 'Kanban', 'Jtrk', 'Qtrans', 'Qacc', 'log']" var="type">
-
-                <g:remoteLink controller="report" action="setJPReportType" id="${type}"
-                              update="${type}ResultSpan"
-                              title="Toggle ${type}">
-                    <span id="${type}ResultSpan" style="font-weight: ${session[type] == 1 ? 'bold' : 'normal'}">
-                        ${type}
-                    </span>
-                </g:remoteLink>
-            </g:each>
-            %{--</div>--}%
-                <br/>
-            %{--<hr/>--}%
-            %{--<br/>--}%
-
-            </g:if>
-
-            <h4 style="">Kanbans:</h4>
-
-            <g:render template="/layouts/savedSearches" model="[entity: 'F']"/>
-
-
-            <g:if test="${1 == 2}">
-            %{--todo disabled on w164.21 for simplicity--}%
-                <h4>Full-page calendars</h4>
-
-                <ul>
-                    <g:each in="${mcs.parameters.SavedSearch.findAllByCalendarEnabled(true, [sort: 'code'])}" var="s">
-                        <li>
-                            <a href="${request.contextPath}/generics/showCalendar/${s.id}"
-                               style="" target="_blank">
-                                %{--<span class="ui-icon ui-icon-calendar"></span>--}%
-                                <b>${s.code}</b>
-                                ${s.summary}
-                            </a>
-
-                        </li>
-                    </g:each>
-
-                </ul>
-            </g:if>
-        %{--<ul>--}%
-        %{--<li>--}%
-        %{--<a href="${request.contextPath}/generics/showCalendar/Tcal"--}%
-        %{--style="" target="_blank">--}%
-        %{--<span class="ui-icon ui-icon-calendar"></span>--}%
-        %{--<g:message code="ui.tasksCalendar"></g:message>--}%
-        %{--</a>--}%
-
-        %{--</li>--}%
-        %{--<li>--}%
-        %{--<a href="${request.contextPath}/generics/showCalendar/Pcal"--}%
-        %{--style="" target="_blank">--}%
-        %{--<span class="ui-icon ui-icon-calendar"></span>--}%
-        %{--<g:message code="ui.plannerCalendar"></g:message>--}%
-        %{--</a>--}%
-        %{--</li>--}%
-        %{--<li>--}%
-        %{--<a href="${request.contextPath}/generics/showCalendar/Jcal" style="" target="_blank">--}%
-        %{--<g:message code="ui.journalCalendar"></g:message>--}%
-        %{--</a>--}%
-
-        %{--</li>--}%
-
-        %{--<li>--}%
-        %{--<a href="${request.contextPath}/generics/showCalendar/Rcal" style="" target="_blank">--}%
-        %{--<g:message code="ui.resourceCalendar"></g:message>--}%
-        %{--</a>--}%
-
-        %{--</li>--}%
-        %{--<li>--}%
-        %{--<a href="${request.contextPath}/generics/showCalendar/Ncal" style="" target="_blank">--}%
-        %{--<g:message code="ui.notesCalendar"></g:message>--}%
-        %{--</a>--}%
-
-        %{--</li>--}%
-        %{--</ul>--}%
-
-            <br/>
-            <br/>
-
-
-
-            %{--<g:render template="/gTemplates/recordSummary"--}%
-        %{--model="[abridged: 'yes', record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]]"/>--}%
-        %{--<g:render template="/layouts/coursesAccordionOnePanel"></g:render>--}%
-        </div>
-
-    </g:if>
-
-    <h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">
+    <a href="#">
         <g:message code="ui.lists0"></g:message>
     </a></h3>
 
     <div>
+        <g:if test="${1 == 2 && OperationController.getPath('calendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
+            <h3 class="accordionPanelBrowse"><a href="#">
+                <g:message code="ui.calendar"></g:message>
+            </a></h3>
+
+            <div>
+
+            </div>
+
+        </g:if>
 
         <g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
 
@@ -154,6 +61,103 @@
             <br/>
         </g:if>
 
+
+
+    %{--<h4>Browse records by date or range of dates</h4>--}%
+        <g:if test="${OperationController.getPath('rangeCalendar.enabled')?.toLowerCase() == 'yes' ? true : false}">
+            <span id="dateRange1" style="">
+                <input type="hidden" class="startDate" id="range_start">
+                <input type="hidden" class="endDate" id="range_end">
+            </span>
+        %{--<br/>--}%
+        %{--Calendar report includes:--}%
+            <br/>
+            Show: <g:each in="['JP', 'P', 'J', 'Kanban', 'Jtrk', 'Qtrans', 'Qacc', 'log']" var="type">
+
+            <g:remoteLink controller="report" action="setJPReportType" id="${type}"
+                          update="${type}ResultSpan"
+                          title="Toggle ${type}">
+                <span id="${type}ResultSpan" style="font-weight: ${session[type] == 1 ? 'bold' : 'normal'}">
+                    ${type}
+                </span>
+            </g:remoteLink>
+        </g:each>
+        %{--</div>--}%
+            <br/>
+        %{--<hr/>--}%
+        %{--<br/>--}%
+
+        </g:if>
+
+        <h4 style="">Kanbans:</h4>
+
+        <g:render template="/layouts/savedSearches" model="[entity: 'F']"/>
+
+
+        <g:if test="${1 == 2}">
+        %{--todo disabled on w164.21 for simplicity--}%
+            <h4>Full-page calendars</h4>
+
+            <ul>
+                <g:each in="${mcs.parameters.SavedSearch.findAllByCalendarEnabled(true, [sort: 'code'])}" var="s">
+                    <li>
+                        <a href="${request.contextPath}/generics/showCalendar/${s.id}"
+                           style="" target="_blank">
+                            %{--<span class="ui-icon ui-icon-calendar"></span>--}%
+                            <b>${s.code}</b>
+                            ${s.summary}
+                        </a>
+
+                    </li>
+                </g:each>
+
+            </ul>
+        </g:if>
+    %{--<ul>--}%
+    %{--<li>--}%
+    %{--<a href="${request.contextPath}/generics/showCalendar/Tcal"--}%
+    %{--style="" target="_blank">--}%
+    %{--<span class="ui-icon ui-icon-calendar"></span>--}%
+    %{--<g:message code="ui.tasksCalendar"></g:message>--}%
+    %{--</a>--}%
+
+    %{--</li>--}%
+    %{--<li>--}%
+    %{--<a href="${request.contextPath}/generics/showCalendar/Pcal"--}%
+    %{--style="" target="_blank">--}%
+    %{--<span class="ui-icon ui-icon-calendar"></span>--}%
+    %{--<g:message code="ui.plannerCalendar"></g:message>--}%
+    %{--</a>--}%
+    %{--</li>--}%
+    %{--<li>--}%
+    %{--<a href="${request.contextPath}/generics/showCalendar/Jcal" style="" target="_blank">--}%
+    %{--<g:message code="ui.journalCalendar"></g:message>--}%
+    %{--</a>--}%
+
+    %{--</li>--}%
+
+    %{--<li>--}%
+    %{--<a href="${request.contextPath}/generics/showCalendar/Rcal" style="" target="_blank">--}%
+    %{--<g:message code="ui.resourceCalendar"></g:message>--}%
+    %{--</a>--}%
+
+    %{--</li>--}%
+    %{--<li>--}%
+    %{--<a href="${request.contextPath}/generics/showCalendar/Ncal" style="" target="_blank">--}%
+    %{--<g:message code="ui.notesCalendar"></g:message>--}%
+    %{--</a>--}%
+
+    %{--</li>--}%
+    %{--</ul>--}%
+
+        <br/>
+        <br/>
+
+
+
+        %{--<g:render template="/gTemplates/recordSummary"--}%
+        %{--model="[abridged: 'yes', record: Planner.executeQuery('from Planner p where p.type.code = ? order by id desc', ['knb'])[0]]"/>--}%
+        %{--<g:render template="/layouts/coursesAccordionOnePanel"></g:render>--}%
 
         <g:render template="/layouts/modulesAccordion"/>
 
@@ -399,11 +403,12 @@
             <br/>
             Filter: <g:remoteField style="height: 20px; width: 90px;" controller="operation" action="filterTags"
                                    update="tagsPanel" elementId="tagsPanelElementId" name="filter" value=""/>
-            &nbsp;       <g:remoteLink controller="generics" action="tagCloud"
+            &nbsp;
+            <g:remoteLink controller="generics" action="tagCloud"
                                        update="tagsPanel"
                                        style="text-decoration: underline;"
                                        title="Tag cloud">
-                Clear / full list
+                Clear
             </g:remoteLink>
 
             <br/>
@@ -423,33 +428,49 @@
 
             <span id='tagsPanel'></span>
 
-        </div>
-    </g:if>
-    <g:if test="${Setting.findByName('contacts.enabled')?.value == 'yes'}">
-        <h3 class="accordionPanelBrowse"><a href="#">
-            <g:message code="ui.contacts"></g:message>
-
-        </a></h3>
-
-        <div>
+            <g:if test="${Setting.findByName('contacts.enabled')?.value == 'yes'}">
+                <h4>Contacts</h4>
             %{--before="jQuery('#accordionEast').accordion({ active: 6});"--}%
-            <g:remoteLink controller="generics" action="contactCloud"
-                          update="contactPanel"
-                          style="text-decoration: underline;"
-                          title="Contact cloud">
-                Refresh list
-            </g:remoteLink>
+
+<br/>
+                Filter: <g:remoteField style="height: 20px; width: 90px;" controller="operation" action="filterContacts"
+                                       update="contactPanel" elementId="contactPanelElementId" name="filter" value=""/>
+
+                <g:remoteLink controller="generics" action="contactCloud"
+                              update="contactPanel"
+                              style="text-decoration: underline;"
+                              title="Clear filter">
+                    Clear
+                </g:remoteLink>
+
             %{--<g:remoteLink controller="generics" action="updateContactCount" update="notificationArea">--}%
             %{--Update contact count--}%
             %{--</g:remoteLink>--}%
+                <br/>
+                <span id='contactPanel'>
+                </span>
 
+                <g:remoteLink controller="generics" action="contactCloud"
+                              update="contactPanel"
+                              style="text-decoration: underline;"
+                              title="Contact cloud">
+                    Refresh
+                </g:remoteLink>
 
+            </g:if>
 
-
-            <span id='contactPanel'>
-            </span>
         </div>
     </g:if>
+
+        %{--<h3 class="accordionPanelBrowse"><a href="#">--}%
+            %{--<g:message code="ui.contacts"></g:message>--}%
+
+        %{--</a></h3>--}%
+
+        %{--<div>--}%
+    %{----}%
+        %{--</div>--}%
+
 
     <g:if test="${OperationController.getPath('search.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <h3><a href="#">
@@ -521,6 +542,122 @@
         </a></h3>
 
         <div id=''>
+
+            <h3>Append to writing</h3>
+            <g:formRemote name="addXcdToWriting" id="addXcdToWriting"
+                          url="[controller: 'indexCard', action: 'addXcdToWriting']"
+                          update="centralArea"
+                          onComplete="jQuery('#description').val('')"
+                          method="post">
+
+            %{--            <g:select name="language" from="${['ar', 'fr', 'en', 'de', 'fa']}"--}%
+            %{--                      id="language"--}%
+            %{--                      value="ar"--}%
+            %{--                      noSelection="${['null': '']}"/>--}%
+
+            %{--            <g:select name="priority" from="${(1..4)}"--}%
+            %{--                      id="priorityNote"--}%
+            %{--                      value="${2}"/>--}%
+
+
+            %{--            <g:select name="department.id" from="${Department.list([sort: 'code'])}"--}%
+            %{--                      optionKey="id" id="department"--}%
+            %{--                      optionValue="code"--}%
+            %{--                      noSelection="${['null': 'd-']}"/>--}%
+
+            %{--            <g:select name="course.id"--}%
+            %{--                      from="${Course.executeQuery('from Course c where c.bookmarked = true order by c.department.orderNumber asc, c.orderNumber asc')}"--}%
+            %{--                      optionKey="id"--}%
+            %{--                      id="courseNote"--}%
+            %{--                      class="chosen chosen-rtl"--}%
+            %{--                      optionValue="summary"--}%
+            %{--                      noSelection="${['null': 'No course']}"/>--}%
+            %{--            <br/>--}%
+            %{--            <pkm:datePicker name="writtenOn" placeholder="Date" id="34563453" value="${new Date()}"/>--}%
+            %{--~<g:checkBox name="approximateDate" id="approximateDate" value=""/>--}%
+
+            %{--            <g:select name="type.id" from="${WritingType.list([sort: 'code'])}"--}%
+            %{--                      optionKey="id"--}%
+            %{--                      id="typeNote"--}%
+            %{--                      class="chosen chosen-rtl"--}%
+            %{--                      optionValue="code"--}%
+            %{--                      value="${WritingType.findByCode('usr')?.id}"--}%
+            %{--                      noSelection="${['null': 'No type']}"/>--}%
+
+            %{--            <a onclick="clearFormFields()">Clear</a>--}%
+
+            %{--            <br/>--}%
+
+                <g:select name="writing.id"
+                          from="${Writing.executeQuery('from Writing w where w.type.code != ? order by summary asc', 'surah')}"
+                          optionKey="id"
+                          id="writingNote"
+                          optionValue="summary"
+                          class="chosen chosen-rtl"
+                          style="width: 95%; text-align: right; direction:rtl"
+                          value="${null}"
+                          noSelection="${['null': 'No writing']}"/>
+            %{----}%
+
+
+
+            %{--<g:select name="contact.id"--}%
+            %{--from="${app.Contact.executeQuery('from Contact c order by c.summary asc')}"--}%
+            %{--optionKey="id"--}%
+            %{--id="contactNote"--}%
+            %{--optionValue="summary"--}%
+            %{--class="chosen chosen-rtl"--}%
+            %{--style="width: 48%; text-align: right; direction:rtl"--}%
+            %{--value="${null}"--}%
+            %{--noSelection="${['null': '']}"/>--}%
+
+
+            %{----}%
+            %{--<br/>--}%
+            %{--<g:select name="book.id"--}%
+            %{--from="${Book.executeQuery('from Book r where r.status.code = ? order by r.course.department.orderNumber asc, r.course.orderNumber asc, r.orderNumber asc', ['mkt'])}"--}%
+            %{--id="bookId"--}%
+            %{--optionKey="id"--}%
+            %{--optionValue="title"--}%
+            %{--class="chosen chosen-rtl"--}%
+            %{--style="width: 99%; text-align: right; direction:rtl"--}%
+            %{--value="${null}"--}%
+            %{--noSelection="${['null': '']}"/>--}%
+
+            %{----}%
+
+            %{--            <g:textField placeholder="Summary" name="summary" id="summary" value=""--}%
+            %{--                         style="background: #e8efe7; width: 100%; ;" dir="auto"/>--}%
+
+                <g:textArea cols="80" rows="12" placeholder="Text to append" name="description" id="description"
+                            value="" dir="auto"
+                            style="font-family: tahoma; font-size: small; background: #f7fff6; width: 95%; height: 100px !important;"/>
+            %{--            <br/>--}%
+
+            %{--            R ID: <g:textField placeholder="book.id" name="book.id" id="book.id" value="" style="width: 70%;"/>--}%
+
+            %{--            Pg. <g:textField placeholder="pages" name="pages" id="pages" value="" style="width: 30%;"/>--}%
+            %{--            <br/>--}%
+            %{--            <g:textField placeholder="url" name="url" id="url" value="" placehoder="url" style="width: 100%;"/>--}%
+            %{--<br/>--}%
+            %{--<br/>--}%
+            %{--<g:select name="chosenTags" from="${Tag.list()}" multiple=""--}%
+            %{--size="80" style="min-width: 200px; min-height: 50px;"--}%
+            %{--value="" optionKey="id"--}%
+            %{--class="chosen chosen-rtl" id="chosenTags"--}%
+            %{--optionValue="name"--}%
+            %{--noSelection="${['null': '']}"/>--}%
+
+                <br/>
+
+                <g:submitButton name="add" value="Append"
+
+                                style="height: 30px; margin: 0px; width: 90% !important; background: #efece0"
+                                id="45634523"
+                                class="fg-button ui-widget ui-state-default"/>
+            </g:formRemote>
+
+
             <div class="panelCard">
                 <h4>Using sheet:</h4>
 
@@ -628,6 +765,7 @@
         </div>
     </g:if>
 
+<g:if test="${1 == 2}">
 
     <h3 class="accordionPanelAdd"><a href="#">
         <g:message code="ui.add.full.note"></g:message>
@@ -635,7 +773,6 @@
     </a></h3>
 
     <div id='addXcd'>
-<g:if test="${1 == 2}">
         <g:formRemote name="addXcdFormNgs" id="addXcdFormNgs"
                       url="[controller: 'indexCard', action: 'addXcdFormNgs']"
                       update="centralArea"
@@ -748,122 +885,12 @@
                             id="45634523"
                             class="fg-button ui-widget ui-state-default"/>
         </g:formRemote>
-    </g:if>
-
-     <g:formRemote name="addXcdToWriting" id="addXcdToWriting"
-                      url="[controller: 'indexCard', action: 'addXcdToWriting']"
-                      update="centralArea"
-                      onComplete="jQuery('#description').val('')"
-                      method="post">
-
-        %{--            <g:select name="language" from="${['ar', 'fr', 'en', 'de', 'fa']}"--}%
-        %{--                      id="language"--}%
-        %{--                      value="ar"--}%
-        %{--                      noSelection="${['null': '']}"/>--}%
-
-        %{--            <g:select name="priority" from="${(1..4)}"--}%
-        %{--                      id="priorityNote"--}%
-        %{--                      value="${2}"/>--}%
-
-
-        %{--            <g:select name="department.id" from="${Department.list([sort: 'code'])}"--}%
-        %{--                      optionKey="id" id="department"--}%
-        %{--                      optionValue="code"--}%
-        %{--                      noSelection="${['null': 'd-']}"/>--}%
-
-        %{--            <g:select name="course.id"--}%
-        %{--                      from="${Course.executeQuery('from Course c where c.bookmarked = true order by c.department.orderNumber asc, c.orderNumber asc')}"--}%
-        %{--                      optionKey="id"--}%
-        %{--                      id="courseNote"--}%
-        %{--                      class="chosen chosen-rtl"--}%
-        %{--                      optionValue="summary"--}%
-        %{--                      noSelection="${['null': 'No course']}"/>--}%
-        %{--            <br/>--}%
-        %{--            <pkm:datePicker name="writtenOn" placeholder="Date" id="34563453" value="${new Date()}"/>--}%
-        %{--~<g:checkBox name="approximateDate" id="approximateDate" value=""/>--}%
-
-        %{--            <g:select name="type.id" from="${WritingType.list([sort: 'code'])}"--}%
-        %{--                      optionKey="id"--}%
-        %{--                      id="typeNote"--}%
-        %{--                      class="chosen chosen-rtl"--}%
-        %{--                      optionValue="code"--}%
-        %{--                      value="${WritingType.findByCode('usr')?.id}"--}%
-        %{--                      noSelection="${['null': 'No type']}"/>--}%
-
-        %{--            <a onclick="clearFormFields()">Clear</a>--}%
-
-        %{--            <br/>--}%
-
-        <g:select name="writing.id"
-        from="${Writing.executeQuery('from Writing w where w.type.code != ? order by summary asc', 'surah')}"
-        optionKey="id"
-        id="writingNote"
-        optionValue="summary"
-        class="chosen chosen-rtl"
-        style="width: 95%; text-align: right; direction:rtl"
-        value="${null}"
-        noSelection="${['null': 'No writing']}"/>
-        %{----}%
-
-
-
-        %{--<g:select name="contact.id"--}%
-        %{--from="${app.Contact.executeQuery('from Contact c order by c.summary asc')}"--}%
-        %{--optionKey="id"--}%
-        %{--id="contactNote"--}%
-        %{--optionValue="summary"--}%
-        %{--class="chosen chosen-rtl"--}%
-        %{--style="width: 48%; text-align: right; direction:rtl"--}%
-        %{--value="${null}"--}%
-        %{--noSelection="${['null': '']}"/>--}%
-
-
-        %{----}%
-        %{--<br/>--}%
-        %{--<g:select name="book.id"--}%
-        %{--from="${Book.executeQuery('from Book r where r.status.code = ? order by r.course.department.orderNumber asc, r.course.orderNumber asc, r.orderNumber asc', ['mkt'])}"--}%
-        %{--id="bookId"--}%
-        %{--optionKey="id"--}%
-        %{--optionValue="title"--}%
-        %{--class="chosen chosen-rtl"--}%
-        %{--style="width: 99%; text-align: right; direction:rtl"--}%
-        %{--value="${null}"--}%
-        %{--noSelection="${['null': '']}"/>--}%
-
-        %{----}%
-
-        %{--            <g:textField placeholder="Summary" name="summary" id="summary" value=""--}%
-        %{--                         style="background: #e8efe7; width: 100%; ;" dir="auto"/>--}%
-
-            <g:textArea cols="80" rows="12" placeholder="Description" name="description" id="description"
-                        value="" dir="auto"
-                        style="font-family: tahoma; font-size: small; background: #f7fff6; width: 95%; height: 100px !important;"/>
-        %{--            <br/>--}%
-
-        %{--            R ID: <g:textField placeholder="book.id" name="book.id" id="book.id" value="" style="width: 70%;"/>--}%
-
-        %{--            Pg. <g:textField placeholder="pages" name="pages" id="pages" value="" style="width: 30%;"/>--}%
-        %{--            <br/>--}%
-        %{--            <g:textField placeholder="url" name="url" id="url" value="" placehoder="url" style="width: 100%;"/>--}%
-        %{--<br/>--}%
-        %{--<br/>--}%
-        %{--<g:select name="chosenTags" from="${Tag.list()}" multiple=""--}%
-        %{--size="80" style="min-width: 200px; min-height: 50px;"--}%
-        %{--value="" optionKey="id"--}%
-        %{--class="chosen chosen-rtl" id="chosenTags"--}%
-        %{--optionValue="name"--}%
-        %{--noSelection="${['null': '']}"/>--}%
-
-            <br/>
-
-            <g:submitButton name="add" value="Add"
-
-                            style="height: 35px; margin: 0px; width: 100% !important; background: #efece0"
-                            id="45634523"
-                            class="fg-button ui-widget ui-state-default"/>
-        </g:formRemote>
-
     </div>
+
+</g:if>
+
+
+
 
     <g:if test="${1 == 2}">
         <h3 class="accordionPanelAdd"><a href="#">
@@ -1436,6 +1463,7 @@
     </sec:ifAnyGranted>
 
 </div>
+
 <script type="text/javascript">
 
     jQuery('#range_start').val('')

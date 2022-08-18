@@ -61,7 +61,7 @@
 </script>
 <div style="-moz-column-count: 1">
     %{--<ul>--}%
-<g:each in="${Contact.list([sort: 'summary', order: 'asc'])}" var="t">
+    <g:each in="${filter ? Contact.findAllBySummaryLike('%' + filter + '%', [sort: 'summary', order: 'asc']) : Contact.list([sort: 'summary', order: 'asc'])}" var="t">
     <span style="display: inline-table; list-style-type: none; border: 0.5px solid #d3d3d3; margin: 1px; padding-top: 2px; padding-bottom: 2px; padding-left: 2px; padding-right: 2px; font-size: ${11 + (t.occurrence ? Math.pow(Math.ceil(Math.log(t.occurrence)),1.3) : 0)}px; line-height: 20px; -webkit-border-radius: 4px; -moz-border-radius: 4px;">
         <g:remoteLink controller="generics" action="contactReport" id="${t.id}"
                       update="centralArea">

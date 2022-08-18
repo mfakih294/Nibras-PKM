@@ -664,18 +664,18 @@ class SyncController {
 
         def data = request.JSON.data
 
-//println 'new data '  + data
+println 'new data '  + data
 
         def c = 0
 //        println 'in mobile push json ' + params.dump()
         //      println 'in mobile push json ' + params.tosyncText
 //println 'dump ' +        params.dump()
         if (params.tosyncText)
-//println 'array ' +        params.tosyncText
-            JSON.parse(data)['data'].each() { r ->
+println 'array ' +        params.tosyncText
+            data.each() { r ->
 
 //            r = JSON.parse(r)
-//println ' processing row ' + r
+println ' processing row ' + r
                 c++
                 //     println GenericsController.markCompletedStatic(r.substring(1).toLong(), r.substring(0, 1).toUpperCase())
 

@@ -30,7 +30,8 @@
     <title style="direction: rtl; text-align: right;">
 
     ${OperationController.getPath('app.name') ?: 'Nibras PKM'}
-    <g:meta name="app.version"/>
+    %{--<g:meta name="app.version"/>--}%
+${new Date()?.format('HH:mm')}
 
     </title>
 
@@ -489,7 +490,7 @@ $("#accordionCenter").accordion({
 
 <body>
 
-<g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips, recentRecords: recentRecords, types: types]"/>
+<g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips, rpsSize: rpsSize, recentRecords: recentRecords, types: types]"/>
 <div id="idletimeout"></div>
 
 

@@ -359,6 +359,8 @@
                                       title="${record?.startDate?.format('HH:mm')} - ${record?.endDate?.format('HH:mm')}">
                                     <b>&leftarrow;</b>
                                     <u>${record?.startDate?.format('EEE dd.MM.yyyy HH:mm')}</u>
+                                    <br/>
+                                    ${record?.endDate ? '-> ' + record?.endDate?.format('dd.MM.yyyy HH:mm'): ''}
                                 </span>
                             %{--(<i><prettytime:display--}%
                             %{--date="${record?.startDate}"></prettytime:display></i>)--}%
@@ -663,7 +665,8 @@
                                                           update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
                                                           style="padding: 2px; font-size: 0.95em;"
                                                           before="myLayout.open('east');jQuery('.recordSelected').removeClass('recordSelected');jQuery('#${entityCode}Record${record.id}').addClass('recordSelected'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);">
-                                                ${record?.description?.replaceAll("\\<.*?>", "")?.replaceAll('\n', '\n')?.decodeHTML()?.replaceAll('\n', '\n')?.replace('Product Description', '')}
+                                                ${record?.description?.replaceAll('\n', '<br/>')?.decodeHTML()?.replaceAll('\n', '<br/>')?.replace('Product Description', '')}
+                                                %{--?.replaceAll("\\<.*?>", "")--}%
                                             </g:remoteLink>
                                         </g:if>
 
@@ -678,8 +681,10 @@
                                                               params="[entityCode: entityCode]"
                                                               update="descriptionArea${record.id}"
                                                               title="Show full description">
+                                                    %{--?.replaceAll("\\<.*?>", "")--}%
                                                     <pkm:summarize
-                                                            text="${record?.description?.replace('Product Description', '')?.replaceAll("\\<.*?>", "")}"
+                                                            text="${record?.description?.replace('Product Description', '')}"
+
                                                             length="${OperationController.getPath('description.summarize.threshold')?.toInteger()}"/>
                                                     (${record.description?.count(' ')})
                                                 </g:remoteLink>
@@ -695,8 +700,10 @@
                                                           style="padding: 4px; font-size: 0.95em;"
                                                           before=" myLayout.open('east');jQuery('.recordSelected').removeClass('recordSelected');jQuery('#${entityCode}Record${record.id}').addClass('recordSelected'); jQuery('#accordionEast').accordion({ active: 0});">
 
+
+                                                %{--?.replaceAll("\\<.*?>", "")--}%
                                                 <pkm:summarize
-                                                        text="${record?.description?.replace('Product Description', '')?.replaceAll("\\<.*?>", "")}"
+                                                        text="${record?.description?.replace('Product Description', '')}"
                                                         length="${OperationController.getPath('description.summarize.threshold')?.toInteger()}"/>
                                                 (${record.description?.count(' ')})
                                             </g:remoteLink>
@@ -1850,6 +1857,15 @@ Parent:
                                     Delete (_)
                                 </g:remoteLink>
                             </g:if>
+
+<g:remoteLink controller="generics" action="physicalDelete"
+                              params="${[id: record.id, entityCode: entityCode]}"
+                              update="${entityCode}Record${record.id}"
+                              before="if(!confirm('Are you sure you want to permanantly physically delete the record?')) return false"
+                              class="fg-button ui-widget ui-state-default ui-corner-all"
+                              title="Delete record permanantly">
+                &nbsp;x&nbsp;
+                </g:remoteLink>
 
 
                         <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"

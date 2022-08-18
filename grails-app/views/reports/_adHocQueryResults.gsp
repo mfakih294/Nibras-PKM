@@ -1,4 +1,4 @@
-<g:if test="${title && !ssId}">
+<g:if test="${title}">
 <h2>
 &sect;    ${title}
 </h2>

@@ -9,12 +9,14 @@
         <td style="padding-right: 1px !important;">
         &nbsp;
         &nbsp;
-            <g:remoteLink controller="report" action="homepageSavedSearches"
 
-                          update="centralArea" title="Homepage saved searches">
+
+            %{--<g:remoteLink controller="report" action="homepageSavedSearches"--}%
+                          %{--update="centralArea" title="Homepage saved searches">--}%
             %{--<span class="ui-icon ui-icon-calendar"></span>--}%
+        <a href="${createLink(controller: 'page', action:'appMain')}" target="_blank">
 
-                <span style="margin-right: 1px;">
+            <span style="margin-right: 1px;">
                     <b style="font-size: 1em; font-family: Lato, sans-serif;">
                         ${OperationController.getPath('app.name') ?: 'Nibras'}</b>
                     <i>
@@ -23,7 +25,7 @@
                         %{--<g:meta name="app.version"/>--}%
                     </i>
                 </span>
-            </g:remoteLink>
+            </a>
 
         </td>
 <g:if test="${OperationController.getPath('mihrab.enabled')?.toLowerCase() == 'yes' ? true : false}">
@@ -134,7 +136,7 @@
             %{--before="jQuery.address.value(jQuery(this).attr('href'));"--}%
                 <g:remoteLink controller="import" action="importLocalFiles"
                               update="centralArea"
-                              style="padding-right: 5px !important;"
+                              style="padding-right: 2px !important;"
                               title="Import local files (Path: root.rps1.path)">
 
                 %{--<span class="ui-icon ui-icon-arrow-2-e-w"></span>--}%
@@ -143,8 +145,23 @@
                 %{--<pkm:checkFolder name='rps1' display='Import (<span id="importFileCount"></span>)'--}%
                 %{--path="${ker.OperationController.getPath('root.rps1.path')}"/>--}%
                 </g:remoteLink>
+                <g:if test="${OperationController.getPath('import.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                %{--before="jQuery.address.value(jQuery(this).attr('href'));"--}%
+                    <g:remoteLink controller="import" action="advancedRecordImport"
+                                  update="centralArea"
+                                  style="padding-right: 2px !important;"
+                                  title="Import local files (Path: root.rps1.path)">
+                    %{--<span class="ui-icon ui-icon-arrow-2-e-w"></span>--}%
+                    %{--<g:message code="ui.importFiles"></g:message>--}%
+                        ++
+                    %{--<pkm:checkFolder name='rps1' display='Import (<span id="importFileCount"></span>)'--}%
+                    %{--path="${ker.OperationController.getPath('root.rps1.path')}"/>--}%
+                    </g:remoteLink>
+                </g:if>
                 </td>
             </g:if>
+
+
 
 
 
@@ -219,8 +236,8 @@
             </g:remoteLink>
             </g:if>
 
-<g:if test="${OperationController.getPath('today-report.enabled')?.toLowerCase() == 'yes' ? true : false}">
-       &nbsp;   <g:remoteLink controller="generics" action="todaysRecords"
+<g:if test="${1 == 2 && OperationController.getPath('today-report.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        <g:remoteLink controller="generics" action="todaysRecords"
                           style="padding-right: 2px !important;"
                           update="centralArea" title="Today's records">
             %{--<span class="ui-icon ui-icon-calendar"></span>--}%

@@ -8,6 +8,7 @@
                          Journal.countByBookmarked(true) + Planner.countByBookmarked(true) + Task.countByBookmarked(true) + Book.countByBookmarked(true)})
             </a></h3>
 
+<g:if test="${OperationController.getPath('operations.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 <div style="">
 
                     <h2>${mcs.Operation.executeQuery('select count(*) from mcs.Operation where deletedOn = null and bookmarked = true order by id desc')[0]} pending operation(s)</h2>
@@ -19,7 +20,7 @@
     <b>Mark all operations as settled</b>
     </g:remoteLink>
 
-
+</g:if>
 
                    <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByBookmarked(true),
                                                                            totalHits: Planner.countByBookmarked(true)]"/>

@@ -55,7 +55,7 @@ and <g:textField name="dateB" style="width: 50px;" value=""/>
 <g:if test="${'T'.contains(entityCode)}">
     <g:select name="location" style="width: 150px;"
               from="${locations}" optionKey="id" optionValue="value"
-              noSelection="${['null': 'Any location']}"/>
+              noSelection="${['null': 'Any context']}"/>
     <br/>
 </g:if>
 

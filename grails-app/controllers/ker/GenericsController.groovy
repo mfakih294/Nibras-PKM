@@ -2749,7 +2749,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                     statuses.add([id: it.id, value: it.name + ' (' + Task.countByStatus(it) + ')'])
                 }
                     Context.list([sort: 'name']).each() {
-                        locations.add([id: it.id, value: it.name + ' (' + Task.countByContext(it) + ')'])
+                        locations.add([id: it.id, value: it.code + ' ' + it.name + ' (' + Task.countByContext(it) + ')'])
                     }
                     Contact.list([sort: 'summary']).each() {
                         sources.add([id: it.id, value: it.summary + ' (' + Task.countByContact(it) + ')'])

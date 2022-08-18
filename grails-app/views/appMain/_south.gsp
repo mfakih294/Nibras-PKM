@@ -51,7 +51,7 @@
 <g:if test="${OperationController.getPath('selection-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
     <span style="padding-right: 1px !important;">
 
-        <a onclick="selectAll()" href="#">+</a>
+        <a onclick="selectAll()" href="#">Select all</a>
     &nbsp;
         <g:remoteLink controller="generics" action="showSelectedRecords"
                       update="centralArea"
@@ -111,7 +111,17 @@
 </g:each>
 </g:if>
 
+<span style="border: 0px dashed darkgray; padding-left: 15px !important; background: #8e8e97">
+    %{--${rpsSize}--}%
+    ${new File('/nibras/rps1/new').listFiles().size()} new /
+    %{--<% def fc = 0; new File('/nibras/rps1').traverse(){fc++} %> ${fc} total ---}%
+    %{--<% def fc = 0; new File('/nibras/rps1').traverse(){fc++} %> ${fc} total ---}%
+    <pkm:prettySize size="${new File('/nibras/rps1/new').directorySize()}" abbr="${true}"/>
+</span>
+
+
 <g:if test="${1==2}">
+
 <span style="border: 0px dashed darkgray; padding-left: 15px !important; background: #8e8e97">
 
 ${mcs.Course.countByBookmarked(true)} C * / p4:

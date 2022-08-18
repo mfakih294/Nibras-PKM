@@ -71,7 +71,7 @@ Mousetrap.bind(['ق','r'], function (e) {
 
 
 });
-Mousetrap.bind(['D','shift+ي'], function (e) {
+Mousetrap.bind(['D',']'], function (e) {
 	jQuery(".recordSelected  .doneButton").click();
 });
 
@@ -128,33 +128,53 @@ Mousetrap.bind('-', function (e) {
 });
 
 
-Mousetrap.bind('up', function (e) {
-	let t = jQuery('.recordSelected')
-if (jQuery('.recordSelected').prevAll('table').size() >= 1) {
-jQuery('.recordSelected').prevAll('table').eq(0).addClass('recordSelected');
-t.removeClass('recordSelected');
-}
 
-	//document.getElementByClass('.recordSelected').scrollIntoView(); //{behavior: 'smooth', block: 'center'}
-	jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+jQuery(document).ready(function () {
 
-	return false;
-});
+	jQuery("#3rdPanel").focus(function(){
+		//console.log('3rd panel in focus');
+		Mousetrap.unbind('down');
+		Mousetrap.unbind('up');
 
-Mousetrap.bindGlobal('down', function (e) {
-	let t = jQuery('.recordSelected')
-	if (jQuery('.recordSelected').nextAll('table').size() >= 1) {
-		jQuery('.recordSelected').nextAll('table').eq(0).addClass('recordSelected');
+	});
+
+
+jQuery("#centralArea").focus(function(){
+
+	//console.log('workbench panel in focus');
+
+	Mousetrap.bindGlobal('down', function (e) {
+		let t = jQuery('.recordSelected')
+		if (jQuery('.recordSelected').nextAll('table').size() >= 1) {
+			jQuery('.recordSelected').nextAll('table').eq(0).addClass('recordSelected');
 //        jQuery('.selectedRecord .refresh').click();
-		t.removeClass('recordSelected');
-	}
-	//jQuery('.recordSelected').scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
-	jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
-	return false;
+			t.removeClass('recordSelected');
+		}
+		//jQuery('.recordSelected').scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+		jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+		return false;
+
+	});
+
+
+
+	Mousetrap.bind('up', function (e) {
+		let t = jQuery('.recordSelected')
+		if (jQuery('.recordSelected').prevAll('table').size() >= 1) {
+			jQuery('.recordSelected').prevAll('table').eq(0).addClass('recordSelected');
+			t.removeClass('recordSelected');
+		}
+
+		//document.getElementByClass('.recordSelected').scrollIntoView(); //{behavior: 'smooth', block: 'center'}
+		jQuery('.recordSelected')[0].scrollIntoView({block: "center", inline: "nearest", behavior: "smooth", });
+
+		return false;
+	});
 
 });
 
 
+});
 
 
 const array = ['A', 'B', 'D', 'Y', 'E', 'F', 'L', 'O', 'Z', 'H', 'I', 'V', 'T', 'U', 'S', 'K', 'X']

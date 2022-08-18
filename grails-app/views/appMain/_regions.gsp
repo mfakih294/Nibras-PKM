@@ -61,12 +61,13 @@
              style="margin: 0px !important; width: 100% !important; padding-bottom: 0px !important;">
 
             <h6 style="text-aling: center"><a href="#" id="testTitle1">
-                Main panel
+                Workbench
+                %{--panel--}%
             </a></h6>
 
             <div id="1" class="common" style="">
 
-                <div id="centralArea" class="common" style="">
+                <div id="centralArea" class="common" style="" tabindex=2>
 %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
 %{--<g:render template="/gTemplates/recordListing" model="[list: recentRecords, title: 'Last records']"></g:render>--}%
 
@@ -104,6 +105,8 @@
 
 
                 </div>
+                <br/>
+                <br/>
                 <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
                    onclick="jQuery('#centralArea').html('');" style="float: right; color: darkgray; margin-right: 4px;">Clear</a>
 
@@ -154,7 +157,7 @@
                     %{--</g:if>--}%
 %{--                </div>--}%
 
-                <g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                <g:if test="${1 == 2 && OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">
                 %{--before="jQuery('#testTitle2').text('[2]: ' + jQuery('#testField2').val());"--}%
                     <br/>
                     <br/>
@@ -183,7 +186,7 @@
 
             </div>
 
-<g:if test="${OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<g:if test="${1 == 2 && OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
             <h6 style="text-aling: center"><a href="#" id="testTitle2">
                 Quick add panel
             </a></h6>
@@ -367,7 +370,7 @@
     </g:if>
             %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
 
-                <g:if test="${OperationController.getPath('advanced-panel.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                <g:if test="${1 == 2 && OperationController.getPath('advanced-panel.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <h6 id="h64"><a href="#" id="testTitle4">
             Advanced panel
         </a></h6>

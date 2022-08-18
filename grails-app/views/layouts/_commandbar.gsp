@@ -5,7 +5,7 @@
 
 <table border="0" style="border: 0">
     <tr>
-        <td style="width: 50%; vertical-align: top;">
+        <td style="width: 60%; vertical-align: top;">
             <div id="commandBars" style="">
                 %{--<a onclick="jQuery('#commandBars').addClass('navHidden')" style="font-size: smaller; color: gray; float: right;">Hide &nbsp;</a>--}%
                 <div id="top"></div>
@@ -23,11 +23,11 @@
                         <tr>
                             <td style=" padding: 0px; margin: 0px; width: 99%; vertical-align: top;">
                                 <span>
-                                    Prefix template:
+                                    Template:
                                     <g:select name="commandPrefix"
                                               from="${CommandPrefix.list([sort: 'orderNumber'])}" optionKey="id" optionValue="summary"
                                               style="direction: ltr; text-align: left; display: inline; width: 220px; font-size: normal;"
-                                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextFieldInfoNotes').html('Contents format: ' + jsdata.info);jQuery('#prefixField').val(jsdata.prefix); })"
+                                              onchange="jQuery.getJSON('${request.contextPath}/generics/commandNotes?q=' + this.value, function(jsdata){jQuery('#quickAddTextField').html('' + jsdata.info);jQuery('#prefixField').val(jsdata.prefix); })"
                                               value=""/>
 
                                     %{--if (jsdata.info  == null ||  jsdata.info  == 'null' || !jsdata.info) jQuery('#quickAddTextField').addClass('commandMode'); else  jQuery('#quickAddTextField').removeClass('commandMode')--}%
@@ -36,9 +36,8 @@
 
                                 </span>
 
-                               <br/>
-                                Manual prefix: <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"
-                                                            style="display: inline; width: 220px; " value=""/>
+                                (prefix): <g:textField id="prefixField" name="prefix" class="ui-corner-all" cols="80"
+                                                            style="display: inline; width: 180px; " value=""/>
                                 %{--For each line?--}%
                                 %{--<input type="text" name="forEachLine" id="forEachLine"--}%
                                 %{--/>--}%
@@ -80,14 +79,15 @@
                                             class="commandBarTexField"/>
 
                                 <g:checkBox name="verifyMode" value="${true}"/> Verify
-
+&nbsp;
+&nbsp;
                                 <g:submitButton name="batch" value="Execute"
-                                                style="margin: 0px; padding: 0 10px; width: 90px !important;"
+                                                style="margin: 0px; padding: 0 10px; width: 290px !important;"
                                                 id="quickAddXcdSubmitExecute"
                                                 class="fg-button ui-widget ui-state-default"/>
 
 
-                                <div id="quickAddTextFieldInfoNotes" style="color: darkgreen; font-size: normal; font-style: italic; padding: 5px 5px; display: inline-block"></div>
+                                <div id="quickAddTextFieldInfoNotes" style="color: darkgreen; font-size: medium; font-style: italic; padding: 5px 5px; display: inline-block"></div>
                             </td>
                             %{--<td style="width: 25px !important ; padding: 0px; margin: 0px;">--}%
 
