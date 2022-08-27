@@ -81,6 +81,8 @@ class IndexCard implements Comparable {  // entity id = 16
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
 
     String pages
 

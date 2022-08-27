@@ -75,6 +75,10 @@ class Journal implements Comparable {  // entity id = 125
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
+
 
     // end of links
 
@@ -103,6 +107,11 @@ class Journal implements Comparable {  // entity id = 125
 
 
     String notes
+
+    Boolean isMerged = false
+    Date mergedOn
+
+
     Date dateCreated
     Date lastUpdated
     Date deletedOn

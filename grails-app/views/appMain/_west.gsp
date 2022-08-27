@@ -51,7 +51,7 @@
 
         </g:if>
 
-        <g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
+        %{--<g:render template="/layouts/savedSearches" model="[entity: 'M']"/>--}%
 
         <g:if test="${OperationController.getPath('customReport.paintings.enabled')?.toLowerCase() == 'yes' ? true : false}">
             <br/>
@@ -89,9 +89,9 @@
 
         </g:if>
 
-        <h4 style="">Kanbans:</h4>
+        %{--<h4 style="">Kanbans:</h4>--}%
 
-        <g:render template="/layouts/savedSearches" model="[entity: 'F']"/>
+
 
 
         <g:if test="${1 == 2}">
@@ -150,8 +150,8 @@
     %{--</li>--}%
     %{--</ul>--}%
 
-        <br/>
-        <br/>
+        %{--<br/>--}%
+        %{--<br/>--}%
 
 
 

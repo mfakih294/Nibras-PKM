@@ -3,7 +3,18 @@
 %{--<div id="accordionModules"--}%
      %{--style="width: 95%; padding-left: 4px;">--}%
 
+<div class="panelCard">
+ <h4>
+                <span class="T-bkg"
+                      style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;"></span>
+Main reports<span
+        class="moduleCount">${Task.count()}</span></h4>
 
+ <ul>
+
+<g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
+</ul>
+</div>
 
     <g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <div class="panelCard">

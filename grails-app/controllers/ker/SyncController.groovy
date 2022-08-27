@@ -359,6 +359,20 @@ class SyncController {
                         description: i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
+        for (i in Task.executeQuery("from Task t where  t.endDate >= ? and t.endDate <= ? order by t.priority desc, t.id desc", [new Date() - 3, new Date() + 3])) {
+            // t.context.code asc, t.priority todo: fix
+            records += [type       : (i.isTodo == true ? 'Todo' : 'T'),
+                        id         : i.id,
+                        ecode      : 'T',
+                        meta       : (i.context ? '@' + i.context?.code : '-') + ' ' + (i.priority ? priorityMap[i.priority] : ''),
+                        color      : 'lightgreen',
+                        summary    : i.summary,
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+                        language   : i.language,
+                        description: i.description ? i.description?.replace('\n', '<br/>') : '']
+        }
+
         def json = builder.build {
             result = "ok"
             data = records
@@ -411,8 +425,8 @@ class SyncController {
                         filesList   : i.filesList,
                         nbFiles     : i.nbFiles,
                         summary     : i.title + (i.legacyTitle ? ' [' + i.legacyTitle + ' ]' : ''),
-                        description : (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
-                                ?.replaceAll(/www[\S\.]*/, '') ?: '') + (i.description ?: '')]
+                        description : (i.description ? i.description?.replace('\n', '<br/>'): '') + ' --- ' + (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
+                                ?.replaceAll(/www[\S\.]*/, '') ?: '')]
         }
 
         def json = builder.build {
@@ -664,23 +678,28 @@ class SyncController {
 
         def data = request.JSON.data
 
-println 'new data '  + data
+        println 'new data ' + data
 
         def c = 0
 //        println 'in mobile push json ' + params.dump()
         //      println 'in mobile push json ' + params.tosyncText
 //println 'dump ' +        params.dump()
         if (params.tosyncText)
-println 'array ' +        params.tosyncText
-            data.each() { r ->
+            println 'array ' + params.tosyncText
+        data.each() { r ->
 
 //            r = JSON.parse(r)
-println ' processing row ' + r
-                c++
-                //     println GenericsController.markCompletedStatic(r.substring(1).toLong(), r.substring(0, 1).toUpperCase())
+            println ' processing row ' + r
+            c++
+            //     println GenericsController.markCompletedStatic(r.substring(1).toLong(), r.substring(0, 1).toUpperCase())
 
-                def entityCode = r['ecode']
-                def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(r.id)
+            def entityCode = r['ecode']
+            def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(r.id)
+            if (r['textToAppend']) {
+if (!record.notes)
+    record.notes = r['textToAppend']
+                else record.notes += '\n\n' + r['textToAppend']
+            } else {
 
                 if (record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
                     record.bookmarked = false
@@ -740,7 +759,7 @@ println ' processing row ' + r
                 }
 
             }
-
+}
         render c
     }
 
@@ -904,9 +923,9 @@ println ' processing row ' + r
     def commitMobileRecord() {
         def builder = new JSONBuilder()
         def json
-        //new File('d:/test.log').write(request.JSON.data, 'UTF-8')
+//        new File('/home/maitham/test.log').write(request.JSON.data, 'UTF-8')
         def data = request.JSON.data
-//        println 'data is ' + data
+        println 'data is ' + data
         if (data) {
             def c = 0
 //            def n = new app.IndexCard()//mcs.Journal()
@@ -933,8 +952,12 @@ println ' processing row ' + r
             if (module == 'r') {
                 record.title = o.summary?.trim() //inconsistancy
                 record.type = ResourceType.findByCode('doc')
+                record.fullText = o.description?.trim()
+
             } else {
                 record.summary = o.summary?.trim()
+                record.description = o.description?.trim()
+
             }
 
             record.bookmarked = true
@@ -955,7 +978,6 @@ println ' processing row ' + r
             else if (module == 'r')
                 record.publishedOn = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
 
-            record.description = o.description?.trim()
 
             def savedRecord = record.save(flush: true)
 
@@ -973,9 +995,11 @@ println ' processing row ' + r
                     new File(newPath).mkdirs()
                     def ant = new AntBuilder()
                     new File(path).eachFile() {
-                        ant.copy(file: it.path,
+                        ant.move(file: it.path,
                                 tofile: newPath + '/' + it.name)
                     }
+                    new File(path).delete()
+
                 }
 
 

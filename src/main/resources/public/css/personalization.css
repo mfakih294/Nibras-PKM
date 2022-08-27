@@ -25,3 +25,7 @@
     cursor: pointer;
     border: 1px solid darkgreen;
 }
+
+.hidden {
+    display: none;
+}

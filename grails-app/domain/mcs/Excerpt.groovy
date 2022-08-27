@@ -64,6 +64,9 @@ class Excerpt implements Comparable {  // entity id = 143
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
     Boolean bookmarked = false
 
 

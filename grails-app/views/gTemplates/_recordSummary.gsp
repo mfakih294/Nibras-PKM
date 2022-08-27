@@ -279,7 +279,8 @@
 
 
                             <g:if test="${record.class.declaredFields.name.contains('status') && record.status}">
-                                <span style="margin: 2px; padding: 2px; border-radius: 5px; border: 1px solid darkgray; color: darkorange; font-style: italic; font-weight: normal;">${record.status?.code}</span>
+                                <span style="font-size: 1.4em !important; margin: 5px 2px; padding: 2px; border-radius: 5px; border: 1px solid darkgray; color: darkorange; font-style: italic; font-weight: bold;">${record.status?.code}
+                                </span>
                             </g:if>
 
 
@@ -327,10 +328,10 @@
                                                 <span style="font-size: large; color: darkgreen"> &copy; </span>
                                             </g:if>
                                             <g:elseif  test="${record.class.declaredFields.name.contains('publishedNodeId') && record.publishedNodeId && record.status?.code == 'repub'}">
-                                                <span style="font-size: 0.95em; color: darkred"> &copy; </span>
+                                                <span style="font-size: 1em; color: darkred"> &copy; </span>
                                             </g:elseif>
                                             <g:if  test="${record.class.declaredFields.name.contains('context') && record.context}">
-                                                <span style="background: 1px solid darkyellow; font-size: 0.95em; font-weight: bold;color: darkgreen"> @${record.context?.code} </span>
+                                                <span style="background: 1px solid darkyellow; font-size: 1em; font-weight: bold;color: darkgreen"> @${record.context?.code} </span>
                                             </g:if>
                                         %{--<bdi>--}%
                                             <pkm:summarize text="${record.summary ?: ''}"
@@ -359,12 +360,31 @@
                                       title="${record?.startDate?.format('HH:mm')} - ${record?.endDate?.format('HH:mm')}">
                                     <b>&leftarrow;</b>
                                     <u>${record?.startDate?.format('EEE dd.MM.yyyy HH:mm')}</u>
-                                    <br/>
-                                    ${record?.endDate ? '-> ' + record?.endDate?.format('dd.MM.yyyy HH:mm'): ''}
+                                    %{--<br/>--}%
+                                    %{--${record?.endDate ? '-> ' + record?.endDate?.format('dd.MM.yyyy HH:mm'): ''}--}%
                                 </span>
                             %{--(<i><prettytime:display--}%
                             %{--date="${record?.startDate}"></prettytime:display></i>)--}%
                             </g:if>
+
+                            <g:if test="${record.class.declaredFields.name.contains('endDate') && record.endDate}">
+                                <br/> &nbsp;
+                                <span class="${ 'T'.contains(entityCode) && record.endDate < new Date() - 1 && record.completedOn == null ? 'overDueDate' : ''}"
+                                      title="e${record.endDate?.format(OperationController.getPath('datetime.format'))}">
+                                    %{--<pkm:weekDate date="${record?.endDate}"/>--}%
+                                    <span style="font-size: 0.95em; margin: 2px; padding: 2px; border-radius: 3px; border-bottom: 0px solid darkgray;">
+                                        %{--                            &gt;--}%
+                                        Due date: ${record?.startDate  && record?.endDate - record?.startDate == 0 ? record?.endDate?.format('HH:mm') : record?.endDate?.format('EE dd.MM.yyyy')}
+                                    </span>
+                                </span>
+                                <br/>
+                            %{--<span title="s${record.endDate?.format(OperationController.getPath('datetime.format'))}">--}%
+                            %{--<pkm:weekDate date="${record?.endDate}"/>--}%
+                            %{--</span>--}%
+                            %{--</g:else>--}%
+                            </g:if>
+
+
 
                             <g:if test="${entityCode == 'Blog'}">
                             <a href="${createLink(controller: 'operation', action: 'htmlPublishedPosts')}" style="border: 1px solid darkgray; margin: 3px;"
@@ -639,8 +659,21 @@
                             </g:if>
 
 
+                            <g:if test="${record.class.declaredFields.name.contains('shortDescription') && record.shortDescription}">
+                                <div style="border-right: 1px solid darkgreen; font-size: 0.90em !important; color: #5b805e !important; padding: 3px; line-height: 1.4em;">
+                                    <g:remoteLink controller="page" action="panel"
+                                                  tabindex="-1"
+                                                  params="${[id: record.id, entityCode: entityCode, mobileView: mobileView]}"
+                                                  update="${mobileView == 'true' ? 'below' + entityCode+ 'Record' + record.id : '3rdPanel'}"
+                                                  style="padding: 2px; font-size: 0.95em;"
+                                                  before="myLayout.open('east');jQuery('.recordSelected').removeClass('recordSelected');jQuery('#${entityCode}Record${record.id}').addClass('recordSelected'); jQuery('#accordionEast').accordion({ active: 0}); jQuery('#3rdPanel').scrollTop(0);">
+                                        ${record?.shortDescription?.replaceAll('\n', '<br/>')?.decodeHTML()?.replaceAll('\n', '<br/>')}
+                                    %{--?.replaceAll("\\<.*?>", "")--}%
+                                    </g:remoteLink>
+                                </div>
+                            </g:if>
                             <g:if test="${record.class.declaredFields.name.contains('description') && record.description}">
-                                <br/>
+                                %{--<br/>--}%
                                 <g:if test="${record.class.declaredFields.name.contains('language') && record.language}">
                                     <span class="${OperationController.getPath('repository.languages.RTL').contains(record.language) ? 'RTLText' : 'LRTText'}">
                                 </g:if>
@@ -781,6 +814,7 @@
 
 
                             <g:if test="${record.class.declaredFields.name.contains('notes') && record.notes}">
+                                <br/>
                                 <span style="color:#7588b2 ">
                                     <pkm:summarize text="${record.notes}"
                                                    length="${OperationController.getPath('notes.summarize.threshold')?.toInteger()}"/>
@@ -859,11 +893,13 @@
                         </span>
 
                         <g:if test="${record.class.declaredFields.name.contains('tags') && record.tags}">
-%{--                            <br/> &nbsp;--}%
+                            <br/> &nbsp;
                             <g:render template="/tag/tags" model="[instance: record, entity: entityCode]"/>
                         </g:if>
                         <g:if test="${record.class.declaredFields.name.contains('contacts') && record.contacts}">
-                            &nbsp; <g:render template="/tag/contacts" model="[instance: record, entity: entityCode]"/>
+                            <br/>
+                            &nbsp;
+                            <g:render template="/tag/contacts" model="[instance: record, entity: entityCode]"/>
                         </g:if>
 
 
@@ -1164,22 +1200,6 @@
                         %{--date="${record?.startDate}"></prettytime:display></i>)--}%
                         </g:if>
 
-                        <g:if test="${record.class.declaredFields.name.contains('endDate') && record.endDate}">
-                            &nbsp;
-                            <span class="${ 'T'.contains(entityCode) && record.endDate < new Date() - 1 && record.completedOn == null ? 'overDueDate' : ''}"
-                                  title="e${record.endDate?.format(OperationController.getPath('datetime.format'))}">
-                                %{--<pkm:weekDate date="${record?.endDate}"/>--}%
-                                <span style="font-size: 0.95em; margin: 2px; padding: 2px; border-radius: 3px; border-bottom: 0px solid darkgray;">
-                                    %{--                            &gt;--}%
-                                    Due date: ${record?.startDate  && record?.endDate - record?.startDate == 0 ? record?.endDate?.format('HH:mm') : record?.endDate?.format('EE dd.MM.yyyy')}
-                                </span>
-                            </span>
-                            <br/>
-                        %{--<span title="s${record.endDate?.format(OperationController.getPath('datetime.format'))}">--}%
-                        %{--<pkm:weekDate date="${record?.endDate}"/>--}%
-                        %{--</span>--}%
-                        %{--</g:else>--}%
-                        </g:if>
 
 
 
@@ -1281,7 +1301,7 @@ Type:
                                    data-value="${record[field]?.id}"
                                    data-name="${field}-${entityCode}"
                                    class="${record.class.declaredFields.name.contains('status') && record.status ? 'status-' + record?.status?.code : ''}"
-                                   style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 1m; font-style: italic; padding-left: 1px; padding-right: 1px; "
+                                   style="${record.status ? record.status?.style : ''}; border-bottom: 0.5px solid #808080; font-size: 1em; font-style: italic; padding-left: 1px; padding-right: 1px; "
                                    data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
                                    data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
                                    data-title="Edit ${field}">
@@ -1874,8 +1894,7 @@ Parent:
                                     title="Select record"
                                     value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes().getSession()[entityCode + record.id] == 1}"
                                     style="height: 14px !important; float: right;"
-                                    onclick="jQuery('#selectBasketRegion').load('${request.contextPath}/generics/select/${entityCode}${record.id}')"
-                        />
+                                    onclick="jQuery('#selectBasketRegion').load('${request.contextPath}/generics/select/${entityCode}${record.id}')" />
 
                     </div>
 

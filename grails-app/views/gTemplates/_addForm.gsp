@@ -992,6 +992,11 @@
                 <td>
                     <g:checkBox name="onMobile" value="${record?.onMobile}"/> On mobile?
                 </td>
+
+            </g:if> <g:if test="${fields.contains('markedAsActive')}">
+                <td>
+                    <g:checkBox name="markedAsActive" value="${record?.markedAsActive}"/> Status marked as active?
+                </td>
             </g:if>
 
 

@@ -59,6 +59,10 @@ class Planner implements Comparable {  // entity id = 137
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
+
     // Can link to:
     Department department
 //    Front front

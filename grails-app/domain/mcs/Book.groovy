@@ -104,6 +104,9 @@ class Book implements Comparable {  // entity id = 134
     Integer nbFiles
     String filesList
 
+    Integer nbFilesLib
+    String filesListLib
+
     String edition
 
 //    NewsSource source

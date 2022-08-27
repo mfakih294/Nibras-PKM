@@ -2,30 +2,33 @@
 
 .aya {
     color: black;
+    font-family: 'lato';
 }
 
 
 .aya0 {
     font-size: 24px;
-    font-family: "traditional arabic";
+    font-family: 'lato "traditional arabic"';
     color: black;
     background: #ffdcd4;
 }
 .aya1 {
     font-size: 24px;
-    font-family: "traditional arabic";
+    font-family: 'lato "traditional arabic"';
     color: white;
     background: #f7b6b3;
 }
 .aya2 {
     font-size: 22px;
-    font-family: "traditional arabic";
+    font-family: lato;
+    /*"traditional arabic";*/
     /*color: white;*/
     /*background: #f3f1cf;*/
 }
 .aya3 {
     font-size: 24px;
-    font-family: "traditional arabic";
+    font-family: lato;
+/*"traditional arabic";*/
     font-weight: bold;
     color: black;
     background: #e8f6d4;
@@ -82,14 +85,13 @@
                 </g:if>
                 <div style="color: #272727; font-size: 24px; display: inline;" title="${r.description != '?' ? r.description : ''}"
                      class="aya aya${r.priority}">
-                    ${r.shortDescription}
-                </div>
                 <g:remoteLink controller="generics" action="showSummary"
                               params="${[id: r.id, entityCode: 'N']}"
                               update="belowAya0${r.id}"
                               title="">
+                    ${r.shortDescription} </g:remoteLink>
+                </div>
                     (${r.orderInWriting})
-                </g:remoteLink>
                 <span id="belowAya0${r.id}"></span>
             </g:each>
 

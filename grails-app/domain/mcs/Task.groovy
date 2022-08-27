@@ -84,6 +84,10 @@ class Task implements Comparable {  // entity id = 127
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
+
     Boolean isTodo = false
     Boolean isTopic = false
 

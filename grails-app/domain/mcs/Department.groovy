@@ -46,6 +46,15 @@ class Department {  // entity id = 131
 
 
 
+    Integer nbFiles
+    String filesList
+
+
+
+    Integer nbFilesLib
+    String filesListLib
+
+
     String notes
     Date dateCreated
     Date lastUpdated

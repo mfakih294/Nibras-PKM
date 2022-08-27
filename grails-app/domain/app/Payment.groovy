@@ -61,6 +61,9 @@ class Payment implements Comparable {  // entity id = 24
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
     static constraints = {
 
         category(nullable: true)

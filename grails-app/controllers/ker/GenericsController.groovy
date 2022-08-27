@@ -1191,7 +1191,6 @@ ll
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
 
-
         if (record) {
 
             if (entityCode == 'O'){
@@ -1529,16 +1528,21 @@ def markAsMarkdowned(Long id, String entityCode) {
 
         // count rps1 folder files
         def rps1Folder = getRecordPaths(params.entityCode, params.id.toLong())[0]
-
+        println 'file size total 1'
             if (new File(rps1Folder).exists() && Files.list(Paths.get(rps1Folder)).count() > 0) {
+                println 'file size total 2'
                 record.filesCount = 0
                 record.filesList = ''
 
                 def filesCount = 0
                 def filesList = ''
                 new File(rps1Folder).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
-                    filesCount++
-                    filesList += it.name + '\n'
+                    if (it.isFile()) {
+                        filesCount++
+                        filesList += it.name + '\n'
+                        println 'file size total ' + it?.size()
+//                        println 'file size usable ' + it.getUsableSpace()
+                    }
                 }
                 record.filesCount = filesCount
                 record.filesList = filesList
@@ -1585,6 +1589,12 @@ def markAsMarkdowned(Long id, String entityCode) {
 //        record.percentComplete = new Date()
             record.status = WorkStatus.findByCode('done')
         }
+
+        if ('NJ'.contains(entityCode)) {
+            record.isMerged = true
+            record.mergedOn = new Date()
+        }
+
 
         if ('T'.contains(entityCode) && record.isRecurring) {
             def t = new Task()
@@ -1841,28 +1851,37 @@ def markAsMarkdowned(Long id, String entityCode) {
 //            typeLibraryPath = OperationController.getPath('root.rps3.path') + 'R/' + b.type?.code
                         //ResourceType.findByCode(type).libraryPath
                         typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/R' + (resourceNestedByType ?  '/' +  b.type.code : '')
-                        folders.add(
-                                [typeSandboxPath + '' + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
-                        if (!b.bookmarked)
-                            folders.add(
-                                    [typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
+//                        folders.add(
+//                                [typeSandboxPath + '' + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
+//                        if (!b.bookmarked)
+//                            folders.add(
+//                                    [typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '')])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger()
                         //     ]
+
+                        // old method of storing files
                         folders.each() { folder ->
 //                        println 'folder' + folder
+
+
                             if (new File(folder[0]).exists()) {
                                 new File(folder[0]).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
-                                    filesCount++
-                                    filesList += it.name// + '\n'
+                                    if (1 == 2 && it.isFile() ) {  //todo, fix
+                                        filesCount++
+                                        filesList += it.name + '|' + it.size()
+                                    }
                                 }
                             }
+
                         }
+
+
                         folders = []
                         folders.add(
                                 [typeSandboxPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') + '/' + b.id])
 //                    typeLibraryPath + '/' + (b.id / 100).toInteger() + '/' + b.id,
-                        if (!b.bookmarked)
-                            folders.add([typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') + '/' + b.id])
+//                        if (!b.bookmarked)
+//                            folders.add([typeRepositoryPath + (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') + '/' + b.id])
 //                ]
 
                         folders.each() { folder ->
@@ -1870,11 +1889,12 @@ def markAsMarkdowned(Long id, String entityCode) {
                             if (new File(folder[0]).exists()) {
                                 new File(folder[0]).eachFile() {
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
-                                    if (!it.isFile())
-                                        filesList += '*** ' + it.name
-                                    else {
+                                    if (it.isFile()){
+                                       // filesList += '*** ' + it.name
+//                                    else {
+
                                         filesCount++
-                                        filesList += it.name
+                                        filesList += it.name + '|' + it.size()
                                     }
                                 }
                             }
@@ -1906,11 +1926,11 @@ def markAsMarkdowned(Long id, String entityCode) {
                             if (new File(folder[0]).exists()) {
                                 new File(folder[0]).eachFile() {
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
-                                    if (!it.isFile())
-                                        filesList += '*** ' + it.name
-                                    else {
+                                    if (it.isFile()){
+                                        //; //filesList += '*** ' + it.name
+//                                    else {
                                         filesCount++
-                                        filesList += it.name
+                                        filesList += it.name + '|' + it.size()
                                     }
                                 }
                             }

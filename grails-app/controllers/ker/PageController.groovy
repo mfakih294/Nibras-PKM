@@ -27,6 +27,7 @@ import grails.web.JSONBuilder
 
 
 import grails.plugin.springsecurity.annotation.Secured
+import mcs.Writing
 import newpackage.PrayTime
 
 import java.time.Duration
@@ -1096,6 +1097,11 @@ YellowGreen;#9ACD32"""
 
     def settingsFull() {
         render(template: '/page/settings', model: [full: true])
+
+    }
+
+    def uikit() {
+        render(view: '/uikit/apps-light', model: [records: Writing.findAllByBookmarked(true)])
 
     }
 

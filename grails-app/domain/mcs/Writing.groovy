@@ -84,6 +84,8 @@ class Writing implements Comparable {  // entity id = 144
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
 
 
     WritingType type

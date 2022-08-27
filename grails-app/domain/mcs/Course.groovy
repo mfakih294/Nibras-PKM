@@ -76,6 +76,9 @@ class Course implements Comparable {  // entity id = 130
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
     //static transients = ['numberOfTasks']
     //long getNumberOfTasks() { return tasks ? tasks.size() : 0 }
 

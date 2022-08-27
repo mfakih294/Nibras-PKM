@@ -64,6 +64,13 @@ class Contact implements Comparable {  // entity id = 26
 
 
 
+    Integer nbFiles
+    String filesList
+
+
+    Integer nbFilesLib
+    String filesListLib
+
 
     String createdBy
     String insertedBy = 'me'

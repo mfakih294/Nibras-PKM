@@ -27,6 +27,8 @@ class WorkStatus implements Comparable {  // entity id = 138
     // Fields
 
     String code
+    Boolean isActive
+    Boolean markedAsActive
     String name
 
     String style

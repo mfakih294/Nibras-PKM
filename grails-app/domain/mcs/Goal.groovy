@@ -63,6 +63,10 @@ class Goal implements Comparable {  // entity id = 126
     String filesList
 
 
+    Integer nbFilesLib
+    String filesListLib
+
+
 
     Integer priority = 2
     Integer percentCompleted

@@ -111,7 +111,112 @@
                    onclick="jQuery('#centralArea').html('');" style="float: right; color: darkgray; margin-right: 4px;">Clear</a>
 
 
-%{--                <div id="centralArea" class="common" style="">--}%
+                <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
+                   onclick="jQuery('#centralArea').html(''); jQuery('#quickAddForm').removeClass('hidden');" style="float: right; color: darkgray; margin-right: 4px;">N++</a>
+
+                <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
+                   onclick="jQuery('#quickAddForm').addClass('hidden');" style="float: right; color: darkgray; margin-right: 4px;">--</a>
+<br/>
+
+                <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                    <br/>
+                %{--<hr/>--}%
+                %{--<br/>--}%
+                %{--<div class="">--}%
+                %{--<h2>Create new record...</h2>--}%
+                %{--<h4 style="user-focus-pointer: hand; cursor: hand;"></h4>--}%
+                %{--<br/>--}%
+                %{--</div>--}%
+                    <div id="quickAddForm" style="border: 1px solid darkgreen; padding: 6px;" class="hidden">
+
+
+
+                        <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
+                                      url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
+                                      update="underAreaForQuickAdd"
+                                      onComplete=" jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus(); jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', });"
+                                      method="post">
+
+                        %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
+                        %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
+                        %{--</code>--}%
+
+                            <b>Quick add record: </b>
+                            &nbsp;
+                            <g:select name="type" from="${types}"
+                                      id="typeField"
+                                      tabindex="1"
+                                      optionKey="id"
+                                      optionValue="name"
+                                      onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
+                                      value="N"/>
+                        %{--console.log('now sel: ', this.value);--}%
+                            &nbsp;
+
+                        %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+                            <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+                                      optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+                        %{--disabled="true"--}%
+                        %{--</g:if>--}%
+
+                            p <g:select name="priority" from="${(1..5)}" style="border-radius: 5px;"
+                                        id="priority"
+                                        tabindex="1"
+                                        value="${2}"/>
+                            &nbsp;
+
+
+                        %{--<br/>--}%
+                            &nbsp;
+
+                            <g:checkBox name="addOperation" id="addOperation" checked="checked"/>Operation
+                            <g:checkBox name="addFolder" id="addFolder" checked="checked"/>Make folder
+                            <g:checkBox name="grabAllFiles" id="grabAllFiles"/>Move new files
+
+
+
+                        %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
+                        %{--value="${OperationController.getPath('default.language')}"--}%
+                        %{--/>--}%
+
+
+                        %{--<g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+                        %{--<g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"--}%
+                        %{--optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>--}%
+                        %{--</g:if>--}%
+
+                            <br/>
+
+                            <g:textField name="title" value=""
+                                         tabindex="2" id="summayDaftar"
+                                         style="background: #f8f9fa; border: 1px solid darkgray; border-radius: 5px;padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 99% !important;"
+                                         placeholder="Summary * "/>
+
+                            <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                                        tabindex="3"
+                                        name="description" id="descriptionDaftar"
+                                        value=""
+                                        style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 9px 3px; width: 99%; height: 90px !important;"/>
+                            <br/>
+                            <g:submitButton name="save" value="Add"
+                                            style="background: #e0f4bf; border: 1px solid darkgray; text-align: center; padding-left: 8px; padding-right: 8px; width: 99%"
+                                            tabindex="4"
+                                            title="Add record (ctrl+enter)"
+                                            id="addXcdFormDaftarSubmit"
+                                            class="fg-button ui-widget ui-state-default"/>
+                            <br/>
+
+                        </g:formRemote>
+
+
+                        <br/>
+                        <div id="underAreaForQuickAdd"></div>
+                    </div>
+
+                </g:if>
+
+
+            %{--                <div id="centralArea" class="common" style="">--}%
 
 %{--                </div>--}%
 
@@ -200,102 +305,6 @@
                 </div>
 
 
-                <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                    <br/>
-                %{--<hr/>--}%
-                %{--<br/>--}%
-                %{--<div class="">--}%
-                %{--<h2>Create new record...</h2>--}%
-                %{--<h4 style="user-focus-pointer: hand; cursor: hand;"></h4>--}%
-                %{--<br/>--}%
-                %{--</div>--}%
-                    <div style="border: 1px solid darkgreen; padding: 6px;">
-
-
-
-                        <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
-                                      url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
-                                      update="underAreaForQuickAdd"
-                                      onComplete=" jQuery('#descriptionDaftar').val('');jQuery('#summayDaftar').val('');jQuery('#topDaftarArea').html(''); jQuery('#summayDaftar').focus(); jQuery('#underAreaForQuickAdd').scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth', });"
-                                      method="post">
-
-                        %{--onkeyup="jQuery('#topDaftarArea').load('${request.contextPath}/indexCard/extractTitle/', {'typing': this.value})"--}%
-                        %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
-                        %{--</code>--}%
-
-                            <b>Quick add record: </b>
-                            &nbsp;
-                            <g:select name="type" from="${types}"
-                                                                    id="typeField"
-                                                                    tabindex="1"
-                                                                    optionKey="id"
-                                                                    optionValue="name"
-                                      onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
-                                                                    value="N"/>
-                            %{--console.log('now sel: ', this.value);--}%
-                            &nbsp;
-
-                        %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
-                            <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
-                                      optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
-                        %{--disabled="true"--}%
-                        %{--</g:if>--}%
-
-                                                        p <g:select name="priority" from="${(1..5)}" style="border-radius: 5px;"
-                                       id="priority"
-                                       tabindex="1"
-                                       value="${2}"/>
-&nbsp;
-
-
-%{--<br/>--}%
-                            &nbsp;
-
-                             <g:checkBox name="addOperation" id="addOperation" checked="checked"/>Operation
-                            <g:checkBox name="addFolder" id="addFolder" checked="checked"/>Make folder
-                             <g:checkBox name="grabAllFiles" id="grabAllFiles"/>Move new files
-
-
-
-                        %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
-                        %{--value="${OperationController.getPath('default.language')}"--}%
-                        %{--/>--}%
-
-
-                        %{--<g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
-                        %{--<g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"--}%
-                        %{--optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>--}%
-                        %{--</g:if>--}%
-
-<br/>
-
-                            <g:textField name="title" value=""
-                                         tabindex="2" id="summayDaftar"
-                                         style="background: #f8f9fa; border: 1px solid darkgray; border-radius: 5px;padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 99% !important;"
-                                         placeholder="Summary * "/>
-
-                            <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
-                                        tabindex="3"
-                                        name="description" id="descriptionDaftar"
-                                        value=""
-                                        style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 9px 3px; width: 99%; height: 90px !important;"/>
-                            <br/>
-                            <g:submitButton name="save" value="Add"
-                                            style="background: #e0f4bf; border: 1px solid darkgray; text-align: center; padding-left: 8px; padding-right: 8px; width: 99%"
-                                            tabindex="4"
-                                            title="Add record (ctrl+enter)"
-                                            id="addXcdFormDaftarSubmit"
-                                            class="fg-button ui-widget ui-state-default"/>
-                            <br/>
-
-                        </g:formRemote>
-
-
-                        <br/>
-                        <div id="underAreaForQuickAdd"></div>
-                    </div>
-
-                </g:if>
 
 
 
