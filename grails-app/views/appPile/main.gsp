@@ -247,7 +247,7 @@
 //        });
 
 //        jQuery('#searchForm').load('${request.contextPath}/generics/hqlSearchForm/T')
-        jQuery('#tagCloud').load('${request.contextPath}/report/tagCloud')
+        %{--jQuery('#tagCloud').load('${request.contextPath}/report/tagCloud')--}%
 
 // jQuery('#centralArea').load('${request.contextPath}/generics/recentRecords')
 
@@ -289,7 +289,7 @@
 
             $("#accordionWest").accordion({
                 heightStyle: "fill",
-                fillSpace: true,
+//                fillSpace: true,
                 header: "h3",
                 event: "click",
                 active: 0,
@@ -321,18 +321,7 @@ $("#accordionCenter").accordion({
 
 
 
-        Mousetrap.bindGlobal('ctrl+1', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 0});
-            });
-          Mousetrap.bindGlobal('ctrl+2', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 1});
-            });
-          Mousetrap.bindGlobal('ctrl+3', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 2});
-            });
-          Mousetrap.bindGlobal('ctrl+4', function (e) {
-                jQuery('#accordionCenter').accordion({ active: 3});
-            });
+
 
      Mousetrap.bindGlobal('esc', function (e) {
 //            jQuery("html, body").animate({ scrollTop: 0 }, "fast");
@@ -380,17 +369,6 @@ $("#accordionCenter").accordion({
 
             });
 
-            Mousetrap.bind('n', function (e) {
-                jQuery('.nextLink').click()
-            });
-
-            Mousetrap.bind('ctrl+s', function (e) {
-                jQuery('#quickAddRecordSubmit').click()
-            });
-
-            Mousetrap.bind('p', function (e) {
-                jQuery('.prevLink').click()
-            });
 
             /*
              For modifier keys you can use shift, ctrl, alt, option, meta, and command.

@@ -32,7 +32,7 @@ class Excerpt implements Comparable {  // entity id = 143
     User user
 
 
-    static searchable = [only: ['book', 'writing', 'title', 'chapter', 'chapters', 'notes']]
+    static searchable = true// [only: ['book', 'writing', 'title', 'chapter', 'chapters', 'notes']]
 
     // Fields
 

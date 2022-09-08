@@ -88,7 +88,7 @@
                 <g:remoteLink controller="generics" action="showSummary"
                               params="${[id: r.id, entityCode: 'N']}"
                               update="belowAya0${r.id}"
-                              title="">
+                              title="${r.description}">
                     ${r.shortDescription} </g:remoteLink>
                 </div>
                     (${r.orderInWriting})

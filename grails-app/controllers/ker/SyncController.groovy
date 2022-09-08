@@ -926,6 +926,12 @@ if (!record.notes)
 //        new File('/home/maitham/test.log').write(request.JSON.data, 'UTF-8')
         def data = request.JSON.data
         println 'data is ' + data
+
+        /** for non-json requests!!! ionic 6
+         *    def data = JSON.parse(params['data'])
+         println 'data is ' + data
+
+         * */
         if (data) {
             def c = 0
 //            def n = new app.IndexCard()//mcs.Journal()

@@ -33,10 +33,11 @@ class Book implements Comparable {  // entity id = 134
 
     static hasMany = [excerpts: Excerpt, tags: Tag, contacts: Contact]
 
-    static searchable = {
+    static searchable = true /* {
         only = ['title', 'author', 'description', 'fullText', 'resourceType', 'comments', 'highlights',
                 'isbn', 'legacyTitle', 'ext', 'publisher', 
                     'publicationDate', 'notes', 'textTags']
+
         title (nullValue:  'Empty')
         
         description (nullValue: 'Empty')
@@ -44,6 +45,7 @@ class Book implements Comparable {  // entity id = 134
         //        course(component: true)
         //        status(component: true)
     }
+    */
     //static searchable = true
 
     // Fields

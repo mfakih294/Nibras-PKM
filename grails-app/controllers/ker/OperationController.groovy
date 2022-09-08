@@ -2103,6 +2103,13 @@ past.each(){
     }
 
 
+    def dumpAllWritings(){
+        Writing.list().each() {
+            dumpRecordForImport(it.id, 'W')
+            }
+
+
+        }
 
     def dumpRecordForImport(Long id, String entityCode) {
 
@@ -2136,7 +2143,7 @@ past.each(){
             new File(OperationController.getPath('root.rps1.path') + '/edit/').mkdirs()
 
         f = new File(OperationController.getPath('root.rps1.path') + '/edit/' + entityCode + "-" + id + ' ' +
-                filename + '.txt') // + ' ' + filename
+                filename + '.md') // + ' ' + filename
         // + ' ' + filename
 
 //        if (r.entityCode() == 'W') {
@@ -2156,15 +2163,15 @@ past.each(){
 //                r.entityCode() + '/' + r.id + '.out') // + ' ' + filename
 //        if (!f.exists()) {
         if (entityCode == 'R'){
-            f.write(r?.fullText ?: '...', 'UTF-8')
+            f.write(r?.fullText ?: '', 'UTF-8')
 
         } else {
-
-            f.write(r?.description ?: '...', 'UTF-8')
+            if (r?.description && r?.description?.trim() != '' && r?.description?.length() > 3)
+            f.write(r?.description ?: '', 'UTF-8')
         }
 //            f2.write(r?.description ?: '...', 'UTF-8')
-//        render('Text checked out')
-        render(template: '/layouts/achtung', model: [message: 'Note text written to disk.'])
+        render('Text checked out')
+//        render(template: '/layouts/achtung', model: [message: 'Note text written to disk.'])
 //        } else render 'Dump already exists.'
 
 

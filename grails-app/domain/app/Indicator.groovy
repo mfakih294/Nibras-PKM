@@ -23,7 +23,7 @@ import security.User
 class Indicator implements Comparable {  // entity id = 22
 
 
-    static searchable = [only:['code', 'name', 'description', 'notes' ]]
+    static searchable = [only:['code', 'summary', 'description', 'notes' ]]
 
     static hasMany = [tags: Tag]
 

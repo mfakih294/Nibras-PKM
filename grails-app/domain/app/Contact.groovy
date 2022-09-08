@@ -28,7 +28,7 @@ class Contact implements Comparable {  // entity id = 26
 
     def springSecurityService
 
-     static searchable = [only:['name', 'description', 'summary', 'notes' ]]
+     static searchable = true //[only:['description', 'summary', 'notes' ]]
 
 //    static hasMany = [tags: Tag, contacts: Contact]
 

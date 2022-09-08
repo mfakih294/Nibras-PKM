@@ -69,7 +69,7 @@
 
 <g:remoteLink controller="generics" action="fetchQuickAddForm"
               style="padding: 2px; font-size: 12px;"
-              class="${record.class.declaredFields.name.contains('priority') ? 'priorityText' + record.priority : ''}"
+              class="editButton"
               id="${record.id}"
               params="[entityController: record.class.name,
                        updateRegion    : '3rdPanel',
@@ -1546,4 +1546,11 @@ jQuery(".heading").click(function() {
         window.isHidden = false;
 });
 
-</script>
+
+Mousetrap.bind(['q', 'ض'], function (e) {
+    jQuery(".editButton").click();
+});
+
+
+
+        </script>

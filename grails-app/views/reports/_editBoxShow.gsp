@@ -14,9 +14,9 @@
 <g:else>
 <g:each in="${new File(OperationController.getPath('root.rps1.path') + '/edit/').listFiles()}" var="f">
 
-    <g:if test="${f.name.endsWith('.txt') && 'WNR'.contains(f.name?.substring(0, 1))}">
+    <g:if test="${f.name.endsWith('.md') && 'WNR'.contains(f.name?.substring(0, 1))}">
     %{--<g:set value="${f.name.split(/\./)[0].substring(1)}" var="id"></g:set>--}%
-        <g:set value="${f.name.split('-')[1]?.split(' ')[0].replace('.txt', '')}" var="id"></g:set>
+        <g:set value="${f.name.split('-')[1]?.split(' ')[0].replace('.md', '')}" var="id"></g:set>
 
         <g:if test="${f.name?.startsWith('W')}">
             <g:set value="${Writing.get(id)?.description}" var="description"></g:set>

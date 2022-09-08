@@ -79,7 +79,7 @@
 
     <div id="spinner2" style="display:none; z-index: 10000 !important">
         <img src="${resource(dir: '/images', file: 'pmg-grain.gif')}" alt="Spinner2"
-             style="z-index: 10000 !important"/>
+             style="z-index: 10000 !important; display: none;"/>
     </div>
     %{--<sec:ifNotGranted roles="ROLE_ADMIN">--}%
     %{--<g:if test="${OperationController.getPath('commandBar.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%

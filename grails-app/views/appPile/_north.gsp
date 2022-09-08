@@ -20,7 +20,7 @@
                     <b style="font-size: 1.4em;">
 %{--                        ${OperationController.getPath('app.name') ?: 'Nibras'} /Study </b>--}%
 %{--Course--}%
-                        Pile</b>
+                        My Writings</b>
                 </span>
             </g:remoteLink>
 
@@ -64,7 +64,7 @@
         <td style="padding: 1px !important; margin-left: 9px; color: white;">
 
             <g:formRemote name="batchAdd3"
-                          url="[controller: 'generics', action: 'quickQuranSearch']"
+                          url="[controller: 'generics', action: 'quickWritingSearch']"
                           update="centralArea" style="display: inline"
                           before="jQuery('#testTitle5').text('[3]: ' + jQuery('#testField5').val());"
                           method="post">

@@ -1,75 +1,5 @@
 # Nibras PKM
 
-## Rational
-
-In the age of the internet, personal information has become fragmented across devices, cloud applications, sites, social media, desktop applications, and personal storage, in addition to those on paper (notebooks, documents..), and governed by various applications, each has its own methods to organize the information.
-
-This situation is problematic, as the person has a hard time organizing all this information in a unified way, and in a centralized way. He/she may forget or lose information, take a long time to find them, or simply get distracted by the sheer amount of information coming to his space.
-
-Believing in the following core values makes the situation even more problematic:
-- Information is meant to be transformed into knowledge, and not for mere entertainment.
-- Knowledge must be applied, and can't be gained fully except by applying it.
-
-Principles:
-- Transforming information into knowledge is a slow, paintful, and long process.
-- Applying the knowledge is also slow, paintful, and long process.
-
-As a result, acquiring vast amounts of (new) information in a fast way is not aligned with the above values and principles.
-
-Solution:
-
-- Centralized management of the personal information.
-
-Two main options for the storage place:
-- on the cloud
-- on the personal computer.
-- on the (smart) mobile phone
-
-
-The cloud:
-- Technical setup, maintenance, security and administration are their responsbility
-- Usually costs money (eventually it will often cost money)
-- Requires constant fast connection
-- Service features may change
-- Hard to use other applications to manage the data
-- Account may be termination
-- Service may be terminated
-
-The personal computer:
-- Cheap and large storage 
-- High and cheap processing power
-- Can run complex applications
-- Wide administration control
-- Responsibility to setup, administrator, repair, backup, secure
-- Hard to have synchronized data on other devices
-- Hard to move it
-
-
-The mobile
-- Highly portable
-- Passive consumer of information
-- Applications are simple in design and scope
-- Limited storage and processing power
-- Very limited administration options
-
-Options for the application governing the information:
-- The operating system itself (Windows).
-- A closed-source application.
-- An open source application.
-
-A closed-source application:
-- May be rich in features and good company support
-- May be expensive
-- Hard to customize and tailor to your needs
-- May get abondened by the company
-- Usually easy-to-use
-
-
-An open-source application:
-- Totally free
-- Ability to modify it (you can own its code)
-- May be hard to use
-- May be in the stage of active development
 
 
 
@@ -95,16 +25,61 @@ It manages resources (articles, books, documents), notes, writings, tasks, goals
 It was designed with large amounts of information in mind. In current usage, it manages dozens of thousands of records. With its commands and saved searches, it makes easy to navigate through all the information.
 
 
+# Features
+
+* **Flexible text-based commands** to add, update and search records, which provides powerful ways to manage information.
+* **Saved searches** to save searches for later use.
+* Ability to display records on calendars and Kanban boards.
+* Full-text search of all record fields.
+* Simple file system integration so to greatly reduce the need to organize files manually.
+
+
+
+
 ## User's guide
 
 User's guide is available online at [https://mfakih294.github.io/Nibras-PKM/pages](https://mfakih294.github.io/Nibras-PKM/pages/).
 
 
-## Downloads
+## Releases
 
 Nibras PKM is hosted on GitHub [https://github.com/mfakih294/Nibras-PKM](https://github.com/mfakih294/Nibras-PKM).
 
+## Quick start guide
 
+Running Nibras requires three simple steps:
+
+- Download the bundle file corresponding to your platform, e.g. nibras-bundle-windows.zip from the [releases page](https://github.com/mfakih294/Nibras-PKM/releases) on Github.
+- Extract the zipped file to a location of your choice on your local disk.
+- Launch Nibras by double clicking on ./scripts/start file.
+
+Once Nibras has finished launching, a message like the one below will appear.
+
+`* Nibras has launched. You can access it from:             *`
+`* https://localhost:1441/                                  *`
+
+
+Go to **https://localhost:1441/** using Firefox or Chrome. On the login page, enter *nibras* for username and *nibras* for the password.
+
+Notes: 
+- As it has a self-signed certificate, you need to accept and bypass the security warning that shows up at the beginning.
+- On Linux, you need to make the files inside ./scripts and ./tomcat/bin folders executable (chmod +x *).
+- To stop Nibras, you can close this window, or press ctrl+c in it, or run ./scripts/stop script.
+
+## Technical details
+
+* Nibras is developed in Grails framework 3.3.10, which is based on Groovy language, a dynamic language on top of the Java platform.
+* Grails applications run on any platform that can run Java 8 and later, so practically all platforms, including Windows, Linux, Mac.
+* For production use, Nibras uses MySQL 5 for its database, and the file system to store the files of the records. To testing and demonstration, you can run it with h2 database, with no need to configure it.
+* Apache Tomcat 8+ is the recommended application server to run it for production use.
+
+## Technical details
+
+* Nibras is developed in Grails framework 3.3.10, a dynamic framework on top of the Java platform.
+* Grails applications run on any platform that can run Java 8 and later, so practically all platforms, including Windows, Linux, Mac.
+* For production use, Nibras uses MySQL 5+ for its database, and the file system to store the files of the records. To testing and demonstration, it can run with h2 database, with zero extra configuration.
+* Apache Tomcat 8+ is the recommended application server to run it for production use.
+* The bundled distribution comes with Tomcat 8 and runs with a h2 database.
 
 
 

@@ -170,6 +170,17 @@ class GenericsController {
     def supportService
     def searchableService
 
+
+
+    def quickWritingSearch(String input) {
+        if (!input.startsWith(' ')) {
+            findRecords('f w -- ' + params.input)
+        } else if (input.startsWith(' ')) {
+            findRecords('f w :: ' + params.input)
+        }
+    }
+
+
     def quickQuranSearch(String input) {
         if (!input.startsWith(' ')) {
             findRecords('n #aya -- ' + params.input)
@@ -1579,9 +1590,11 @@ def markAsMarkdowned(Long id, String entityCode) {
 
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
-        if (!'RP'.contains(entityCode) && record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
+//        !'RP'.contains(entityCode) &&
+        if (record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
             record.bookmarked = false
-
+//
+//            record.bookmarked = false
 
         if ('GTP'.contains(entityCode)) {
             record.completedOn = new Date()
@@ -1637,6 +1650,8 @@ def markAsMarkdowned(Long id, String entityCode) {
             record.lastReviewed = new Date()
             record.status = WritingStatus.findByCode('revised')
         }
+
+
         render(template: '/gTemplates/recordSummary', model: [record: record])
         render(template: '/layouts/achtung', model: [message: 'Record marked as completed'])
     }
