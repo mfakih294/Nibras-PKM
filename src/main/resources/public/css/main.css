@@ -85,26 +85,42 @@ html * {
     /*background: #fdfdfd !important;*/
 }
 
+/*ui-layout-resizer ui-layout-resizer-west ui-layout-resizer-open ui-layout-resizer-west-open ui-layout-resizer-sliding*/
+
 .ui-layout-resizer-west {
     /*background: #b1ada5 !important;*/
     /*background: #fdfdfd !important;*/
-    z-index: 200000 !important;
-    padding: 1px !important;
+    /*z-index: 200000 !important;*/
+    /*padding: 1px !important;*/
     /*margin-right: 4px !important;*/
-    border-radius: 2px;
+    /*border-radius: 2px;*/
     /*width: 10px !important;*/
+    /*background: #effadc !important;*/
 }
 
+/*.ui-layout-resizer:hover { /!* all 'resizer-bars' *!/*/
+    /*background: #FED;*/
+/*}*/
+
+.ui-layout-toggler{
+
+    width: 120px !important;
+
+}
+
+.ui-layout-toggler .content {
+    margin-left: 3px !important;
+}
 .ui-layout-toggler-east{
-    background: darkgray !important;
+    /*background: darkgray !important;*/
 }
 
-.ui-layout-resizer-north{
-    display: none !important;
-}
-.ui-layout-resizer-south{
-    display: none !important;
-}
+/*.ui-layout-resizer-north{*/
+    /*display: none !important;*/
+/*}*/
+/*.ui-layout-resizer-south{*/
+    /*display: none !important;*/
+/*}*/
 
 .ui-layout-center, /* has content-div */
 
@@ -129,9 +145,9 @@ html * {
     border-top-right-radius: 3px !important;
 }
 .ui-layout-south, .ui-layout-north {
-    border: solid 0.5px #818284;
+    border: solid 1px #818284;
 
-    background: #6D6D74 !important;
+    /*background: #6D6D74 !important;*/
 /*url(../images/bg-header.gif) no-repeat*/
 }
 
@@ -142,12 +158,12 @@ body {
     font-size: 1em;
     font-family:  Lato;
 
-    background: #D8D4C9 url(../images/bg-main.gif) repeat-x;
+    background: #D8D4C9;
     /*font: 12px/20px Verdana, Arial, Tahoma, sans-serif;*/
 
     /*todo*/
-    padding-left: 2% !important;
-    padding-right: 2% !important;
+    /*padding-left: 2% !important;*/
+    /*padding-right: 2% !important;*/
 
     /*'Lucida Sans Unicode';*/
     /*overflow: hidden;*/
@@ -206,24 +222,24 @@ h2:hover {
 }
 
 h3 {
-    font-family: Lato, arial;
-    font-size: 13px;
-    color: #799edd;
-    font-weight: bold;
-    line-height: 15px;
-    margin: 5px;
+    /*font-family: Lato, arial;*/
+    /*font-size: 13px;*/
+    /*color: #799edd;*/
+    /*font-weight: bold;*/
+    /*line-height: 15px;*/
+    /*margin: 5px;*/
 }
 
 h4 {
 
-    color: #212121;
+    /*color: #212121;*/
     /*4e5f6e;*/
-    font-weight: bold;
-    font-size: 14px !important;
+    /*font-weight: bold;*/
+    /*font-size: 14px !important;*/
     /*margin: .2em 0 .2em 0;*/
-    padding: 5px;
-    margin-bottom: 1.2em;
-    font-family: Lato, "DejaVu Sans Mono";
+    /*padding: 5px;*/
+    /*margin-bottom: 1.2em;*/
+    /*font-family: Lato, "DejaVu Sans Mono";*/
 
     /*padding: 4px;*/
     /*vertical-align: top;*/
@@ -248,10 +264,15 @@ ul {
     padding-bottom: 9px;
 }
 
+textarea {
+    white-space: pre-wrap; /* to solve enter problem */
+}
+
+
 input,select, textarea {
     background-color: #fafafa;
     border: 1px solid #ccc;
-    font: 0.9em Lato, tahoma, verdana, arial, helvetica, sans-serif;
+    font: 1em Lato, tahoma, verdana, arial, helvetica, sans-serif;
     margin: 2px 2px !important;
     padding: 4px 8px !important;
     min-width: 20px !important;
@@ -313,7 +334,7 @@ textarea {
 
 /*select:focus,*/
 input:focus, textarea:focus {
-    border: 0.5px solid #6d94a8;
+    /*border: 1px solid #6d94a8;*/
     /*background: #f1f5ed;*/
 }
 
@@ -423,7 +444,7 @@ tr {
 
 td, th {
     font: 1em Lato, verdana, arial, helvetica, sans-serif;
-    line-height: 15px;
+    line-height: 20px;
     padding: 2px;
     /*text-align: left;*/
     vertical-align: middle;
@@ -641,8 +662,18 @@ th.desc a {
     z-index: 999999 !important;
 }
 
-img {
-    border: none;
+.recordCover {
+    /*border: none;*/
+    border: 1px solid;
+    /*max-width: 90%;*/
+    /*max-height: 200px;*/
+}
+
+.markdown img {
+    /*border: none;*/
+    border: 1px solid;
+    max-width: 90%;
+    max-height: 200px;
 }
 
 label {
@@ -1025,8 +1056,9 @@ ul.ui-tabs-nav {
 }
 
 .record-id {
-    width: 120px !important;
-    font-size: 12px;
+    /*width: 120px !important;*/
+    font-size: 1.1em;
+    font-weight: bold;
     color: #fff;
     text-align: left;
     white-space: nowrap;
@@ -1046,7 +1078,7 @@ ul.ui-tabs-nav {
 }
 
 .record-course {
-    width: 70px;
+    /*width: 70px;*/
     font-size: 11px;
     padding: 2px;
     text-align: center;
@@ -1105,7 +1137,7 @@ ul.ui-tabs-nav {
 
 .record-statistics {
     width: 140px;
-    font-size: 10px;
+    font-size: 12px;
     font-style: italic;
     text-align: center;
 }
@@ -1310,7 +1342,7 @@ ul.ui-tabs-nav {
 }
 
 .recordContainer td {
-    padding: 3px;
+    padding: 0 5px 0   5px;
 }
 
 .justUpdated {
@@ -1345,6 +1377,12 @@ ul.ui-tabs-nav {
 .status-nst a {
     color: #7894a5 !important;
     /*font-weight: bold;*/
+}
+
+.status-done {
+    color: #7894a5 !important;
+    /*font-weight: bold;*/
+    text-decoration: line-through;
 }
 
 .status-done a {
@@ -1414,13 +1452,13 @@ ul.ui-tabs-nav {
     background: url("../images/mail.png") no-repeat scroll -20px -20px transparent;
     width: 15px;
     height: 15px;
-    display: block;
+    display: inline-block;
 }
 .icon-star-gm {
     background: url("../images/mail.png") no-repeat scroll 0px -20px transparent;
     width: 15px;
     height: 15px;
-    display: block;
+    display: inline-block;
 }
 
 .icon-edit {
@@ -1690,26 +1728,26 @@ ul.ui-autocomplete.ui-menu {
 
 h3, h4 {
     /* Headers & Footer in Center & East panes */
-    font-size: 1.2em;
+    /*font-size: 1.2em;*/
     /*background: #D8D4C9;*/
     /*border-bottom: 1px solid #BBB;*/
-    border-width: 0 0 1px;
-    padding: 5px 4px;
-    margin: 0;
+    /*border-width: 0 0 1px;*/
+    /*padding: 5px 4px;*/
+    /*margin: 0;*/
 }
 
 h2 {
-    font-family: Lato, Georgia;
-    color: rgb(92, 109, 121);
-    font-weight: bold;
+    /*font-family: Lato, Georgia;*/
+    /*color: rgb(92, 109, 121);*/
+    /*font-weight: bold;*/
     /*line-height: 40px;*/
     /* Headers & Footer in Center & East panes */
-    font-size: 1.1em;
+    /*font-size: 1.1em;*/
     /*background: #D8D4C9;*/
-    border-bottom: 0.5px #BBB solid;
-    border-width: 1px 0 0;
-    padding: 7px 5px;
-    margin: 0;
+    /*border-bottom: 0.5px #BBB solid;*/
+    /*border-width: 1px 0 0;*/
+    /*padding: 7px 5px;*/
+    /*margin: 0;*/
 }
 
 .ui-helper-reset {
@@ -1758,6 +1796,7 @@ ul.ui-autocomplete.ui-menu {
     /*width: 422px;*/
     z-index: 1000;
     /*margin-top: 12px;*/
+    line-height: 30px;
     padding: 4px 0;
     background: #ffffff !important;
     border: 1px solid #ccc;
@@ -1905,6 +1944,7 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .southRegion {
+
     /*background: rgb(102, 121, 134) !important; !*#BAC2BA !important;*!*/
     /*border-color: #818284 !important; !*#BAC2BA !important;*!*/
     /*color: black;*/
@@ -1912,21 +1952,21 @@ ul.ui-autocomplete.ui-menu {
 }
 
 .southRegion a {
-    color: black !important;
+    /*color: black !important;*/
     font-weight: normal;
 }
 
-.commandBarTexField {
-    font-family: Lato, tahoma !important;
-    font-size: 1em;
-    width: 98% !important;
-    height: 200px;
-    background: #dce5e5;
-    margin: 0px !important;
-    border: 1px solid darkgray;
-    text-align: start  !important;
-    unicode-bidi: plaintext !important;
-}
+/*.commandBarTexField {*/
+    /*font-family: Lato, tahoma !important;*/
+    /*font-size: 1em;*/
+    /*width: 98% !important;*/
+    /*height: 200px;*/
+    /*background: #dce5e5;*/
+    /*margin: 0px !important;*/
+    /*border: 1px solid darkgray;*/
+    /*text-align: start  !important;*/
+    /*unicode-bidi: plaintext !important;*/
+/*}*/
 
 .dis {
     color: black;
@@ -2077,11 +2117,92 @@ a :hover {
     border: 1px solid lightgrey; padding: 5px; margin: 12px 3px; border-radius: 4px;
 }
 
-.recordSelected{
-    border: 2px darkolivegreen solid !important;
-    border-radius: 7px !important;
+.recordSelected {
+    border-left: 4px darkgreen solid !important;
+    border-right: 4px darkgreen solid !important;
+    /*padding: 4px;*/
+    /*border-radius: 5px !important;*/
 }
 
 .recordNotSelected{
     border: 0px darkgreen solid !important;
+}
+
+.prayersBlock {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid darkgreen;
+    margin: 5px;
+}
+
+
+textarea {
+    white-space: pre-wrap; /* to solve enter problem */
+}
+
+.addRecordHeading:hover {
+
+    user-focus-pointer: hand;
+    cursor: hand;
+
+}
+
+.shortDescription {
+    border-right: 1px solid darkgreen; font-size: 0.90em !important; color: #5b805e !important; padding: 3px; line-height: 1.4em;
+}
+.shortDescription a {
+    padding: 2px; font-size: 0.95em;
+}
+.recordsTask {
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid darkolivegreen;
+    color: darkgreen;
+    font-style: italic;
+    font-size: medium;
+}
+
+.endDate {
+    display: inline-block; margin: 3px; font-size: 0.95em; padding: 2px; border-radius: 3px; border: 1px solid darkgreen; direction: ltr; text-align: left;
+}
+
+.courseName {
+    padding: 1px 2px; margin: 0px 2px; font-size: normal; border-radius: 0px; border-bottom: 2px solid darkgray; color: black; font-weight: normal; font-family: monospace
+}
+
+.typeName {
+    padding: 1px 2px; margin: 0px 2px; font-size: normal; border-radius: 0px;  font-weight: bold; font-family: monospace
+}
+
+.statusName {
+    font-size: 1em !important; margin: 5px 2px; padding: 2px; border-radius: 5px; border: 0px solid darkgray; font-style: italic; font-weight: bold;
+}
+
+
+.contextName {
+    /*border: 1px solid yellow;*/
+    font-size: 1em; font-weight: bold;color: darkgreen;
+}
+
+
+.priorityNumber {
+    color: white;
+    background: #b8b8aa;
+    padding: 1px 4px 1px 4px;
+    border-radius: 5px;
+    margin: 3px;
+}
+
+.departmentName {
+    color: white;
+    background: #536B78;
+    padding: 1px 4px 1px 4px;
+    border-radius: 5px;
+    margin: 3px;
+}
+
+
+* + h1, * + .uk-h1, * + h2, * + .uk-h2, * + h3, * + .uk-h3, * + h4, * + .uk-h4, * + h5, * + .uk-h5, * + h6, * + .uk-h6, * + .uk-heading-small, * + .uk-heading-medium, * + .uk-heading-large, * + .uk-heading-xlarge, * + .uk-heading-2xlarge{
+margin-top: 5px !important;
 }

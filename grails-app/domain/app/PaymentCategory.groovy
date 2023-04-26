@@ -65,7 +65,7 @@ class PaymentCategory implements Comparable {  // entity id = 23
     static mapping = {
 
         // name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
     }
 
     public String entityCode() {

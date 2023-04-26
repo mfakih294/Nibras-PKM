@@ -1129,7 +1129,7 @@
     cursor: pointer;
     position: relative;
     margin-top: 3px;
-    padding: 4px;
+    padding: 6px;
     zoom: 1;
 }
 
@@ -1140,10 +1140,11 @@
 .ui-accordion .ui-accordion-header-active {
     border: 1px solid #7e7783 !important;
     border-bottom: 0px black   !important;
-    background: #d8dbd4;
+    background: #728ca1;
 }
-.ui-accordion .ui-accordion-header-active a{
+.ui-accordion .ui-accordion-header-active a {
     font-weight: bold !important;
+    color: white;
 }
 
 .ui-accordion .ui-accordion-header .ui-accordion-content-active {
@@ -1151,7 +1152,7 @@
 }
 .ui-accordion .ui-accordion-header a {
     display: block;
-    font-size: 0.95em;
+    font-size: 1.1em;
     font-weight: normal;
     /*direction: ltr;*/
     text-align: start;
@@ -1171,7 +1172,7 @@
 }
 
 .ui-accordion .ui-accordion-content {
-    padding: .5em .5em;
+    padding: 1em;
     border-top: 0;
     margin-top: -2px;
     position: relative;

@@ -23,7 +23,9 @@ package mcs
 
       import cmn.*
       import grails.converters.*
-      import java.text.SimpleDateFormat
+import security.User
+
+import java.text.SimpleDateFormat
     
 
 class Relationship implements Comparable {  // entity id = 453
@@ -36,7 +38,9 @@ class Relationship implements Comparable {  // entity id = 453
 	// static searchable = [only:['entityA', 'entityB', 'type', 'recordA', 'recordB', 'notes' ]]
 
     // Fields
-	
+
+    User user
+
   String entityA 
   String entityACode
 
@@ -73,7 +77,7 @@ class Relationship implements Comparable {  // entity id = 453
 	static mapping = {
      table 'relationship'
       
-	  notes (sqlType: 'longtext')
+	  notes (sqlType: 'long varchar')
     }
     
     static namedQueries = {

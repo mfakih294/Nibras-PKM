@@ -3,7 +3,8 @@
 
 
 
-**Nibras PKM** is a __web-based self-hosted open source__ system for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use and where all the records are entered, and an Android __reader and note taker__ application.
+**Nibras PKM** is a __web-based self-hosted open source__ system for 
+the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use and where all the records are entered, and an Android __reader and note taker__ application.
 
 ![](https://raw.githubusercontent.com/mfakih294/Nibras-PKM/master/docs/images/screenshot.jpg)
 
@@ -36,9 +37,9 @@ It was designed with large amounts of information in mind. In current usage, it 
 
 
 
-## Documentation
+## User's guide
 
-Documentation is available online at [https://mfakih294.github.io/Nibras-PKM/pages](https://mfakih294.github.io/Nibras-PKM/pages/).
+User's guide is available online at [https://mfakih294.github.io/Nibras-PKM/pages](https://mfakih294.github.io/Nibras-PKM/pages/).
 
 
 ## Releases
@@ -67,12 +68,14 @@ Notes:
 - On Linux, you need to make the files inside ./scripts and ./tomcat/bin folders executable (chmod +x *).
 - To stop Nibras, you can close this window, or press ctrl+c in it, or run ./scripts/stop script.
 
-
 ## Technical details
 
-* Nibras is developed in Grails framework 3.3.10, a dynamic framework on top of the Java platform.
+* Nibras is developed in Grails framework 3.3.10, a dynamic web framework on top of the Java platform.
 * Grails applications run on any platform that can run Java 8 and later, so practically all platforms, including Windows, Linux, Mac.
-* For production use, Nibras uses MySQL 5+ for its database, and the file system to store the files of the records. To testing and demonstration, it can run with h2 database, with zero extra configuration.
+* For production use, Nibras uses MySQL 5+ for its database, and the file system to store the files of the records. To testing and demonstration, you can run it with h2 database, with zera extra configurion.
+* Apache Tomcat 8+ is the recommended application server to run it for production use.
+
+
 * Apache Tomcat 8+ is the recommended application server to run it for production use.
 * The bundled distribution comes with Tomcat 8 and runs with a h2 database.
 

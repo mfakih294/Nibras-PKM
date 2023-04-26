@@ -71,6 +71,8 @@
             </span>
         %{--<br/>--}%
         %{--Calendar report includes:--}%
+
+            <g:if test="${1==2}">
             <br/>
             Show: <g:each in="['JP', 'P', 'J', 'Kanban', 'Jtrk', 'Qtrans', 'Qacc', 'log']" var="type">
 
@@ -81,9 +83,11 @@
                     ${type}
                 </span>
             </g:remoteLink>
+
         </g:each>
         %{--</div>--}%
             <br/>
+            </g:if>
         %{--<hr/>--}%
         %{--<br/>--}%
 
@@ -473,7 +477,7 @@
 
 
     <g:if test="${OperationController.getPath('search.enabled')?.toLowerCase() == 'yes' ? true : false}">
-        <h3><a href="#">
+        <h3 class="accordionPanelBrowse"><a href="#">
             <g:message code="ui.calendar.and.search"></g:message>
 
         </a></h3>
@@ -537,13 +541,13 @@
 
     <g:if test="${OperationController.getPath('add-import-panel.enabled')?.toLowerCase() == 'yes' ? true : false}">
 
-        <h3 class="accordionPanelAdd" style="margin-top: 5px;"><a href="#">
+        <h3 class="accordionPanelBrowse" style="margin-top: 5px;"><a href="#">
             <g:message code="ui.add"></g:message>
         </a></h3>
 
         <div id=''>
 
-            <h3>Append to writing</h3>
+            <h4>Append to writing</h4>
             <g:formRemote name="addXcdToWriting" id="addXcdToWriting"
                           url="[controller: 'indexCard', action: 'addXcdToWriting']"
                           update="centralArea"
@@ -593,8 +597,8 @@
                           optionKey="id"
                           id="writingNote"
                           optionValue="summary"
-                          class="chosen chosen-rtl"
-                          style="width: 95%; text-align: right; direction:rtl"
+                          class="chosen chosen-rtl uk-select uk-width-expand"
+                          style=""
                           value="${null}"
                           noSelection="${['null': 'No writing']}"/>
             %{----}%
@@ -630,8 +634,9 @@
             %{--                         style="background: #e8efe7; width: 100%; ;" dir="auto"/>--}%
 
                 <g:textArea cols="80" rows="12" placeholder="Text to append" name="description" id="description"
-                            value="" dir="auto"
-                            style="font-family: tahoma; font-size: small; background: #f7fff6; width: 95%; height: 100px !important;"/>
+                            value=""
+                    class="uk-textArea uk-width-expand"
+                            style="font-family: tahoma; height: 100px !important;"/>
             %{--            <br/>--}%
 
             %{--            R ID: <g:textField placeholder="book.id" name="book.id" id="book.id" value="" style="width: 70%;"/>--}%
@@ -651,10 +656,9 @@
                 <br/>
 
                 <g:submitButton name="add" value="Append"
-
-                                style="height: 30px; margin: 0px; width: 90% !important; background: #efece0"
+                                style="height: 40px; margin: 0px; width: 90% !important;"
                                 id="45634523"
-                                class="fg-button ui-widget ui-state-default"/>
+                                class="uk-button uk-button-primary uk-width-expand"/>
             </g:formRemote>
 
 
@@ -714,7 +718,8 @@
                                     [enabled: OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes', code: 'T', name: 'Tasks', controller: 'mcs.Task'],
                                     [enabled: OperationController.getPath('planner.enabled')?.toLowerCase() == 'yes', code: 'P', name: 'Planner', controller: 'mcs.Planner'],
                                     [enabled: OperationController.getPath('journal.enabled')?.toLowerCase() == 'yes', code: 'J', name: 'Journal', controller: 'mcs.Journal'],
-                                    [enabled: OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes', code: 'I', name: 'Indicator', controller: 'app.IndicatorData'],
+                                    [enabled: OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes', code: 'K', name: 'Indicator', controller: 'app.Indicator'],
+                                    [enabled: OperationController.getPath('indicators.enabled')?.toLowerCase() == 'yes', code: 'I', name: 'IndicatorData', controller: 'app.IndicatorData'],
                                     [enabled: OperationController.getPath('Payment.enabled')?.toLowerCase() == 'yes', code: 'Q', name: 'Payment', controller: 'app.Payment'],
                                     [enabled: OperationController.getPath('writings.enabled')?.toLowerCase() == 'yes', code: 'W', name: 'Writing', controller: 'mcs.Writing'],
                                     [enabled: OperationController.getPath('notes.enabled')?.toLowerCase() == 'yes', code: 'N', name: 'Notes', controller: 'app.IndexCard',],
@@ -993,7 +998,7 @@
 %{--</div>--}%
 
 
-    <sec:ifAnyGranted roles="ROLE_ADMIN">
+
     %{--<h4>Configuration</h4>--}%
     %{--<hr/>--}%
 
@@ -1007,21 +1012,42 @@
         <div>
 
 
-                Records per page
+                %{--Records per page--}%
 
                 %{--                        noSelection="${['null': '']}"--}%
-                <g:select name="resultType"
-                          from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"
-                          style="direction: ltr; text-align: left; padding: 2px; margin: 0;"
-                          onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
-                          value="${cmn.Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
-                <span id="notificationArea" style=""></span>
-                <span style="display: none" id="notificationAreaHidden"></span>
+                %{--<g:select name="resultType"--}%
+                          %{--from="${[1, 2, 3, 4, 5, 6, 7, 8,9, 10, 15, 20, 30, 40, 50, 100, 250]}"--}%
+                          %{--style="direction: ltr; text-align: left; padding: 2px; margin: 0;"--}%
+                          %{--onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"--}%
+                          %{--value="${cmn.Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>--}%
+            %{----}%
 
 
                 <ul class="settingsUL">
 
-                <li>
+                    %{--<li>--}%
+                       %{----}%
+
+                    %{--</li>--}%
+                    <li>
+                        Records per page
+                        <ul>
+                            <li>
+                                %{--noSelection="${['null': '']}"--}%
+                                <g:select name="resultType"
+                                          from="${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 40, 50, 100, 250]}"
+                                          style="direction: ltr; text-align: left; padding: 0; margin: 0;  height: 24px;"
+                                          onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
+                                          value="${Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
+                                <span id="notificationArea" style=""></span>
+                                <span style="display: none" id="notificationAreaHidden"></span>
+                            </li>
+                        </ul>
+
+                    </li>
+
+
+                    <li>
                     Configuration
                     <ul>
                         <li>
@@ -1034,6 +1060,8 @@
                             <g:remoteLink controller="page" action="settingsFull" update="centralArea">
                                 Full settings list (${Setting.count()})
                             </g:remoteLink></li>
+
+
 
                         <li>
 
@@ -1072,7 +1100,7 @@
                 %{--</td>--}%
 
 
-
+    %{--<sec:ifAnyGranted roles="ROLE_ADMIN">--}%
                 <li>
                     Execute code
                     <ul>
@@ -1140,23 +1168,6 @@
 
 
 
-                <li>
-                    Records per page
-                    <ul>
-                        <li>
-                            %{--                        noSelection="${['null': '']}"--}%
-                            <g:select name="resultType"
-                                      from="${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 30, 40, 50, 100, 250]}"
-                                      style="direction: ltr; text-align: left; padding: 0; margin: 0;  height: 24px;"
-                                      onchange="jQuery('#notificationArea').load('${request.contextPath}/generics/setPageMax/' + this.value);"
-                                      value="${Setting.findByNameLike('savedSearch.pagination.max.link')?.value ?: 4}"/>
-                            <span id="notificationArea" style=""></span>
-                            <span style="display: none" id="notificationAreaHidden"></span>
-
-                        </li>
-                    </ul>
-
-                </li>
 
             </ul>
             <br/>
@@ -1201,10 +1212,10 @@
         %{--    </div>--}%
 
 
-            <h5 class="accordionPanelSettings"><a href="#">
+            <h4 class="accordionPanelSettings"><a href="#">
                 <g:message code="ui.parameters"></g:message>
 
-            </a></h5>
+            </a></h4>
 
 
         %{--    <div>--}%
@@ -1416,7 +1427,27 @@
                 <g:remoteLink controller="export" action="generateAllBibs" update="notificationArea">
                     Generate all bibs
                 </g:remoteLink>
+
+
                 <br/>
+                <br/>
+     <g:remoteLink controller="report" action="duplicateCandidates" update="centralArea">
+                    Candidate duplicates
+                </g:remoteLink>
+
+
+                <br/>
+                <br/>
+
+
+                <g:remoteLink controller="operation" action="dumpAllWritings" update="centralArea">
+
+                    <b>Export all writings</b>
+                </g:remoteLink>
+
+                <br/>
+                <br/>
+
 
                 <g:remoteLink controller="generics" action="settleAllOperations"
                               update="centralArea" title="Mark all operations as settled">
@@ -1451,6 +1482,22 @@
                 <a onclick="jQuery('#centralArea').load('report/duplicateIsbnBooks')">Books with duplication ISBN</a>
                 <br/>
 
+                <g:remoteLink controller="irfan" action="exportIrfanWebsite" update="centralArea">
+                    <b>
+irfan:                         تصدير المقالات إلى الموقع
+                    </b>
+                </g:remoteLink>
+
+                <br/>
+
+              <g:remoteLink controller="irfan" action="irfanArchive" update="centralArea">
+                    <b>
+irfan:                         كل ا لمقالات
+                    </b>
+                </g:remoteLink>
+
+                <br/>
+
                 <h5 class="">
 
                     <a>Admin saved searches</a>
@@ -1460,8 +1507,9 @@
             </g:if>
         </div>
 
-    </sec:ifAnyGranted>
-
+    %{--</sec:ifAnyGranted>--}%
+<br/>
+<br/>
 </div>
 
 <script type="text/javascript">

@@ -18,6 +18,7 @@
 package mcs.parameters
 
 import cmn.DataChangeAudit
+import security.User
 
 class GoalType implements Comparable {  // entity id = 139
 
@@ -25,6 +26,8 @@ class GoalType implements Comparable {  // entity id = 139
     static searchable = [only: ['name', 'notes']]
 
     // Fields
+
+    User user
 
     String code
     String name
@@ -56,7 +59,7 @@ class GoalType implements Comparable {  // entity id = 139
         table 'goal_type'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

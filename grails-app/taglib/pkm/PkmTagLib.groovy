@@ -58,7 +58,7 @@ class PkmTagLib {
             def text = attrs.text ? attrs.text.encodeAsHTML() : ''
             def length = attrs.length
 
-            out << StringUtils.abbreviate(text, length ? length.toInteger() : 80)?.replaceAll('>', ' ')?.replaceAll('<', ' ')?.encodeAsHTML()?.decodeHTML()
+            out << StringUtils.abbreviate(text, length ? length.toInteger() : 80)?.replaceAll('>', ' ')?.replaceAll('<', ' ')?.trim()//?.encodeAsHTML()?.replaceAll('\n', '<br/>')?.decodeHTML()
         } else {
             out << ''
         }
@@ -159,12 +159,15 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
     }
 
     def listRecordFiles = { attrs ->
+
         def module = attrs.module
         def fileClass = attrs.fileClass
         def recordId = attrs.recordId
         def type = attrs.type
-        def isStatic = attrs.static
+        def isStatic = attrs.isStatic
+        def abridged = attrs.abridged
         def filesList = []
+
 
      def resourceNestedById = false
      def resourceNestedByType = false
@@ -225,9 +228,14 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
                 folders = [
                         typeSandboxPath +
                                 (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''),
-                        typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''),
-                        typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')
+//                        typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''),
+
                 ]
+
+             if (isStatic != 'yes') {
+                 folders += (typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''))
+                 folders += (typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : ''))
+             }
                 folders.each() { folder ->
 
                     if (new File(folder).exists()) {
@@ -237,13 +245,20 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
                     }
                 }
                 folders = [
-          typeSandboxPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId,
+          typeSandboxPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId
       //    typeLibraryPath + '/' + (recordId / 100).toInteger() + '/' + recordId,
-          typeRepositoryPath +(resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')  + '/' + recordId,
-          typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId
+//          typeRepositoryPath +(resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')  + '/' + recordId,
+//          typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId
                 ]
 
-                def b = Book.get(recordId)
+
+             if (isStatic != 'yes') {
+                 folders += (typeRepositoryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '')  + '/' + recordId)
+                 folders += (typeLibraryPath + (resourceNestedById ?  '/' +   (recordId / 100).toInteger() : '') + '/' + recordId)
+             }
+
+
+             def b = Book.get(recordId)
 //                if (b.code){
 //                    folders.add(typeSandboxPath + '/' + b.code)
 //                    folders.add(typeRepositoryPath + '/' + b.code)
@@ -279,22 +294,33 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
             out << ''
             print 'Problem in listing record folder: ' + e.printStackTrace()
         }
-        def output = filesList.size() > 0 ? "<ul style='margin: 2px; border-bottom: 1px darkgray solid;list-style: square; font-weight: normal; font-family: tahoma; font-size: 12px; text-decoration: none;'>" : ''
+
+
+        def output = filesList.size() > 0 ? "<ol style='margin: 2px; border-bottom: 1px darkgray solid;list-style: square; font-weight: normal; font-family: tahoma; font-size: 12px; text-decoration: none;'>" : ''
         def c = 1
         for (i in filesList) {
             def fileId = new Date().format('HHmmssSSS') + c //Math.floor(Math.random()*1000)
             c++
 
             if (isStatic == 'yes') {
+            if (i.name != 'cover.jpg') {
+
+//                <a href="${i.path?.replace('\\' + (OperationController.getPath('rootFolder') ?: 'mhi') + '\\mcd', '.')}" class="${fileClass}"
+
+                session[fileId] = i.path
+//println 'path ' + i.path
+
                 output += """<li class="fileItem">
 			<div class="showhim">
-<a href="${i.path?.replace('\\' + (OperationController.getPath('rootFolder') ?: 'mhi') + '\\mcd', '.')}" class="${fileClass}"
+<a title="download" href="${i.isFile() ? createLink(controller: 'operation', action: 'download', id: fileId): '#'}" class="${fileClass}"
+
                           target="_blank"
                           title="${i.path}">
   ${i.name} <span style="font-size: small; color: gray;">
 &nbsp;&nbsp;&nbsp;${i.isFile() ? ' ('+ prettySizeMethod(i.size()) + ')' : ''}
 </span></a></span></div>
 </li>"""
+            }
             }
             else {
                 session[fileId] = i.path
@@ -308,45 +334,52 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
                           title="${i.path}">
 """
 if (i.isFile()){
+//    if (i.name != 'cover.jpg') {
                 output += """
+<div class='fileBox' style="font-size: 1em; display: inline-block; padding: 3px; margin-bottom: 6px;  border: 1px solid darkgray; border-radius: 5px; color: black;" title="${i.path?.replace(i.name, '')}">
 <img src='${resource(dir: '/file-icons/32px', file: "${extension}.png")}' style="width: 32px;"
                                      title=""/>
 """
+//}
 }
 else {
                 output += """
+<span class='fileBox'  style="font-size: 1em; display: inline-block; padding: 3px;   margin-bottom: 6px;  border: 1px solid darkgray; border-radius: 5px; color: black;" title="${i.path?.replace(i.name, '')}">
 <img src='${resource(dir: '/file-icons/32px', file: "directory.png")}' style="width: 32px;"
                                      title=""/>
 """
 
 }
                 output +=  """
-                                     <span style="font-size: small; color: gray;" title="${i.path?.replace(i.name, '')}">
+${i.name}
+</span>      <span style="font-size: normal; display: inline-block; padding: 5px; color: darkgray;" title="${i.path?.replace(i.name, '')}">
 ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
-</span>${i.name}
+</span>
             </a>
+
 	    	<span class="testhide">
-		<a href="#" title="Extract cover from first page" onclick="jQuery('#logArea').load('${
+		<a href="#" title="Extract cover from first page" onclick="jQuery('#${fileId}FileLog').load('${
                     createLink(controller: 'generics', action: 'generateCover', id: recordId, params: [path: i, module: module, type: type])
                 }')"    title="${i.path}">
   cvr
             </a>
- &nbsp;<a href="#" title="Generate AblePlayer html file for WebVTT" onclick="jQuery('#logArea').load('${
+ &nbsp;<a href="#" title="Generate AblePlayer html file for WebVTT" onclick="jQuery('#${fileId}FileLog').load('${
                     createLink(controller: 'operation', action: 'generateWebVttHtml', id: recordId, params: [path: i, module: module, type: type, fileName: i.name])
                 }')"    title="${i.path}">
   vtt
             </a>
  &nbsp;
- <a title="Copy to rps1" onclick="jQuery('#logArea').load('${createLink(controller: 'operation', action: 'checkoutFile', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
+ <a title="Copy to rps1" onclick="jQuery('#${fileId}FileLog').load('${createLink(controller: 'operation', action: 'checkoutFile', id: recordId, params: [path: i, name: i.name, module: module, type: type])}')">
               &nbsp;    ->
                   </a>
-                  <a onclick="if(confirm('Are you sure you want to delete the file?')) return jQuery('#file${fileId}').load('${
+                  <a onclick="if(confirm('Are you sure you want to delete the file?')) return jQuery('#${fileId}FileLog').load('${
                     createLink(controller: 'operation', action: 'deleteFile', path: i.path)}')">
               &nbsp;    x
                  </a>
 			</span>
+       <span id="${fileId}FileLog"></span>
+			</span>
 
-			</div>
 </li>"""
 
 
@@ -362,7 +395,7 @@ ${i.isFile() ? '('+ prettySizeMethod(i.size()) + ')' : ''}
 
         }
 
-        output += "</ul>"
+        output += "</ol>"
 
 
 
@@ -743,7 +776,7 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
             }
         } else {
             color = 'darkorange'
-            output = "<span style='color: ${color}' title='Path: $path'>" + name + "</span>"
+            output = "<span style='color: ${color}; font-weight: bold;' title='Path: $path'>" + name + "</span>"
             out << output.decodeHTML()
         }
 
@@ -827,7 +860,7 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
     def prettyDuration = { attrs ->
 
 //        out << supportService.toWeekDate(attrs.date)
-
+//println 'here in pretty'  + attrs.dump()
         if (attrs.date1) {
             try {
                 Instant start = attrs.date1.toInstant()
@@ -836,12 +869,14 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
                 long years = dur.toDays() / 365;
                 long months = (dur.toDays() % 365 ) / 30;
                 long days = ((dur.toDays() % 365 ) % 30) ;
-//     long hours = dur.toDays();
-//     long minutes = dur.toHours();
+     long hours = ((dur.toHours()  % 365 ) % 30) % 24;
+     long minutes = (((dur.toMinutes()  % 365 ) % 30) % 24 ) % 60;
+
+// todo: fine tune the display
+                out <<  (minutes ? minutes + 'min ' : '') + (hours ? hours + 'h ' : '')  +(days ? days + 'd ' : '') + (months ? months + 'm ' : '') + (years ? years + 'y ' : '')
 
 
 
-                out <<  (days ? days + 'd ' : '') + (months ? months + 'm ' : '') + (years ? years + 'y ' : '')
             } catch(Exception e){
                 out << 'WD error!'
             }

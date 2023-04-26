@@ -1,6 +1,13 @@
 <%@ page import="mcs.parameters.ResourceStatus; mcs.Goal; org.apache.commons.lang.StringUtils; mcs.Book; app.parameters.ResourceType; mcs.Writing; mcs.Department; mcs.parameters.WritingType; app.Tag; cmn.Setting; mcs.Course; mcs.Journal; mcs.Planner; app.IndexCard; mcs.Task; ker.OperationController" %>
 %{--${ker.OperationController.getPath('app.headers.background') ?: '#5b7a59'}--}%
 
+<style>
+.ui-layout-south, .ui-layout-north {
+    background: ${OperationController.getPath('app.color') ?: '#6D6D74'} !important;
+    /*url(../images/bg-header.gif) no-repeat*/
+}
+
+</style>
 
 
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
@@ -18,7 +25,7 @@
 </div>
 
 <div class="ui-layout-south footerRegion"
-     style="font-size: 12px; margin-top: 10px; margin-left: 20px; min-height: 0px !important;  padding: 3px; direction: ltr; text-align: left; font-family: tahoma; color: white">
+     style="font-size: 14px; margin-top: 10px; margin-left: 20px; min-height: 0px !important;  padding: 6px; direction: ltr; text-align: left; font-family: tahoma; color: white">
     <g:render template="/appMain/south" model="[ips: ips]"/>
 
 </div>
@@ -61,7 +68,7 @@
              style="margin: 0px !important; width: 100% !important; padding-bottom: 0px !important;">
 
             <h6 style="text-aling: center"><a href="#" id="testTitle1">
-                Workbench
+                Main panel
                 %{--panel--}%
             </a></h6>
 
@@ -103,20 +110,15 @@
                     </g:if>
 
 
-
-                </div>
+       </div>
                 <br/>
                 <br/>
                 <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
                    onclick="jQuery('#centralArea').html('');" style="float: right; color: darkgray; margin-right: 4px;">Clear</a>
 
 
-                <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
-                   onclick="jQuery('#centralArea').html(''); jQuery('#quickAddForm').removeClass('hidden');" style="float: right; color: darkgray; margin-right: 4px;">N++</a>
 
-                <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
-                   onclick="jQuery('#quickAddForm').addClass('hidden');" style="float: right; color: darkgray; margin-right: 4px;">--</a>
-<br/>
+                <br/>
 
                 <g:if test="${OperationController.getPath('quick-add-form.enabled')?.toLowerCase() == 'yes' ? true : false}">
                     <br/>
@@ -127,10 +129,15 @@
                 %{--<h4 style="user-focus-pointer: hand; cursor: hand;"></h4>--}%
                 %{--<br/>--}%
                 %{--</div>--}%
-                    <div id="quickAddForm" style="border: 1px solid darkgreen; padding: 6px;" class="hidden">
+                    <div id="quickAddForm" style="border: 1px solid darkgreen; padding: 6px;" class="">
 
 
-
+                        <div class="headingAdd">
+                %{--<h2>Create new record...</h2>--}%
+                    <h3 class="addRecordHeading">Add records...</h3>
+                %{--<br/>--}%
+                    </div>
+                    <div class="contentAdd">
                         <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
                                       url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
                                       update="underAreaForQuickAdd"
@@ -141,8 +148,8 @@
                         %{--<code>Format: title (line 1) <br/> details (from line 2 till the end)--}%
                         %{--</code>--}%
 
-                            <b>Quick add record: </b>
-                            &nbsp;
+
+
                             <g:select name="type" from="${types}"
                                       id="typeField"
                                       tabindex="1"
@@ -151,7 +158,6 @@
                                       onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
                                       value="N"/>
                         %{--console.log('now sel: ', this.value);--}%
-                            &nbsp;
 
                         %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
                             <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
@@ -159,58 +165,77 @@
                         %{--disabled="true"--}%
                         %{--</g:if>--}%
 
-                            p <g:select name="priority" from="${(1..5)}" style="border-radius: 5px;"
-                                        id="priority"
-                                        tabindex="1"
-                                        value="${2}"/>
-                            &nbsp;
-
-
-                        %{--<br/>--}%
-                            &nbsp;
-
-                            <g:checkBox name="addOperation" id="addOperation" checked="checked"/>Operation
-                            <g:checkBox name="addFolder" id="addFolder" checked="checked"/>Make folder
-                            <g:checkBox name="grabAllFiles" id="grabAllFiles"/>Move new files
-
-
-
-                        %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
-                        %{--value="${OperationController.getPath('default.language')}"--}%
-                        %{--/>--}%
-
-
-                        %{--<g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
-                        %{--<g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"--}%
-                        %{--optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>--}%
-                        %{--</g:if>--}%
-
-                            <br/>
 
                             <g:textField name="title" value=""
                                          tabindex="2" id="summayDaftar"
-                                         style="background: #f8f9fa; border: 1px solid darkgray; border-radius: 5px;padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 99% !important;"
+                                         style="background: #f8f9fa; border: 1px solid darkgray; border-radius: 5px;padding: 3px; text-align: right; display: inline;  font-family: tahoma, Lato, serif ; width: 50% !important;"
                                          placeholder="Summary * "/>
+                            <a class="fg-button ui-widget ui-state-default ui-corner-all" title="Hide"
+                               onclick="jQuery('#detailsOfQuickAdd').removeClass('hidden');" style="padding: 3px; color: black; margin-right: 4px;">more</a>
 
-                            <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
-                                        tabindex="3"
-                                        name="description" id="descriptionDaftar"
-                                        value=""
-                                        style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 9px 3px; width: 99%; height: 90px !important;"/>
-                            <br/>
-                            <g:submitButton name="save" value="Add"
-                                            style="background: #e0f4bf; border: 1px solid darkgray; text-align: center; padding-left: 8px; padding-right: 8px; width: 99%"
+
+
+                            <g:submitButton name="save" value="Save"
+                                            style="float: right; background: #82c670; color: black; border: 1px solid darkgray; text-align: center; padding-left: 4px; padding-right: 4px; width: 50px"
                                             tabindex="4"
-                                            title="Add record (ctrl+enter)"
+                                            title="Add record"
                                             id="addXcdFormDaftarSubmit"
-                                            class="fg-button ui-widget ui-state-default"/>
-                            <br/>
+                                            class="uk-button-primary"/>
+                        %{--(ctrl+enter)--}%
+
+                            <div id="detailsOfQuickAdd" class="hidden">
+
+
+                                %{--p <g:select name="priority" from="${(1..5)}" style="border-radius: 5px;"--}%
+                                            %{--id="priority"--}%
+                                            %{--tabindex="1"--}%
+                                            %{--value="${2}"/>--}%
+                                %{--&nbsp;--}%
+                                <a class="" title="Hide"
+                                   onclick="jQuery('#detailsOfQuickAdd').addClass('hidden');" style="color: darkgray; float: right;">x</a>
+
+
+
+                                %{--<br/>--}%
+                                &nbsp;
+
+                                %{--<g:checkBox name="addOperation" id="addOperation" checked="checked"/>Operation--}%
+                                %{--<g:checkBox name="addFolder" id="addFolder" checked="checked"/>Make folder--}%
+                                %{--<g:checkBox name="grabAllFiles" id="grabAllFiles"/>Move new files--}%
+
+
+
+                                %{--<g:select name="language" id="language" from="${OperationController.getPath('repository.languages')?.split(',')}"--}%
+                                %{--value="${OperationController.getPath('default.language')}"--}%
+                                %{--/>--}%
+
+
+                                %{--<g:if test="${OperationController.getPath('courses.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
+                                %{--<g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'department', order: 'desc'])}"--}%
+                                %{--optionKey="id" class="chosen" style="width: 450px !important;" optionValue="summary" noSelection="${['': 'No course']}"/>--}%
+                                %{--</g:if>--}%
+
+                                <br/>
+                                <g:textArea cols="80" rows="12" placeholder="Description / full text ..."
+                                            tabindex="3"
+                                            name="description" id="descriptionDaftar"
+                                            value=""
+                                            style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 9px 3px; width: 99%; height: 90px !important;"/>
+
+                            </div>
+
 
                         </g:formRemote>
 
-
                         <br/>
                         <div id="underAreaForQuickAdd"></div>
+            </div>
+
+
+
+
+
+
                     </div>
 
                 </g:if>
@@ -289,11 +314,12 @@
                 </g:if>
 
 
+
             </div>
 
-<g:if test="${1 == 2 && OperationController.getPath('extra-panes.enabled')?.toLowerCase() == 'yes' ? true : false}">
+<g:if test="${OperationController.getPath('extra-panes.enabled')?.toLowerCase() == '====yes' ? true : false}">
             <h6 style="text-aling: center"><a href="#" id="testTitle2">
-                Quick add panel
+                Side panel
             </a></h6>
 
             <div id="2" class="common" style="">
@@ -525,6 +551,20 @@
     </div>
 <div id="notificationAreaHidden"></div>
 <script type="text/javascript">
+
+
+    jQuery(".contentAdd").hide();
+
+    jQuery(".headingAdd").click(function() {
+        jQuery(this).next(".contentAdd").slideToggle(200);
+
+        if (!window.isHidden)
+            window.isHidden = true;
+        else
+            window.isHidden = false;
+    });
+
+
     jQuery(".chosen").chosen({allow_single_deselect: true, search_contains: true, no_results_text: "None found"});
 
     jQuery("#chosenTags").chosen({allow_single_deselect: true, no_results_text: "None found"});

@@ -1,4 +1,4 @@
-<%@ page import="org.apache.commons.lang.StringUtils; ker.OperationController; app.parameters.ResourceType; cmn.Setting; mcs.parameters.PlannerType; mcs.parameters.JournalType; mcs.Planner; mcs.Journal; mcs.parameters.ResourceStatus; mcs.Book" %>
+<%@ page import="java.nio.file.Paths; java.nio.file.Files; org.apache.commons.lang.StringUtils; ker.OperationController; app.parameters.ResourceType; cmn.Setting; mcs.parameters.PlannerType; mcs.parameters.JournalType; mcs.Planner; mcs.Journal; mcs.parameters.ResourceStatus; mcs.Book" %>
 
 
 <br/><br/>
@@ -22,7 +22,7 @@
         <h4>Folders and files in <b>${OperationController.getPath('root.rps' + r + '.path')}/new</b>:</h4>
         <g:each in="${new java.io.File(OperationController.getPath('root.rps' + r + '.path') + '/new').listFiles()}" var="i">
 
-            <g:if test="${i.isFile() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*\.[\S]*/ && i.name?.contains('--')}">
+            <g:if test="${i.isFile() && !java.nio.file.Files.isSymbolicLink(java.nio.file.Paths.get(i.path)) && i.name ==~ /(?i)[a-z] [\S\s ;-_]*\.[\S]*/ && i.name?.contains('--')}">
                 <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                     <g:formRemote name="importIndividualFile"
                                   url="[controller: 'import', action: 'importIndividualFile']"
@@ -37,7 +37,7 @@
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
                         <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
-                        <g:actionSubmit value="import"/>
+                        <g:actionSubmit value="import" class="uk-button-secondary"/>
                         <script>
                             jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
                                 jQuery("#${i.name.encodeAsMD5()}").attr('class', response);
@@ -55,7 +55,7 @@
             </g:if>
 
 
-            <g:if test="${i.isFile() && !i.name?.contains('--') && !'desktop.ini,'.contains(i.name + ',')}">
+            <g:if test="${i.isFile() && !java.nio.file.Files.isSymbolicLink(Paths.get(i.path)) && !i.name?.contains('--') && !'desktop.ini,'.contains(i.name + ',')}">
                 <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                     <g:formRemote name="importIndividualFile"
                                   url="[controller: 'import', action: 'importIndividualFile']"
@@ -70,7 +70,8 @@
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
                         <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
-                        <g:actionSubmit value="import"/>
+                        <g:actionSubmit value="import"
+                                        class="uk-button-secondary"/>
                     </g:formRemote>
                 </div>
                 <span style="display: inline; font-family: monospace;"
@@ -82,7 +83,7 @@
             </g:if>
 
 
-            <g:if test="${i.isDirectory() && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1 && !i.name?.startsWith('.')  && !'scans,later,raw,site,dmp,sns,sch,mbl,'.contains(i.name + ',')}">
+            <g:if test="${i.isDirectory() && !java.nio.file.Files.isSymbolicLink(Paths.get(i.path)) && i.name ==~ /(?i)[a-z] [\S\s ;-_]*/  && i.name?.contains('--') && i.name?.length() > 1 && !i.name?.startsWith('.')  && !'scans,later,raw,site,dmp,sns,sch,mbl,'.contains(i.name + ',')}">
                 <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                     <g:formRemote name="importIndividualFolder"
                                   style="display: inline; "
@@ -97,7 +98,7 @@
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
                         <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
-                        <g:actionSubmit value="add"/>
+                        <g:actionSubmit value="add" class="uk-button-secondary"/>
                         <script>
                             jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
                                 jQuery("#${i.name.encodeAsMD5()}").attr('class', response);
@@ -112,7 +113,7 @@
                 <br/>
             </g:if>
 
-            <g:if test="${i.isDirectory() && !i.name?.contains('--') && i.name?.length() > 1  && !i.name?.startsWith('.')  && !i.name?.startsWith('.')  && !'scans,later,raw,'.contains(i.name + ',')}">
+            <g:if test="${i.isDirectory() && !java.nio.file.Files.isSymbolicLink(Paths.get(i.path)) && !i.name?.contains('--') && i.name?.length() > 1  && !i.name?.startsWith('.')  && !i.name?.startsWith('.')  && !'scans,later,raw,'.contains(i.name + ',')}">
                 <div style="display: inline; font-family: monospace;" id="file${i.name.encodeAsMD5()}">
                     <g:formRemote name="importIndividualFolder"
                                   style="display: inline; "
@@ -127,7 +128,7 @@
                         <g:hiddenField name="smart" value="yes"></g:hiddenField>
                         <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
                         <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
-                        <g:actionSubmit value="add"/>
+                        <g:actionSubmit value="add" class="uk-button-secondary"/>
                     </g:formRemote>
                 </div>
                 <span style="display: inline; font-family: monospace;"
@@ -160,7 +161,7 @@
                             <g:hiddenField name="smart" value="yes"></g:hiddenField>
                             <g:hiddenField name="path" value="${i.path}"></g:hiddenField>
                             <g:hiddenField name="rootPath" value="${OperationController.getPath('root.rps' + r + '.path')}"></g:hiddenField>
-                            <g:actionSubmit value="import"/>
+                            <g:actionSubmit value="import" class="uk-button-secondary"/>
                             <script>
                                 jQuery("#notificationAreaHidden").load('${request.contextPath}/generics/verifySmartFileName', {'line': "${i.name}"}, function (response, status, xhr) {
                                     jQuery("#${i.name.encodeAsMD5()}").attr('class', response);

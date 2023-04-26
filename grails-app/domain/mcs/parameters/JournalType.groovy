@@ -18,6 +18,7 @@
 package mcs.parameters
 
 import cmn.DataChangeAudit
+import security.User
 
 class JournalType implements Comparable {  // entity id = 141
 
@@ -26,13 +27,16 @@ class JournalType implements Comparable {  // entity id = 141
 
     // Fields
 
+    User user
+
     String code
     String color
     String style
     String name
     Integer metaType
 
-    Integer category
+//    Integer category
+
     String indicatorCode
 
     String notes
@@ -58,7 +62,7 @@ class JournalType implements Comparable {  // entity id = 141
         table 'journal_type'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

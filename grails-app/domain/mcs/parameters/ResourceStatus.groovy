@@ -53,7 +53,7 @@ class ResourceStatus implements Comparable {  // entity id = 158
         table 'resource_status'
         // sort "id":"desc"
         // name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

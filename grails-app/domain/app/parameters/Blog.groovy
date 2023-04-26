@@ -18,6 +18,8 @@
 package app.parameters
 
 import cmn.DataChangeAudit
+import security.User
+
 //import com.bloomhealthco.jasypt.GormEncryptedStringType
 
 class Blog implements Comparable {  // entity id = 20
@@ -26,6 +28,10 @@ class Blog implements Comparable {  // entity id = 20
     // static searchable = [only:['name', 'notes' ]]
 
     // Fields
+
+    User user
+
+    Boolean bookmarked = false
 
     String summary
     String code
@@ -36,6 +42,8 @@ class Blog implements Comparable {  // entity id = 20
     String style
 
     String notes
+
+    String language
 
     Date dateCreated
     Date lastUpdated
@@ -51,7 +59,7 @@ class Blog implements Comparable {  // entity id = 20
     }
 
     static mapping = {
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
 //        password type: GormEncryptedStringType
     }
 

@@ -53,8 +53,8 @@ class DataChangeAudit implements Comparable {  // entity id = 18
     }
 
     static mapping = {
-        operationDetails(sqlType: 'longtext')
-        exactOperation(sqlType: 'longtext')
+        operationDetails(sqlType: 'long varchar')
+        exactOperation(sqlType: 'long varchar')
         datePerformed(sqlType: 'datetime')
 
         table 'data_change_audits'

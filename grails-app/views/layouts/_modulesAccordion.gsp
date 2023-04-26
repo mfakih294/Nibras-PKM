@@ -3,18 +3,23 @@
 %{--<div id="accordionModules"--}%
      %{--style="width: 95%; padding-left: 4px;">--}%
 
+<g:if test="${1 == 2}">
 <div class="panelCard">
  <h4>
                 <span class="T-bkg"
                       style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold; font-size: 12px;"></span>
 Main reports<span
-        class="moduleCount">${Task.count()}</span></h4>
+        class="moduleCount">
+     %{--${Task.count()}--}%
+ </span></h4>
 
  <ul>
 
 <g:render template="/layouts/savedSearches" model="[entity: 'M']"/>
 </ul>
 </div>
+</g:if>
+
 
     <g:if test="${OperationController.getPath('tasks.enabled')?.toLowerCase() == 'yes' ? true : false}">
         <div class="panelCard">
@@ -33,7 +38,15 @@ Main reports<span
 
                 %{--<br/>--}%
                 <ul>
-                    <g:render template="/layouts/savedSearches" model="[entity: 'T']"/>
+                <li>
+                    <a href="${createLink(controller: 'page', action: 'tasksTable', id: 0)}"
+                       target="_blank">
+                        Active tasks table
+                    </a>
+
+                </li>
+
+                <g:render template="/layouts/savedSearches" model="[entity: 'T']"/>
                 </ul>
             </div>
         </div>
@@ -53,6 +66,8 @@ Main reports<span
 
     <div>
         <ul>
+
+
             <g:render template="/layouts/savedSearches" model="[entity: 'G']"/>
         </ul>
     </div>
@@ -373,7 +388,7 @@ Main reports<span
                style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">E</span>
         ${OperationController.getPath('excerpts.label') ?: 'Excerpts'} <span class="moduleCount">${mcs.Excerpt.countByDeletedOnIsNull()}
         </span>
-    </a>
+    %{--</a>--}%
     </h4>
 
     <div style="font-family: tahoma;">

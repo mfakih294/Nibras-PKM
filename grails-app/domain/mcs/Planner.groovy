@@ -106,7 +106,7 @@ class Planner implements Comparable {  // entity id = 137
 
     Boolean isDayChallenge
     Boolean bookmarked
-    Boolean isPrivate = false
+    Boolean isPrivate = true
 
 
 
@@ -128,7 +128,9 @@ class Planner implements Comparable {  // entity id = 137
 
     static constraints = {
         level(inList: ['l', 'y', 'e', 'A', 'M', 'r', 'w', 'd', 'm', 'i'])
-        startDate(nullable: false, unique: ['task'])
+
+        startDate(nullable: false)
+
         endDate()
 
         description()
@@ -141,14 +143,14 @@ class Planner implements Comparable {  // entity id = 137
     }
 
     static mapping = {
-        description(sqlType: 'longtext')
-        reality(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        reality(sqlType: 'long varchar')
 
         table 'planner'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

@@ -1,5 +1,15 @@
 <%@ page import="mcs.parameters.ResourceStatus; mcs.Goal; org.apache.commons.lang.StringUtils; mcs.Book; app.parameters.ResourceType; mcs.Writing; mcs.Department; mcs.parameters.WritingType; app.Tag; cmn.Setting; mcs.Course; mcs.Journal; mcs.Planner; app.IndexCard; mcs.Task; ker.OperationController" %>
 %{--${ker.OperationController.getPath('app.headers.background') ?: '#5b7a59'}--}%
+
+
+<style>
+.ui-layout-south, .ui-layout-north {
+    background: ${OperationController.getPath('app.color') ?: '#6D6D74'} !important;
+    /*url(../images/bg-header.gif) no-repeat*/
+}
+</style>
+
+
 <div class="ui-layout-north southRegion appBkg" style="overflow: hidden;"
      style="">
     %{--<g:render template="/layouts/north" model="[]"/>--}%
@@ -99,14 +109,96 @@
 
                 <div id="3rdPanel">
 
+
                 </div>
+            </div>
+
+
+                <g:each in="${mcs.Department.list([sort: 'code'])}" var="d">
+
+                %{--<g:remoteLink controller="report" action="departmentCourses"--}%
+                %{--update="centralArea" params="[id: d.id]"--}%
+                %{--title="Actions">--}%
+                %{--<span style="padding: 1px;">--}%
+
+                %{--<g:remoteLink controller="generics" action="recordsByDepartment" id="${d.id}"--}%
+                %{--before="jQuery.address.value(jQuery(this).attr('href'));"--}%
+                %{--update="centralArea">--}%
+                    <div style="text-align: left; font-weight: bold; background: #a1ac97; border-right: 1px solid darkgray; padding: 7px; margin: 14px 3px;">
+                        <a style=" color: white;">
+                            ${d.summary}
+                            (${d.courses.size()} courses)
+                        </a>
+                    </div>
+                %{--</span>--}%
+                %{--</g:remoteLink>--}%
+
+
+
+                %{--<span class="I-bkg" style=" float: right;"--}%
+                %{--style="font-family: 'Lucida Console'; margin-right: 3px; padding-right: 2px; font-weight: bold;">--}%
+                %{--</span>--}%
+
+
+
+
+                    <div class="markdown">
+
+                        <g:each in="${Course.findAllByDepartment(Department.get(d.id), [sort: 'code', order: 'asc'])}"
+                        var="t">
+
+                    <g:if test="${Writing.countByCourse(t) > 0}">
+                        <div style="background: #ececc8; border-right: 1px solid darkgray; padding: 5px; margin: 8px 3px;"
+                             class="${t.language}" title="${t.code}"
+                             onclick="jQuery('#courseWritings${t.id}').removeClass('hidden');">
+                            <b>${t.numberCode}</b>
+                            ${StringUtils.abbreviate(t.summary ?: '', 26)} (${Writing.countByCourse(t)}w)
+                        </div>
+
+                        <div id="courseWritings${t.id}" style="padding-left: 30px" class="--hidden">
+                            <g:each in="${Writing.findAllByCourse(t, [sort: 'orderNumber', order: 'asc'])}"
+                                    var="w">
+                            %{--<a onclick="jQuery('#quickAddForm').addClass('hidden');">--</a>--}%
+                            %{--<li style="list-style-type: bullet; text-align: right; direction: rtl;">--}%
+                                <h3 class="${w.language}">
+                                    <g:remoteLink controller="page" action="panel"
+                                                  params="${[id: w.id, entityCode: 'W']}"
+                                                  update="3rdPanel"
+                                                  title="Go to page">
+                                        ${w.toString()}
+                                    </g:remoteLink>
+                                </h3>
+
+
+                                <g:if test="${w.class.declaredFields.name.contains('descriptionHTML') && w.descriptionHTML}">
+                                    %{--&& w.withMarkdown--}%
+
+                                    <div style="padding: 3px 3px 7px 7px; margin: 3px 7px;  background: antiquewhite; border: 1px solid darkgray; ">
+                                        ${raw(w.descriptionHTML)}
+                                    </div>
+                                </g:if>
+                                <g:else>
+                                %{--ToDo didn't work--}%
+                                    <div id="descriptionBloc${w.id}" style="margin: 3px 7px; padding: 3px 3px 7px 7px; background: antiquewhite; border: 1px solid darkgray; ">
+                                        ${raw(w.description?.replaceAll('\n', '<br/>')?.replace('Product Description', ''))}
+                                        %{--${?.encodeAsHTML()?.replaceAll('\n', '<br/>')}--}%
+                                    </div>
+
+                                </g:else>
+
+
+                            </g:each>
+                        </div>
+                    </g:if>
+                </g:each>
+            </div>
+            </g:each>
 
 
 
                 %{--<g:render template="/gTemplates/recordSummary" model="[record: record]"/>--}%
 
 
-        </div>
 
     </div>
     %{--<hr/>--}%

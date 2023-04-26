@@ -62,7 +62,7 @@ class RelationshipType implements Comparable {  // entity id = 452
 	static mapping = {
      table 'relationship_type'
       
-	  notes (sqlType: 'longtext')
+	  notes (sqlType: 'long varchar')
     }
     
     static namedQueries = {

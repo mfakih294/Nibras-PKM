@@ -92,7 +92,7 @@ class Journal implements Comparable {  // entity id = 125
 
     Boolean keepSecret = false
 
-    Boolean isPrivate = false
+    Boolean isPrivate = true
 
 
     Integer reviewCount = 0
@@ -138,9 +138,9 @@ class Journal implements Comparable {  // entity id = 125
         table 'journal'
         //sort "id":"desc"
         //name (index:'name_index')
-        description(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

@@ -17,6 +17,14 @@
 
 <%@ page import="java.time.format.DateTimeFormatter; mcs.Department;  cmn.DataChangeAudit; ker.OperationController; app.Indicator; mcs.Goal; mcs.Task; mcs.Planner; mcs.Journal; mcs.Writing; app.IndexCard; mcs.Excerpt; mcs.Book; mcs.Course;" %>
 
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+    <meta http-equiv="Access-Control-Allow-Methods" content="*"/>
+    <meta http-equiv="Access-Control-Allow-Headers" content="*"/>
+</head>
+
 <script type="text/javascript" src="${resource(dir: 'plugins/uploader', file: 'jquery.uploadr.js')}"></script>
 <link rel="stylesheet" href="${resource(dir: 'plugins/uploader', file: 'jquery.uploadr.css')}"/>
 
@@ -85,10 +93,9 @@
     # ${record.orderNumber}
 </g:if>
 <br/>
-<div style="direction: rtl !important; text-align: right !important; line-height: 25px;">
+<div style="line-height: 25px; padding: 7px; font-weight: bold;" class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}">
     <g:remoteLink controller="page" action="panel"
                   params="${[id: record.id, entityCode: entityCode]}"
-
 				  class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
                   update="3rdPanel"
                   title="Click to refresh">
@@ -98,7 +105,7 @@
 				  <g:if test="${record.class.declaredFields.name.contains('title')}">
 				  ${record.title}
 				  </g:if>
-				  </span>
+				  %{--</span>--}%
 </g:remoteLink>
 </div>
 
@@ -109,7 +116,7 @@
     %{--cal.setFirstDayOfWeek(java.util.Calendar.MONDAY)--}%
     %{--%>--}%
     %{--<b>أ${cal.get(Calendar.WEEK_OF_YEAR)}</b>--}%
-    <td>
+    %{--<td>--}%
 
     %{--<h4>Files</h4>--}%
 
@@ -122,494 +129,275 @@
 %{--</uploader:uploader>--}%
 
 %{--ToDo--}%
-        <g:if test="${record.entityCode().length() == 120 && mobileView != 'true'}">
-            <div style="display: inline; text-align: right;">
-                <table border=0 width="95%">
-                    <tr>
-                        <td width="50%" style="vertical-align: top;">
-                        Upload cover
-                        <uploader:uploader id="uploadCover${record.id}"
-                        url="${[controller: 'import', action: 'uploadCover']}"
-                        params="${[recordId: record.id, entityCode: record.entityCode()]}">
-                        <uploader:onComplete>
-                        jQuery('#subUploadInPanel').load('${request.contextPath}/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
-                        </uploader:onComplete>
-                        Upload...
-                        </uploader:uploader>
-                        </td>
-                        <td>
-                            Add to wrk folder ('${OperationController.getPath('root.rps1.path')}'):
-                            <g:if test="${new File(OperationController.getPath('root.rps1.path')).exists()}">
-                                <uploader:uploader id="addToRecordFolder${record.id}"
-                                                   url="${[controller: 'import', action: 'addToRecordFolder']}"
-                                                   params="${[recordId: record.id, entityCode: record.entityCode()]}">
-                                    Add to record folder
-                                </uploader:uploader>
-                            </g:if>
-                            <g:else>
-                                Folder 'root.rps1.path' does not exist.
-                                 Set: <g:render template="/forms/updateSetting" model="[settingValue: 'root.rps1.path']"/>.
-                            </g:else>
-
-
-                            <g:if test="${!new File(OperationController.getPath('tmp.path')).exists()}">
-                                <br/>
-                                Folder 'tmp.path' not found. Set:
-                                <g:render template="/forms/updateSetting" model="[settingValue: 'tmp.path']"/>
-                            </g:if>
-
-                        </td>
-                    </tr>
-                </table>
-
-            </div>
-
-            <div id="subUploadInPanel"></div>
-        </g:if>
-
-
-        <g:if test="${entityCode == 'T' && record.recurringCron}">
-
-    <g:set value="recurringInterval" var="field"></g:set>
-            <b>Recurrence:</b>
-             <br/>
-            <code>${record.recurringCron}</code>
-
-            <br/><br/>
-            <b>Planned duration: </b>
-            ${record.plannedDuration?.toInteger() ?: 'No set. Default is 30min.'}
-            <br/>
-            <br/>
-&nbsp;
-            <g:remoteLink controller="export" action="showNextRecurringDates"
-                          params="${[id: record.id]}"
-                          update="${entityCode}Record${record.id}NextDates"
-                style="border: 1px solid darkgray; padding: 1px;"
-                          title="">
-               Show upcoming occurrences...
-            </g:remoteLink>&nbsp;
-            <g:remoteLink controller="export" action="generateNextRecurringPlans"
-                          params="${[id: record.id]}"
-                          update="${entityCode}Record${record.id}NextDates"
-                style="border: 1px solid darkgray ; padding: 1px;"
-                          title="">
-               Generate plan records...
-            </g:remoteLink>
-<br/>
-            <div id="${entityCode}Record${record.id}NextDates"></div>
-<br/>
-Repeat
-    <a href="#" id="${field}${record.id}" class="${field}"
-       data-type="select" title="Recurring interval"
-       data-value="${record[field]}"
-       data-name="${field}-${record.entityCode()}"
-       data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-       data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
-       data-title="Edit ${field}">
-        ${record[field] ? '--' + record[field] + '--' : '----'}
-    </a> times.
-    <script>
-        jQuery("#${field}${record.id}").editable();
-    </script>
-
-
-    &nbsp;
-    &nbsp;
-</g:if>
-
-
-        <g:if test="${source}">
-<span style="color: green">
-Source: ${source}
-</span>
-        </g:if>
-
-<g:if test="${authors}">
-<br/>
-<span style="color: green">
-Authors: ${authors}
-</span>
-    </g:if>
 
 
 
+<ul id="accord2" uk-accordion="multiple: true; collapsible: true" class="uk-margin-small-left uk-margin-small-right">
 
+    <li class="uk-open">
+        <a class="uk-accordion-title" href="#">
 
-
-<g:if test="${'R'.contains(entityCode)}">
-%{--<b>${record.title?.encodeAsHTML()?.replaceAll('\n', '<br/>')}</b>--}%
-%{--<br/>--}%
-    <div style="padding: 2px; font-size: 12px; font-family: tahoma; margin: 2px; line-height: 20px;">
-        <g:if test="${record.legacyTitle}">
-            <span style="font-size: small">
-                <br/>    <b>Legacy title:</b>  ${record.legacyTitle}
-                <br/>
-            </span>
-        </g:if>
-        <g:if test="${record.author}">
-            <b>Author</b>   : ${record.author}
-            <br/>
-        </g:if>
-        <g:if test="${record.isbn}">
-            <b>ISBN</b>   : ${record.isbn}
-            <br/>
-        </g:if>
-
-    %{--Extension: ${record.ext}--}%
-    %{--<br/>--}%
-        <g:if test="${record.publisher}">
-            <b>Publisher</b>: ${record.publisher}
-            <br/>
-        </g:if>
-        <g:if test="${record.journal}">
-            <b>Journal</b>: ${record.journal}
-            <br/>
-        </g:if>
-        <g:if test="${record.edition}">
-            <b>Edition</b>: ${record.edition}
-            <br/>
-        </g:if>
-        <g:if test="${record.publicationDate}">
-            <b>Publication date</b>: ${record.publicationDate}
-            <br/>
-        </g:if>
-       <g:if test="${record.year}">
-            <b>Year</b>: ${record.year}
-            <br/>
-        </g:if>
-       <g:if test="${record.month}">
-            <b>Month</b>: ${record.month}
-            <br/>
-        </g:if>
-        <g:if test="${record.volume}">
-            <b>Volume</b>: ${record.volume}
-            <br/>
-        </g:if>
-       <g:if test="${record.series}">
-            <b>Series</b>: ${record.series}
-            <br/>
-        </g:if>
-        <g:if test="${record.number}">
-            <b>Number</b>: ${record.number}
-            <br/>
-        </g:if>
-
-
-
-       <g:if test="${record.publicationCity}">
-            <b>City</b>: ${record.publicationCity}
-            <br/>
-        </g:if>
-     <g:if test="${record.sourceFree}">
-            <b>Source</b>: ${record.sourceFree}
-            <br/>
-        </g:if>
-
-   <g:if test="${record.nbPages}">
-            <b>Nb. pages</b>: ${record.nbPages}
-            <br/>
-        </g:if>
-   <g:if test="${record.pages}">
-            <b>Pages</b>: ${record.pages}
-            <br/>
-        </g:if>
-
-
-        <g:if test="${record.url}">
-            <span style="">
-                <b>URL :</b>
-                ${record.url}
-                <span id="linkBloc${record.id}"></span>
-
-            </span>
-            <br/>
-        %{--${record.author},${record.title ?: record.legacyTitle} ${record.edition} ed--}%
-        %{--(${record.publisher},--}%
-        %{--${record.publicationDate})--}%
-        </g:if>
-
-        %{--<g:if test="${'R'.contains(entityCode)}">--}%
-            %{--<br/>--}%
-
-
-
-    <g:if test="${record?.url}">
-    <br/>
-    <g:remoteLink controller="import" action="scrapHtmlPage" id="${record.id}"
-    update="RRecord${record.id}"
-    class="actionLink"
-    title="Scrap HTML">
-    Scrape HTML page
-    </g:remoteLink>
-
-        <g:remoteLink controller="import" action="scrapHtmlAll"
-    update="RRecord${record.id}"
-    class="actionLink"
-    title="Scrap HTML">
-    Scrape ALL pages
-    </g:remoteLink>
-    <br/>
-    <br/>
-    </g:if>
-
-
-
-
-
-
-
-
-        <g:if test="${1 == 2 && record.isbn}">
-            <g:remoteLink controller="operation" action="addBibtex" id="${record.id}"
-                          update="bibTexBloc${record.id}"
-                          class="actionLink"
-                          title="Update metadata">
-                Fetch Bib entry
-            </g:remoteLink>
-        </g:if>
-    %{--Amazon tags: ${record.tags}--}%
-
-        <g:if test="${record.withAudiobook}">
-            <br/><i>With audiobook</i>
-        </g:if>
-        <g:if test="${record.isAudiobook}">
-            <br/><i>Is audiobook</i>
-        </g:if>
-        <g:if test="${record.isPaperOnly}">
-            <br/><i>Paper format only</i>
-        </g:if>
-
-        <g:if test="${record.isRead}">
-            <br/><i>Has been read</i>
-        </g:if>
-
-        <g:if test="${record.isPublic}">
-            <br/><i>To be shared</i>
-        </g:if>
-    </div>
-</g:if>
-
-
-%{--todo: new setting 30.07.2021 10:39 --}%
-
-        <g:if test="${'G'.contains(entityCode) && ker.OperationController.getPath('task-steps.enabled')?.toLowerCase() == 'yes'}">
-            <g:if test="${record.percentCompleted}">
-                <b>Percent completed</b>: ${record.percentCompleted}
-                <br/>
-            </g:if>
-            %{--<g:if test="${record.totalSteps}">--}%
-                %{--<b>Total steps</b>: ${record.totalSteps}--}%
-                %{--<br/>--}%
-            %{--</g:if>--}%
-                <g:if test="${record.class.declaredFields.name.contains('completedSteps')}">
-
-                <g:formRemote name="saveCompletedSteps" url="[controller: 'operation', action: 'updateCompletedSteps', id: record.id]"
-                              update="displayCompletedSteps"
-                              style="display: inline;">
-                %{--<g:hiddenField name="id" value="${record.id}"/>--}%
-                    <g:hiddenField name="entityCode" value="${entityCode}"/>
-                %{--placeholder="ما اُنجز"--}%
-                    <b>Completed steps</b>:  <g:textField id="saveCompletedSteps${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
-                                                      rows="5"
-                                                      style="width:20%;  display: inline; " value="${record.completedSteps}"/>
-                    <g:submitButton name="add" value="=" style="display:none;"
-                                    class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
-                %{--<br/>--}%
-                </g:formRemote>
-                &nbsp;    <span id="displayCompletedSteps"></span>
-
-
-                <br/>
-            </g:if>
-
-            <g:if test="${record.class.declaredFields.name.contains('totalSteps')}">
-            <g:formRemote name="saveTotalSteps" url="[controller: 'operation', action: 'updateTotalSteps', id: record.id]"
-                          update="displayTotalSteps"
-                          style="display: inline;">
-                %{--<g:hiddenField name="id" value="${record.id}"/>--}%
-                <g:hiddenField name="entityCode" value="${entityCode}"/>
-                <b>Total steps</b>:
-                %{--placeholder="عدد الخطوات"--}%
-                <g:textField id="saveTotalSteps${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
-                             rows="5"
-                             style="width:20%;  display: inline; " value="${record.totalSteps}"/>
-                <g:submitButton name="add" value="=" style="display:none;"
-                                class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
-                %{--<br/>--}%
-            </g:formRemote>
-        &nbsp;    <span id="displayTotalSteps"></span>
-
-        </g:if>
-        </g:if>
-
-
-    %{--<g:if test="${record.class.declaredFields.name.contains('percentCompleted')}">--}%
-    %{--<a name="bookmark${record.id}${entityCode}" title="percent++"--}%
-    %{--value="${record.percentCompleted}"--}%
-    %{--onclick="jQuery('#displayTotalSteps').load('${request.contextPath}/generics/increasePercentCompleted/${entityCode}${record.id}')">--}%
-    %{--Step++--}%
-    %{--</a>--}%
-        %{--<br/>--}%
-    %{--</g:if>--}%
-
-
-
-        <g:if test="${record.class.declaredFields.name.contains('reviewHistory') && record.reviewHistory}">
-            <b>Review history:</b> ${record.reviewHistory}
-            <br/>
-        </g:if>
-  <g:if test="${record.class.declaredFields.name.contains('stepsHistory') && record.stepsHistory}">
-            <b>Steps history:</b>
-      <br/>${record.stepsHistory?.replace('-', '<br/>')}
-            <br/>
-        </g:if>
-
-<g:if test="${record.entityCode() == 'R'}">
-
-    <g:if test="${(new File(OperationController.getPath('root.rps1.path') + '/cvr/' +
-            record?.type?.code + '/' + record.id + '.jpg')?.exists() || new File(OperationController.getPath('root.rps2.path') + '/cvr/' + record?.type?.code + '/' + record.id + '.jpg')?.exists())}">
-
-        <a href="${createLink(controller: 'book', action: 'viewImage', id: record.id)}"
-           target="_blank">
-            <img class="Photo" style="width: 80px; height:120px; display:inline"
-                 src="${createLink(controller: 'book', action: 'viewImage', id: record.id, params: [date: new Date()])}"/>
+            Info
         </a>
-    </g:if>
-
-</g:if>
+        <div class="uk-accordion-content">
 
 
 
+            <g:if test="${source}">
+                <span style="color: green">
+                    Source: ${source}
+                </span>
+            </g:if>
 
-
-<g:if test="${record.class.declaredFields.name.contains('shortDescription')}">
-    <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
-         style="background: #dce5e5; border: 1px solid darkgray; ${ker.OperationController.getPath('description.style')};  text-align: justify !important;">
-<span style=" ;  font-style: normal; color: darkred">
- ${record?.shortDescription?.replaceAll('\n', '<br/>')}
-</span>
-    </div>
-</g:if>
-
-
-
-%{--direction: ${record?.source?.language == 'ar' ? 'rtl' : 'ltr'}--}%
-%{--todo--}%
+            <g:if test="${authors}">
+                <br/>
+                <span style="color: green">
+                    Authors: ${authors}
+                </span>
+            </g:if>
 
 
 
 
 
 
+            <g:if test="${'R'.contains(entityCode)}">
+            %{--<b>${record.title?.encodeAsHTML()?.replaceAll('\n', '<br/>')}</b>--}%
+            %{--<br/>--}%
+                <div style="padding: 2px; font-size: 12px; font-family: tahoma; margin: 2px; line-height: 20px;">
+                    <g:if test="${record.legacyTitle}">
+                        <span style="font-size: small">
+                            <br/>    <b>Legacy title:</b>  ${record.legacyTitle}
+                            <br/>
+                        </span>
+                    </g:if>
+                    <g:if test="${record.author}">
+                        <b>Author</b>   : ${record.author}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.isbn}">
+                        <b>ISBN</b>   : ${record.isbn}
+                        <br/>
+                    </g:if>
 
-%{--direction: ${record?.source?.language == 'ar' ? 'rtl' : 'ltr'}; text-align: ${record?.source?.language == 'ar' ? 'right' : 'left'}--}%
-%{--todo--}%
-
-%{--</div>--}%
-
-
-
-
-
-%{--<g:each in="${app.IndexCard.findAllByEntityCodeAndRecordId(entityCode, record.id)}" var="c">--}%
-%{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
-%{--</g:each>--}%
-
-%{--<g:if test="${'R'.contains(record.entityCode())}">--}%
-%{--<g:each in="${app.IndexCard.findAllByBook(record)}" var="c">--}%
-%{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
-%{--</g:each>--}%
-%{--</g:if>--}%
-%{--<g:if test="${'W'.contains(record.entityCode())}">--}%
-%{--<g:each in="${app.IndexCard.findAllByWriting(record)}" var="c">--}%
-%{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
-%{--</g:each>--}%
-%{--</g:if>--}%
-
-
-
-
-
-<g:if test="${record.entityCode() == 'todoR'}">
-    <div id="type-4" style="">
-
-        <g:if test="${'R'.contains(record.entityCode())}">
-        %{--<h4>Notes</h4>--}%
-
-            <h4>Excerpts</h4>
-            <g:each in="${Excerpt.findAllByBook(record)}" var="r">
-
-                <g:render template="/gTemplates/recordSummary" model="[record: r, expandedView: false]"/>
-            </g:each>
-        %{--<g:each in="${Planner.findAllByBook(record)}" var="r">--}%
-        %{----}%
-        %{--<g:render template="/gTemplates/recordSummary" model="[record: r]"/>--}%
-        %{--</g:each>--}%
-
-        </g:if>
-
-    </div>
-</g:if>
-
-
-<g:if test="${record.class.declaredFields.name.contains('description')}">
-
-    <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
-         style="background: #eef7e5; ${ker.OperationController.getPath('description.style')};  text-align: justify !important;"
-
-        <g:if test="${record.class.declaredFields.name.contains('descriptionHTML') && record.descriptionHTML && record.withMarkdown}">
-
-            <div style="background: antiquewhite; border: 1px solid darkgray; ">
-                ${raw(record.descriptionHTML)}
-            </div>
-        </g:if>
-        <g:else>
-        %{--ToDo didn't work--}%
-
-
-            <div id="descriptionBloc${record.id}">
-                ${raw(record.description?.replaceAll('\n', '<br/>')?.replace('Product Description', ''))}
-                %{--${?.encodeAsHTML()?.replaceAll('\n', '<br/>')}--}%
-            </div>
-
-        </g:else>
-
-
-        %{--${WikiParser.renderXHTML(record.description)?.replaceAll('\n', '<br/>')?.decodeHTML()}--}%
-
-    </div>
-    <div id="${entityCode}Record${record.id}newText"></div>
-    <g:render template="/gTemplates/recordAppend" model="[record: record]"/>
-
-
-</g:if>
+                %{--Extension: ${record.ext}--}%
+                %{--<br/>--}%
+                    <g:if test="${record.publisher}">
+                        <b>Publisher</b>: ${record.publisher}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.journal}">
+                        <b>Journal</b>: ${record.journal}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.edition}">
+                        <b>Edition</b>: ${record.edition}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.book}">
+                        <b>From</b>: ${record.book?.title}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.publicationDate}">
+                        <b>Publication date</b>: ${record.publicationDate}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.resourceYear}">
+                        <b>Year</b>: ${record.resourceYear}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.month}">
+                        <b>Month</b>: ${record.month}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.volume}">
+                        <b>Volume</b>: ${record.volume}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.series}">
+                        <b>Series</b>: ${record.series}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.number}">
+                        <b>Number</b>: ${record.number}
+                        <br/>
+                    </g:if>
 
 
 
+                    <g:if test="${record.publicationCity}">
+                        <b>City</b>: ${record.publicationCity}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.sourceFree}">
+                        <b>Source</b>: ${record.sourceFree}
+                        <br/>
+                    </g:if>
+
+                    <g:if test="${record.pages}">
+                        <b>Pages</b>: ${record.pages}
+                        <br/>
+                    </g:if>
+                    <g:if test="${record.nbPages}">
+                        <b>Nb. pages</b>: ${record.nbPages}
+                        <br/>
+                    </g:if>
 
 
-%{--<table style="border: 0px solid; vertical-align: top; border-collapse: collapse; width: 99%" border="0">--}%
-    %{--<tr>--}%
+                    <g:if test="${record.url}">
+                        <span style="">
+                            <b>URL :</b>
+
+                            <a href="${record.url}" target="_blank">
+                                <pkm:summarize
+                                        text="${record?.url}"
+                                        length="60"/>
+                            </a>
+
+                            <span id="linkBloc${record.id}"></span>
+
+                        </span>
+                        <br/>
+                    %{--${record.author},${record.title ?: record.legacyTitle} ${record.edition} ed--}%
+                    %{--(${record.publisher},--}%
+                    %{--${record.publicationDate})--}%
+                    </g:if>
+
+                %{--<g:if test="${'R'.contains(entityCode)}">--}%
+                %{--<br/>--}%
+
+
+
+                %{--<g:if test="${record?.url}">--}%
+                %{--<br/>--}%
+                %{--<g:remoteLink controller="import" action="scrapHtmlPage" id="${record.id}"--}%
+                %{--update="RRecord${record.id}"--}%
+                %{--class="actionLink"--}%
+                %{--title="Scrap HTML">--}%
+                %{--Scrape HTML page--}%
+                %{--</g:remoteLink>--}%
+
+                %{--<g:remoteLink controller="import" action="scrapHtmlAll"--}%
+                %{--update="RRecord${record.id}"--}%
+                %{--class="actionLink"--}%
+                %{--title="Scrap HTML">--}%
+                %{--Scrape ALL pages--}%
+                %{--</g:remoteLink>--}%
+                %{--<br/>--}%
+                %{--<br/>--}%
+                %{--</g:if>--}%
+
+
+
+
+
+
+
+
+                    <g:if test="${1 == 2 && record.isbn}">
+                        <g:remoteLink controller="operation" action="addBibtex" id="${record.id}"
+                                      update="bibTexBloc${record.id}"
+                                      class="actionLink"
+                                      title="Update metadata">
+                            Fetch Bib entry
+                        </g:remoteLink>
+                    </g:if>
+                %{--Amazon tags: ${record.tags}--}%
+
+                    <g:if test="${record.withAudiobook}">
+                        <br/><i>With audiobook</i>
+                    </g:if>
+                    <g:if test="${record.isAudiobook}">
+                        <br/><i>Is audiobook</i>
+                    </g:if>
+                    <g:if test="${record.isPaperOnly}">
+                        <br/><i>Paper format only</i>
+                    </g:if>
+
+                    <g:if test="${record.isRead}">
+                        <br/><i>Has been read</i>
+                    </g:if>
+
+
+                </div>
+            </g:if>
+
+
+
+
+
+            <g:if test="${record.class.declaredFields.name.contains('shortDescription')}">
+                <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
+                     style="background: #dce5e5; border: 1px solid darkgray; ${ker.OperationController.getPath('description.style')};  text-align: justify !important;">
+                    <span style=" ;  font-style: normal; color: darkred">
+                        ${record?.shortDescription?.replaceAll('\n', '<br/>')}
+                    </span>
+
+                    <g:if test="${record.entityCode() == 'N' && record.type?.code == 'aya'}">
+                    %{--def list = IndexCard.executeQuery('from IndexCard i where i.type.code = ? and i.orderNumber = ? order by i.orderInBook',['aya', params.id.toInteger()])--}%
+                        (سورة ${mcs.Writing.get(record.recordId.toLong()).summary},
+                        ${record.orderInWriting})
+                    </g:if>
+                </div>
+            </g:if>
+
+
+
+            <g:if test="${record.class.declaredFields.name.contains('description')}">
+                <h4>Description:</h4>
+                <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
+                     style="background: rgba(238, 247, 229, 0.15); ${ker.OperationController.getPath('description.style')};  text-align: justify !important;">
+                    <g:if test="${record.class.declaredFields.name.contains('descriptionHTML') && record.descriptionHTML}">
+                    %{--&& record.withMarkdown--}%
+                        <div style="padding: 3px 3px 3px 3px; margin: 3px 4px; border: 1px solid darkgray; ">
+                            ${raw(record.descriptionHTML)}
+                        </div>
+                    </g:if>
+                    <g:else>
+                    %{--ToDo didn't work--}%
+
+                        <div id="descriptionBloc${record.id}" style="font-style: italic; margin: 3px 3px; padding: 5px 3px 7px 3px; border: 0px solid darkgray; ">
+                            ${raw(record.description?.replaceAll('\n', '<br/>')?.replace('Product Description', ''))}
+                            %{--${?.encodeAsHTML()?.replaceAll('\n', '<br/>')}--}%
+                        </div>
+
+                    </g:else>
+
+
+                %{--${WikiParser.renderXHTML(record.description)?.replaceAll('\n', '<br/>')?.decodeHTML()}--}%
+
+                </div>
+
+
+                <div id="${entityCode}Record${record.id}newText"></div>
+            %{--<g:render template="/gTemplates/recordAppend" model="[record: record]"/>--}%
+            </g:if>
+
+
+
+
+
+        %{--<table style="border: 0px solid; vertical-align: top; border-collapse: collapse; width: 99%" border="0">--}%
+        %{--<tr>--}%
         %{--<td style="vertical-align: top; width: 99%">--}%
 
-            %{--<g:if test="${'B'.contains(record.entityCode())}">--}%
-            %{--<b>Description</b>--}%
-            %{--<br/>--}%
-            %{----}%
+        %{--<g:if test="${'B'.contains(record.entityCode())}">--}%
+        %{--<b>Description</b>--}%
+        %{--<br/>--}%
+        %{----}%
 
-            <div style="padding: 1px; font-size: 1.1em; text-align: justify !important; margin: 1px; line-height: 20px; ; white-space: wrap;">
-
+            <div style="padding: 5px 3px 3px 3px; font-size: 1.1em; text-align: justify !important; margin: 1px; line-height: 20px; ; white-space: wrap;">
                 <g:if test="${record.class.declaredFields.name.contains('notes') && record.notes}">
-                    %{--<br/>--}%
-                %{--Notes:--}%
+                %{--<br/>--}%
+                    <h4>Notes:</h4>
                     <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}"
-					style="${ker.OperationController.getPath('description.style')}; text-align: justify !important; line-height: 170%">
+                         style="${ker.OperationController.getPath('description.style')}; text-align: justify !important; line-height: 170%">
                         <div style="color: #003366 !important">${raw(record.notes?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
-                        .replaceAll(/\nوَ /, ' وَ')
-                        .replaceAll(/^و /, ' و').replaceAll(/\nو / , '\nو' )
-                        .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك').replaceAll('\n', '<br/>'))}</div>
+                                .replaceAll(/\nوَ /, ' وَ')
+                                .replaceAll(/^و /, ' و').replaceAll(/\nو / , '\nو' )
+                                .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك').replaceAll('\n', '<br/>'))}</div>
                     </div>
-                    %{--<br/>--}%
+                %{--<br/>--}%
                     <br/>
                 </g:if>
 
@@ -617,11 +405,10 @@ Authors: ${authors}
             %{--<br/>--}%
 
                 <g:if test="${'R'.contains(record.entityCode())}">
-                    <div style="font-family: Lato; text-align: justify; line-height: 20px; font-size: 1.1em; margin: 4px;">
+                    <div style="font-family: Lato; text-align: justify; line-height: 20px; font-size: 1.1em; margin: 2px;">
                         <g:if test="${record.highlights}">
+                            <h4>Highlights:</h4>
                             <div class="text${record.class.declaredFields.name.contains('language') ? record.language : ''}">
-
-
                                 <i style="color: #48802C">
                                     ${record.highlights?.replaceAll('\n', '<br/>')}
                                 </i>
@@ -630,20 +417,22 @@ Authors: ${authors}
                         </g:if>
                         <g:if test="${record.comments}">
                             <br/>
+                            <h4>Comments:</h4>
                             <i style="color: #1d806f">${record.comments?.replaceAll('\n', '<br/>')}</i>
                         %{--<br/><hr/><br/>--}%
                             <br/><hr/><br/>
                         </g:if>
                         <g:if test="${record.fullText}">
+                            <h4>Full text:</h4>
                             <div class="${record.language == 'ar' ? 'arabicText' : ''}"
                                  style="${ker.OperationController.getPath('description.style')}; text-align: justify !important; line-height: 170%">
-                                <br/><hr/>
-%{--                                <markdown:renderHtml>--}%
-                            <g:if test="${record.withMarkdown}">
+                                %{--<br/><hr/>--}%
+                                %{--                                <markdown:renderHtml>--}%
+                                <g:if test="${record.withMarkdown}">
 
-                                ${raw(htmlFullText)}
+                                    ${raw(htmlFullText)}
 
-%{--                                </markdown:renderHtml>--}%
+                                %{--                                </markdown:renderHtml>--}%
                                 </g:if>
                                 <g:else>
 
@@ -657,869 +446,1118 @@ Authors: ${authors}
                 </g:if>
             </div>
 
-        %{--</td>--}%
-%{----}%
-    %{--</tr>--}%
-%{--</table>--}%
-%{----}%
-%{----}%
-<div id="type-7" style="">
-
-</div>
-
-
-
-
-<br/>
-
-
-
-
-<g:if test="${record.entityCode() == 'D'}">
-    <div id="OrderTheFields" style="-moz-columns-count:1">
-        <h4>Order the courses</h4>
-        <table id="table1">
-        %{--<ul id="item_list" >--}%
-            <g:each in="${mcs.Course.findAllByDepartment(mcs.Department.get(record.id), [sort: 'orderNumber', order: 'asc'])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td>
-                        #${c.orderNumber} C-${c.id} - ${c.summary}
-                    </td></tr>
-            </g:each>
-        </table>
-        <a style="font-size: 10px; text-align: right;" href="#"
-           onclick='jQuery("#OrderTheFields").load("${request.contextPath}/operation/orderRecords?type=D&child=C&tableId=1", jQuery("#table1").tableDnDSerialize())'>
-            Sort</a>
-
-        <hr/>
-    </div>
-
-    <script type="text/javascript">
-        jQuery("#table1").tableDnD();
-    </script>
-</g:if>
-
-<g:if test="${record.entityCode() == 'C'}">
-
-<ol style="dir: rtl; text-align: right;">
-     <g:each in="${mcs.Writing.findAllByCourseAndPriorityGreaterThan(record, 2, [sort: 'orderNumber', order: 'asc'])}"
-                    var="c">
-                <li style="font-weight: normal;">
-
-                       W-${c.id} - <b>${c.summary}
-                %{--r${c.reviewCount}--}%
-                </li>
-<ol style="dir: rtl; text-align: right;">
-                            <g:each in="${app.IndexCard.executeQuery('from IndexCard i where i.recordId = ? and i.entityCode = ? and i.priority >= 2 order by i.orderNumber asc',
-                    [c.id.toString(), 'W'])}"
-                    var="n">
-                                <li style="font-weight: normal;">
-                   N-${n.id} - ${n.summary}
-                        %{--<pkm:summarize text="${c.description}"  length="80"/>--}%
-                  </li>
-            </g:each>
-
-            </ol>
-
-
-            </g:each>
-
-
-
-    <g:each in="${app.IndexCard.executeQuery('from IndexCard i where i.recordId = ? and i.course = ? and i.priority > ? order by orderNumber asc' ,[null, record, 2])}"
-            var="n">
-
-        <li>
-           N-${n.id} - ${n.summary}
-           %{--r${n.reviewCount}--}%
-            %{--<pkm:summarize text="${c.description}"  length="80"/>--}%
-        </li>
-    </g:each>
-
-
-
-    </ol>
-
-
-
-
-
-    <div id="OrderTheFields" style="-moz-columns-count:1">
-        <h4>Order the goals</h4>
-        <table id="table1">
-        %{--<ul id="item_list" >--}%
-            <g:each in="${mcs.Goal.findAllByCourse(Course.get(record.id), [sort: 'orderNumber', order: 'asc'])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td>
-                        #${c.orderNumber} G-${c.id} - ${c.summary} <pkm:summarize text="${c.description}"
-                                                                                  length="80"/>
-                    </td></tr>
-            </g:each>
-        </table>
-        <br/>
-        <a style="font-size: 10px; text-align: right;" href="#"
-           onclick='jQuery("#OrderTheFields").load("${request.contextPath}/operation/orderRecords?type=C&child=G&tableId=1", jQuery("#table1").tableDnDSerialize())'>
-            Sort</a>
-
-        <hr/>
-
-        <table id="table2">
-            %{--<ul id="item_list" >--}%
-            <h4>Order the writings</h4>
-            <g:each in="${mcs.Writing.findAllByCourseAndPriorityGreaterThan(Course.get(record.id), 2, [sort: 'orderNumber', order: 'asc'])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td>
-                        #${c.orderNumber} W-${c.id} - <b>${c.summary}</b>
-
-                        %{--<pkm:summarize--}%
-                        %{--text="${c.description}"--}%
-                        %{--length="80"/>--}%
-                    </td>
-                </tr>
-            </g:each>
-        </table>
-        <br/>
-        <a style="font-size: 10px; text-align: right;" href="#"
-           onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=W&tableId=2", jQuery("#table2").tableDnDSerialize())'>
-            Sort</a>
-
-        <hr/>
-
-        <table id="table3">
-            <h4>Order the resources</h4>
-            <g:each in="${mcs.Book.findAllByCourse(Course.get(record.id), [sort: 'orderNumber', order: 'asc'])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td>
-                        #${c.orderInCourse} B-${c.id} - ${c.title} ${c.legacyTitle}<pkm:summarize
-                                text="${c.description}" length="80"/>
-                    </td></tr>
-            </g:each>
-        </table>
-        <br/>
-        <a style="font-size: 10px; text-align: right;" href="#"
-           onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=R&tableId=3", jQuery("#table3").tableDnDSerialize())'>
-            Sort</a>
-
-
-
-        <table id="table4">
-            %{--<ul id="item_list" >--}%
-            <h4>Order the excerpts</h4>
-            <g:each in="${mcs.Excerpt.executeQuery('from Excerpt r where r.book.course = ? order by orderNumber asc', [Course.get(record.id)])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td>
-                        #${c.orderNumber} R-${c.id} - <b>${c.book?.title} ${c.book?.legacyTitle}</b>:${c.chapters} ${c.summary}
-                    </td></tr>
-            </g:each>
-        </table>
-        <br/>
-        <a style="font-size: 10px; text-align: right;" href="#"
-           onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=E&tableId=4", jQuery("#table4").tableDnDSerialize())'>
-            Sort</a>
-
-        <table id="table5">
-            %{--<ul id="item_list" >--}%
-            <h4>Order the tasks</h4>
-            <g:each in="${mcs.Excerpt.executeQuery('from Task r where r.course = ? and r.bookmarked = ? order by orderNumber asc', [Course.get(record.id), true])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td>
-                        #${c.orderNumber} T-${c.id} - <b>${c?.summary}
-                    </td></tr>
-            </g:each>
-        </table>
-        <input type="button" id="sortButton5" value="Save sort"
-               onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=T&tableId=5", jQuery("#table5").tableDnDSerialize())'/>
-
-
-
-
-
-
-        <script type="text/javascript">
-            jQuery("#table1").tableDnD();
-            jQuery("#table2").tableDnD();
-            jQuery("#table3").tableDnD();
-            jQuery("#table4").tableDnD();
-            jQuery("#table5").tableDnD();
-        </script>
-    </div>
-</g:if>
-
-<g:if test="${record.entityCode() == 'W'}">
-    <h4>Order the notes</h4>
-
-    <div id="OrderTheFields" style="direction: rtl; text-align: right !important;">
-
-        <table id="table1">
-        %{--<ul id="item_list" >--}%
-            %{--<g:each in="${app.IndexCard.findAllByWriting(Writing.get(record.id), [sort: 'orderNumber', order: 'asc'])}"--}%
-                    %{--var="c">--}%
-                %{--<tr id="${c.id}">--}%
-                    %{--<td>--}%
-                        %{--#${c.orderNumber} C-${c.id} - ${c.summary} <pkm:summarize text="${c.description}"--}%
-                                                                                     %{--length="80"/>--}%
-                    %{--</td></tr>--}%
-            %{--</g:each>--}%
-            <g:each in="${app.IndexCard.executeQuery('from IndexCard i where i.recordId = ? and i.entityCode = ? and i.priority >= 2 order by i.orderNumber asc',
-                    [record.id.toString(), 'W'])}"
-                    var="c">
-                <tr id="${c.id}">
-                    <td  style="direction: rtl; text-align: right !important; margin: 5px;">
-                        #${c.orderNumber} p${c.priority} W-${c.id} - ${c.summary}
-                        %{--<pkm:summarize text="${c.description}"  length="80"/>--}%
-                    </td>
-                </tr>
-            </g:each>
-        </table>
-        <br/>
-        <a style="font-size: 10px; text-align: right;" href="#"
-           onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=W&child=N&tableId=1", jQuery("#table1").tableDnDSerialize())'>
-            Sort</a>
-
-        <script type="text/javascript">
-            jQuery("#table1").tableDnD();
-        </script>
-    </div>
-
-</g:if>
-
-
-
-
-
-&nbsp;
-<br/>
-<br/>
-
-
-
-
-
-<div class="heading">
-    %{--<h2>Create new record...</h2>--}%
-    <h4 style="user-focus-pointer: hand; cursor: hand;">Actions...</h4>
-    <br/>
-</div>
-<div class="content">
-
-        <div class="actionsButtons">
-
-
-        <g:link controller="page" action="record" target="_blank"
-                params="${[id: record.id, entityCode: record.entityCode()]}"
-                class="fg-button ui-widget ui-state-default ui-corner-all"
-                title="Go to page">
-            Ext.
-
-        </g:link>
-<g:if test="${'R'.contains(entityCode) && ker.OperationController.getPath('bibTex.enabled')?.toLowerCase() == 'yes'}">
-
-                <g:remoteLink controller="operation" action="generateBibEntry" id="${record.id}"
-                              update="bibTexBloc${record.id}"
-                              class="actionLink"
-                              title="${record.bibEntry?.replace('"', '\'')}">
-                    Generate bib entry
-                </g:remoteLink>
-    </g:if>
-                <span id="bibTexBloc${record.id}">
-               </span>
-
-
-            <g:if test="${'T'.contains(entityCode)}">
-
-                <g:remoteLink controller="task" action="markRecurring"
-                              id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="${entityCode}Record${record.id}"
-                              title="Mark recurring">
-                    <b>rcr.</b>
-                    <g:if test="${record.isRecurring}">
-                        rci:${record.recurringInterval}
-                    </g:if>
-                </g:remoteLink>
-            </g:if>
-
-<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                <g:if test="${'RN'.contains(entityCode)}">
-                <g:remoteLink controller="generics" action="fixedFarsiArabic" id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="descriptionBloc${record?.id}"
-                              title="descriptionBlocrecord"
-                              style="">
-                    Fix text
-                </g:remoteLink>
-            </g:if>
-            </g:if>
-
-
-            <g:if test="${entityCode.size() == 1}">
-            %{--|| (record.class.declaredFields.name.contains('deletedOn') && record.deletedOn != null)--}%
-                <g:remoteLink controller="generics" action="physicalDelete"
-                              params="${[id: record.id, entityCode: entityCode]}"
-                              update="${entityCode}Record${record.id}"
-                              before="if(!confirm('Are you sure you want to permanantly physically delete the record?')) return false"
-                              class="fg-button ui-widget ui-state-default ui-corner-all"
-                              title="Delete record permanantly">
-                    Delete
-                </g:remoteLink>
-            </g:if>
-
-
-        %{--<g:if test="${entityCode.size() > 1}">--}%
-        %{--<g:remoteLink controller="generics" action="physicalDelete"--}%
-        %{--params="${[id: record.id, entityCode: entityCode]}"--}%
-        %{--update="${entityCode}Record${record.id}"--}%
-        %{--title="Delete record permanantly">--}%
-        %{--Delete--}%
-        %{--</g:remoteLink>--}%
-        %{--</g:if>--}%
-            <g:if test="${entityCode == 'C'}">
-
-            %{--<g:link url="[controller: 'export', action: 'generateCourseWritingsAsHtml', id: record.id]"--}%
-
-            %{--target="_blank"--}%
-            %{--title="Convert to HTML">--}%
-            %{--===--}%
-            %{--</g:link>--}%
-            %{--<br/>--}%
-                <g:remoteLink controller="export" action="combineCourseWritings"
-                              id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="${entityCode}CheckoutLog${record.id}"
-                              class="fg-button ui-widget ui-state-default ui-corner-all"
-                              title="Compline course with its writings and their notes">
-                    md &crarr;
-                </g:remoteLink>
-                &nbsp;&nbsp;
-                <g:remoteLink controller="export" action="combineCourseWritingsAsTex"
-                              id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="${entityCode}CheckoutLog${record.id}"
-                              class="fg-button ui-widget ui-state-default ui-corner-all"
-                              title="Comdine course with its writings and their notes">
-                    tex &crarr;
-                </g:remoteLink>
-
-
+            %{--</td>--}%
             %{----}%
-            %{--<br/>--}%
-            %{--<br/>--}%
-            %{--<g:link url="[controller: 'export', action: 'generateCoursePresentation', id: record.id]"--}%
-            %{--class="actionLink"--}%
-            %{--target="_blank"--}%
-            %{--title="Convert to HTML">--}%
-            %{--Generate presentation (new tab)--}%
-            %{--</g:link>--}%
-
-            </g:if>
+            %{--</tr>--}%
+            %{--</table>--}%
+            %{----}%
+            %{----}%
 
 
 
 
-            <g:if test="${OperationController.getPath('1=2pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
-                <g:if test="${record.class.declaredFields.name.contains('keepSecret')}">
-<br/>
-<br/>
-                    <a name="bookmark${record.id}${entityCode}" title="Toggle privacy"
-                       value="${record.keepSecret}"
-                       onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/togglePrivacy/${entityCode}-${record.id}')">
-                        Make private &nbsp;
-                    </a>
+        </div>
+    </li>
+  <li class="">
+        <a class="uk-accordion-title" href="#">
+            Actions
+        </a>
+        <div class="uk-accordion-content">
+
+            <div class="actionsButtons">
+
+
+                <g:link controller="page" action="record" target="_blank"
+                        params="${[id: record.id, entityCode: record.entityCode()]}"
+                        class="fg-button ui-widget ui-state-default ui-corner-all"
+                        title="Go to page">
+                    Ext.
+
+                </g:link>
+
+                <g:remoteLink controller="operation" action="makeSymbolicLink" id="${record.id}"
+                              params="[entityCode: entityCode]"
+                              update="linkLog${record.id}"
+                              class="actionLink"
+                              title="">
+                    Symbolic link
+                </g:remoteLink>
+
+                <span id="linkLog${record.id}">
+                </span>
+
+
+
+                <g:if test="${'R'.contains(entityCode) && ker.OperationController.getPath('bibTex.enabled')?.toLowerCase() == 'yes'}">
+
+                    <g:remoteLink controller="operation" action="generateBibEntry" id="${record.id}"
+                                  update="bibTexBloc${record.id}"
+                                  class="actionLink"
+                                  title="${record.bibEntry?.replace('"', '\'')}">
+                        Generate bib entry
+                    </g:remoteLink>
                 </g:if>
-            </g:if>
+                <span id="bibTexBloc${record.id}">
+                </span>
+
+
+                <g:if test="${'T'.contains(entityCode)}">
+
+                    <g:remoteLink controller="task" action="markRecurring"
+                                  id="${record.id}"
+                                  params="[entityCode: entityCode]"
+                                  update="${entityCode}Record${record.id}"
+                                  title="Mark recurring">
+                        <b>rcr.</b>
+                        <g:if test="${record.isRecurring}">
+                            rci:${record.recurringInterval}
+                        </g:if>
+                    </g:remoteLink>
+                </g:if>
+
+                <g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                    <g:if test="${'RN'.contains(entityCode)}">
+                        <g:remoteLink controller="generics" action="fixedFarsiArabic" id="${record.id}"
+                                      params="[entityCode: entityCode]"
+                                      update="descriptionBloc${record?.id}"
+                                      title="descriptionBlocrecord"
+                                      style="">
+                            Fix text
+                        </g:remoteLink>
+                    </g:if>
+                </g:if>
+
+
+                <g:if test="${entityCode.size() == 1}">
+                %{--|| (record.class.declaredFields.name.contains('deletedOn') && record.deletedOn != null)--}%
+                    <g:remoteLink controller="generics" action="physicalDelete"
+                                  params="${[id: record.id, entityCode: entityCode]}"
+                                  update="${entityCode}Record${record.id}"
+                                  before="if(!confirm('Are you sure you want to permanantly physically delete the record?')) return false"
+                                  class="fg-button ui-widget ui-state-default ui-corner-all"
+                                  title="Delete record permanantly">
+                        Delete
+                    </g:remoteLink>
+                </g:if>
+
+
+            %{--<g:if test="${entityCode.size() > 1}">--}%
+            %{--<g:remoteLink controller="generics" action="physicalDelete"--}%
+            %{--params="${[id: record.id, entityCode: entityCode]}"--}%
+            %{--update="${entityCode}Record${record.id}"--}%
+            %{--title="Delete record permanantly">--}%
+            %{--Delete--}%
+            %{--</g:remoteLink>--}%
+            %{--</g:if>--}%
+                <g:if test="${entityCode == 'C'}">
+
+                %{--<g:link url="[controller: 'export', action: 'generateCourseWritingsAsHtml', id: record.id]"--}%
+
+                %{--target="_blank"--}%
+                %{--title="Convert to HTML">--}%
+                %{--===--}%
+                %{--</g:link>--}%
+                %{--<br/>--}%
+                    <g:remoteLink controller="export" action="combineCourseWritings"
+                                  id="${record.id}"
+                                  params="[entityCode: entityCode]"
+                                  update="${entityCode}CheckoutLog${record.id}"
+                                  class="fg-button ui-widget ui-state-default ui-corner-all"
+                                  title="Compline course with its writings and their notes">
+                        md &crarr;
+                    </g:remoteLink>
+                    &nbsp;&nbsp;
+                    <g:remoteLink controller="export" action="combineCourseWritingsAsTex"
+                                  id="${record.id}"
+                                  params="[entityCode: entityCode]"
+                                  update="${entityCode}CheckoutLog${record.id}"
+                                  class="fg-button ui-widget ui-state-default ui-corner-all"
+                                  title="Comdine course with its writings and their notes">
+                        tex &crarr;
+                    </g:remoteLink>
+
+
+                %{----}%
+                %{--<br/>--}%
+                %{--<br/>--}%
+                %{--<g:link url="[controller: 'export', action: 'generateCoursePresentation', id: record.id]"--}%
+                %{--class="actionLink"--}%
+                %{--target="_blank"--}%
+                %{--title="Convert to HTML">--}%
+                %{--Generate presentation (new tab)--}%
+                %{--</g:link>--}%
+
+                </g:if>
 
 
 
 
-        %{--<g:if test="${'RWNTGJPCD'.contains(entityCode)}">--}%
-%{--            <g:if test="${record.class.declaredFields.name.contains('language')}">--}%
-%{--            <br/>--}%
-%{--            <br/>--}%
-%{--                Language:--}%
-%{--                <g:select name="language" from="${OperationController.getPath('repository.languages').split(',')}"--}%
-%{--                    value="${record.language}"--}%
-%{--     onchange="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/setLanguage/' + '${record.id}-${entityCode}-' + this.value)"--}%
-%{--  style="overflow: visible; z-index: 200; background: lightgrey" noSelection="${['': '']}"/>--}%
+                <g:if test="${OperationController.getPath('1=2pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                    <g:if test="${record.class.declaredFields.name.contains('keepSecret')}">
+                        <br/>
+                        <br/>
+                        <a name="bookmark${record.id}${entityCode}" title="Toggle privacy"
+                           value="${record.keepSecret}"
+                           onclick="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/togglePrivacy/${entityCode}-${record.id}')">
+                            Make private &nbsp;
+                        </a>
+                    </g:if>
+                </g:if>
+
+
+
+
+            %{--<g:if test="${'RWNTGJPCD'.contains(entityCode)}">--}%
+            %{--            <g:if test="${record.class.declaredFields.name.contains('language')}">--}%
+            %{--            <br/>--}%
+            %{--            <br/>--}%
+            %{--                Language:--}%
+            %{--                <g:select name="language" from="${OperationController.getPath('repository.languages').split(',')}"--}%
+            %{--                    value="${record.language}"--}%
+            %{--     onchange="jQuery('#${entityCode}Record${record.id}').load('${request.contextPath}/generics/setLanguage/' + '${record.id}-${entityCode}-' + this.value)"--}%
+            %{--  style="overflow: visible; z-index: 200; background: lightgrey" noSelection="${['': '']}"/>--}%
 
 
 
 
 
 
-                %{--<g:remoteLink controller="generics" action="setArabic"--}%
-                          %{--id="${record.id}"--}%
-                          %{--params="[entityCode: entityCode]"--}%
-                          %{--update="${entityCode}Record${record.id}"--}%
-                          %{--style="background: lightgrey"--}%
-                          %{--title="Mark arabic">--}%
-                %{--Ar--}%
+            %{--<g:remoteLink controller="generics" action="setArabic"--}%
+            %{--id="${record.id}"--}%
+            %{--params="[entityCode: entityCode]"--}%
+            %{--update="${entityCode}Record${record.id}"--}%
+            %{--style="background: lightgrey"--}%
+            %{--title="Mark arabic">--}%
+            %{--Ar--}%
             %{--</g:remoteLink>--}%
 
             %{--<g:if test="${OperationController.getPath('pkm-actions.enabled')?.toLowerCase() == 'yes' ? true : false}">--}%
             %{--<g:remoteLink controller="generics" action="setPersian"--}%
-                          %{--id="${record.id}"--}%
-                          %{--params="[entityCode: entityCode]"--}%
-                          %{--update="${entityCode}Record${record.id}"--}%
-                          %{--title="Mark as Farsi">--}%
-                %{--Fa--}%
+            %{--id="${record.id}"--}%
+            %{--params="[entityCode: entityCode]"--}%
+            %{--update="${entityCode}Record${record.id}"--}%
+            %{--title="Mark as Farsi">--}%
+            %{--Fa--}%
             %{--</g:remoteLink>--}%
-               %{--</g:if>--}%
+            %{--</g:if>--}%
 
             %{--<g:remoteLink controller="generics" action="setFrench"--}%
-                          %{--id="${record.id}"--}%
-                          %{--params="[entityCode: entityCode]"--}%
-                          %{--update="${entityCode}Record${record.id}"--}%
-                          %{--title="Mark as French">--}%
-                %{--Fr--}%
+            %{--id="${record.id}"--}%
+            %{--params="[entityCode: entityCode]"--}%
+            %{--update="${entityCode}Record${record.id}"--}%
+            %{--title="Mark as French">--}%
+            %{--Fr--}%
             %{--</g:remoteLink>--}%
             %{--<g:remoteLink controller="generics" action="setEnglish"--}%
-                          %{--id="${record.id}"--}%
-                          %{--params="[entityCode: entityCode]"--}%
-                          %{--update="${entityCode}Record${record.id}"--}%
-                          %{--title="Mark as English">--}%
-                %{--En--}%
+            %{--id="${record.id}"--}%
+            %{--params="[entityCode: entityCode]"--}%
+            %{--update="${entityCode}Record${record.id}"--}%
+            %{--title="Mark as English">--}%
+            %{--En--}%
             %{--</g:remoteLink>--}%
-%{--        </g:if>--}%
-%{----}%
-%{--        <br/>--}%
-        <br/>
-
-
-    %{--todo; case of x ,y--}%
-
-
-
-
-        <g:if test="${'R'.contains(entityCode) && ker.OperationController.getPath('excerpts.enabled')?.toLowerCase() == 'yes'}">
-            <div dir="ltr"/>
-            <br/>
-            Add excerpt:
-            <g:formRemote name="appendText" url="[controller: 'book', action: 'addExcerpt']"
-                          update="${entityCode}Record${record.id}"
-                          style="display: inline;">
-                <g:hiddenField name="id" value="${record.id}"/>
-                <g:hiddenField name="entityCode" value="${entityCode}"/>
-                <g:textField id="appendTextFor${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
-                             placeholder="title"
-                             rows="5"
-                             style="width:60%;  display: inline; " value=""/>
-                <g:submitButton name="add" value="+=" style="display:none;"
-                                class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
+            %{--        </g:if>--}%
+            %{----}%
+            %{--        <br/>--}%
                 <br/>
-            </g:formRemote>
-            %{--</div>--}%
-        </g:if>
 
 
-    <g:if test="${'NO'.contains(entityCode) && ker.OperationController.getPath('convert-records.enabled')?.toLowerCase() == 'yes'}">
-    <br/>
-    <br/>
-    &nbsp; &nbsp;<b>Convert to:</b>
-    <g:each in="${['J', 'P', 'T', 'G', 'R', 'W']}" var="t">
-
-        <g:remoteLink controller="generics" action="convertNoteToRecord"
-                      params="${[id: record.id, entityCode: entityCode, type: t]}"
-                      update="${entityCode}Record${record.id}"
-                      class="fg-button ui-widget ui-state-default ui-corner-all convertButton${t}"
-                      title="Convert note to ${t}">
-            &nbsp;${t} &nbsp;
-        </g:remoteLink>
-    </g:each>
-    </g:if>
+            %{--todo; case of x ,y--}%
 
 
-<g:if test="${cmn.Setting.findByName('aws.secret.key') && entityCode == 'R' && record.isbn}">
-    <g:remoteLink controller="book" action="updateBookInfo" id="${record.id}"
-                  update="RRecord${record.id}"
-                  class="actionLink fg-button ui-widget ui-state-default ui-corner-all"
-                  title="Update metadata from Amazon">
-        Update metadata
-    </g:remoteLink>
-    <br/>
-    <br/>
-</g:if>
-<g:if test="${OperationController.getPath('blog.enabled')?.toLowerCase() == 'yes' ? true : false}">
-        <g:if test="${record.class.declaredFields.name.contains('blog')}">
-                                                                     <br/>
-                                                                     <br/>
-            &nbsp;
 
-            <g:set value="blog" var="field"></g:set>
-            Blog:
-            <a href="#" id="${field}${record.id}" class="${field}"
-               data-type="select"
-               data-value="${record[field]?.id}"
-               data-name="${field}-${entityCode}"
-               style=" border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"
-               data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
-               data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
-               data-title="Edit ${field}">
-                ${record[field] ? (record[field]?.code ? 'blog-' + record[field]?.code : 'blog' + record.blog) : 'blog-'}
-            </a>
-            <script type="text/javascript">
-                jQuery("#${field}${record.id}").editable();
-            </script>
-<br/>
-<br/>
 
-            <g:if test="${record?.blog?.code && record.descriptionHTML}">
-                <g:remoteLink controller="generics" action="publish" id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="postResult${record?.id}"
-                              title="Publish record"
-                              class="fg-button ui-widget ui-state-default ui-corner-all">
-                    Publish on <b>${record?.blog?.code}</b>
-                </g:remoteLink>
-            </g:if>
-            <div id="postResult${record.id}" style="display: inline">
+                <g:if test="${'R'.contains(entityCode) && ker.OperationController.getPath('excerpts.enabled')?.toLowerCase() == 'yes'}">
+                    <div dir="ltr">
+                        <br/>
+                        Add excerpt:
+                        <g:formRemote name="appendText" url="[controller: 'book', action: 'addExcerpt']"
+                                      update="${entityCode}Record${record.id}"
+                                      style="display: inline;">
+                            <g:hiddenField name="id" value="${record.id}"/>
+                            <g:hiddenField name="entityCode" value="${entityCode}"/>
+                            <g:textField id="appendTextFor${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
+                                         placeholder="title"
+                                         rows="5"
+                                         style="width:60%;  display: inline; " value=""/>
+                            <g:submitButton name="add" value="+=" style="display:none;"
+                                            class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
+                            <br/>
+                        </g:formRemote>
+                    </div>
+                </g:if>
+
+
+                <g:if test="${'NO'.contains(entityCode) && ker.OperationController.getPath('convert-records.enabled')?.toLowerCase() == 'yes'}">
+                    <br/>
+                    <br/>
+                    &nbsp; &nbsp;<b>Convert to:</b>
+                    <g:each in="${['J', 'P', 'T', 'G', 'R', 'W']}" var="t">
+
+                        <g:remoteLink controller="generics" action="convertNoteToRecord"
+                                      params="${[id: record.id, entityCode: entityCode, type: t]}"
+                                      update="${entityCode}Record${record.id}"
+                                      class="fg-button ui-widget ui-state-default ui-corner-all convertButton${t}"
+                                      title="Convert note to ${t}">
+                            &nbsp;${t} &nbsp;
+                        </g:remoteLink>
+                    </g:each>
+                </g:if>
+
+
+                <g:if test="${cmn.Setting.findByName('aws.secret.key') && entityCode == 'R' && record.isbn}">
+                    <g:remoteLink controller="book" action="updateBookInfo" id="${record.id}"
+                                  update="RRecord${record.id}"
+                                  class="actionLink fg-button ui-widget ui-state-default ui-corner-all"
+                                  title="Update metadata from Amazon">
+                        Update metadata
+                    </g:remoteLink>
+                    <br/>
+                    <br/>
+                </g:if>
+                <g:if test="${OperationController.getPath('blog.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                    <g:if test="${record.class.declaredFields.name.contains('blog')}">
+                        <br/>
+                        <br/>
+                        &nbsp;
+
+                        <g:set value="blog" var="field"></g:set>
+                        Blog:
+                        <a href="#" id="${field}${record.id}" class="${field}"
+                           data-type="select"
+                           data-value="${record[field]?.id}"
+                           data-name="${field}-${entityCode}"
+                           style=" border-radius: 3px; font-size: 0.9em; font-style: italic; padding-left: 1px; padding-right: 1px;"
+                           data-source="${request.contextPath}/operation/getQuickEditValues?entity=${entityCode}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                           data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
+                           data-title="Edit ${field}">
+                            ${record[field] ? (record[field]?.code ? 'blog-' + record[field]?.code : 'blog' + record.blog) : 'blog-'}
+                        </a>
+                        <script type="text/javascript">
+                            jQuery("#${field}${record.id}").editable();
+                        </script>
+                        <br/>
+                        <br/>
+
+                    %{--<g:if test="${record?.blog?.code && record.descriptionHTML}">--}%
+
+                        <g:remoteLink controller="generics" action="publish" id="${record.id}"
+                                      params="[entityCode: entityCode]"
+                                      update="postResult${record?.id}"
+                                      before="jQuery('#postResult${record?.id}').html()"
+                                      title="Publish record"
+                                      class="fg-button ui-widget ui-state-default ui-corner-all">
+                            Publish
+                        %{--<b>${record?.blog?.code}</b>--}%
+                        </g:remoteLink>
+                    %{--</g:if>--}%
+
+
+                        <div id="postResult${record.id}" style="display: inline">
+                        </div>
+                        <g:if test="${record.publishedNodeId}">
+                            Published with ID: (${record.publishedNodeId})
+                        </g:if>
+
+                    </g:if>
+
+
+
+
+                    <span id="${entityCode}CheckoutLog${record.id}"></span>
+
+
+
+                    <g:if test="${(entityCode == 'W') || entityCode == 'N'}">
+
+
+                    %{--|| entityCode == 'N'--}%
+                    %{--<g:remoteLink--}%
+                    %{--url="[controller: 'generics', action: 'convertMarkupToHtml', id: record.id, params: [entityCode: entityCode]]"--}%
+                    %{--update="3rdPanel"--}%
+                    %{--before="jQuery('#accordionEast').accordion({ active: 0});"--}%
+                    %{--class="actionLink"--}%
+                    %{--title="Convert to HTML">--}%
+                    %{--==--}%
+                    %{--</g:remoteLink>--}%
+
+                        <g:remoteLink controller="generics" action="notes2Operations"
+                                      id="${record.id}"
+                                      params="[entityCode: entityCode]"
+                                      update="${entityCode}CheckoutLog${record.id}"
+                                      title="Checkout record">
+                            to operations &crarr;
+                        </g:remoteLink>
+                        <g:remoteLink controller="generics" action="checkoutRecordText"
+                                      id="${record.id}"
+                                      params="[entityCode: entityCode]"
+                                      update="${entityCode}CheckoutLog${record.id}"
+                                      title="Checkout record">
+                            out &crarr;
+                        </g:remoteLink>
+
+                    </g:if>
+                    <g:if test="${entityCode == 'W'}">
+
+                        <g:remoteLink controller="export" action="combineWritingNotes"
+                                      id="${record.id}"
+                                      params="[entityCode: entityCode]"
+                                      update="${entityCode}CheckoutLog${record.id}"
+                                      title="Compile writing with its notes">
+                            cmp &crarr;
+                        </g:remoteLink>
+
+                    </g:if>
+
+
+                    &nbsp;
+                %{--            <g:remoteLink controller="operation" action="pandoc" id="${record.id}"--}%
+                %{--                          params="[entityCode: entityCode]"--}%
+                %{--                          update="postResult${record?.id}"--}%
+                %{--                          title="Publish record"--}%
+                %{--                          class="fg-button ui-widget ui-state-default ui-corner-all">--}%
+                %{--                pandoc--}%
+                %{--            </g:remoteLink>--}%
+                %{--                            &nbsp;--}%
+
+
+                %{--<g:if test="${entityCode == 'W' && !record.code}">--}%
+                %{--<b style="color: red">No code</b>--}%
+                %{--</g:if>--}%
+                </g:if>
+
+
+                <br/>
             </div>
-            <g:if test="${record.publishedNodeId}">
-                Published with ID: (${record.publishedNodeId})
+
+            <br/>
+            <br/>
+
+
+            <g:if test="${OperationController.getPath('markdown.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                <g:if test="${'RN'.contains(entityCode)}">
+                    <g:if test="${!record.withMarkdown}">
+                        <br/>
+                        <br/>
+                        <g:remoteLink controller="generics" action="markAsMarkdowned" style="padding: 5px; margin: 5px;"
+                                      params="${[id: record.id, entityCode: entityCode]}"
+                                      update="notificationLog"
+                                      class="fg-button ui-widget ui-state-default ui-corner-all"
+                                      title="Mark that the content is markdown">
+                            Mark contents as markdown
+                        </g:remoteLink>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                    </g:if>
+                    <g:else>
+
+                        <br/>
+                        <br/>
+
+
+                        Description in markdown
+
+                        <g:remoteLink controller="generics" action="unmarkAsMarkdowned"
+                                      params="${[id: record.id, entityCode: entityCode]}"
+                                      update="notificationLog"
+                                      class="fg-button ui-widget ui-state-default ui-corner-all"
+                                      title="Unmark that the content as markdown">
+                            unset
+                        </g:remoteLink>
+
+                        <br/>
+                        <br/>
+                    </g:else>
+                </g:if>
             </g:if>
 
+
+            <g:if test="${'R'.contains(entityCode)}">
+                <br/>
+
+                <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}" style="font-size: 11px; background: lightgrey; padding: 3px;">
+                    <g:set value="${record.language == 'en' ? ',' : '،'}" var="comma"></g:set>
+                    <g:if test="${record.type?.code == 'ebk'}">
+                        ${record.author}${comma}
+                        ${record.title}${record.translator ? ' - ' + record.translator : ''}${record.editor ? ' - ' + record.editor: ''}${record.edition ? comma + ' ' + record.edition + ' ': ''}
+                        (${record.publicationCity ? record.publicationCity + ': ' : '' }${record.publisher}${comma}${record.resourceYear ?: record.publicationDate}).
+                    </g:if>
+                    <g:if test="${record.type?.code == 'art'}">
+                        ${record.author}${comma}
+                        "${record.title}" ${record.translator ? ' - ' + record.translator : ''}${record.editor ? ' - ' + record.editor: ''} ${record.journal}. ${record.volume} ${record.number} ${record.pages}
+                        (${record.publicationCity ? record.publicationCity + ': ' : '' }${record.publisher}${comma}${record.resourceYear ?: record.publicationDate}).
+                        ${record.url}${record.sourceFree}
+
+                    </g:if>
+                </div>
+                <br/>
+            %{--<br/>--}%
             </g:if>
 
+            <g:if test="${entityCode == 'T' && record.recurringCron}">
 
+                <g:set value="recurringInterval" var="field"></g:set>
+                <b>Recurrence:</b>
+                <br/>
+                <code>${record.recurringCron}</code>
 
+                <br/><br/>
+                <b>Planned duration: </b>
+                ${record.plannedDuration?.toInteger() ?: 'No set. Default is 30min.'}
+                <br/>
+                <br/>
 
-            <span id="${entityCode}CheckoutLog${record.id}"></span>
+                <g:remoteLink controller="export" action="showNextRecurringDates"
+                              params="${[id: record.id]}"
+                              update="${entityCode}Record${record.id}NextDates"
+                              style="border: 1px solid darkgray; padding: 1px;"
+                              title="">
+                    Show upcoming occurrences...
+                </g:remoteLink>&nbsp;
+                <br/>
+                <br/>
+                <div id="${entityCode}Record${record.id}NextDates"></div>
 
-
-
-            <g:if test="${(entityCode == 'W') || entityCode == 'N'}">
-
-
-            %{--|| entityCode == 'N'--}%
-            %{--<g:remoteLink--}%
-            %{--url="[controller: 'generics', action: 'convertMarkupToHtml', id: record.id, params: [entityCode: entityCode]]"--}%
-            %{--update="3rdPanel"--}%
-            %{--before="jQuery('#accordionEast').accordion({ active: 0});"--}%
-            %{--class="actionLink"--}%
-            %{--title="Convert to HTML">--}%
-            %{--==--}%
-            %{--</g:remoteLink>--}%
-
-                <g:remoteLink controller="generics" action="notes2Operations"
-                              id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="${entityCode}CheckoutLog${record.id}"
-                              title="Checkout record">
-                    to operations &crarr;
+                <br/>
+                <g:remoteLink controller="export" action="generateNextRecurringPlans"
+                              params="${[id: record.id]}"
+                              update="${entityCode}Record${record.id}NextDates"
+                              style="border: 1px solid darkgray ; padding: 1px;"
+                              title="">
+                    Generate plan records...
                 </g:remoteLink>
-      <g:remoteLink controller="generics" action="checkoutRecordText"
-                              id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="${entityCode}CheckoutLog${record.id}"
-                              title="Checkout record">
-                    out &crarr;
-                </g:remoteLink>
 
+                <br/>  <br/>
+
+                Repeat
+                <a href="#" id="${field}${record.id}" class="${field}"
+                   data-type="select" title="Recurring interval"
+                   data-value="${record[field]}"
+                   data-name="${field}-${record.entityCode()}"
+                   data-source="${request.contextPath}/operation/getQuickEditValues?entity=${record.entityCode()}&field=${field}&date=${new Date().format('hhmmssDDMMyyyy')}"
+                   data-pk="${record.id}" data-url="${request.contextPath}/operation/quickSave2"
+                   data-title="Edit ${field}">
+                    ${record[field] ? '--' + record[field] + '--' : '----'}
+                </a> times.
+                <script>
+                    jQuery("#${field}${record.id}").editable();
+                </script>
+
+
+                &nbsp;
+                &nbsp;
             </g:if>
-            <g:if test="${entityCode == 'W'}">
 
-                <g:remoteLink controller="export" action="combineWritingNotes"
-                              id="${record.id}"
-                              params="[entityCode: entityCode]"
-                              update="${entityCode}CheckoutLog${record.id}"
-                              title="Compile writing with its notes">
-                    cmp &crarr;
-                </g:remoteLink>
 
+        %{--todo: new setting 30.07.2021 10:39 --}%
+
+            <g:if test="${'G'.contains(entityCode) && ker.OperationController.getPath('task-steps.enabled')?.toLowerCase() == 'yes'}">
+                <g:if test="${record.percentCompleted}">
+                    <b>Percent completed</b>: ${record.percentCompleted}
+                    <br/>
+                </g:if>
+            %{--<g:if test="${record.totalSteps}">--}%
+            %{--<b>Total steps</b>: ${record.totalSteps}--}%
+            %{--<br/>--}%
+            %{--</g:if>--}%
+                <g:if test="${record.class.declaredFields.name.contains('completedSteps')}">
+
+                    <g:formRemote name="saveCompletedSteps" url="[controller: 'operation', action: 'updateCompletedSteps', id: record.id]"
+                                  update="displayCompletedSteps"
+                                  style="display: inline;">
+                    %{--<g:hiddenField name="id" value="${record.id}"/>--}%
+                        <g:hiddenField name="entityCode" value="${entityCode}"/>
+                    %{--placeholder="ما اُنجز"--}%
+                        <b>Completed steps</b>:  <g:textField id="saveCompletedSteps${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
+                                                              rows="5"
+                                                              style="width:20%;  display: inline; " value="${record.completedSteps}"/>
+                        <g:submitButton name="add" value="=" style="display:none;"
+                                        class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
+                    %{--<br/>--}%
+                    </g:formRemote>
+                    &nbsp;    <span id="displayCompletedSteps"></span>
+
+
+                    <br/>
+                </g:if>
+
+                <g:if test="${record.class.declaredFields.name.contains('totalSteps')}">
+                    <g:formRemote name="saveTotalSteps" url="[controller: 'operation', action: 'updateTotalSteps', id: record.id]"
+                                  update="displayTotalSteps"
+                                  style="display: inline;">
+                    %{--<g:hiddenField name="id" value="${record.id}"/>--}%
+                        <g:hiddenField name="entityCode" value="${entityCode}"/>
+                        <b>Total steps</b>:
+                    %{--placeholder="عدد الخطوات"--}%
+                        <g:textField id="saveTotalSteps${entityCode}${record.id}" name="text" class="ui-corner-all" cols="80"
+                                     rows="5"
+                                     style="width:20%;  display: inline; " value="${record.totalSteps}"/>
+                        <g:submitButton name="add" value="=" style="display:none;"
+                                        class="fg-button ui-widget ui-state-default ui-corner-all navHidden"/>
+                    %{--<br/>--}%
+                    </g:formRemote>
+                    &nbsp;    <span id="displayTotalSteps"></span>
+
+                </g:if>
             </g:if>
 
 
-            &nbsp;
-%{--            <g:remoteLink controller="operation" action="pandoc" id="${record.id}"--}%
-%{--                          params="[entityCode: entityCode]"--}%
-%{--                          update="postResult${record?.id}"--}%
-%{--                          title="Publish record"--}%
-%{--                          class="fg-button ui-widget ui-state-default ui-corner-all">--}%
-%{--                pandoc--}%
-%{--            </g:remoteLink>--}%
-%{--                            &nbsp;--}%
-
-
-        %{--<g:if test="${entityCode == 'W' && !record.code}">--}%
-        %{--<b style="color: red">No code</b>--}%
+        %{--<g:if test="${record.class.declaredFields.name.contains('percentCompleted')}">--}%
+        %{--<a name="bookmark${record.id}${entityCode}" title="percent++"--}%
+        %{--value="${record.percentCompleted}"--}%
+        %{--onclick="jQuery('#displayTotalSteps').load('${request.contextPath}/generics/increasePercentCompleted/${entityCode}${record.id}')">--}%
+        %{--Step++--}%
+        %{--</a>--}%
+        %{--<br/>--}%
         %{--</g:if>--}%
-        </g:if>
 
 
-        <br/>
-        </div>
 
-    <br/>
-    <br/>
-
-<g:if test="${OperationController.getPath('markdown.enabled')?.toLowerCase() == 'yes' ? true : false}">
-    <g:if test="${'RN'.contains(entityCode)}">
-    <g:if test="${!record.withMarkdown}">
-
-        <g:remoteLink controller="generics" action="markAsMarkdowned"
-                      params="${[id: record.id, entityCode: entityCode]}"
-                      update="notificationLog"
-                      class="fg-button ui-widget ui-state-default ui-corner-all"
-                      title="Mark that the content is markdown">
-            Mark contents as markdown
-        </g:remoteLink>
-
-        </g:if>
-        <g:else>
-            Markdowned!
-        </g:else>
-        </g:if>
-        </g:if>
-    <g:if test="${'R'.contains(entityCode)}">
-
-
-        <div class="${record.class.declaredFields.name.contains('language') ? 'text' + record.language : ''}" style="font-size: 11px; background: lightgrey; padding: 3px;">
-            <g:set value="${record.language == 'en' ? ',' : '،'}" var="comma"></g:set>
-            <g:if test="${record.type?.code == 'ebk'}">
-                ${record.author}${comma}
-                ${record.title}${record.translator ? ' - ' + record.translator : ''}${record.editor ? ' - ' + record.editor: ''}${record.edition ? comma + ' ' + record.edition + ' ': ''}
-                (${record.publicationCity ? record.publicationCity + ': ' : '' }${record.publisher}${comma}${record.year ?: record.publicationDate}).
+            <g:if test="${record.class.declaredFields.name.contains('reviewHistory') && record.reviewHistory}">
+                <b>Review history:</b> ${record.reviewHistory}
+                <br/>
             </g:if>
-            <g:if test="${record.type?.code == 'art'}">
-                ${record.author}${comma}
-                "${record.title}" ${record.translator ? ' - ' + record.translator : ''}${record.editor ? ' - ' + record.editor: ''} ${record.journal}. ${record.volume} ${record.number} ${record.pages}
-                (${record.publicationCity ? record.publicationCity + ': ' : '' }${record.publisher}${comma}${record.year ?: record.publicationDate}).
-                ${record.url}${record.sourceFree}
+            <g:if test="${record.class.declaredFields.name.contains('stepsHistory') && record.stepsHistory}">
+                <b>Steps history:</b>
+                <br/>${record.stepsHistory?.replace('-', '<br/>')}
+                <br/>
+            </g:if>
+
+            <g:if test="${record.entityCode() == 'R'}">
+
+                <g:if test="${(new File(OperationController.getPath('root.rps1.path') + '/cvr/' +
+                        record?.type?.code + '/' + record.id + '.jpg')?.exists() || new File(OperationController.getPath('root.rps2.path') + '/cvr/' + record?.type?.code + '/' + record.id + '.jpg')?.exists())}">
+
+                    <a href="${createLink(controller: 'book', action: 'viewImage', id: record.id)}"
+                       target="_blank">
+                        <img class="Photo" style="width: 80px; height:120px; display:inline"
+                             src="${createLink(controller: 'book', action: 'viewImage', id: record.id, params: [date: new Date()])}"/>
+                    </a>
+                </g:if>
 
             </g:if>
-        </div>
-
-    %{--<br/>--}%
-    </g:if>
-
-
-
-<g:if test="${record.class.declaredFields.name.contains('completedOn') && record.completedOn}">
-
-    <b>Completed on</b> ${record.completedOn?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
-    %{--(<prettytime:display--}%
-        %{--date="${record.completedOn}"/>)--}%
-
-    <g:remoteLink controller="generics" action="resetCompletedOnStatus"
-                  params="${[id: record.id, entityCode: entityCode]}"
-                  update="resetCompletedOn"
-                  title="Reset completion status">
-x
-    </g:remoteLink>
-    <span id="resetCompletedOn"></span>
-
-
-    <br/>
-    <br/>
-    </g:if>
-   <g:if test="${record.class.declaredFields.name.contains('readOn') && record.readOn}">
-
-    <b>Read on</b> ${record.readOn?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
-       %{--(<prettytime:display--}%
-        %{--date="${record.readOn}"/>)--}%
-
-       <g:remoteLink controller="generics" action="resetReadOnStatus"
-                     params="${[id: record.id, entityCode: entityCode]}"
-                     update="resetReadOn"
-                     title="Reset reading status">
-           x
-       </g:remoteLink>
-       <span id="resetReadOn"></span>
-
-       <br/>
-       <br/>
-
-    </g:if>
-</div>
-</div>
-
-%{--heading--}%
-<div class="">
-    %{--<h2>Create new record...</h2>--}%
-    <h4 style="user-focus-pointer: hand; cursor: hand;">Files...</h4>
-    <hr/>
-    <br/>
-</div>
-%{--content--}%
-<div class="">
-
-
-    <g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
-
-
-    <pkm:listPictures fileClass="snsFile"
-                      folder="${OperationController.getPath('root.rps1.path')}/${record.entityCode()}/${record.id}"
-                      initial=""/>
-
-    <pkm:listPictures fileClass="snsFile"
-                      folder="${OperationController.getPath('root.rps2.path')}/${record.entityCode()}/${record.id}"
-                      initial=""/>
-
-    <pkm:listPictures fileClass="snsFile"
-                      folder="${OperationController.getPath('root.rps1.path')}/${record.entityCode()}"
-                      initial="${record.id}"/>
-
-    <pkm:listPictures fileClass="snsFile"
-                      folder="${OperationController.getPath('root.rps2.path')}/${record.entityCode()}"
-                      initial="${record.id}"/>
 
 
 
 
-    <g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
-<br/>
-<br/>
-<b>Upload files to record <i>rps1</i> folder:</b>
-        %{--(${typeSandboxPath})--}%
-%{--<br/>--}%
-<br/>
-%{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
-<uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
-             name="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
-             controller="import" action="upload" path="${typeSandboxPath}"
-             placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
-             noSound="true"
-             direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1" class="demo">
-    <uploadr:onSuccess>
-        jQuery('#spinner2').hide();
-        jQuery('.info-badge').html('Done uploading files.');
-        </uploadr:onSuccess>
 
-</uploadr:add>
-    </g:if>
 
-<g:if test="${1 == 2 && OperationController.getPath('upload-cover.enabled')?.toLowerCase() == 'yes' ? true : false}">
+        %{--direction: ${record?.source?.language == 'ar' ? 'rtl' : 'ltr'}--}%
+        %{--todo--}%
 
-        <br/>
-        <br/>
 
-        <b>Upload cover</b>:
-        <uploadr:add id="uploadCover${record.id}"
-                     name="uploaderCover${new Date()?.format('ddMMyyyyHHmmss')}"
-                     controller="import" action="uploadCover2" path="${coverPath}"
-                     noSound="true"
-                     direction="down" maxVisible="5" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1">
-            <uploader:onSuccess>
-                jQuery('#subUploadInPanel').html('Cover uploaded.')//load('/pkm/generics/showSummary/' + responseJSON.id + '?entityCode=' +  responseJSON.entityCode)
-            </uploader:onSuccess>
-            Upload...
-        </uploadr:add>
-</g:if>
 
-<g:if test="${OperationController.getPath('open-record-folders.enabled')?.toLowerCase() == 'yes' ? true : false}">
-<br/>
-<br/>
 
-    <div style="background: #e7eeeb; border: 1px #7dba82; margin: 20px 0">
-Open record's folder:
-&nbsp;
-<g:remoteLink controller="generics" action="openRpsFolder"
-              params="${[id: record.id, entityCode: entityCode, repository: 1]}"
-              update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps1 folder: ${OperationController.getPath('root.rps1.path')}">
-    <u><b>&nbsp; repo. 1&nbsp;</b></u>
-</g:remoteLink>
-/
-<g:remoteLink controller="generics" action="openRpsFolder"
-              params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
-              update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps2 folder: ${OperationController.getPath('root.rps2.path')}">
-    <u><b>&nbsp;2&nbsp;</b></u>
-</g:remoteLink>
-/
-<g:remoteLink controller="generics" action="openRpsFolder"
-              params="${[id: record.id, entityCode: entityCode,  repository: 3]}"
-              update="${entityCode}Record${record.id}OpenLog"
-              title="Open rps3 folder: ${OperationController.getPath('root.rps3.path')}">
-    <u><b>&nbsp;3&nbsp;</b></u>
-</g:remoteLink>.
 
-        <g:if test="${record.class.declaredFields.name.contains('nbFiles')}">
-        <g:if test="${record.nbFiles}">
-        %{--<g:if test="${record.nbFiles}">--}%
-            <br/>
 
-            <b> Number of files: </b><span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.
-        </g:if>
-            <br/>
-            <br/>
-        <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}" params="[entityCode: entityCode]"
-                      update="${entityCode}Record${record.id}OpenLog" style=""
-                      title="Update files count">
-            Update count <b>&circlearrowright;</b>
-        </g:remoteLink>
-                         &nbsp;
-                <g:remoteLink controller="operation" action="copyToRps1"
+
+        %{--direction: ${record?.source?.language == 'ar' ? 'rtl' : 'ltr'}; text-align: ${record?.source?.language == 'ar' ? 'right' : 'left'}--}%
+        %{--todo--}%
+
+        %{--</div>--}%
+
+
+
+
+
+        %{--<g:each in="${app.IndexCard.findAllByEntityCodeAndRecordId(entityCode, record.id)}" var="c">--}%
+        %{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
+        %{--</g:each>--}%
+
+        %{--<g:if test="${'R'.contains(record.entityCode())}">--}%
+        %{--<g:each in="${app.IndexCard.findAllByBook(record)}" var="c">--}%
+        %{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
+        %{--</g:each>--}%
+        %{--</g:if>--}%
+        %{--<g:if test="${'W'.contains(record.entityCode())}">--}%
+        %{--<g:each in="${app.IndexCard.findAllByWriting(record)}" var="c">--}%
+        %{--<g:render template="/gTemplates/box" model="[record: c]"/>--}%
+        %{--</g:each>--}%
+        %{--</g:if>--}%
+
+
+
+
+
+            <g:if test="${record.entityCode() == 'todoR'}">
+                <div id="type-4" style="">
+
+                    <g:if test="${'R'.contains(record.entityCode())}">
+                    %{--<h4>Notes</h4>--}%
+
+                        <h4>Excerpts</h4>
+                        <g:each in="${Excerpt.findAllByBook(record)}" var="r">
+
+                            <g:render template="/gTemplates/recordSummary" model="[record: r, expandedView: false]"/>
+                        </g:each>
+                    %{--<g:each in="${Planner.findAllByBook(record)}" var="r">--}%
+                    %{----}%
+                    %{--<g:render template="/gTemplates/recordSummary" model="[record: r]"/>--}%
+                    %{--</g:each>--}%
+
+                    </g:if>
+
+                </div>
+            </g:if>
+            <div id="type-7" style="">
+
+            </div>
+
+
+
+
+        %{--<br/>--}%
+
+
+
+
+            <g:if test="${record.entityCode() == 'D'}">
+                <div id="OrderTheFields" style="-moz-columns-count:1">
+                    <h4>Order the courses</h4>
+                    <table id="table1">
+                    %{--<ul id="item_list" >--}%
+                        <g:each in="${mcs.Course.findAllByDepartment(mcs.Department.get(record.id), [sort: 'orderNumber', order: 'asc'])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td>
+                                    #${c.orderNumber} C-${c.id} - ${c.summary}
+                                </td></tr>
+                        </g:each>
+                    </table>
+                    <a style="font-size: 10px; text-align: right;" href="#"
+                       onclick='jQuery("#OrderTheFields").load("${request.contextPath}/operation/orderRecords?type=D&child=C&tableId=1", jQuery("#table1").tableDnDSerialize())'>
+                        Sort</a>
+
+                    <hr/>
+                </div>
+
+                <script type="text/javascript">
+                    jQuery("#table1").tableDnD();
+                </script>
+            </g:if>
+
+            <g:if test="${record.entityCode() == 'C'}">
+
+                <ol style="dir: rtl; text-align: right;">
+                    <g:each in="${mcs.Writing.findAllByCourseAndPriorityGreaterThan(record, 2, [sort: 'orderNumber', order: 'asc'])}"
+                            var="c">
+                        <li style="font-weight: normal;">
+
+                            W-${c.id} - <b>${c.summary}
+                        %{--r${c.reviewCount}--}%
+                        </li>
+                        <ol style="dir: rtl; text-align: right;">
+                            <g:each in="${app.IndexCard.executeQuery('from IndexCard i where i.recordId = ? and i.entityCode = ? and i.priority >= 2 order by i.orderNumber asc',
+                                    [c.id.toString(), 'W'])}"
+                                    var="n">
+                                <li style="font-weight: normal;">
+                                    N-${n.id} - ${n.summary}
+                                    %{--<pkm:summarize text="${c.description}"  length="80"/>--}%
+                                </li>
+                            </g:each>
+
+                        </ol>
+
+
+                    </g:each>
+
+
+
+                    <g:each in="${app.IndexCard.executeQuery('from IndexCard i where i.recordId = ? and i.course = ? and i.priority > ? order by orderNumber asc' ,[null, record, 2])}"
+                            var="n">
+
+                        <li>
+                            N-${n.id} - ${n.summary}
+                            %{--r${n.reviewCount}--}%
+                            %{--<pkm:summarize text="${c.description}"  length="80"/>--}%
+                        </li>
+                    </g:each>
+
+
+
+                </ol>
+
+
+
+
+
+                <div id="OrderTheFields" style="-moz-columns-count:1">
+                    <h4>Order the goals</h4>
+                    <table id="table1">
+                    %{--<ul id="item_list" >--}%
+                        <g:each in="${mcs.Goal.findAllByCourse(Course.get(record.id), [sort: 'orderNumber', order: 'asc'])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td>
+                                    #${c.orderNumber} G-${c.id} - ${c.summary} <pkm:summarize text="${c.description}"
+                                                                                              length="80"/>
+                                </td></tr>
+                        </g:each>
+                    </table>
+                    <br/>
+                    <a style="font-size: 10px; text-align: right;" href="#"
+                       onclick='jQuery("#OrderTheFields").load("${request.contextPath}/operation/orderRecords?type=C&child=G&tableId=1", jQuery("#table1").tableDnDSerialize())'>
+                        Sort</a>
+
+                    <hr/>
+
+                    <table id="table2">
+                        %{--<ul id="item_list" >--}%
+                        <h4>Order the writings</h4>
+                        <g:each in="${mcs.Writing.findAllByCourseAndPriorityGreaterThan(Course.get(record.id), 2, [sort: 'orderNumber', order: 'asc'])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td>
+                                    #${c.orderNumber} W-${c.id} - <b>${c.summary}</b>
+
+                                    %{--<pkm:summarize--}%
+                                    %{--text="${c.description}"--}%
+                                    %{--length="80"/>--}%
+                                </td>
+                            </tr>
+                        </g:each>
+                    </table>
+                    <br/>
+                    <a style="font-size: 10px; text-align: right;" href="#"
+                       onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=W&tableId=2", jQuery("#table2").tableDnDSerialize())'>
+                        Sort</a>
+
+                    <hr/>
+
+                    <table id="table3">
+                        <h4>Order the resources</h4>
+                        <g:each in="${mcs.Book.findAllByCourse(Course.get(record.id), [sort: 'orderNumber', order: 'asc'])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td>
+                                    #${c.orderInCourse} B-${c.id} - ${c.title} ${c.legacyTitle}<pkm:summarize
+                                            text="${c.description}" length="80"/>
+                                </td></tr>
+                        </g:each>
+                    </table>
+                    <br/>
+                    <a style="font-size: 10px; text-align: right;" href="#"
+                       onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=R&tableId=3", jQuery("#table3").tableDnDSerialize())'>
+                        Sort</a>
+
+
+
+                    <table id="table4">
+                        %{--<ul id="item_list" >--}%
+                        <h4>Order the excerpts</h4>
+                        <g:each in="${mcs.Excerpt.executeQuery('from Excerpt r where r.book.course = ? order by orderNumber asc', [Course.get(record.id)])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td>
+                                    #${c.orderNumber} R-${c.id} - <b>${c.book?.title} ${c.book?.legacyTitle}</b>:${c.chapters} ${c.summary}
+                                </td></tr>
+                        </g:each>
+                    </table>
+                    <br/>
+                    <a style="font-size: 10px; text-align: right;" href="#"
+                       onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=E&tableId=4", jQuery("#table4").tableDnDSerialize())'>
+                        Sort</a>
+
+                    <table id="table5">
+                        %{--<ul id="item_list" >--}%
+                        <h4>Order the tasks</h4>
+                        <g:each in="${mcs.Excerpt.executeQuery('from Task r where r.course = ? and r.bookmarked = ? order by orderNumber asc', [Course.get(record.id), true])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td>
+                                    #${c.orderNumber} T-${c.id} - <b>${c?.summary}
+                                </td></tr>
+                        </g:each>
+                    </table>
+                    <input type="button" id="sortButton5" value="Save sort"
+                           onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=C&child=T&tableId=5", jQuery("#table5").tableDnDSerialize())'/>
+
+
+
+
+
+
+                    <script type="text/javascript">
+                        jQuery("#table1").tableDnD();
+                        jQuery("#table2").tableDnD();
+                        jQuery("#table3").tableDnD();
+                        jQuery("#table4").tableDnD();
+                        jQuery("#table5").tableDnD();
+                    </script>
+                </div>
+            </g:if>
+
+            <g:if test="${record.entityCode() == 'W' && app.IndexCard.executeQuery('select count(*) from IndexCard i where i.recordId = ? and i.entityCode = ? and i.priority >= 2',
+                    [record.id.toString(), 'W'])[0] > 0}">
+                <h4>Order the notes</h4>
+
+                <div id="OrderTheFields" style="direction: rtl; text-align: right !important;">
+
+                    <table id="table1">
+                    %{--<ul id="item_list" >--}%
+                    %{--<g:each in="${app.IndexCard.findAllByWriting(Writing.get(record.id), [sort: 'orderNumber', order: 'asc'])}"--}%
+                    %{--var="c">--}%
+                    %{--<tr id="${c.id}">--}%
+                    %{--<td>--}%
+                    %{--#${c.orderNumber} C-${c.id} - ${c.summary} <pkm:summarize text="${c.description}"--}%
+                    %{--length="80"/>--}%
+                    %{--</td></tr>--}%
+                    %{--</g:each>--}%
+                        <g:each in="${app.IndexCard.executeQuery('from IndexCard i where i.recordId = ? and i.entityCode = ? and i.priority >= 2 order by i.orderNumber asc',
+                                [record.id.toString(), 'W'])}"
+                                var="c">
+                            <tr id="${c.id}">
+                                <td  style="direction: rtl; text-align: right !important; margin: 5px;">
+                                    #${c.orderNumber} p${c.priority} W-${c.id} - ${c.summary}
+                                    %{--<pkm:summarize text="${c.description}"  length="80"/>--}%
+                                </td>
+                            </tr>
+                        </g:each>
+                    </table>
+                    <br/>
+                    <a style="font-size: 10px; text-align: right;" href="#"
+                       onclick='jQuery("#OrderTheFields").load("operation/orderRecords?type=W&child=N&tableId=1", jQuery("#table1").tableDnDSerialize())'>
+                        Sort</a>
+
+                    <script type="text/javascript">
+                        jQuery("#table1").tableDnD();
+                    </script>
+                </div>
+
+            </g:if>
+
+        &nbsp;
+        %{--<br/>--}%
+        %{--<br/>--}%
+
+
+
+            <g:if test="${record.class.declaredFields.name.contains('completedOn') && record.completedOn}">
+
+                <b>Completed on</b> ${record.completedOn?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
+            %{--(<prettytime:display--}%
+            %{--date="${record.completedOn}"/>)--}%
+
+                <g:remoteLink controller="generics" action="resetCompletedOnStatus"
                               params="${[id: record.id, entityCode: entityCode]}"
-                              update="${entityCode}Record${record.id}OpenLog"
-                              title="Copy files from rps2 (${OperationController.getPath('root.rps2.path')}) to rps1 (${OperationController.getPath('root.rps1.path')})">
-                Out <b>   &darr;
-                    &darr;</b>
+                              update="resetCompletedOn"
+                              title="Reset completion status">
+                    x
                 </g:remoteLink>
-        <br/>
-        <br/>
-        &nbsp;<span id="${entityCode}Record${record.id}OpenLog"></span>
-
-</g:if>
-</g:if>
-</div>
-
-</div>
-<hr/>
-<br/>
-    <br/>
-%{--&nbsp;/--}%
-%{--&nbsp;--}%
-<g:if test="${1 == 2}">
-<g:if test="${entityCode == 'R'}">
-    <br/>
-    <br/>
-opf    ${OperationController.getPath('root.rps1.path')}R/${record.type?.code}/${(record.id / 100).toInteger()}/${record.id}
-    <br/>
-opf    ${OperationController.getPath('root.rps2.path')}R/${record.type?.code}/${(record.id / 100).toInteger()}/${record.id}
-</g:if>
-<g:else>
-    <br/>
-    <br/>
-opf    ${OperationController.getPath('root.rps1.path')}${entityCode}/${record.id}
-    <br/>
-opf    ${OperationController.getPath('root.rps2.path')}${entityCode}/${record.id}
-</g:else>
-</g:if>
+                <span id="resetCompletedOn"></span>
 
 
+                <br/>
+                <br/>
+            </g:if>
+            <g:if test="${record.class.declaredFields.name.contains('readOn') && record.readOn}">
 
-<div style="background: #cee2db; border: 1px #206e24">
-<b>Updated</b> ${record.lastUpdated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
-%{--(<prettytime:display--}%
+                <b>Read on</b> ${record.readOn?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
+            %{--(<prettytime:display--}%
+            %{--date="${record.readOn}"/>)--}%
+
+                <g:remoteLink controller="generics" action="resetReadOnStatus"
+                              params="${[id: record.id, entityCode: entityCode]}"
+                              update="resetReadOn"
+                              title="Reset reading status">
+                    x
+                </g:remoteLink>
+                <span id="resetReadOn"></span>
+
+                <br/>
+                <br/>
+
+            </g:if>
+
+
+        %{--heading--}%
+        %{--<div class="">--}%
+        %{--<h2>Create new record...</h2>--}%
+        %{--<hr/>--}%
+        %{--<br/>--}%
+        %{--<h3 style="user-focus-pointer: hand; cursor: hand;">Files...</h3>--}%
+        %{--</div>--}%
+        %{--content--}%
+
+
+
+
+
+        %{--Working--}%
+        %{----}%
+
+
+
+
+        </div>
+    </li>
+
+    <li class="">
+        <a class="uk-accordion-title" href="#">
+            Log
+        </a>
+        <div class="uk-accordion-content">
+
+
+
+            %{--<div style="background: #cee2db; border: 1px #206e24">--}%
+            <b>Updated</b> ${record.lastUpdated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
+        %{--(<prettytime:display--}%
         %{--date="${record.lastUpdated}"/>)--}%
-    <br/>
-    %{--(<prettytime:display--}%
-    %{--date="${record.dateCreated}"/>)--}%
-    %{--by ${record.insertedBy}--}%
-    %{--editedBy ${record.editedBy}--}%
-<b>Created</b> ${record.dateCreated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
-%{--(${new PrettyTime()?.format(record.dateCreated)})--}%
-    <br/>
-<b>Version</b> <span style="font-weight: normal">${record.version}</span>
-    <br/>
+            <br/>
+            %{--(<prettytime:display--}%
+            %{--date="${record.dateCreated}"/>)--}%
+            %{--by ${record.insertedBy}--}%
+            %{--editedBy ${record.editedBy}--}%
+            <b>Created</b> ${record.dateCreated?.format(OperationController.getPath('date.format') ? OperationController.getPath('date.format') + ' HH:mm' : 'dd.MM.yyyy HH:mm')}
+        %{--(${new PrettyTime()?.format(record.dateCreated)})--}%
+            <br/>
 
+            <b>User</b>: ${record?.user?.username}
+            <br/>
+            <b>Version</b> <span style="font-weight: normal">${record.version}</span>
+            <br/>
+
+            %{--</div>--}%
+            %{--<br/>--}%
+        </div>
+
+
+        %{--</div>--}%
+
+    </li>
+
+
+    <li class="uk-open">
+        <a class="uk-accordion-title" href="#">
+            Files
+        </a>
+        <div class="uk-accordion-content">
+
+
+            <g:render template="/gTemplates/filesListing" model="[record: record, entityCode: record.entityCode()]"/>
+
+
+            <g:if test="${OperationController.getPath('open-record-folders.enabled')?.toLowerCase() == 'yes' ? true : false}">
+
+            %{--<span style="background: #e7eeeb; border: 0px #7dba82; margin: 10px 5px; padding: 4px;">--}%
+
+                Open record's folder in repository:
+
+                <ul class="uk-subnav uk-subnav-pill" uk-switcher="animation: uk-animation-fade">
+                    <li>
+
+                        <g:remoteLink controller="generics" action="openRpsFolder"
+                                      params="${[id: record.id, entityCode: entityCode, repository: 1]}"
+                                      update="${entityCode}Record${record.id}OpenLog"
+                                      class="uk-button-secondary"
+                                      title="Open rps1 folder: ${OperationController.getPath('root.rps1.path')}">
+                            <u><b>1&nbsp;</b></u>
+                        </g:remoteLink>
+                    </li>
+                    <li>
+                        <g:remoteLink controller="generics" action="openRpsFolder"
+                                      params="${[id: record.id, entityCode:  entityCode, repository: 2]}"
+                                      update="${entityCode}Record${record.id}OpenLog"
+                                      title="Open rps2 folder: ${OperationController.getPath('root.rps2.path')}">
+                            <u><b>&nbsp;2&nbsp;</b></u>
+                        </g:remoteLink>
+                    </li>
+                    <li>
+                        <g:remoteLink controller="generics" action="openRpsFolder"
+                                      params="${[id: record.id, entityCode: entityCode,  repository: 3]}"
+                                      update="${entityCode}Record${record.id}OpenLog"
+                                      title="Open rps3 folder: ${OperationController.getPath('root.rps3.path')}">
+                            <u><b>&nbsp;3&nbsp;</b></u>
+                        </g:remoteLink>
+                    </li>
+                </ul>
+
+
+
+
+            %{--</span>--}%
+
+                <g:if test="${record.class.declaredFields.name.contains('nbFiles')}">
+                %{--<g:if test="${record.nbFiles}">--}%
+                %{--<g:if test="${record.nbFiles}">--}%
+                %{--<br/>--}%
+
+                %{--<b> Number of files: </b>--}%
+                %{--<span title="${record.filesList}" style="">${record.nbFiles ?: ''}</span>.--}%
+                %{--</g:if>--}%
+                %{--<br/>--}%
+                    <br/>
+                    &nbsp;
+                    <g:remoteLink controller="operation" action="countResourceFiles" id="${record.id}" params="[entityCode: entityCode]"
+                                  update="${entityCode}Record${record.id}OpenLog" style=""
+                                  class="uk-button-secondary"
+                                  title="Update files count">
+
+                        Update count <b>&circlearrowright;</b>
+                    </g:remoteLink>
+                    &nbsp;
+                    <g:remoteLink controller="operation" action="copyToRps1"
+                                  params="${[id: record.id, entityCode: entityCode]}"
+                                  update="${entityCode}Record${record.id}OpenLog"
+                                  class="uk-button-secondary"
+                                  title="Copy files from rps2 (${OperationController.getPath('root.rps2.path')}) to rps1 (${OperationController.getPath('root.rps1.path')})">
+                        Out <b>   &darr;
+                    &darr;</b>
+                    </g:remoteLink>
+                    <br/>
+                    &nbsp;<span id="${entityCode}Record${record.id}OpenLog"></span>
+
+                </g:if>
+
+            </g:if>
+
+
+            <g:if test="${OperationController.getPath('upload-files.enabled')?.toLowerCase() == 'yes' ? true : false}">
+                <br/>
+                <br/>
+                <b>Upload files to record <i>rps1</i> folder:</b>
+            %{--(${typeSandboxPath})--}%
+                <br/>
+                <br/>
+            %{--${typeSandboxPath?.replace('/', '-')?.replaceAll(/\\/, '-')}--}%
+                <uploadr:add id="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
+                             name="uploader${new Date()?.format('ddMMyyyyHHmmss')}"
+                             controller="import" action="upload" path="${typeSandboxPath}"
+                             placeholder="Behold: the drop area!" fileselect="Behold: the fileselect!"
+                             noSound="true"
+                             direction="down" maxVisible="3" unsupported="${request.contextPath}/upload/warning" maxConcurrentUploads="1" class="demo">
+                    <uploadr:onSuccess>
+                        jQuery('#spinner2').hide();
+                        jQuery('.info-badge').html('Done uploading files.');
+                    </uploadr:onSuccess>
+                </uploadr:add>
+
+
+            </g:if>
+
+
+
+
+
+        %{---------------------------}%
 </div>
-    <br/>
-</div>
+        </li>
+
+            %{--<li class="uk-open">--}%
+   %{--<a class="uk-accordion-title" href="#">--}%
+       %{--Files--}%
+   %{--</a>--}%
+   %{--<div class="uk-accordion-content">--}%
+       %{--</div>--}%
+    %{----}%
+    %{--</li>--}%
+
+%{--</ul>--}%
 
 
-
-%{--Working--}%
-%{----}%
-
-
-
+</ul>
 
 
 
@@ -1546,11 +1584,8 @@ jQuery(".heading").click(function() {
         window.isHidden = false;
 });
 
-
-Mousetrap.bind(['q', 'ض'], function (e) {
-    jQuery(".editButton").click();
-});
-
-
+//Mousetrap.bind(['q', 'ض'], function (e) {
+//    jQuery(".editButton").click();
+//});
 
         </script>

@@ -36,12 +36,15 @@
                                    update="${i.id}Notes" method="post">
                          <g:hiddenField name="indicator.id" value="${i.id}"/>
 
-                         <pkm:datePicker name="date" id="field${i.id}" value="${new Date()}" style="width: 90px;"/>
+                         <pkm:datePicker name="date" id="field${i.id}" value="${new Date()}" style="width: 90px;"
+                                         class="uk-input uk-width-auto"/>
 
-                         <g:textField value="${SupportService.indicatorCurrentValue(i.id) ?: ''}" style="width: 50px; height: 20px; display: inline;"
+                         <g:textField value="${SupportService.indicatorCurrentValue(i.id) ?: ''}" style=""
+                             class="uk-input uk-width-expand"
                                    name="value"/>
-                         <a onclick="jQuery('#notes${i.id}').css('display', 'inline');" style="display: inline;">+n</a>
-   <g:textField value="" style="width: 300px; height: 20px; display: none;" id="notes${i.id}"
+                         <a onclick="jQuery('#notes${i.id}').css('display', 'inline');" style="display: inline;">with notes</a>
+   <g:textField value="" style="display: none;" id="notes${i.id}"
+                class="uk-input uk-width-auto"
                                    name="summary"/>
 
 

@@ -10,17 +10,17 @@
                 <div style="">
 
 
-                    <g:remoteLink controller="indexCard" action="generateWritingsBook"
+                    <g:link controller="indexCard" action="generateWritingsBook"
                                   id="${record.id}"
-                                  update="centralArea"
+                                  target="_blank"
                                   title="">
                         Generate book on screen
-                    </g:remoteLink>
+                    </g:link>
 
                     <br/>
                     <br/>
 
-                    <g:remoteLink controller="indexCard" action="generateWritingsBookToFile"
+                    <g:remoteLink controller="generics" action="generateWritingsBookToFile"
                                   id="${record.id}"
                                   update="centralArea"
                                   title="">
@@ -77,7 +77,7 @@
             </a></h3>
 
                 <div style="direction: rtl; text-align: right;">
-                    <g:render template="/gTemplates/recordListing" model="[list: Book.findAllByCourse(record)]"/>
+                    %{--<g:render template="/gTemplates/recordListing" model="[list: Book.findAllByCourse(record)]"/>--}%
                 </div>
 
             <h3><a href="#">

@@ -8,11 +8,16 @@ import cmn.*
 import grails.converters.*
 import ker.OperationController
 import mcs.Book
+import mcs.Course
 import mcs.Journal
 import mcs.parameters.GoalType
 import mcs.parameters.JournalType
 import mcs.parameters.WorkStatus
 import org.apache.commons.lang.StringUtils
+import security.User
+
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.text.SimpleDateFormat
 
 //import jxl.*
@@ -26,6 +31,7 @@ import grails.plugin.springsecurity.annotation.Secured
 class IndexCardController { // entity id = 16
 
     def supportService
+    def springSecurityService
 
     static allClasses = [
             mcs.Goal,
@@ -478,7 +484,9 @@ class IndexCardController { // entity id = 16
                 n.summary = params.title//extractTitleReturn(params.description)
                 n.description = params.description //extractDescriptionReturn(params.description)
                 n.status = WorkStatus.findByCode('pending')
-                n.bookmarked = true
+//                n.bookmarked = true
+                if (params.goal)
+                    n.goal = mcs.Goal.get(params.goal)
                 if (params.context)
                     n.context = mcs.parameters.Context.get(params.context)
                 n.save()
@@ -489,7 +497,7 @@ class IndexCardController { // entity id = 16
                 n.description = params.description //extractDescriptionReturn(params.description)
                 n.type = GoalType.findByCode('goal')
                 n.status = WorkStatus.findByCode('pending')
-                n.bookmarked = true
+//                n.bookmarked = true
                 n.save()
             }
           else if (params.type == 'R'){
@@ -519,6 +527,18 @@ class IndexCardController { // entity id = 16
                 n.priority = params.priority?.toInteger()
 
 
+            n.user = User.findByUsername(springSecurityService.currentUser.username)
+
+            def fullPath = supportService.getResourcePath(n.id, params.type, false)
+
+            if (OperationController.getPath('currentFolder.path')) {
+                def currentPath = OperationController.getPath('currentFolder.path')
+                Files.createDirectories(Paths.get(fullPath))
+                if (new File(fullPath).exists()) {
+                    new File(currentPath + '/current').delete()
+                    java.nio.file.Files.createSymbolicLink(Paths.get(currentPath + '/current'), Paths.get(fullPath))
+                }
+            }
         render(template: "/gTemplates/recordSummary", model: [record: n, justSaved: true])
             render(template: '/layouts/achtung', model: [message: 'Record saved with id: ' + n.id])
 
@@ -658,13 +678,14 @@ class IndexCardController { // entity id = 16
 
 
     def generateWritingsBook(){
-        render(template: "/appCourse/writingsBookHtml", model: [record: mcs.Course.get(params.id)])
+        params.id = params.id ?: 9263
+        render(view: "/appCourse/writingsBookHtml", model: [record: mcs.Course.get(params.id)])
     }
-    def generateWritingsBookToFile() {
-        def f = new File('/' + (OperationController.getPath('root.rps1.path') ?: '') + '/crs' + params.id + '.md')
-        f.write(g.include([controller: 'indexCard', action: 'generateWritingsBook', id: params.id]).toString(), 'UTF-8')
-        render 'Generation done: ' + new Date().format('HH:mm:ss')
-    }
+
+
+
+
+
     def sortNotes(){
         render(template: "/appCourse/sortNotes", model: [record: mcs.Course.get(params.id)])
     }

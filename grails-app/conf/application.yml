@@ -24,8 +24,8 @@ info:
         version: 1.9.1
         grailsVersion: '@info.app.grailsVersion@'
 server:
-    contextPath: '/'
-    port: 1441 # The port to listen on
+    contextPath: '/nibras' # ContextPath must start with '/' and not end with '/'
+    port: 1445 # The port to listen on
     session:
         timeout: 720000  # 20 hours (in ms)
     ssl:
@@ -112,14 +112,15 @@ hibernate:
     flush:
         mode: AUTO
 environments:
-    h2:
+    h2: #h2
         grails.dbconsole:
             enabled: true
 #             urlRoot: ${appName}/dbc
         dataSource:
             dbCreate: update
-            url: jdbc:h2:./db/db;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE;
-            dialect: com.hp.opr.hibernate.dialect.H2Dialect
+            url: jdbc:h2:./db/db;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE; # MODE=MySQL
+            dialect:  org.hibernate.dialect.H2Dialect
+            #org.hibernate.dialect.HSQLDialect # com.hp.opr.hibernate.dialect. # H2Dialect (MODE=MySQL; not supported in h2dialect)
             driverClassName: org.h2.Driver
             properties:
                 jmxEnabled: true
@@ -139,14 +140,24 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+    derby: #derby
+        grails.dbconsole:
+            enabled: true
+        dataSource:
+            dbCreate: update
+            url: jdbc:derby:./db;create=true
+            dialect:  org.hibernate.dialect.DerbyTenSeven
+            driverClassName: org.apache.derby.jdbc.EmbeddedDriver
+            logsql: true
+
     development:
         dataSource:
             dbCreate: update
             url: jdbc:mysql://localhost:3306/db_nibras?serverTimezone=Asia/Beirut
             driverClassName: com.mysql.cj.jdbc.Driver
             dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-            username: nibras
-            password: nibras
+            username: user1
+            password: user1
             properties:
                 jmxEnabled: true
                 initialSize: 5
@@ -222,3 +233,8 @@ environments:
 #                        - classpath:'@info.app.grailsVersion@'.groovy
 #            - classpath:myconfig.yml
 
+
+
+quartz:
+    autoStartup: true
+    jdbcStore: false

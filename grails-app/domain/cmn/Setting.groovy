@@ -17,7 +17,11 @@
 
 package cmn
 
+import security.User
+
 class Setting {  // entity id = 51
+
+    User user
 
     String name
     String summary
@@ -39,13 +43,13 @@ class Setting {  // entity id = 51
     }
 
     static mapping = {
-     //   table "SETTINGS"
-        value(sqlType: 'longtext')
-        summary(sqlType: 'longtext')
-        description(sqlType: 'longtext')
-        allowedValues(sqlType: 'longtext')
-        explanation(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
+        // table "SETTINGS"
+        value(sqlType: 'long varchar')
+//        summary(sqlType: 'long varchar')
+        description(sqlType: 'long varchar')
+        allowedValues(sqlType: 'long varchar')
+        explanation(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
     }
 
     public String entityCode() {

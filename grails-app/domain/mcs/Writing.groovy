@@ -93,7 +93,7 @@ class Writing implements Comparable {  // entity id = 144
 
     Date bornOn
     Boolean bookmarked = false
-    Boolean isPrivate = false
+    Boolean isPrivate = true
     Boolean keepSecret = false
 
     Integer priority = 2
@@ -143,15 +143,15 @@ class Writing implements Comparable {  // entity id = 144
     }
 
     static mapping = {
-        description(sqlType: 'longtext')
-        shortDescription(sqlType: 'longtext')
-	    descriptionHTML(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        shortDescription(sqlType: 'long varchar')
+	    descriptionHTML(sqlType: 'long varchar')
 
         table 'writing'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

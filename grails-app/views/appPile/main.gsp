@@ -21,6 +21,9 @@
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+    <meta http-equiv="Access-Control-Allow-Methods" content="*"/>
+    <meta http-equiv="Access-Control-Allow-Headers" content="*"/>
     %{--<meta name="layout" content="main"/>--}%
 
 
@@ -28,7 +31,7 @@
 
 
     <title style="direction: ltr; text-align: left;">
-        Nibras Pile
+        Reader
 %{--        ${OperationController.getPath('app.name') ? OperationController.getPath('app.name') + ' /Study': 'Nibras PKM /Study'}--}%
     %{--<g:meta name="app.version"/>--}%
 

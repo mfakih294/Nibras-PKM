@@ -2,16 +2,25 @@
 
 %{--<h2>Dashboard</h2>--}%
 
-<h2>Data entry over the days</h2>
-
-<div id="graph${1}" style="width: 500px; height: 250px; margin: 3px auto 0 auto;"></div>
-
 <table>
     <tr>
 
-        <td style="width: 30%"></td>
-        <td>
-            <h3>Last 24 hours' records</h3>
+        <td style="width: 30%">
+
+            <h4>Data entry over the days</h4>
+
+            <div id="chart1" style="width:600px;height:250px;"></div>
+
+            %{--<div id="graph${1}" style="width: 600px; height: 250px; margin-bottom: 10px;"></div>--}%
+
+
+
+
+        </td>
+
+
+        <td style="width: 30%">
+            <h4>Last 24 hours' records</h4>
 
             ${app.IndexCard.countByDateCreatedGreaterThan(new Date() - 1)} notes <br/>
             ${mcs.Journal.countByDateCreatedGreaterThan(new Date() - 1)} journal<br/>
@@ -21,8 +30,8 @@
 
         </td>
 
-        <td>
-            <h3>Last 7 days' records</h3>
+        <td style="width: 30%">
+            <h4>Last 7 days' records</h4>
 
             ${IndexCard.countByDateCreatedGreaterThan(new Date() - 7)} notes <br/>
             ${Journal.countByDateCreatedGreaterThan(new Date() - 7)} journal<br/>
@@ -36,7 +45,7 @@
 </table>
 
 
-
+<g:if test="${1==2}">
 
 <br/>
 <br/>
@@ -44,7 +53,7 @@
 <table>
 
     <tr>
-        <td >1</td>
+        <td></td>
         <td class="dashboardCell">
             <span class="dashboardNumber">${Course.executeQuery('from Course where bookmarked = true').department.unique().size()}</span>
             <span class="dashboardLabel">D*</span>
@@ -60,36 +69,36 @@
 
         <td></td>
     </tr>
-    <tr>
-        <td>E</td>
-        <td class="dashboardCell">
-            <span class="dashboardNumber">
-                ${Course.executeQuery('from Excerpt e where e.book.course.bookmarked = true and e.readOn != null').size()}
-                /
-                ${Course.executeQuery('from Excerpt e where e.book.course.bookmarked = true and e.readOn = null').size()}
-                /
-                ${Course.executeQuery('from Excerpt e where e.book.course.bookmarked = true').size()}
-            </span>
-            <span class="dashboardLabel">read/unread/total</span>
+    %{--<tr>--}%
+        %{--<td>E</td>--}%
+        %{--<td class="dashboardCell">--}%
+            %{--<span class="dashboardNumber">--}%
+                %{--${Course.executeQuery('from Excerpt e where e.book.course.bookmarked = true and e.readOn != null').size()}--}%
+                %{--/--}%
+                %{--${Course.executeQuery('from Excerpt e where e.book.course.bookmarked = true and e.readOn = null').size()}--}%
+                %{--/--}%
+                %{--${Course.executeQuery('from Excerpt e where e.book.course.bookmarked = true').size()}--}%
+            %{--</span>--}%
+            %{--<span class="dashboardLabel">read/unread/total</span>--}%
 
-        </td>
-        <td class="dashboardCell">
+        %{--</td>--}%
+        %{--<td class="dashboardCell">--}%
 
-             <span class="dashboardNumber">
+             %{--<span class="dashboardNumber">--}%
 
-                ${Course.executeQuery('select sum(e.reviewCount) from Excerpt e where e.book.course.bookmarked = true and e.readOn != null')[0]}
+                %{--${Course.executeQuery('select sum(e.reviewCount) from Excerpt e where e.book.course.bookmarked = true and e.readOn != null')[0]}--}%
 
-            </span>
-            <span class="dashboardLabel">reviews</span>
-
-
-
-        </td>
+            %{--</span>--}%
+            %{--<span class="dashboardLabel">reviews</span>--}%
 
 
-        <td></td>
-        <td></td>
-    </tr>
+
+        %{--</td>--}%
+
+
+        %{--<td></td>--}%
+        %{--<td></td>--}%
+    %{--</tr>--}%
     <tr>
         <td>R</td>
         <td class="dashboardCell">
@@ -102,10 +111,10 @@
         </td>
      <td class="dashboardCell">
             <span class="dashboardNumber">
-                ${Course.executeQuery('select count(*) from Book e where e.bookmarked = true and e.course.bookmarked = true and e.completedOn != null')[0]}
+                ${Course.executeQuery('select count(*) from Book e where e.bookmarked = true and e.course.bookmarked = true and e.readOn != null')[0]}
 
             </span>
-            <span class="dashboardLabel">read res.</span>
+            <span class="dashboardLabel">read resource</span>
 
         </td>
 
@@ -119,7 +128,7 @@
                 / ${Course.executeQuery('from Goal e where e.course.bookmarked = true and e.bookmarked = true').size()}
 
             </span>
-            <span class="dashboardLabel">uncompleted / t</span>
+            <span class="dashboardLabel">uncompleted / total</span>
 
         </td> 
         <td class="dashboardCell">
@@ -140,7 +149,7 @@
                 / ${Course.executeQuery('from Task e where e.course.bookmarked = true and e.bookmarked = true').size()}
 
             </span>
-            <span class="dashboardLabel">uncompleted / t</span>
+            <span class="dashboardLabel">uncompleted / total</span>
 
         </td> 
         <td class="dashboardCell">
@@ -153,24 +162,24 @@
 
     </tr>
 
-    <tr>
-        <td>E</td>
-        <td class="dashboardCell">
-            <span class="dashboardNumber">
-                ${Course.executeQuery('select e.readOn from Excerpt e where e.book.course.bookmarked = true order by e.readOn desc')[0]?.format('dd.MM')}
-            </span>
-            <span class="dashboardLabel">last read </span>
+    %{--<tr>--}%
+        %{--<td>E</td>--}%
+        %{--<td class="dashboardCell">--}%
+            %{--<span class="dashboardNumber">--}%
+                %{--${Course.executeQuery('select e.readOn from Excerpt e where e.book.course.bookmarked = true order by e.readOn desc')[0]?.format('dd.MM')}--}%
+            %{--</span>--}%
+            %{--<span class="dashboardLabel">last read </span>--}%
 
-        </td>
-    <td class="dashboardCell">
-            <span class="dashboardNumber">
-          ${Course.executeQuery('select e.lastReviewed from Excerpt e where e.book.course.bookmarked = true order by e.lastReviewed desc')[0]?.format('dd.MM')}
-            </span>
-            <span class="dashboardLabel"> reviewed date </span>
+        %{--</td>--}%
+    %{--<td class="dashboardCell">--}%
+            %{--<span class="dashboardNumber">--}%
+          %{--${Course.executeQuery('select e.lastReviewed from Excerpt e where e.book.course.bookmarked = true order by e.lastReviewed desc')[0]?.format('dd.MM')}--}%
+            %{--</span>--}%
+            %{--<span class="dashboardLabel"> reviewed date </span>--}%
 
-        </td>
+        %{--</td>--}%
 
-    </tr>
+    %{--</tr>--}%
     <tr>
         <td>N</td>
         <td class="dashboardCell">
@@ -195,10 +204,44 @@
 
 </table>
 
-
+</g:if>
 
 
 <script type="text/javascript">
+
+
+    jQuery(document).ready(function() {
+
+
+//			jQuery('#logAreaModal').load("/trn/stbCitizen/chartData",
+        jQuery.ajax("${request.contextPath}/report/chartData", {dataType: "json"}).done(
+//					{id: ''},
+                function (responce) {
+
+//						console.log('data is: ' , responce)
+
+//						var data1 = JSON.parse(responce);
+                    var layout = {
+                        margin: {t: 50, b: 30, l: 30, r: 30},
+                        showlegend: true
+                        , legend: {
+                            x: 1,
+//                            xanchor: 'right',
+                            y: 1.1
+                        }
+                    }
+
+                    var chart1 = document.getElementById('chart1');
+
+                    Plotly.newPlot(chart1, responce, layout);
+
+
+                }
+        )
+
+    });
+
+    if (1 == 2){
 
     var day_data = [
         <%   dates.eachWithIndex(){ h, i -> if (i != dates.size() - 1) { %>
@@ -226,16 +269,18 @@
         xkey: 'date',
         ykeys: ['Goal','Task', 'Plan','Journal', 'Writing', 'Note'],
         ymin: 'auto',
-//        hideHover: 'true',
+        hideHover: 'true',
         labels: ['Goal','Task', 'Plan','Journal', 'Writing', 'Note'],
         /* custom label formatting with `xLabelFormat` */
         xLabelFormat: function (d) {
-           return d.getDate() + '.' + (d.getMonth() + 1) //+ '/' + d.getDate() + '/' + d.getFullYear();
+           return d.getDate() + '.' + (d.getMonth() + 1) //+ '/' + d.getDate()
+            + '.' + d.getFullYear();
         }
         ,
         /* setting `xLabels` is recommended when using xLabelFormat */
         xLabels: 'date'
     });
+    }
 
 </script>
 

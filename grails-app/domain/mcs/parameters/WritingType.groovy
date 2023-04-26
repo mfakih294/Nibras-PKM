@@ -54,7 +54,7 @@ class WritingType implements Comparable {  // entity id = 155
         table 'writing_type'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

@@ -4,8 +4,11 @@
     %{--<g:render template="/gTemplates/recordSummary" model="[record: record]"/>--}%
 %{--</g:if>--}%
 
-<g:formRemote name="genericSearch" id="genericSearch22" url="[controller: 'generics', action: 'saveViaQuickForm']"
+<div id="underQuickEditForm"></div>
 
+
+<g:formRemote name="genericSearch" id="genericSearch22" url="[controller: 'generics', action: 'saveViaQuickForm']"
+              class="uk-form-stacked"
               update="${updateRegion}" method="post" style="display: inline;" onComplete="">
 
     <g:hiddenField name="entityController" value="${entityController}"/>
@@ -19,9 +22,13 @@
             <g:if test="${fields.contains('name')}">
                 <tr>
                     <td>
-                        Name:<br/>
-                    <g:textField name="name" placeholder="Name" title="Name" class="ui-corner-all"
+
+                        <label class="uk-form-label">
+                            Name
+                        </label>
+                    <g:textField name="name" placeholder="Name" title="Name"
                                  style="width: 99%;"
+                                 class="uk-input"
                                  onblur="jQuery('#submitUpdate').click();"
                                  value="${record?.name}"/>
                 </td>
@@ -33,11 +40,12 @@
             <g:if test="${fields.contains('value')}">
                 <tr>
                 <td>
-                    Value: <br/>
-                    <g:textArea id="value" name="value" placeholder="Value" title="Value"
-                                style="width: 99%;"
-                                class="ui-corner-all"
-                                rows="5" cols="80"
+
+                    <label class="uk-form-label">
+                        Value
+                    </label>
+                    <g:textField id="value" name="value" placeholder="Value" title="Value"
+                                class="uk-input uk-width-1-1"
                                 onblur="jQuery('#submitUpdate').click();"
                                 value="${record?.value}"/>
                 </td>
@@ -48,16 +56,28 @@
                 <tr>
                     <td>
                 <g:if test="${fields.contains('code')}">
-                    Code:<br/>
-                        <g:textField name="code" placeholder="Code" title="Code" class="ui-corner-all"
-                                     style="width: 10%;"
+
+                    <label class="uk-form-label">
+                        Code
+                    </label>
+                        <g:textField name="code" placeholder="Code" title="Code"
+                                     class="uk-input uk-width-1-1"
+                                     style="width: 20%;"
                                      onblur="jQuery('#submitUpdate').click();"
                                      value="${record?.code}"/>
                     </g:if>
-Summary: <br/>
-                    <g:textField id="sumamryField" name="summary" title="summary" value="${record?.summary}" placeholder="Summary"
+
+
+                        <label class="uk-form-label" for="sumamryField">
+                            Summary
+                        </label>
+                        <div class=uk-form-controls">
+
+                        <g:textField id="sumamryField" name="summary" title="summary" value="${record?.summary}" placeholder="Summary"
                                  onblur="jQuery('#submitUpdate').click();"
-                                 style="width: 89%;"/>
+                                 class="uk-input uk-width-1-1"
+                                 />
+                        </div>
                 </td>
 
                 </tr>
@@ -66,13 +86,20 @@ Summary: <br/>
      <g:if test="${fields.contains('recurringCron')}">
                 <tr>
                     <td>
-                        Recurring cron expression:<br/>
+
+                        <label class="uk-form-label">
+                        Recurrence cron expression
+                            <br/>
+                            (min h dom mon dow)
+                        </label>
+
                     <g:textField id="recurringCron" name="recurringCron"
-                                 title="recurring Cron expression"
+                                 title="Recurrence Cron expression"
                                  value="${record?.recurringCron}"
-                                 placeholder="Recurring Unix cron expression"
+                                 placeholder="min h dom mon dow, e.g. 0 8 * * 1"
                                  onblur="jQuery('#submitUpdate').click();"
-                                 style="width: 99%;"/>
+                                 class="uk-input uk-width-1-1"
+                                 />
                 </td>
 
                 </tr>
@@ -84,17 +111,30 @@ Summary: <br/>
 
             <g:if test="${fields.contains('title')}">
                 <tr>      <td>
-                    Title:<br/>
-                    <g:textField placeholder="Title" name="title" title="title" value="${record?.title}"
-                                 onblur="jQuery('#submitUpdate').click();"
-                                 style="width: 99%;"/>
+                    <label class="uk-form-label">
+                        Title
+                    </label>
+                    <div class=uk-form-controls">
 
-                %{--<g:if test="${fields.contains('authorInfo')}">--}%
-                    %{--<g:textField placeholder="Author infor" name="authorInfo" title="Author info" value="${record?.authorInfo}"--}%
-                                 %{--style="width: 95%;"/>--}%
-                    %{--</g:if>--}%
+                        <g:textField placeholder="Title" name="title" title="title" value="${record?.title}"
+                                 onblur="jQuery('#submitUpdate').click();"
+                                 class="uk-input uk-width-1-1"/>
+                        </div>
+
                 </td> </tr>
             </g:if>
+
+    <g:if test="${fields.contains('url')}">
+        <tr>      <td>
+
+        <label class="uk-form-label">
+                        URL
+                    </label>
+
+    <g:textField placeholder="URL"
+                 class="uk-input uk-width-1-1"
+                 name="url" title="URL" value="${record?.url}"/>
+    </g:if>
 
 
 
@@ -103,22 +143,29 @@ Summary: <br/>
 
             <g:if test="${fields.contains('shortDescription')}">
                 <tr>      <td>
-                    Short description:<br/>
+
+                    <label class="uk-form-label">
+                        Short description
+                    </label>
                     <g:textArea cols="80" rows="5" placeholder="Short description" title="Short description" name="shortDescription"
                                 value="${record?.shortDescription}"
+                                class="uk-width-1-1 uk-textarea"
                                 onblur="jQuery('#submitUpdate').click();"
-                                style="width: 99%; height: 60px;"/>
+                                style="height: 60px;"/>
                 </td></tr>
             </g:if>
 
 
             <g:if test="${fields.contains('description')}">
                 <tr>      <td>
-                    Description:<br/>
+                    <label class="uk-form-label">
+                        Short Description
+                    </label>
                     <g:textArea cols="80" rows="5" placeholder="Description" title="Description" name="description"
                                 value="${record?.description}"
+                                class="uk-width-1-1 uk-textarea"
                                 onblur="jQuery('#submitUpdate').click();"
-                                style="width: 99%; height: 200px;"/>
+                                style="height: 200px;"/>
                 </td></tr>
             </g:if>
 
@@ -135,11 +182,15 @@ Summary: <br/>
         <tr>
             <g:if test="${fields.contains('fullText')}">
                 <td>
-                    Full text:<br/>
+
+                    <label class="uk-form-label">
+                        Full text
+                    </label>
                     <g:textArea cols="80" rows="5" placeholder="Full text" title="Full text" name="fullText"
+                                class="uk-width-1-1 uk-textarea"
                                 value="${record?.fullText}"
                                 onblur="jQuery('#submitUpdate').click();"
-                                style="width: 99%;  height: 160px;"/>
+                                style="height: 160px;"/>
                 </td>
             </g:if>
 
@@ -204,9 +255,14 @@ Summary: <br/>
             <g:if test="${fields.contains('notes')}">
 
                 <td colspan="2">
-                    Notes:<br/>
+
+
+                    <label class="uk-form-label">
+                        Notes
+                    </label>
                     <g:textArea cols="80" rows="5" id="notes" placeholder="Notes" title="Notes"
-                                name="notes" style="width: 99%;" class="ui-corner-all"
+                                name="notes"
+                                class="uk-width-1-1 uk-textarea"
                                 onblur="jQuery('#submitUpdate').click();"
                                 value="${record?.notes}"/>
                 </td>
@@ -216,9 +272,11 @@ Summary: <br/>
    <tr>
             <g:if test="${fields.contains('mainHighlights')}">
                 <td colspan="2">
-                    Highlights:<br/>
+                    <label class="uk-form-label">
+                        Highlights
+                    </label>
                     <g:textArea cols="80" rows="5" id="mainHighlights" placeholder="Highlights" title="mainHighlights"
-                                name="mainHighlights" style="width: 99%; background: lightgreen;" class="ui-corner-all"
+                                name="mainHighlights" style="background: lightgreen;" class="uk-textarea uk-width-1-1"
                                 onblur="jQuery('#submitUpdate').click();"
                                 value="${record?.mainHighlights}"/>
                 </td>
@@ -262,9 +320,9 @@ Summary: <br/>
 
 
     </table>
-    <g:submitButton class="fg-button ui-icon-left ui-widget ui-state-default ui-corner-all" name="submit"
-                    style="width: 99%; height: 25px; text-align: center; background: #f0f0f0;"
+    <g:submitButton class="uk-width-1-1 uk-button uk-button-primary" name="submit"
                     value="Update"
+                    style="height: 40px"
         id="submitUpdate"
                     onsubmit=""/>
 </g:formRemote>
@@ -274,4 +332,3 @@ Summary: <br/>
 %{--</g:if>--}%
 
 
-<div id="underQuickEditForm"></div>

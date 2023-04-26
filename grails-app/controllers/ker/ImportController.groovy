@@ -36,12 +36,15 @@ import grails.plugin.springsecurity.annotation.Secured
 import com.gravity.goose.Article
 import com.gravity.goose.Configuration
 import com.gravity.goose.Goose
+import security.User
 
 
 @Secured(['ROLE_ADMIN','ROLE_READER'])
 class ImportController {
 
     def supportService
+    def springSecurityService
+
 
     static entityMapping = [
             'G': 'mcs.Goal',
@@ -199,8 +202,15 @@ class ImportController {
             } else {
                 b = grailsApplication.classLoader.loadClass(entityMapping[entityCode.toUpperCase()]).newInstance()
                 b.summary = title
-                finalName = entityCode.toLowerCase() + '.' + ext
 
+//                if (ext == 'jpg') {
+//                    finalName = 'cover' + '.' + ext
+//                }
+//                else {
+//                    finalName =  b.id + entityCode.toLowerCase() + '.' + ext
+//                }
+
+//                finalName = entityCode.toLowerCase() + '.' + ext
 
             }
 
@@ -214,7 +224,9 @@ class ImportController {
             //      println 'text is ' + folder.text
 
             //b.description = 'Imported on ' + new Date().format(OperationController.getPath('date.format') ?: 'dd.MM.yyyy')
-        } else {
+        }
+
+        else {
 
             b = grailsApplication.classLoader.loadClass(entityMapping[entityCode.toUpperCase()]).newInstance()
             b.properties = GenericsController.transformMcsNotation(title)['properties']
@@ -224,8 +236,9 @@ class ImportController {
             }
 
 
-                finalName = entityCode.toLowerCase() + '.' + ext
+
         }
+
 
         if (ext == 'txt') {
             if (entityCode.toLowerCase() == 'r')
@@ -236,7 +249,22 @@ class ImportController {
 
         //b.notes = 'Imported on ' + new Date().format(OperationController.getPath('date.format') ?: 'dd.MM.yyyy')
 
+
+        b.user = User.findByUsername(springSecurityService.currentUser.username)
+//        println ' imported file from ' + User.findByUsername(springSecurityService.currentUser.username)
+
+
+
         if (!b.hasErrors() && b.save(flush: true)) {
+
+
+            if (ext == 'jpg') {
+                finalName = 'cover' + '.' + ext
+            }
+            else {
+                finalName =  b.id + entityCode.toLowerCase() + '.' + ext
+            }
+
 
             render(template: '/gTemplates/recordSummary', model: [record: b])
             def ant = new AntBuilder()
@@ -249,11 +277,11 @@ class ImportController {
                 ant.move(file: path, tofile: rootPath + '/' + entityCode +
                         (resourceNestedByType ?  '/' +  type.code : '') +
                         (resourceNestedById ?  '/' +   (b.id / 100).toInteger() : '') +
-                        '/' + b.id + '/' + b.id + '' + finalName)
+                        '/' + b.id + '/' + finalName)
             } else
             //ant.move(file: path, tofile: OperationController.getPath('module.sandbox.' + entityCode + '.path') + '/' + b.id + '' + finalName)
             // inline move 22.10.2016
-                ant.move(file: path, tofile: rootPath + '/' + entityCode + '/' + b.id + '/' + b.id + finalName)
+                ant.move(file: path, tofile: rootPath + '/' + entityCode + '/' + b.id + '/' + finalName)
 
         } else {
             b.errors.each() {
@@ -311,7 +339,8 @@ class ImportController {
          if (OperationController.getPath('resourceNestedByType') == 'yes')
             resourceNestedByType = true
 
-
+        b.user = User.findByUsername(springSecurityService.currentUser.username)
+        println ' imported folder from ' + User.findByUsername(springSecurityService.currentUser.username)
 
 
         if (!b.hasErrors() && b.save(flush: true)) {

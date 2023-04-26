@@ -139,7 +139,7 @@ class IndexCard implements Comparable {  // entity id = 16
 
     Boolean bookmarked = false
     Boolean keepSecret = false
-    Boolean isPrivate = false
+    Boolean isPrivate = true
 
     Boolean isMerged = false
     Date mergedOn
@@ -172,17 +172,17 @@ class IndexCard implements Comparable {  // entity id = 16
     }
 
     static mapping = {
-        description(sqlType: 'longtext')
-        shortDescription(sqlType: 'longtext')
-        descriptionHTML(sqlType: 'longtext')
-        mainHighlights(sqlType: 'longtext')
-        sideHighlights(sqlType: 'longtext')
-        reaction(sqlType: 'longtext')
-        extractedWords(sqlType: 'longtext')
-        sourceFree(sqlType: 'longtext')
-        url(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        shortDescription(sqlType: 'long varchar')
+        descriptionHTML(sqlType: 'long varchar')
+        mainHighlights(sqlType: 'long varchar')
+        sideHighlights(sqlType: 'long varchar')
+        reaction(sqlType: 'long varchar')
+        extractedWords(sqlType: 'long varchar')
+        sourceFree(sqlType: 'long varchar')
+        url(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
 //        password type: GormEncryptedStringType
     }
 

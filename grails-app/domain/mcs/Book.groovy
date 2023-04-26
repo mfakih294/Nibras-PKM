@@ -72,6 +72,7 @@ class Book implements Comparable {  // entity id = 134
     String shortFileName
 
     String description
+    String descriptionHTML
 
     String fullText
 
@@ -125,14 +126,14 @@ class Book implements Comparable {  // entity id = 134
     Contact person
     String journal
     String month
-    String year
+    String resourceYear
     String volume
     String number
     String series
 
 
     Boolean bookmarked = false
-    Boolean isPrivate = false
+    Boolean isPrivate = true
     Boolean keepSecret = false
 
 
@@ -168,8 +169,14 @@ class Book implements Comparable {  // entity id = 134
 
 //    Blog blog
 //    String blogCode
-    Date publishedOn
+//    Date publishedOn
 //    Integer publishedNodeId
+
+    Blog blog
+    String blogCode
+    Date publishedOn
+    Integer publishedNodeId
+
 
 
     String textTags
@@ -205,29 +212,30 @@ class Book implements Comparable {  // entity id = 134
 
     static mapping = {
         //id(generator: 'assigned')
-        title(sqlType: 'longtext')
-        author(sqlType: 'longtext')
-        authorInfo(sqlType: 'longtext')
-        description(sqlType: 'longtext')
-        fullText(sqlType: 'longtext')
-        bibEntry(sqlType: 'longtext')
-        highlights(sqlType: 'longtext')
-        comments(sqlType: 'longtext')
-        reviewHistory(sqlType: 'longtext')
-        stepsHistory(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+//        title(sqlType: 'long varchar')
+//        author(sqlType: 'long varchar')
+        authorInfo(sqlType: 'long varchar')
+        description(sqlType: 'long varchar')
+        descriptionHTML(sqlType: 'long varchar')
+        fullText(sqlType: 'long varchar')
+        bibEntry(sqlType: 'long varchar')
+        highlights(sqlType: 'long varchar')
+        comments(sqlType: 'long varchar')
+        reviewHistory(sqlType: 'long varchar')
+        stepsHistory(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
 
         table 'book'
         //sort "id":"desc"
         //name (index:'name_index')
-        textTags(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
-        imageUrl(sqlType: 'longtext')
-        url(sqlType: 'longtext')
-        citation(sqlType: 'longtext')
-        citationText(sqlType: 'longtext')
-        citationHtml(sqlType: 'longtext')
-        citationAsciicode(sqlType: 'longtext')
+        textTags(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
+        imageUrl(sqlType: 'long varchar')
+        url(sqlType: 'long varchar')
+        citation(sqlType: 'long varchar')
+        citationText(sqlType: 'long varchar')
+        citationHtml(sqlType: 'long varchar')
+        citationAsciicode(sqlType: 'long varchar')
 
         // excerpts: Excerpt cascade: 'persist,merge,save-update'
     }

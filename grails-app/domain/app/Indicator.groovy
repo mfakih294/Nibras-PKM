@@ -85,9 +85,9 @@ class Indicator implements Comparable {  // entity id = 22
     }
 
     static mapping = {
-
+        table 'indicators'
         // name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
     }
 
 

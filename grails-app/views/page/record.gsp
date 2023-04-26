@@ -37,7 +37,16 @@
 
 
 
-%{--    <r:require modules="application"/>--}%
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit-icons.js')}"></script>
+
+    <link rel="stylesheet" href="${resource(dir: 'uikit-min/css', file: 'uikit.css') }"/>
+
+
+
+
+
+    %{--    <r:require modules="application"/>--}%
     %{--<r:require module="fileuploader"/>--}%
 %{--    <r:require modules="jquery"/>--}%
 %{--    <r:require modules="jquery-ui"/>--}%

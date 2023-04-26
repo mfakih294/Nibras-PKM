@@ -3,10 +3,12 @@
 <% Calendar c = new GregorianCalendar(); c.setLenient(false); c.setMinimalDaysInFirstWeek(4);
     c.setFirstDayOfWeek(java.util.Calendar.MONDAY)
     %>
-    <b>Week</b> ${c.get(Calendar.WEEK_OF_YEAR)}
+<span title="Week ${c.get(Calendar.WEEK_OF_YEAR)}">
+    <b>W</b> ${c.get(Calendar.WEEK_OF_YEAR)}
+</span>
 &nbsp; &nbsp;   |
 &nbsp; &nbsp; 
-    ${new Date().format("E dd MMM")}
+    ${new Date().format("dd MMM")}
 
 &nbsp; &nbsp;   |
 &nbsp; &nbsp;
@@ -59,7 +61,7 @@
                       before="jQuery.address.value(jQuery(this).attr('href'));"
                       title="Selected records">
             <g:message code="ui.selected"></g:message>
-            (<span id="selectBasketRegion" style="color: white">${selectBasketCount ?: 0}</span>)
+            (<span id="selectBasketRegion">${selectBasketCount ?: 0}</span>)
         </g:remoteLink>
     &nbsp;
     &nbsp;
@@ -80,18 +82,13 @@
 
 
 
-<g:if test="${OperationController.getPath('copyright.show')?.toLowerCase() == 'yes' ? true : false}">
-                    
-&nbsp; &nbsp; 
-   ${new Date().format('yyyy')} &copy; khuta.org
-    &nbsp; &nbsp; |&nbsp; &nbsp;
-    </g:if>
 
-
-<pkm:checkFolder name='rps1' path="${OperationController.getPath('root.rps1.path')}"/>
+<pkm:checkFolder name='rps1' path="${OperationController.getPath('root.rps1.path')}" display="1"/>
 &nbsp;
 
-    <pkm:checkFolder name='rps2' path="${OperationController.getPath('root.rps2.path')}"/>
+    <pkm:checkFolder name='rps2' path="${OperationController.getPath('root.rps2.path')}" display="2"/>
+&nbsp;
+   <pkm:checkFolder name='rps3' path="${OperationController.getPath('root.rps3.path')}"  display="3"/>
 &nbsp;
 
     <pkm:checkFolder name='edit' display='Edit'
@@ -100,16 +97,36 @@
 
     <span id="onlineLog"></span>
 <g:if test="${OperationController.getPath('IPs.show')?.toLowerCase() == 'yes' ? true : false}">
- &nbsp;
-  IPs:  &nbsp;
-<g:each in="${ips}" var="ip">
+    <span id="ipsRegion">
 
-   <b title="${ip.name}"> ${ip.ip}</b>
-%{--    vs .title ?--}%
-%{--    (${ip.name})--}%
-    &nbsp; &nbsp;
-</g:each>
+    </span>
+
 </g:if>
+
+Hide metadata line:
+
+<g:checkBox name="hideMetadataLine"
+            title="Hide metadata line"
+            value="${OperationController.getPath('metadataLine.hidden') == 'yes'}"
+            style="height: 20px !important;"
+            class="uk-checkbox"
+            onclick="jQuery('#hideMetadataLineLog').load('${request.contextPath}/operation/toggleMetadataLine')" />
+<span id="hideMetadataLineLog"></span>
+
+
+<g:if test="${OperationController.getPath('copyright.show')?.toLowerCase() == 'yes' ? true : false}">
+
+    &nbsp; &nbsp;
+%{--${new Date().format('yyyy')}--}%
+    <a href="https://khuta.org">
+    &copy; khuta.org
+    </a>
+    &nbsp; &nbsp; |&nbsp; &nbsp;
+
+</g:if>
+
+<g:if test="${1==2}">
+
 
 <span style="border: 0px dashed darkgray; padding-left: 15px !important; background: #8e8e97">
     %{--${rpsSize}--}%
@@ -120,7 +137,7 @@
 </span>
 
 
-<g:if test="${1==2}">
+
 
 <span style="border: 0px dashed darkgray; padding-left: 15px !important; background: #8e8e97">
 
@@ -182,6 +199,14 @@ ${mcs.Course.countByBookmarked(true)} C * / p4:
                 });
             }
         });
+
+
+
+    jQuery('#ipsRegion').load('${request.contextPath}/report/updateIps')
+
+    setInterval(function() {
+        jQuery('#ipsRegion').load('${request.contextPath}/report/updateIps')
+    }, 10000);
 
 
 </script>

@@ -81,13 +81,13 @@ class Payment implements Comparable {  // entity id = 24
 
     static mapping = {
         table 'payment'
-        description(sqlType: 'longtext')
-        intendedUse(sqlType: 'longtext')
-        reality(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        intendedUse(sqlType: 'long varchar')
+        reality(sqlType: 'long varchar')
 
         // name (index:'name_index')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
     }
 
     static namedQueries = {

@@ -2,8 +2,7 @@
 
 
 <div id="accordionWest"
-     style="width: 80%; padding: 0 30px;">
-
+     style="width: 90%; padding: 0 30px;">
 
     <g:if  test="${mcs.Department.count() == 0}">
         <h1>There are no departments yet.</h1>
@@ -70,48 +69,76 @@
    </g:if>
 
 %{--<h2>All courses</h2>--}%
+
     <h3 class="bowseTab">
         <a>
-        Active Writings
+            Active records
         </a>
     </h3>
+
+
     <div>
 
         <g:remoteLink controller="operation" action="dumpAllWritings" update="centralArea">
-                      dumpAllWritings
+            Export all writings
         </g:remoteLink>
 
         <br/>
+        <br/>
 
-                <g:each in="${Course.findAll([sort: 'code', order: 'asc'])}"
-                        var="t">
-                    <g:if test="${Writing.countByCourseAndBookmarked(t, true)> 0}">
-                        <div style="text-align: center; background: #ececc8; border-right: 1px solid darkgray; padding: 5px; margin: 8px 3px;">
-                                                    <b>${t.numberCode}</b>
+        <g:each in="${Course.findAll([sort: 'code', order: 'asc'])}"
+                var="t">
+            <g:if test="${Writing.countByCourseAndBookmarked(t, true)> 0}">
+
+
+                <div style="text-align: center; background: #ececc8; border-right: 1px solid darkgray; padding: 5px; margin: 8px 3px;">
+                    <b>${t.numberCode}</b>
                     ${StringUtils.abbreviate(t.summary ?: '', 26)} (${Writing.countByCourse(t)})
-                    </div>
-                    <ul style="padding-left: 30px">
-                        <g:each in="${Writing.findAllByCourseAndBookmarked(t, true, [sort: 'orderNumber', order: 'asc'])}"
-                                var="w">
-                    <li style="list-style-type: none">
-                        <g:remoteLink controller="page" action="panel"
-                        params="${[id: w.id, entityCode: 'W']}"
-                        update="3rdPanel"
-                        title="Go to page">
-                        ${w.toString()}
-                            <g:if test="${w?.description?.length() > 0}">
-                                <div style="float: left">
-                                <g:each in="${0..Math.min((w?.description?.length() / 100).toInteger(), 15)}" var='c'>
-                            -
-                                </g:each>
+                </div>
+
+
+                <ul style="padding-left: 30px">
+                    <g:each in="${Writing.findAllByCourseAndBookmarked(t, true, [sort: 'orderNumber', order: 'asc'])}"
+                            var="w">
+                        <li style="list-style-type: none">
+                            <g:remoteLink controller="page" action="panel"
+                                          params="${[id: w.id, entityCode: 'W']}"
+                                          update="3rdPanel"
+                                          title="Go to page">
+                                ${w.toString()}
+                                <g:if test="${w?.description?.length() > 0}">
+                                    <div style="float: left">
+                                    <g:each in="${0..Math.min((w?.description?.length() / 100).toInteger(), 15)}" var='c'>
+                                        -
+                                    </g:each>
+                                    </div>
                                 </g:if>
-                        </g:remoteLink>
-                    </li>
-                </g:each>
-            </ul>
-                    </g:if>
+                            </g:remoteLink>
+                        </li>
                     </g:each>
-        </div>
+                </ul>
+            </g:if>
+        </g:each>
+
+
+     <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByBookmarked(true),
+                                                                           totalHits: Planner.countByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByBookmarked(true),
+                                                                           totalHits: Journal.countByBookmarked(true)]"/>
+                    %{--todo: repeat--}%
+                    <g:render template="/gTemplates/recordListing" model="[list: Task.findAllByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: IndexCard.findAllByBookmarked(true),
+                                                                           totalHits: IndexCard.countByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Writing.findAllByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Book.findAllByBookmarked(true)]"/>
+                    <g:render template="/gTemplates/recordListing" model="[list: Goal.findAllByBookmarked(true)]"/>
+
+
+
+    </div>
+
+
+
 
         <h3 class="bowseTab">
             <a>
@@ -129,10 +156,12 @@
                 %{--<g:remoteLink controller="generics" action="recordsByDepartment" id="${d.id}"--}%
                               %{--before="jQuery.address.value(jQuery(this).attr('href'));"--}%
                               %{--update="centralArea">--}%
-            <div style="text-align: center; color: white; font-weight: bold; background: darkgreen; border-right: 1px solid darkgray; padding: 7px; margin: 14px 3px;">
-            <a>
+            <div
+                    style="text-align: left; font-weight: bold; background: #a1ac97; border-right: 1px solid darkgray; padding: 7px; margin: 14px 3px;">
+
+                <a style=" color: white;">
             ${d.summary}
-                     (${d.courses.size()})
+                     (${d.courses.size()} courses)
         </a>
             </div>
                 %{--</span>--}%
@@ -151,28 +180,33 @@
 
                 <g:each in="${Course.findAllByDepartment(Department.get(d.id), [sort: 'code', order: 'asc'])}"
                         var="t">
-                    <div style="text-align: center; background: #ececc8; border-right: 1px solid darkgray; padding: 5px; margin: 8px 3px;"
+
+                    <g:if test="${Writing.countByCourse(t) > 0}">
+                    <div style="background: #ececc8; border-right: 1px solid darkgray; padding: 5px; margin: 8px 3px;"
+                         class="${t.language}" title="${t.code}"
                          onclick="jQuery('#courseWritings${t.id}').removeClass('hidden');">
                             <b>${t.numberCode}</b>
-                    ${StringUtils.abbreviate(t.summary ?: '', 26)} (${Writing.countByCourse(t)})
-
+                    ${StringUtils.abbreviate(t.summary ?: '', 26)} (${Writing.countByCourse(t)}w)
                     </div>
 
-                    <ul id="courseWritings${t.id}" style="padding-left: 30px" class="hidden">
+                    <ul id="courseWritings${t.id}" style="padding-left: 30px" class="--hidden">
                         <g:each in="${Writing.findAllByCourse(t, [sort: 'orderNumber', order: 'asc'])}"
                                 var="w">
-                            <a onclick="jQuery('#quickAddForm').addClass('hidden');">--</a>
-                    <li style="list-style-type: bullet; text-align: right; direction: rtl;">
+                            %{--<a onclick="jQuery('#quickAddForm').addClass('hidden');">--</a>--}%
+                    %{--<li style="list-style-type: bullet; text-align: right; direction: rtl;">--}%
+                            <li class="${w.language}">
                         <g:remoteLink controller="page" action="panel"
                         params="${[id: w.id, entityCode: 'W']}"
                         update="3rdPanel"
                         title="Go to page">
                         ${w.toString()}
                             <g:if test="${w?.description?.length() > 0}">
-                                <div style="float: left">
+                                <div style="float: ${w.language == 'ar' ? 'left' : 'right'}">
                             <g:each in="${0..Math.min(Math.floor(w?.description?.length() / 100).toInteger(), 15)}" var='c'>
                             -
                                 </g:each>
+                            &nbsp;&nbsp;
+                            &nbsp;&nbsp;
                                 </div>
                                 </g:if>
 
@@ -180,13 +214,13 @@
                     </li>
                 </g:each>
             </ul>
+                    </g:if>
                 </g:each>
         </div>
 </g:each>
 </div>
+    </div>
 
-
-</div>
 
 
 <g:if test="${1==2}">

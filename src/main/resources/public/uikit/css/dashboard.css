@@ -1,3 +1,12 @@
+.uk-article-divider{
+	border: 1px solid darkgray;
+	margin-bottom: 7px;
+}
+
+.uk-article-meta {
+color: #222;
+}
+
 /* Override */
 .uk-background-primary {
 	background-color: #99c4d7;
@@ -125,9 +134,9 @@
 	box-shadow: 0 2px 12px rgba(50,50,50,0.1);
 }
 #content {
-	margin-top: 52px;
+	/*margin-top: 52px;*/
 	padding: 20px 0 0 0;
-	background-color: #edf2eb;
+	/*background-color: #edf2eb;*/
 	margin-left: 0;
 	transition: margin 0.2s cubic-bezier(.4,0,.2,1);
 }

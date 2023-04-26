@@ -1,7 +1,7 @@
 
-Mousetrap.bind(['ctrl+enter'], function (e) {
-	jQuery('#summayDaftar').click();
-});
+//Mousetrap.bind(['ctrl+enter'], function (e) {
+//	jQuery('#summayDaftar').click();
+//});
 
 
 
@@ -19,6 +19,9 @@ Mousetrap.bind('space', function (e) {
 
 Mousetrap.bind(['e', 'ث'], function (e) {
 	jQuery(".recordSelected  .fullEditButton").click();
+});
+Mousetrap.bind(['C', '}'], function (e) {
+	jQuery(".recordSelected  .clearEndDate").click();
 });
 //Mousetrap.bind(['', 'ث'], function (e) {
 //	jQuery(".recordSelected  .fullEditButton").click();
@@ -49,11 +52,18 @@ Mousetrap.bind('?', function (e) {
 	jQuery(".recordSelected .status").editable('show');
 
 });
+Mousetrap.bind('#', function (e) {
+	jQuery(".recordSelected .type").editable('show');
+
+});
 
 
 Mousetrap.bind(['q', 'ض'], function (e) {
-	jQuery(".recordSelected  .quickEditButton").click();
+	//console.log('q clicked;')
+	jQuery(".recordSelected .quickEditButton").click();
 });
+
+
 Mousetrap.bind(['t','ف'], function (e) {
 	jQuery(".recordSelected .addTagButton").click();
 	jQuery(".recordSelected  .newTagField").focus();
@@ -71,8 +81,17 @@ Mousetrap.bind(['ق','r'], function (e) {
 
 
 });
+
+
 Mousetrap.bind(['D',']'], function (e) {
 	jQuery(".recordSelected  .doneButton").click();
+});
+Mousetrap.bind(['P','؛'], function (e) {
+	jQuery(".recordSelected  .publicButton").click();
+});
+
+Mousetrap.bind(['U','`'], function (e) {
+	jQuery(".recordSelected  .undoneButton").click();
 });
 
 
@@ -119,6 +138,10 @@ Mousetrap.bind(['f 2','ب 2'], function (e) {
 	jQuery(".recordSelected  .openFolderButton2").click();
 });
 
+Mousetrap.bind(['f 3','ب 3'], function (e) {
+	jQuery(".recordSelected  .openFolderButton3").click();
+});
+
 
 Mousetrap.bind('=', function (e) {
 	jQuery('.recordSelected .increasePriorityButton').click()
@@ -133,13 +156,13 @@ jQuery(document).ready(function () {
 
 	jQuery("#3rdPanel").focus(function(){
 		//console.log('3rd panel in focus');
-		Mousetrap.unbind('down');
-		Mousetrap.unbind('up');
-
+		//Mousetrap.unbind('down');
+		//Mousetrap.unbind('up');
+// todo: problem
 	});
 
 
-jQuery("#centralArea").focus(function(){
+//jQuery(".inner-center").focus(function(){
 
 	//console.log('workbench panel in focus');
 
@@ -156,8 +179,6 @@ jQuery("#centralArea").focus(function(){
 
 	});
 
-
-
 	Mousetrap.bind('up', function (e) {
 		let t = jQuery('.recordSelected')
 		if (jQuery('.recordSelected').prevAll('table').size() >= 1) {
@@ -171,7 +192,7 @@ jQuery("#centralArea").focus(function(){
 		return false;
 	});
 
-});
+//});
 
 
 });
@@ -204,6 +225,16 @@ arrayConversion.forEach( i => {
 //                return false;
 //            });
 
+
+const arrayDueDates = ['1', '2', '3', '4', '7', '14']
+
+arrayDueDates.forEach( i => {
+	Mousetrap.bind(i, function (e) {
+//                                    console.log('in dept set: ' + 's ' + i.toLowerCase());
+		jQuery('.recordSelected .setDueDate' + i).click();
+	})
+}
+)
 
 const array2 = ['1', '2', '3', '4', '5']
 
@@ -240,10 +271,32 @@ Mousetrap.bindGlobal('f2', function (e) {
 	jQuery('#quickAddTextFieldBottomTop').select();
 	jQuery('#quickAddTextFieldBottomTop').focus();
 });
+//Mousetrap.bindGlobal('f4', function (e) {
+
+//                jQuery('#accordionCenter').accordion({ active: 0});
+//	jQuery('#quickAddTextFieldBottomTop').select();
+//	e.preventDefault();
+//	jQuery('#centralArea').focus();
+//});
+
 Mousetrap.bindGlobal('f1', function (e) {
 //                jQuery('#accordionCenter').accordion({ active: 0});
 	jQuery('#quickAddTextFieldBottomTop').select();
 	jQuery('#quickAddTextFieldBottomTop').focus();
+});
+
+Mousetrap.bindGlobal('ctrl+k', function (e) {
+
+	if(confirm('Are you sure you want to clear the screen?')){
+	jQuery('#centralArea').html('');
+ 	jQuery('#underAreaForQuickAdd').html('');
+	}
+});
+Mousetrap.bindGlobal('ctrl+ن', function (e) {
+	if(confirm('Are you sure you want to clear the screen?')){
+		jQuery('#centralArea').html('');
+		jQuery('#underAreaForQuickAdd').html('');
+	}
 });
 
 
@@ -305,6 +358,10 @@ Mousetrap.bindGlobal('shift+f2', function (e) {
 //
 
 Mousetrap.bind('left', function (e) {
+	jQuery('.prevLink').click()
+});
+
+Mousetrap.bind('s', function (e) {
 	jQuery('.prevLink').click()
 });
 

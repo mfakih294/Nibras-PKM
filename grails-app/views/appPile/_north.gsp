@@ -20,7 +20,7 @@
                     <b style="font-size: 1.4em;">
 %{--                        ${OperationController.getPath('app.name') ?: 'Nibras'} /Study </b>--}%
 %{--Course--}%
-                        My Writings</b>
+                        Writings</b>
                 </span>
             </g:remoteLink>
 

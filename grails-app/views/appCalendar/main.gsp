@@ -1,4 +1,4 @@
-<%@ page import="mcs.Goal; ker.OperationController; java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
+<%@ page import="mcs.Task; mcs.Goal; ker.OperationController; java.time.temporal.ChronoUnit; mcs.parameters.JournalType; mcs.Journal; mcs.Planner; mcs.parameters.PlannerType" %>
 <!DOCTYPE html>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -52,6 +52,24 @@
 
 %{--  <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar', file: 'main4.js')}"></script>--}%
 
+    <link rel="stylesheet" href="${resource(dir: 'layout', file: 'layout-default.css')}"/>
+
+    <script type="text/javascript" src="${resource(dir: 'layout', file: 'jquery.layout_and_plugins.js')}"></script>
+
+
+
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit-icons.js')}"></script>
+    %{--<script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'jquery-ui-1.7.2.custom.min.js')}"></script>--}%
+    %{--<script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'chosen.jquery.min-new.js')}"></script>--}%
+    %{--<link rel="stylesheet" href="${resource(dir: 'css', file: 'chosen1.8.7.css')}"/>--}%
+
+
+    <link rel="stylesheet" href="${resource(dir: 'uikit-min/css', file: 'uikit.css') }"/>
+
+
+
+
 
     <script type="text/javascript" src="${resource(dir: 'plugins/fullcalendar/560', file: 'main.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'plugins/fullcalendar/560', file: 'main.css')}"/>
@@ -67,7 +85,94 @@
 
 
     <script>
-      var calendar
+
+
+        (function ($) {
+            var _ = $.layout;
+
+// make sure the callbacks branch exists
+            if (!_.callbacks) _.callbacks = {};
+
+            _.callbacks.resizePaneAccordions = function (x, ui) {
+                // may be called EITHER from layout-pane.onresize OR tabs.show
+                var $P = ui.jquery ? ui : $(ui.newPanel || ui.panel);
+                // find all VISIBLE accordions inside this pane and resize them
+                $P.find(".ui-accordion:visible").each(function () {
+                    var $E = $(this);
+                    if ($E.data("accordion"))		// jQuery < 1.9
+                        $E.accordion("resize");
+                    if ($E.data("ui-accordion"))	// jQuery >= 1.9
+                        $E.accordion("refresh");
+                });
+            };
+        })(jQuery);
+
+
+
+        $(document).ready(function () {
+
+            // this layout could be created with NO OPTIONS - but showing some here just as a sample...
+            // myLayout = $('body').layout(); -- syntax with No Options
+
+            myLayout = $('body').layout({
+
+                //	reference only - these options are NOT required because 'true' is the default
+                closable: true	// pane can open & close
+                , resizable: true	// when open, pane can be resized
+                , slidable: true	// when closed, pane can 'slide' open over other panes - closes on mouse-out
+                , livePaneResizing: true
+                , onresize: $.layout.callbacks.resizePaneAccordions
+                //	some resizing/toggling settings
+                , north__slidable: true	// OVERRIDE the pane-default of 'slidable=true'
+//                , north__togglerLength_closed: '100%'	// toggle-button is full-width of resizer-bar
+                , north__spacing_closed: 20		// big resizer-bar when open (zero height)
+//		,	north__size:				50
+                , south__resizable: false	// OVERRIDE the pane-default of 'resizable=true'
+                , west__spacing_open: 0		// no resizer-bar when open (zero height)
+                , west__spacing_closed: 25		// big resizer-bar when open (zero height)
+                , south__spacing_closed: 0		// big resizer-bar when open (zero height)
+                , east__spacing_closed: 0		// big resizer-bar when open (zero height)
+                , south__initClosed: true
+                , west__initClosed: true
+                , east__initClosed: true
+                //	some pane-size settings
+                , west__minSize: 350
+                , west__size: 350
+
+
+                , east__size: 350
+//					, west__togglerContent_closed: '<<'
+
+                , east__minSize: 350
+                , east__maxSize: .5 // 50% of layout width
+                , west__maxSize: .5 // 50% of layout width
+                , center__minWidth: 100
+
+                //	some pane animation settings
+                , west__fxName_close: "none"	// NO animation when closing west-pane
+                , west__fxName_open: "none"	// NO animation when closing west-pane
+                /*
+                 ,	west__animatePaneSizing:	false
+                 ,	west__fxSpeed_size:			"fast"	// 'fast' animation when resizing west-pane
+                 ,	west__fxSpeed_open:			1000	// 1-second animation when opening west-pane
+                 ,	west__fxSettings_open:		{ easing: "easeOutBounce" } // 'bounce' effect when opening
+                 ,	west__fxName_close:			"none"	// NO animation when closing west-pane
+                 */
+
+
+                //	enable showOverflow on west-pane so CSS popups will overlap north pane
+                , west__showOverflowOnHover: true
+
+                //	enable state management
+                , stateManagement__enabled: false // automatic cookie load & save enabled by default
+
+                , showDebugMessages: false// log and/or display messages from debugging & testing code
+            });
+
+        });
+
+
+            var calendar
   document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
@@ -84,13 +189,36 @@
    //   fixedWeekCount: false,
        shouldRedistribute: true,
         headerToolbar : {
-        left: 'prev next today',
+        left: 'prev next today slotDuration15,slotDuration30,slotDuration60',
         center: 'title',
 //        right: 'dayGrid,timeGridWeek,dayGridWeek,timeGridDay,dayGridMonth,agenda'
         right: 'timeGridDay,agenda,dayGrid,timeGridWeek,dayGridMonth'
             // listWeek
       },
-        buttonText: { today: '*', prev: '<- P', next: 'N ->'},
+
+        customButtons: {
+            slotDuration15: {
+                text: '15 min',
+                click: function() {
+                    calendar.setOption('slotDuration', '00:15:00')
+                }
+            },
+            slotDuration30: {
+                text: '30 min',
+                click: function() {
+                    calendar.setOption('slotDuration', '00:30:00')
+                }
+            },
+            slotDuration60: {
+                text: '1 hour',
+                click: function() {
+                    calendar.setOption('slotDuration', '00:60:00')
+                }
+            }
+
+        },
+
+        buttonText: { today: 'Today', prev: '<- P', next: 'N ->'},
       views: {
         dayGridMonth: {
           buttonText: 'Month',
@@ -129,7 +257,7 @@
           },
 
           agenda: {
-          buttonText: '3 days',
+          buttonText: '3 Days', // (reloadable)
               type: 'timeGrid',
 //              duration: { days: 4 },
           columnHead: true,
@@ -157,10 +285,17 @@
       },
 
 
-        initialView : 'agenda',
+        initialView : 'timeGridWeek',
       allDaySlot: true,
       nowIndicator: true,
+        stickyHeaderDates: true,
       timeGridEventMinHeight: true,
+        slotLabelFormat: {
+            hour: 'numeric',
+            minute: '2-digit',
+            omitZeroMinute: true,
+            meridiem: 'short'
+        },
 
         // defaultDate: '2019-06-12',
       navLinks: true, // can click day/week names to navigate views
@@ -188,7 +323,7 @@
        firstHour: '05:00',
       // minTime: 5,
       slotMinTime: '05:00',
-      slotDuration: '00:30',
+      slotDuration: "${OperationController.getPath('calendar.options.slotDuration') ?: '00:60'}",
       // showNonCurrentDates: false,
       // dayCount: 31,
       weekNumbers: true,
@@ -197,6 +332,8 @@
       events:"${request.contextPath}/export/allCalendarEvents",
       selectable: true,
       selectHelper: true,
+
+
 
       select: function (arg) {
 
@@ -258,7 +395,34 @@
                 window.open(info.event.url, '_default');
             }
         },
-        eventDidMount : function(info) {
+        eventDrop: function(info){
+//                    alert(info.event.title + ' - ' + info.event.id + ' drop : ' + info.event.start);
+
+
+            jQuery('#logArea').load('${request.contextPath}/operation/rescheduleEvent',
+
+                    {title: info.event.id, entityCode: info.event.url.split('=')[1],
+                        //start: event.start.format('DD.MM.YYYY hh:mm'),
+                        //end: event.end.format('DD.MM.YYYY hh:mm'),
+                        newStartTime: moment(info.event.start).format('DD.MM.YYYY HH:mm')},
+                    function(responce) {
+
+                    })
+        },
+        eventResize: function(info) {
+//                    alert(info.event.title + " end is now " + info.event.end.toISOString());
+
+            jQuery('#logArea').load('${request.contextPath}/operation/resizeEvent',
+                  {title: info.event.id,
+                      end: moment(info.event.end).format('DD.MM.YYYY HH:mm')},
+                  function(responce) {
+                  })
+//                    if (!confirm("is this okay?")) {
+//                        info.revert();
+//                    }
+      },
+
+      eventDidMount : function(info) {
         // var tooltip = new Tooltip(info.el, {
         //  $(info.el).tooltip(info.event.extendedProps.description);
         // $(info.el).title(info.event.extendedProps.description)
@@ -275,13 +439,16 @@
         ///$(element).title = "2344"//event.description;
       //  console.log('here   ... ' + event.title)
            $(info.el).qtip({
-                     content: {text: info.event.extendedProps.description.split('|')[1], title: info.event.extendedProps.description.split('|')[0]},
+
+                     content: {text: info.event.extendedProps.description.split('|')[1], title: moment(info.event.start).format('HH:mm') + (info.event.end ? '-' + moment(info.event.end).format('HH:mm'): '') + ' ' + info.event.extendedProps.description.split('|')[0]},
                style: 'qtip-light qtip-bootstrap qtip-blue',
+               hide: {fixed: true, distance: 15},
                width: 200,
                position: {
-                 my: 'center',
-                 at: 'center',
-                 target: jQuery('#calendar')
+//                 my: 'center',
+//                 at: 'center',
+                   target: 'mouse'
+//                 target: jQuery('#calendar')
                }
            })
 
@@ -329,7 +496,7 @@
               // console.log('here2' + calendarEl.view.title);
 
 
-              if (html == 'ok' && calendar.view.type == 'dayGrid') {
+              if (html == 'ok============' && calendar.view.type == 'agenda') {
                   window.location.href = window.location;
                   jQuery('#logArea2').html("<span style='background: darkgray; color: darkgreen'>Online</span>");
               }
@@ -358,8 +525,8 @@
   html, body {
     /*overflow: auto; !* don't do scrollbars *!*/
     font-family: tahoma, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 13px;
-    text-align: right;
+    font-size: 12px;
+    /*text-align: right;*/
       background: #ffffea;
 
   }
@@ -425,7 +592,7 @@
   }
 
   .fc-time {
-      font-size: larger;
+      font-size: large;
   }
   .fc .fc-timegrid .fc-daygrid-body {
       z-index: 1 !important;
@@ -443,6 +610,107 @@
 </head>
 <body>
 
+<div class="ui-layout-north" onmouseover="myLayout.allowOverflow('north')" onmouseout="myLayout.resetOverflow(this)">
+
+    %{--<g:render template="/appMain/north"/>--}%
+
+    <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
+
+
+
+
+        <div style="direction: rtl; text-align: center;">
+
+
+
+            %{--   <g:set var="aya1"--}%
+            %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random - 1])[0]}"/>--}%
+            <g:set var="aya2"
+                   value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'], [offset: random])[0]}"/>
+            %{--    <g:set var="aya3"--}%
+            %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
+            <div style="font-family: 'verdana tahoma'; font-size: large; margin-bottom: 10px; line-height: 29px;">
+                بسم الله الرحمن الرحيم
+                %{--                        ${aya1.shortDescription}--}%
+                %{--   (${aya1.orderInWriting})--}%
+
+                {${aya2?.shortDescription}}
+                (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2?.orderInWriting})
+                %{--              ${aya3.shortDescription}--}%
+                %{--              (${aya3.orderInWriting})--}%
+
+
+
+            </div>
+
+            <div class="prayersBlock">
+                <g:each in="${prayersText.split('\n')}" var='l'>
+                    <span style="margin-left: 15px; margin-top: 15px;">
+                        <b>${raw(l)?.split(': ')[0]}</b>:
+                    ${raw(l)?.split(': ')[1]}
+                    </span>
+
+
+                </g:each>
+
+                ${persianDateToday}
+
+
+
+            </div>
+
+
+
+
+
+
+            %{--<b>--}%
+            %{--<b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:--}%
+            %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
+            %{--</b>--}%
+            %{--&nbsp;--}%
+
+            %{--          <g:set var="aya"--}%
+            %{--                 value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>--}%
+            %{--          {--}%
+            %{--          ${aya.shortDescription}--}%
+            %{--          }--}%
+            %{--          (${mcs.Writing.get(aya.recordId)?.summary}--}%
+            %{--          ${aya.orderInWriting})--}%
+            %{--      --}%
+
+                         %{--Slot duration:--}%
+
+
+        </div>
+    </g:if>
+
+
+</div>
+
+<!-- allowOverflow auto-attached by option: west__showOverflowOnHover = true -->
+<div class="ui-layout-west">
+
+    <g:render template="/appCalendar/west"/>
+
+</div>
+
+<div class="ui-layout-south southRegion">
+
+    %{--<g:render template="/appMain/south" model="[ips: ips]"/>--}%
+
+</div>
+
+<div class="ui-layout-east" >
+
+
+    %{--<g:render template="/appMain/east"/>--}%
+
+</div>
+
+<div class="ui-layout-center" style="background: #f6f9f1;">
+
+
 <div id="logArea" style="background: lightgoldenrodyellow; font-size: 14px;">
 </div>
 
@@ -453,204 +721,54 @@
 <div class="body">
 
 </div>
-<table border="0" style="border: 0px;">
-    <tr>
-        <td style="vertical-align: top; width: 70%;">
-            <div id="calendar-container" style="margin: 10px; text-align: left; height: 95vh">
-
-                <g:if test="${ker.OperationController.getPath('hijriDate.enabled')?.toLowerCase() == 'yes' ? true : false}">
+%{--<table border="0" style="border: 0px;">--}%
+    %{--<tr>--}%
+        %{--<td style="vertical-align: top; width: 70%;">--}%
+            <div id="calendar-container" style="margin: 20px; text-align: left; height: 95vh">
 
 
 
 
-                    <div style="direction: rtl; text-align: center; ">
-
-
-
-                        %{--   <g:set var="aya1"--}%
-                        %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random - 1])[0]}"/>--}%
-                        <g:set var="aya2"
-                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'], [offset: random])[0]}"/>
-                        %{--    <g:set var="aya3"--}%
-                        %{--                               value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 800', [4, 'aya'], [offset: random + 1])[0]}"/>--}%
-                        <div style="font-family: 'verdana tahoma'; font-size: large; margin-bottom: 10px; line-height: 29px;">
-                            بسم الله الرحمن الرحيم
-                            %{--                        ${aya1.shortDescription}--}%
-                            %{--   (${aya1.orderInWriting})--}%
-
-                            {${aya2?.shortDescription}}
-                            (${mcs.Writing.get(aya2.recordId)?.summary} ${aya2?.orderInWriting})
-                            %{--              ${aya3.shortDescription}--}%
-                            %{--              (${aya3.orderInWriting})--}%
-
-
-
-                        </div>
-
-                        %{--<b>--}%
-                        %{--<b>${((java.time.chrono.HijrahDate.now().plus(ker.OperationController.getPath('hijri.adjustment') ? ker.OperationController.getPath('hijri.adjustment').toInteger(): 0, java.time.temporal.ChronoUnit.DAYS))).format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM").withLocale(Locale.forLanguageTag('ar')))}</b>:--}%
-                        %{--                            &nbsp;&nbsp; ${new Date().format("E dd HH:mm")}: &nbsp;--}%
-                        %{--</b>--}%
-                        %{--&nbsp;--}%
-
-                        %{--          <g:set var="aya"--}%
-                        %{--                 value="${app.IndexCard.executeQuery('from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) < 80', [4, 'aya'], [offset: Math.floor(Math.random()*100)])[0]}"/>--}%
-                        %{--          {--}%
-                        %{--          ${aya.shortDescription}--}%
-                        %{--          }--}%
-                        %{--          (${mcs.Writing.get(aya.recordId)?.summary}--}%
-                        %{--          ${aya.orderInWriting})--}%
-                        %{--      --}%
-
-
-
-                        %{--<g:each in="${prayersText.split('\n')}" var='l'>--}%
-                        %{--<span style="margin-left: 15px; margin-top: 15px;">--}%
-                        %{--<b>${raw(l)?.split(': ')[0]}</b>:--}%
-                        %{--${raw(l)?.split(': ')[1]}--}%
-                        %{--</span>--}%
-                        %{--</g:each>--}%
-                    </div>
-                </g:if>
             %{--<br/>--}%
-                <div id='calendar' ></div>
-            </div>
-        </td>
-        <td style="vertical-align: top; ">
-<div style="padding:4px 4px; overflow-x:hidden; overflow-y:auto; height: 90vh;">
-    %{--todo: dynamic height --}%
-
-    <b>Add task/goal</b>
+                <div id='calendar'></div>
     <br/>
     <br/>
-    <g:formRemote name="addXcdFormDaftar" id="addXcdFormDaftar"
-                  url="[controller: 'indexCard', action: 'addXcdFormDaftar']"
-                  update="underArea"
-                  style="direction: ltr; text-align: left; margin:  2px; padding: 3px 0px; border: 1px solid darkgray; line-height: 30px;"
-                  onComplete="jQuery('#summayDaftar').val('');jQuery('#summayDaftar').select();;jQuery('#summayDaftar').focus();"
-                  method="post">
+    %{--<h4>Calendar slot duration: </h4>--}%
 
-        <g:select name="type" from="${['T', 'G']}"
-              id="typeField"
-              style="border-radius: 5px;"
-              tabindex="1"
-              value="T"/>
-    &nbsp;
-    p <g:select name="priority" from="${(1..5)}"
-                id="priority"
-                tabindex="1"
-                value="${2}"/>
-    &nbsp;
-    @ <g:select name="context" id="context" from="${mcs.parameters.Context.list([sort: 'code', order: 'asc'])}"
-                optionKey="id" class="chosen"
-                style="width: 80px !important;"
-                noSelection="${['null': 'Context...']}"
-                optionValue="code"/>
-    &nbsp;
-    <g:select name="courseNgs" id="courseNgs" from="${mcs.Course.findAll([sort: 'summary', order: 'asc'])}"
-              optionKey="id" class="chosen"
-              noSelection="${['null': 'Course...']}"
-              style="width: 300px !important;" optionValue="summary"/>
+    %{--<ul class="uk-subnav uk-subnav-pill" uk-switcher="animation: uk-animation-fade">--}%
+        %{--<li>--}%
+            %{--<a onclick="calendar.setOption('slotDuration', '00:30:00')" href="#">30 min</a>--}%
+        %{--</li>--}%
+        %{--<li>--}%
+            %{--<a onclick="calendar.setOption('slotDuration', '00:15:00')" href="#">15 min</a>--}%
+        %{--</li>--}%
+        %{--<li>--}%
+            %{--<a onclick="calendar.setOption('slotDuration', '00:60:00')" href="#">1 hour</a>--}%
+        %{--</li>--}%
+    %{--</ul>--}%
+
     <br/>
 
-    %{--        todo: parametric language list--}%
 
-    %{--<g:select name="language" id="language" class="chosen" from="${['ar', 'en', 'fr', 'fa', 'de']}" value="ar"/>--}%
-    %{--<br/>--}%
-    <g:textField name="title" value=""
-                 tabindex="2" id="summayDaftar"
-                 style="background: #f8f9fa; margin: 3px; text-align: right; font-family: Tahoma; font-size: 1em; width: 90% !important;"
-                 placeholder="Summary *"
-                 class=""/>
-    %{--&nbsp;--}%
-    <g:submitButton name="save" value="Add"
-                    style="text-align: center; padding-left: 8px; padding-right: 8px; display: none;"
-                    tabindex="4"
-                    id="addXcdFormDaftarSubmit"
-                    class="fg-button ui-widget ui-state-default"/>
 
-    %{--        <g:textArea cols="80" rows="12" placeholder="Description / full text ..."--}%
-    %{--                    tabindex="3"--}%
-    %{--                    name="description" id="descriptionDaftar"--}%
-    %{--                    value=""--}%
-    %{--                    style="background: #f8f9fa; font-family: tahoma; font-size: small; padding: 3px; width: 95%; height: 80px !important;"/>--}%
-    </g:formRemote>
-
-    <div id="underArea" class="common" style="margin: 2px 2px 5px 5px;">
-        %{--                <g:render template="/reports/heartbeat" model="[dates: dates]"></g:render>--}%
+<b>Note:</b>
+    <div class="uk-info">
+    To edit the default slot duration, modify the setting "calendar.options.slotDuration" from the main screen, by entering the command: "f y -- calendar.options.slotDuration".
     </div>
 
-
-    <g:if test="${notStarted.size() >= 1}">
-                %{--<g:render template="/gTemplates/recordListing" model="[list: notStarted ]"></g:render>--}%
-                <g:each in="${notStarted.context.unique()}" var="c">
-                %{--<h4>@${c}</h4>--}%
-                    <g:each in="${notStarted.grep{it.context == c}}" var="task" >
-                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                    </g:each>
-                </g:each>
-    </g:if>
-    <g:if test="${inProgress.size() >= 1}">
-                <g:each in="${inProgress.context.unique()}" var="c">
-                    <h4>@${c}</h4>
-                    <g:each in="${inProgress.grep{it.context == c}}" var="task" >
-                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                    </g:each>
-                </g:each>
-    </g:if>
-    <g:if test="${completed.size() >= 1}">
-            %{--<g:render template="/gTemplates/recordListing" model="[list: completed ]"></g:render>--}%
-                <g:each in="${completed.context.unique()}" var="c">
-                    <h4>@${c}</h4>
-                    <g:each in="${completed.grep{it.context == c}}" var="task" >
-                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                    </g:each>
-                </g:each>
-    </g:if>
-    <g:if test="${overdue.size() >= 1}">
-                %{--<h2>Overdue</h2>--}%
-                %{--<g:render template="/gTemplates/recordListing" model="[list: overdue ]"></g:render>--}%
-                <g:each in="${overdue.context.unique()}" var="c">
-                %{--<h4>@${c}</h4>--}%
-                    <g:each in="${overdue.grep{it.context == c}}" var="task" >
-                        <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-                    </g:each>
-                </g:each>
-    </g:if>
-
-    <hr/>
     <br/>
-    %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
-    <g:each in="${pile.context.unique()}" var="c">
-    %{--<h4>@${c}</h4>--}%
-        <g:each in="${pile.grep{it.context == c}}" var="task" >
-            <g:render template="/gTemplates/recordSummary" model="[record: task]"></g:render>
-        </g:each>
-    </g:each>
-
-    <hr/>
     <br/>
-    %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
-    <g:each in="${mcs.Goal.findAllByBookmarked(true)}" var="r">
-    %{--<h4>@${c}</h4>--}%
-        %{--<g:each in="${pile.grep{it.context == c}}" var="task" >--}%
-            <g:render template="/gTemplates/recordSummary" model="[record: r]"></g:render>
-        %{--</g:each>--}%
-    </g:each>
-   <hr/>
     <br/>
-    %{--<g:render template="/gTemplates/recordListing" model="[list: pile ]"></g:render>--}%
-    <g:each in="${courses}" var="r">
-    %{--<h4>@${c}</h4>--}%
-        %{--<g:each in="${pile.grep{it.context == c}}" var="task" >--}%
-            <g:render template="/gTemplates/recordSummary" model="[record: r]"/>
-        %{--</g:each>--}%
-    </g:each>
+    <br/>
 
-</div>
-        </td>
-    </tr>
-</table>
+
+
+            </div>
+        %{--</td>--}%
+        %{--<td style="vertical-align: top; ">--}%
+        %{--</td>--}%
+    %{--</tr>--}%
+%{--</table>--}%
 
 
 <div id="login-form" class="modal" style="z-index:1000; height: 500px; width: 600px; border: 1px solid darkgray; margin: 5px; padding: 15px !important;">
@@ -698,7 +816,7 @@
         <br/>
         <g:select name="task" from="${mcs.Task.findAllByBookmarked(true, [sort: 'summary', order: 'asc'])}" id="task"
                   optionKey="id" optionValue="summary"
-                  style="width: 95%  !important; direction: rtl; text-align: right;"
+                  style="width: 99%  !important; direction: rtl; text-align: right;"
                   noSelection="${['null': '']}" value=""/>
 </div>
         <div style="clear: both;"/>
@@ -845,7 +963,7 @@
 
 </table>
 </g:if>
-
+</div>
 
 </body>
 

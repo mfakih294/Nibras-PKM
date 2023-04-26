@@ -27,8 +27,11 @@ import groovy.io.FileType
 import mcs.*
 import mcs.parameters.*
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.commons.lang.StringUtils
 import org.apache.pdfbox.PDFToImage
+import security.User
 
+import java.nio.file.*
 
 @Secured(['ROLE_ADMIN','ROLE_READER'])
 class OperationController {
@@ -57,8 +60,13 @@ class OperationController {
             'Y': 'cmn.Setting',
             'X': 'mcs.parameters.SavedSearch'
     ]
+
+
     def supportService
     def searchableService
+
+    def springSecurityService
+
     private java.lang.Object object
 
     def actions() {
@@ -777,6 +785,11 @@ class OperationController {
             return Setting.findByName(code)?.value?.replace(/[appFolder]/, '.')
     }
 
+    static def setPath(String code, String newValue) {
+
+            return Setting.findByName(code)?.value = newValue
+    }
+
 
     def generateBibEntry(Long id) {
         render OperationController.generateBibEntrySt(id)
@@ -1096,7 +1109,7 @@ date = "${r.year ?: ''}"
         if (field == 'blog') {
             Blog.findAll([sort: 'code']).each() {
                 responce += [value: it.id,
-                             text : it.code]
+                             text : it.summary]
             }
         } else if (field == 'pomegranate') {
             Pomegranate.findAll([sort: 'code']).each() {
@@ -1121,12 +1134,12 @@ date = "${r.year ?: ''}"
                         n.department)
             }
                 else {
-                courses = Course.executeQuery('from Course c order by c.summary asc')
+                courses = Course.executeQuery('from Course c order by c.code asc, c.summary asc')
             }
 
                 courses.each() {
                 responce += [value: it.id,
-                             text : '[' + it.code + '] ' + it.summary]
+                             text : '' + it.code + ' - ' + it.summary]
             }
 //            } else
 //                responce += [value: 0,
@@ -1466,6 +1479,7 @@ date = "${r.year ?: ''}"
 
             def rps1Folder
             def rps2Folder
+            def rps2Folder2 // legacy case
             if (params.entityCode == 'R') {
                 rps1Folder =
                         OperationController.getPath('root.rps1.path') + '/R' +
@@ -1478,6 +1492,12 @@ date = "${r.year ?: ''}"
                         (resourceNestedByType ?  '/' +  b.type.code : '') +
                         (resourceNestedById ?  '/' +   (params.id.toLong()/ 100).toInteger() : '') +
                         '/' + params.id
+                rps2Folder2 =
+                        OperationController.getPath('root.rps2.path') + '/R' +
+                        (resourceNestedByType ?  '/' +  b.type.code : '') +
+                        (resourceNestedById ?  '/' +   (params.id.toLong()/ 100).toInteger() : '')
+                //+
+                  //      '/' + params.id
             } else {
                 rps1Folder = OperationController.getPath('root.rps1.path') + '/' + params.entityCode + '/' + params.id
                 rps2Folder = OperationController.getPath('root.rps2.path') + '/' + params.entityCode + '/' + params.id
@@ -1487,6 +1507,13 @@ date = "${r.year ?: ''}"
 
             if (new File(rps2Folder).exists()) {
                 new File(rps2Folder).eachFileMatch(~/[\S\s]*\.[\S\s]*/) {
+                    filesList.add(it)
+                }
+            }
+
+
+            if (rps2Folder2 && new File(rps2Folder2).exists()) {
+                new File(rps2Folder2).eachFileMatch(~/${params.id}[\S\s]*\.[\S\s]*/) {
                     filesList.add(it)
                 }
             }
@@ -1693,7 +1720,7 @@ date = "${r.year ?: ''}"
                     if (new File(folder[0]).exists()) {
                         new File(folder[0]).eachFileMatch(~/${b.id}[a-z][\S\s]*\.[\S\s]*/) {
                             filesCount++
-                            filesList += it.name// + '\n'
+                            filesList += it.name  + '|' + it.size()// + '\n'
                         }
                     }
                 }
@@ -1708,13 +1735,13 @@ date = "${r.year ?: ''}"
                 folders.each() { folder ->
 //                    println 'fld ' + folder + ' class ' + folder.class
                     if (new File(folder[0]).exists()) {
-                        new File(folder[0]).eachFileRecurse() {
+                        new File(folder[0]).eachFile() { //Recurse
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
-                            if (!it.isFile())
-                                filesList += '*** ' + it.name
-                            else {
+                            if (it.isFile()){
+//                                filesList += '*** ' + it.name
+//                            else {
                                 filesCount++
-                                filesList += it.name
+                                filesList += it.name + '|' + it.size()
                             }
                         }
                     }
@@ -1760,17 +1787,15 @@ switch (entityCode){
                 if (!b.bookmarked)
                     folders.add([typeRepositoryPath + '/' + (b.id)])
 
-
-
                 folders.each() { folder ->
                     if (new File(folder[0]).exists()) {
-                        new File(folder[0]).eachFileRecurse() {
+                        new File(folder[0]).eachFile() { //Recurse
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
-                            if (!it.isFile())
-                                filesList += '*** ' + it.name
-                            else {
+                            if (it.isFile()) {
+//                                filesList += '*** ' + it.name
+//                            else {
                                 filesCount++
-                                filesList += it.name
+                                filesList += it.name + '|' + it.size()
                             }
                         }
                     }
@@ -1976,7 +2001,7 @@ past.each(){
 //	j.level = 'd'
 //	else
         j.level = 'm'
-        j.bookmarked = true
+        // j.bookmarked = true
 
         if (params.task && params.task != 'null')
             j.task = Task.get(params.task.toLong())
@@ -2001,6 +2026,8 @@ past.each(){
 
 //        if (j.level == 'd')
 //            j.endDate = null
+
+        j.user = User.findByUsername(springSecurityService.currentUser.username)
 
         if (!j.hasErrors()) {
             j.save(flash: true)
@@ -2067,15 +2094,15 @@ past.each(){
                 n.wbsNumber = j+1
 //                sub++
                 n.save(flush: true)
-            //    println 'found a child with id ' + n.id // + +'.' + (sub++) + '\n'
+                println 'found a child with id ' + n.id +'.' + (sub++) + ' ' + n.summary + '\n'
             } else {
-//                sub = 1
+                sub = 1
                 n.wbsParent = null
                 n.orderNumber = roots
                 n.wbsNumber = roots
                 n.save(flush: true)
                 roots++
-             //   println 'found a root with id ' + n.orderNumber// + +'.' + (sub++) + '\n'
+                println 'found a root with id ' + n.orderNumber +  '.' + (sub++) + n.summary + '\n'
             }
         }
 
@@ -2104,7 +2131,7 @@ past.each(){
 
 
     def dumpAllWritings(){
-        Writing.list().each() {
+        Writing.executeQuery('from Writing where type.code != ?', ['surah']).each() {
             dumpRecordForImport(it.id, 'W')
             }
 
@@ -2395,5 +2422,121 @@ margin: 5px 2px;
 
 
 
+    def makeSymbolicLink() {
 
-    } // end of class
+        try {
+            def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+
+            //      def relativePath = supportService.getResourcePath(record.id, params.entityCode, true)
+            def fullPath = supportService.getResourcePath(record.id, params.entityCode, false)
+
+            def name = params.entityCode == 'R' ? record.title : record.summary
+
+            def target = OperationController.getPath('root.rps1.path') + '/new/' + '/' + name
+
+            //                               render 'target ' + target  + '<br/>'
+            //           render 'source ' + fullPath  + '<br/>'
+//        render ' count is ' +  Files.list(Paths.get(fullPath)).count() + '<br/>'
+
+            // Files.createDirectories(Paths.get(target).getParent())
+            Files.createDirectories(Paths.get(fullPath))
+            if (java.nio.file.Files.createSymbolicLink(Paths.get(target), Paths.get(fullPath)))
+//                render ''
+            render(template: '/layouts/achtung', model: [message: 'Link created on ' +  OperationController.getPath('root.rps1.path') + '/new/'])
+            else
+                render(template: '/layouts/achtung', model: [message: 'Problem creating the link'])
+
+        } catch (Exception e){
+            render(template: '/layouts/achtung', model: [message: 'Problem creating the link '  + e])
+            e.printStackTrace()
+        }
+
+
+    }
+
+
+
+    def rescheduleEvent = {
+
+        def m
+
+        def scheduledStart = Date.parse('dd.MM.yyyy HH:mm', params.newStartTime)
+        def scheduledEnd = new Date(scheduledStart.time + 30 * 60 * 1000)
+
+        switch(params.entityCode){
+
+        case 'J':
+            m = Journal.get(params.title)
+        break
+case 'P':
+            m = Planner.get(params.title)
+        break
+case 'T':
+            m = Task.get(params.title)
+        break
+
+        }
+
+
+        m.startDate = scheduledStart
+        m.endDate = scheduledEnd
+
+
+        // scheduledStart + 600//
+//        println 's e:: ' + scheduledStart + ' -> ' + scheduledEnd
+
+
+
+        render(template: '/layouts/achtung', model: [message: 'Plan rescheduled'])
+//                if (keepProcessing && scheduledStart.minutes == 45) {
+
+
+    }
+ def resizeEvent = {
+
+//        println "id: = " + params.title
+        def m = Planner.get(params.title)
+
+//            def scheduledStart = Date.parse('dd.MM.yyyy HH:mm', params.end)
+            def scheduledEnd = Date.parse('dd.MM.yyyy HH:mm', params.end) //new Date(scheduledStart.time + 30 * 60 * 1000)
+            // scheduledStart + 600//
+//        println 's e:: ' + scheduledStart + ' -> ' + scheduledEnd
+
+//        m.startDate = scheduledStart
+        m.endDate = scheduledEnd
+
+
+        render(template: '/layouts/achtung', model: [message: 'Plan resized'])
+//                if (keepProcessing && scheduledStart.minutes == 45) {
+
+
+    }
+
+
+    def createUser() { // todo
+        def username = params.username?.trim()
+        def standardRole = security.Role.findByAuthority('ROLE_READER')
+//        println ' is it ' + standardRole
+        def standardUser = new security.User(username: username, password: username).save()
+        security.UserRole.create(standardUser, standardRole, true)
+
+        render 'User created with username ' + username + ' and password ' + username
+
+    }
+
+    def toggleMetadataLine(){
+
+        if (OperationController.getPath('metadataLine.hidden') == 'yes'){
+
+            Setting.findByName('metadataLine.hidden').value = 'no'
+
+            render 'Metadata line visible. Refresh view to take effect.'
+        }
+        else {
+            Setting.findByName('metadataLine.hidden').value = 'yes'
+
+            render 'Metadata line hidden. Refresh view to take effect.'
+        }
+
+    }
+} // end of class

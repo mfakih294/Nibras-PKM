@@ -18,6 +18,7 @@
 package mcs.parameters
 
 import cmn.DataChangeAudit
+import security.User
 
 class Location implements Comparable {  // entity id = 156
 
@@ -25,6 +26,9 @@ class Location implements Comparable {  // entity id = 156
     static searchable = [only: ['name', 'notes']]
 
     // Fields
+
+    User user
+
 
     Country country
     String code
@@ -55,7 +59,7 @@ class Location implements Comparable {  // entity id = 156
         table 'location'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

@@ -1,9 +1,12 @@
+textarea {
+    white-space: pre-wrap; /* to solve enter problem */
+}
 .fc th, .fc td {
     padding: 3px 6px;
 }
 
 .fc-event-container .fc-content .fc-time {
-    float: left;
+    /*float: left;*/
 }
 
 
@@ -43,4 +46,23 @@
 
 .done {
     text-decoration: line-through black !important;
+}
+
+
+.taskList{
+    border: 1px solid lightgrey;
+    padding:4px 4px; overflow-x:hidden;
+    overflow-y:auto;
+    height: 90vh;
+}
+.taskList::-webkit-scrollbar:vertical {
+    /*-webkit-appearance: none;*/
+    width: 11px;
+    /*display: none;*/
+}
+.taskList::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255, 0.5);
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.5);
+    /*display: none;*/
 }

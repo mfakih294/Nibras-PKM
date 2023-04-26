@@ -47,11 +47,19 @@
         %{--A BEAUTIFUL LANDSCAPE HERE--}%
         %{--</h6>--}%
         <div class="uk-text">
-        <b>From:</b>    ${doc.submittedBy}
+        <b>Created by:</b>    ${doc.submittedBy}
     <br/>
-        <b>To:</b>    ${doc.recipients?.toString()}
+        <b>Shared with:</b>    ${doc.recipients?.toString()}
     <br/>
         <b>On:</b>    ${doc.dateCreated?.format('dd.MM.yyyy HH:mm')}
+
+    <g:remoteLink controller= "attachment" action="deleteFolder"
+                  id="${doc.id}" title="Delete folder"
+                  before="if(!confirm('Are you sure you want to delete the folder: ${doc.name}?')) return false"
+                  update="fileDeleteArea${doc.id}" on404="alert('not found');">
+        x
+    </g:remoteLink>
+
         </div>
 <br/>
 

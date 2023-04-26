@@ -92,7 +92,7 @@ class Task implements Comparable {  // entity id = 127
     Boolean isTopic = false
 
     Boolean bookmarked
-    Boolean isPrivate = false
+    Boolean isPrivate = true
 
 
     String notes
@@ -132,14 +132,14 @@ class Task implements Comparable {  // entity id = 127
     }
 
     static mapping = {
-        description(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
 
         table 'task'
         //sort "id":"desc"
         //name (index:'name_index')
-        description(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

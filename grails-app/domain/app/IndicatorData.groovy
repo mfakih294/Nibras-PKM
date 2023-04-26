@@ -55,7 +55,7 @@ class IndicatorData implements Comparable {  // entity id = 21
     Integer priority
 
     Boolean bookmarked = false
-    Boolean isPrivate = false
+    Boolean isPrivate = true
 
     static constraints = {
         indicator(nullable: false)
@@ -71,8 +71,8 @@ class IndicatorData implements Comparable {  // entity id = 21
     static mapping = {
 
         // name (index:'name_index')
-        description(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
     }
 
     static namedQueries = {

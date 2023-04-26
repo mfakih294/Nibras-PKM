@@ -53,7 +53,7 @@ class WritingStatus implements Comparable {  // entity id = 145
         table 'writing_status'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

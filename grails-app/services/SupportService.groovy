@@ -23,6 +23,8 @@ import mcs.Goal
 //import mcs.WritingType
 
 import net.bican.wordpress.CustomField
+import net.bican.wordpress.MediaItem
+import net.bican.wordpress.MediaItemUploadResult
 
 //import net.bican.wordpress.Post
 
@@ -48,6 +50,58 @@ class SupportService {
     def grailsApplication
 
 //    private static final log = LogFactory.getLog(this)
+
+    static entityMapping = [
+            'G'            : 'mcs.Goal',
+            'ه'            : 'mcs.Goal',
+            'T'            : 'mcs.Task',
+            'ع'            : 'mcs.Task',
+            'P'            : 'mcs.Planner',
+            'خ'            : 'mcs.Planner',
+
+            'W'            : 'mcs.Writing',
+            'ك'            : 'mcs.Writing',
+            'N'            : 'app.IndexCard',
+            'ن'            : 'app.IndexCard',
+
+            'J'            : 'mcs.Journal',
+            'ذ'            : 'mcs.Journal',
+            'I'            : 'app.IndicatorData',
+            'K'            : 'app.Indicator',
+
+            'Q'            : 'app.Payment',
+            'د'            : 'app.Payment',
+            'L'            : 'app.PaymentCategory',
+
+            'R'            : 'mcs.Book',
+            'م'            : 'mcs.Book',
+            'C'            : 'mcs.Course',
+            'و'            : 'mcs.Course',
+            'D'            : 'mcs.Department',
+            'ج'            : 'mcs.Department',
+            'E'            : 'mcs.Excerpt',
+            'ف'            : 'mcs.Excerpt',
+            'S'            : 'app.Contact',
+            'Tag'          : 'app.Tag',
+
+            'Y'            : 'cmn.Setting',
+            'X'            : 'mcs.parameters.SavedSearch',
+            'A'            : 'app.parameters.CommandPrefix',
+            'O'            : 'mcs.Operation',
+//todo for all params
+            'ResourceType' : 'app.parameters.ResourceType',
+            'WorkStatus'   : 'mcs.parameters.WorkStatus',
+            'WritingStatus': 'mcs.parameters.WritingStatus',
+            'GoalType'     : 'mcs.parameters.GoalType',
+            'JournalType'  : 'mcs.parameters.JournalType',
+            'PlannerType'  : 'mcs.parameters.PlannerType',
+            'WritingType'  : 'mcs.parameters.WritingType',
+            'Context'      : 'mcs.parameters.Context',
+            'Blog'         : 'app.parameters.Blog'
+
+    ]
+
+
 
 
     String getResourcePath(Long id, String type, Boolean relative) {
@@ -392,7 +446,7 @@ class SupportService {
         if (i.path)
             result = countFolder(i.path, i.extensions)
         else if (i.query)
-            result = Goal.executeQuery("" + i.query)[0]
+            result = Goal.executeQuery("select count(*)" + i.query)[0] // todo: why select count(*) was removed!
 
         return result
     }
@@ -422,14 +476,24 @@ class SupportService {
     }
 
 
-    int postToBlog(Long blogId, String code, String title, String categoriesString, String tags, String fullText, String excerpt, String entityCode, Integer publishedNodeId) {
+    int postToBlog(Long blogId, String code, String title, String categoriesString, String tags, String fullText,
+                   String excerpt, String entityCode, Integer publishedNodeId, String coverPath, String[] files, String uploadBase) {
+
         try {
             def username
             def password
             def link
 
             ArrayList<String> categories = categoriesString.split(',')
-            Blog blog = Blog.get(blogId)
+
+
+            Blog blog
+
+            if (blogId)
+            blog = Blog.get(blogId)
+            else
+             blog = Blog.findByCode(OperationController.getPath('blog.current.code'))
+
             username = blog.username
             password = blog.password
             link = blog.link
@@ -484,10 +548,38 @@ class SupportService {
             post.setPost_title(title)
             post.setPost_excerpt(excerpt)
 
+
+            def links = []
+
+            if (files){
+                files.each(){
+                    links += '<a href="' + uploadBase + '/' + code + '/' + it + '">' + it + '</a>'
+
+                }
+            }
+            if (fullText && links)
+            post.setPost_content(fullText + '<br/><br/><b>Files:</b><br/>' +  links.join('<br/>'))
+            else if (fullText && !links)
             post.setPost_content(fullText)
+            else if (!fullText && links)
+            post.setPost_content( '<br/><b>Files:</b><br/>' +  links.join('<br/>'))
             //   post.setPage_status('published')
             post.setPost_status('publish')
             post.setPost_name(code)
+
+//            def mi = new MediaItem()
+//            mi.setLink('https://khuta.org/cover.jpg')
+
+if (coverPath) {
+    InputStream media = new FileInputStream(new File(coverPath))
+    final String fileName = "cover.jpg";
+    final MediaItemUploadResult mediaUploaded = wp.uploadFile(media, fileName);
+    final MediaItem r = wp.getMediaItem(mediaUploaded.getId());
+    post.setPost_thumbnail(r);
+}
+//                Integer p = wp.newPost(post);
+
+//            post.setPost_thumbnail(mi)
 
 
             final List<Term> terms = wp.getTerms("post_tag");
@@ -582,7 +674,11 @@ class SupportService {
               //  result = wp.getPost(publishedNodeId.intValue())
             }
 
-//           println 'resut is: ' + result
+           println 'resut is: ' + result
+
+            println 'post link is: ' + post.getLink()
+//            render 'post link is: ' + post.getLink()
+
             if (!publishedNodeId ) {
 //                println 'here'
                 return result
@@ -735,5 +831,104 @@ class SupportService {
          return list
     }
 
+    def updateBookmarkedRecordsFileCount(){
+
+//         println 'In support service counting files...'
+
+
+
+        if (OperationController.getPath('panel.integrations.currentPlan.enabled') == 'yes') {
+            def path = OperationController.getPath('panel.integrations.currentPlan.path')
+            if (mcs.Planner.executeQuery('select count(*) from Planner where startDate <= ? and endDate >= ? ', [new Date(), new Date()])[0] > 0) {
+                def p =
+                        mcs.Planner.executeQuery('from Planner where startDate <= ? and endDate >= ? ', [new Date(), new Date()])[0]
+
+                new File(path).write('>' + p.endDate?.format('HH:mm') + ' ' + p.summary, 'UTF-8')
+            } else {
+                new File(path).write('*** No plan set!', 'UTF-8')
+            }
+        }
+
+
+        def results = []
+        [mcs.Course,
+         mcs.Goal,
+         mcs.Task,
+         mcs.Planner,
+         mcs.Journal,
+
+         mcs.Writing,
+         app.IndexCard,
+
+         mcs.Book,
+         mcs.Excerpt,
+         app.Contact
+        ].each() {
+            it.findAllByBookmarked(true).each(){
+                OperationController.countResourceFilesStatic(it.id, it.entityCode())
+            }
+        }
+
+
+
+    }
+
+    def loadRecord(String entitCode, Long id){
+        return grailsApplication.classLoader.loadClass(entityMapping[entitCode]).get(id)
+    }
+
+
+
+    /**
+     * Calculates the similarity (a number within 0 and 1) between two strings.
+     */
+    public static double similarity(String s1, String s2) {
+        String longer = s1, shorter = s2;
+        if (s1.length() < s2.length()) { // longer should always have greater length
+            longer = s2; shorter = s1;
+        }
+        int longerLength = longer.length();
+        if (longerLength == 0) { return 1.0; /* both strings are zero length */ }
+        /* // If you have StringUtils, you can use it to calculate the edit distance:
+        return (longerLength - StringUtils.getLevenshteinDistance(longer, shorter)) /
+                                                             (double) longerLength; */
+        return (longerLength - editDistance(longer, shorter)) / (double) longerLength;
+
+    }
+
+    // Example implementation of the Levenshtein Edit Distance
+    // See http://r...content-available-to-author-only...e.org/wiki/Levenshtein_distance#Java
+    public static int editDistance(String s1, String s2) {
+        s1 = s1.toLowerCase();
+        s2 = s2.toLowerCase();
+
+        int[] costs = new int[s2.length() + 1];
+        for (int i = 0; i <= s1.length(); i++) {
+            int lastValue = i;
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0)
+                    costs[j] = j;
+                else {
+                    if (j > 0) {
+                        int newValue = costs[j - 1];
+                        if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                            newValue = Math.min(Math.min(newValue, lastValue),
+                                    costs[j]) + 1;
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+            }
+            if (i > 0)
+                costs[s2.length()] = lastValue;
+        }
+        return costs[s2.length()];
+    }
+
+    public static void printSimilarity(String s, String t) {
+//		System.out.println
+        render (String.format(
+                "%.3f is the similarity between \"%s\" and \"%s\"", similarity(s, t), s, t));
+    }
 
 }

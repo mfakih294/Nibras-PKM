@@ -1,5 +1,7 @@
 <%@ page import="mcs.parameters.ResourceStatus; mcs.Goal; org.apache.commons.lang.StringUtils; mcs.Book; app.parameters.ResourceType; mcs.Writing; mcs.Department; mcs.parameters.WritingType; app.Tag; cmn.Setting; mcs.Course; mcs.Journal; mcs.Planner; app.IndexCard; mcs.Task; ker.OperationController" %>
-<div id="3rdPanel" tabindex=3 style="z-index: 1000000; background: whitesmoke; margin-bottom: 25px; padding: 10px; border: 2px solid darkgray;">
+<div id="3rdPanel" tabindex=6
+     style="z-index: 1000000; background: #f6f9f1;
+      margin-bottom: 25px; padding: 10px; border: 0px solid darkgray;">
 
     %{--<uploadr:add id="addToRecordFolder"--}%
     %{--url="${[controller: 'import', action: 'addToRecordFolder2']}"--}%
@@ -13,7 +15,7 @@
     %{--</div>--}%
 
 
-
+    %{--<g:render template='/reports/homepageSavedSearchesHql'/>--}%
 
 
 

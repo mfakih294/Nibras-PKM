@@ -54,6 +54,9 @@ import com.vladsch.flexmark.ext.gfm.tasklist.TaskListExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 
+
+import java.time.format.DateTimeFormatter
+
 //import java.io.StringWriter;
 //import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
 //import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
@@ -122,6 +125,7 @@ class PageController {
     def appMain() {
 
 
+
 //
 //        ['IPs.show',                    'add-import-panel.enabled',                    'advanced-panel.enabled',                    'calendar.enabled',                    'commandbar.enabled',                    'copyright.show',                    'course.enabled',                    'extra-panes.enabled',                    'notes.enabled',                    'open-record-folders.enabled',                    'quick-add-form.enabled',                    'review.enabled',                    'rss.enabled',                    'scans.enabled',                    'selection-actions.enabled',                    'tasks.enabled',                    'today-report.enabled',
 //         'convert-records.enabled',
@@ -132,7 +136,7 @@ class PageController {
 //        }
 
 
-        def types = []
+        def types = [  [id: 'C', name: 'Course', code: 'courses']]
 
         [
                 [id: 'T', name: 'Task', code: 'tasks'],
@@ -141,6 +145,7 @@ class PageController {
                 [id: 'W', name: 'Writing', code: 'writings'],
                 [id: 'J', name: 'Journal', code: 'journal'],
 //                [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'P', name: 'Planner', code: 'planner'],
                 [id: 'R', name: 'Resource', code: 'resources']
         ].each(){
             if (OperationController.getPath(it.code + '.enabled') == 'yes')
@@ -288,7 +293,8 @@ class PageController {
 				["updateResultSet.max-items","100"],
 				["upload-cover.enabled","no"],
 				["upload-files.enabled","yes"],
-				["writings.enabled","no"]
+				["writings.enabled","no"],
+				["metadataLine.hidden","no"]
             ].each() {
                 new cmn.Setting([name: it[0], value: it[1]]).save(flush: true)
             }
@@ -312,10 +318,12 @@ class PageController {
 //        }
 
         def recentRecords = []
-        recentClasses.each() {
+
+        if (1 == 2) {
+            recentClasses.each() {
 //            recentRecords += it.findAllByDateCreatedGreaterThanAndDeletedOnIsNull(new Date() - 2, [sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
-            recentRecords += it.findAll([sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
-        }
+                recentRecords += it.findAll([sort: 'dateCreated', order: 'desc', max: 1])?.reverse()
+            }
 
 //        def filledInDates = ''
 //        Journal.executeQuery("select  DATE_FORMAT(startDate, '%c/%e/%Y') from Journal group by date(startDate) order by startDate asc").each() {
@@ -323,18 +331,18 @@ class PageController {
 //        }
 
 //        session['log'] = 1
-        session['J'] = 1
-        session['P'] = 1
+            session['J'] = 1
+            session['P'] = 1
 
-        session['showLine1Only'] = 'on'
-        session['showFullCard'] = 'off'
+            session['showLine1Only'] = 'on'
+            session['showFullCard'] = 'off'
 
 //        MarkupParser markupParser = new MarkupParser();
 //        markupParser.setMarkupLanguage(new MarkdownLanguage());
 //        String htmlContent = markupParser.parseToHtml(text);
 
-        def r = ''
-   //     def c = 0
+            def r = ''
+            //     def c = 0
 //        def f = ker.OperationController.getPath('editBox.path')
 //        if (f) {
 //            new File(f)?.listFiles().each(){
@@ -345,26 +353,26 @@ class PageController {
 //            }
 //        }
 
-        def resources =
-                Book.executeQuery('from Book r where r.course.bookmarked = ? ' +
+            def resources =
+                    Book.executeQuery('from Book r where r.course.bookmarked = ? ' +
 //                        in ' +
 //                        '(select course from Planner p where p.startDate < current_date and p.endDate > current_date and p.course is not null)' +
-                        ' and r.priority >= ? and r.readOn is not null' +
-                        ' and (r.lastReviewed < ? or r.lastReviewed is null) and r.reviewCount < ?' +
-                        ' order by r.orderNumber asc, r.reviewCount asc',
-                        [true, 3, new Date() + 7, 5])
-        def excerpts =
-                Book.executeQuery('from Excerpt r where r.book.course.bookmarked = ? ' +
+                            ' and r.priority >= ? and r.readOn is not null' +
+                            ' and (r.lastReviewed < ? or r.lastReviewed is null) and r.reviewCount < ?' +
+                            ' order by r.orderNumber asc, r.reviewCount asc',
+                            [true, 3, new Date() + 7, 5])
+            def excerpts =
+                    Book.executeQuery('from Excerpt r where r.book.course.bookmarked = ? ' +
 //                ' in' +
 //                ' (select course from Planner p where p.startDate < current_date and p.endDate > current_date and p.course is not null)' +
-                        ' and r.priority >= ? and r.readOn is not null' +
-                        ' and (r.lastReviewed < ? or r.lastReviewed is null) and r.reviewCount < ?' +
-                        ' order by r.orderNumber asc, r.reviewCount asc',
-                        [true, 3, new Date() + 7, 5])
+                            ' and r.priority >= ? and r.readOn is not null' +
+                            ' and (r.lastReviewed < ? or r.lastReviewed is null) and r.reviewCount < ?' +
+                            ' order by r.orderNumber asc, r.reviewCount asc',
+                            [true, 3, new Date() + 7, 5])
 
 //        println 'r ' + resources
 //        println 'e ' + excerpts
-
+        }
         def ips = []
         def ip
         def interf
@@ -392,7 +400,7 @@ class PageController {
 //                [mcs.Book, 'Resource'],
                    [mcs.Planner, 'Plan'],
                    [mcs.Journal, 'Journal'], [app.IndexCard, 'Note']]) {
-            for (t in c[0].findAllByDateCreatedGreaterThan(new Date() - 90, [sort: 'dateCreated', order: 'asc'])) {
+            for (t in c[0].findAllByDateCreatedGreaterThan(new Date() - 14, [sort: 'dateCreated', order: 'asc'])) {
                 def date = t.dateCreated.format('yyyy-MM-dd')
                 if (!datesHb[date])
                     datesHb[date] = ['Goal'   : 0,
@@ -415,8 +423,10 @@ class PageController {
         def user = springSecurityService.currentUser
 
 
+
+
 //        def rpsSize = '/home/maitham/job/rps1/bin/rps0size.sh'.execute().text
-        render(view: '/appMain/main', model: [
+        render(view: '/appMain/main2', model: [
                 htmlContent      : null,
                 ips              : ips,
 //                rpsSize              : rpsSize,
@@ -424,7 +434,7 @@ class PageController {
                 editFileCount    : 0, // todo: fix
                 dates: datesHb,
                 username         : user.username,
-                reviewPileSize   : resources.size() + excerpts.size(),
+//                reviewPileSize   : resources.size() + excerpts.size(),
                 types: types,
                 tasksActiveNotStarted: tasksActiveNotStarted,
 //                environment: environment
@@ -445,13 +455,16 @@ class PageController {
         def types = []
 
         [
+                [id: 'N', name: 'Note', code: 'notes'],
+                [id: 'W', name: 'Writing', code: 'writings'],
+
                 [id: 'T', name: 'Task', code: 'tasks'],
                 [id: 'P', name: 'Plan', code: 'plans'],
                 [id: 'G', name: 'Goal', code: 'goals'],
-                [id: 'N', name: 'Note', code: 'notes'],
-                [id: 'W', name: 'Writing', code: 'writings'],
+
                 [id: 'J', name: 'Journal', code: 'journal'],
 //                [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'P', name: 'Planner', code: 'planner'],
                 [id: 'R', name: 'Resource', code: 'resources']
         ].each(){
             if (OperationController.getPath(it.code + '.enabled') == 'yes')
@@ -511,7 +524,13 @@ class PageController {
         ])
     }
 def appPile() {
-        render(view: '/appPile/main', model: [ ])
+
+
+    response.setHeader("Access-Control-Allow-Origin", "*")
+    response.setHeader("Access-Control-Allow-Methods", "*")
+
+    render(view: '/appPile/main', model: [ ])
+
     }
 
     def appKanban() {
@@ -570,6 +589,7 @@ def appPile() {
                 [id: 'W', name: 'Writing', code: 'writings'],
                 [id: 'J', name: 'Journal', code: 'journal'],
 //                 [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'P', name: 'Planner', code: 'planner'],
                 [id: 'R', name: 'Resource', code: 'resources']
         ].each() {
             if (OperationController.getPath(it.code + '.enabled') == 'yes')
@@ -665,6 +685,9 @@ def appPile() {
  max = app.IndexCard.executeQuery('select count(*) from IndexCard i where i.priority >= ? and i.type.code = ? and length(i.summary) > 80 and length(i.summary) < 800', [4, 'aya'])[0].toInteger()
 
 
+
+
+
         def overdue = supportService.getOverdueTasks()
         def pile = supportService.getTasksPile()
         def todayInProgress = supportService.getTasksTodayInProgress()
@@ -676,7 +699,7 @@ def appPile() {
 
 
         render(view: '/appCalendar/main', model: [
-                prayersText: prayersText,
+                prayersText: prayersTimes(),
                 random: Math.floor(Math.random() * max),
                 overdue: overdue,
                 pile: pile,
@@ -684,6 +707,7 @@ def appPile() {
                 courses: mcs.Course.findAllByBookmarked(true),
                 completed: todayCompleted,
                 notStarted: todayNotStarted
+
         ])
     }
   def appMobileCalendar() {
@@ -699,8 +723,15 @@ def appPile() {
     def record() {
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
         if (record)
-        render(view: '/page/record', model: [record:record
-        ])
+        render(view: '/page/record', model: [record:record])
+        else render 'Record not found.'
+    }
+
+    def staticPage() {
+        params.entityCode = params.entityCode ?: 'R'
+        def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+        if (record)
+        render(view: '/page/staticPage', model: [record: record])
         else render 'Record not found.'
     }
  def rssPage() {
@@ -711,7 +742,13 @@ def appPile() {
     }
 
     def panel() {
+
+        response.setHeader("Access-Control-Allow-Origin", "*")
+        response.setHeader("Access-Control-Allow-Methods", "*")
+
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+
+//        supportService.updateBookmarkedRecordsFileCount()
 
         def typeSandboxPath
 
@@ -777,8 +814,11 @@ def coverPath
 
 
 def htmlText = ''
+// record.entityCode() == 'N' &&
+            if ('NRW'.contains(record.entityCode()) && record.description) {
 
-            if (record.entityCode() == 'N' && record.description) {
+
+
                 MutableDataSet options = new MutableDataSet();
 
                 options.setFrom(ParserEmulationProfile.MARKDOWN);
@@ -796,7 +836,8 @@ def htmlText = ''
                 HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
                 // You can re-use parser and renderer instances
-                Node document = parser.parse(record.description?.replaceAll('\n', '\n<br/>\n'));
+                def reposFilesUrl = ker.OperationController.getPath('repository.url')
+                Node document = parser.parse(record.description?.replaceAll('\n', '\n<br/>\n').replace('](', '](' + reposFilesUrl + '/W/' + record.id + '/'));
                 String html = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
                 record.descriptionHTML =  html//?.replaceAll('\n', '<br/>\n')?.replaceAll('<br/>', '<br/>\n')
                 // println 'html ' + html
@@ -1090,10 +1131,17 @@ YellowGreen;#9ACD32"""
     }
 
 
+
+  def appIrfan() {
+        render(view: '/appIrfan/main', model: [])
+
+    }
+
     def settingsMain() {
         render(template: '/page/settings', model: [full: false])
 
     }
+
 
     def settingsFull() {
         render(template: '/page/settings', model: [full: true])
@@ -1115,6 +1163,8 @@ YellowGreen;#9ACD32"""
             result = "ok"
 
         }
+        response.setHeader("Access-Control-Allow-Origin", "*")
+        response.setHeader("Access-Control-Allow-Methods", "*")
         render(status: 200, contentType: 'application/json', text: json)
     }
 
@@ -1153,4 +1203,48 @@ YellowGreen;#9ACD32"""
 
     }
 
+    String prayersTimes(){
+
+        double latitude = 33.8933182;
+        double longitude = 35.5015717;
+        double timezone = ker.OperationController.getPath('prayers.timezone') ?ker.OperationController.getPath('prayers.timezone').toInteger(): 3 ;
+        // Test Prayer times here
+        PrayTime prayers = new newpackage.PrayTime();
+
+        prayers.setTimeFormat(prayers.Time12NS);
+        prayers.setCalcMethod(prayers.Jafari);
+        prayers.setAsrJuristic(prayers.Shafii);
+        prayers.setAdjustHighLats(prayers.AngleBased);
+        int[] offsets = [0, 1, 0, 0, 0, 3, 5]; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
+        prayers.tune(offsets);
+
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+
+        ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal,
+                latitude, longitude, timezone);
+        ArrayList<String> prayerNames = prayers.getTimeNames();
+
+        def prayersText = ''
+//     for (int i = 0; i < prayerTimes.size(); i++) {
+        prayersText += (prayerNames.get(0) + ": " + prayerTimes.get(0) + '\n')
+        prayersText += (prayerNames.get(1) + ": " + prayerTimes.get(1) + '\n')
+        prayersText += (prayerNames.get(2) + ": " + prayerTimes.get(2) + '\n')
+        prayersText += (prayerNames.get(3) + ": " + prayerTimes.get(3) + '\n')
+        prayersText += (prayerNames.get(4) + ": " + prayerTimes.get(4) + '\n')
+        prayersText += (prayerNames.get(5) + ": " + prayerTimes.get(5) + '\n')
+//         prayersText += (prayerNames.get(6) + ": " + prayerTimes.get(6) + '\n')
+//     }
+
+
+        return prayersText
+
+    }
+
+
+    def tasksTable (){
+        render(view: '/reports/taskTable', model: [])
+
+    }
 } // end of class

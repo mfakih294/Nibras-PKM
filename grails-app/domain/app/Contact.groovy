@@ -92,8 +92,8 @@ class Contact implements Comparable {  // entity id = 26
     static mapping = {
 
         // name (index:'name_index')
-        description(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
     }
 
 

@@ -32,6 +32,8 @@ import mcs.parameters.*
 import mcs.parameters.Context
 import org.apache.commons.lang.StringUtils
 import grails.converters.JSON
+import security.User
+
 import java.nio.file.*
 
 //import org.eclipse.mylyn.wikitext.core.parser.MarkupParser
@@ -45,7 +47,10 @@ import grails.plugin.springsecurity.annotation.Secured
 import org.apache.pdfbox.PDFToImage
 
 
+
+
 @Secured(['ROLE_ADMIN','ROLE_READER'])
+
 class GenericsController {
 
     static entityMapping = [
@@ -169,14 +174,14 @@ class GenericsController {
 
     def supportService
     def searchableService
-
+    def springSecurityService
 
 
     def quickWritingSearch(String input) {
         if (!input.startsWith(' ')) {
-            findRecords('f w -- ' + params.input)
+            findRecords('w -- ' + params.input)
         } else if (input.startsWith(' ')) {
-            findRecords('f w :: ' + params.input)
+            findRecords('w :: ' + params.input)
         }
     }
 
@@ -186,6 +191,28 @@ class GenericsController {
             findRecords('n #aya -- ' + params.input)
         } else if (input.startsWith(' ')) {
             findRecords('n #aya :: ' + params.input)
+        }
+    }
+
+    def quickCourseSearch(String input) {
+        if (!input.startsWith(' ')) {
+            findRecords("r C${params.id} -- " + params.input)
+            findRecords("n C${params.id} -- " + params.input)
+            findRecords("w C${params.id} -- " + params.input)
+            findRecords("t C${params.id} -- " + params.input)
+            findRecords("t C${params.id} -- " + params.input)
+            findRecords("j C${params.id} -- " + params.input)
+            findRecords("p C${params.id} -- " + params.input)
+            findRecords("g C${params.id} -- " + params.input)
+        } else if (input.startsWith(' ')) {
+            findRecords("r C${params.id}  :: " + params.input)
+            findRecords("n C${params.id} :: " + params.input)
+            findRecords("w C${params.id} :: " + params.input)
+            findRecords("t C${params.id} :: " + params.input)
+            findRecords("t C${params.id} :: " + params.input)
+            findRecords("j C${params.id} :: " + params.input)
+            findRecords("p C${params.id} :: " + params.input)
+            findRecords("g C${params.id} :: " + params.input)
         }
     }
 
@@ -217,7 +244,7 @@ class GenericsController {
  queryKey : queryKey,
  title    : entityCode + ': ' + count + ' results.'
  ])}*/
-        render '<h2>Search results...</h2><i>Add a space before the term(s) to search inside the contents of the records</i>.<br/>'
+        render "<h3>Search results for '${params.input}'...</h3>" //Add a space before the term(s) to search inside the contents of the records</i>.<br/>'
 //println 'type' + params.resultType
         if (params.resultType == '*') {
             [
@@ -230,22 +257,27 @@ class GenericsController {
                     [id: 'p', name: 'Planner', code: 'planner'],
                     [id: 's', name: 'Contact', code: 'contacts'],
                     [id: 'c', name: 'Course', code: 'courses']
-            ].each() {
-                if (OperationController.getPath(it.code + '.enabled') == 'yes')
+            ].each() { //todo: simplify
+                if (OperationController.getPath(it.code + '.enabled') == 'yes'){
                    if (input.startsWith(' '))
                         findRecords(it.id + ' :: ' + params.input)
                     else
                         findRecords(it.id + ' -- ' + params.input)
+                }
             }
         }
         else {
             if (input?.trim()?.isInteger())
                 findRecords(params.resultType.toLowerCase() + ' i' + params.input?.trim())
-            else if (input.startsWith(' '))
-                        findRecords(params.resultType.toLowerCase() + ' :: ' + params.input)
-            else
-                        findRecords(params.resultType.toLowerCase() + ' -- ' + params.input)
+                    else {
+                             if (input.startsWith(' '))
+                                        findRecords(params.resultType.toLowerCase() + ' :: ' + params.input)
+                            else
+                                        findRecords(params.resultType.toLowerCase() + ' -- ' + params.input)
+                    }
+
             }
+
 
 
 //             render '<h2>Searching contents...</h2>'
@@ -282,6 +314,9 @@ class GenericsController {
 
 
     Long actionDispatcher(String input) {
+
+        input = input.trim()
+
         try {
             if (input && input.trim() != '') {
 
@@ -591,8 +626,8 @@ YellowGreen;#9ACD32"""
             }
             else {
                 render(template: '/layouts/verification', model:
-                        [line: prefix?.replace('--', ' -- ') + it?.trim(),
-                         status: verifySmartCommand(prefix?.replace('--', ' -- ') + it?.trim()), index: index++]) // prefix + ' ' +
+                        [line: prefix?.replace('--', ' -- ') + block?.trim(),
+                         status: verifySmartCommand(prefix?.replace('--', ' -- ') + block?.trim()), index: index++]) // prefix + ' ' +
             }
         }
 
@@ -791,7 +826,8 @@ r (resource)
                         case 'e': hintResponce = 'e saved search code <br/>'
 if (input.length() < 3){
                             SavedSearch.findAll().each(){
-                                hintResponce+= it.id + (it.code ? ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '<br/>'
+                                hintResponce+= (it.code ? ' <b>' + it.code + '</b>' : '') + ' - ' + it.summary + '<br/>'
+                                // it.id +
                             }
 } else {
 
@@ -859,7 +895,7 @@ fr"""
                             break
                         case '#':
 
-                            hintResponce += ('Types\n\n')
+                            hintResponce += ('<b>Types</b>\n\n')
 
                             switch (entityCode) {
 
@@ -1202,7 +1238,11 @@ ll
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
 
+
         if (record) {
+            // todo: remove
+            record.user = User.findByUsername(springSecurityService.currentUser.username)
+
 
             if (entityCode == 'O'){
                 if (verifySmartCommand(record?.summary + ' -- ' + record.description?.trim()) == 'correctCommand') {
@@ -1226,11 +1266,14 @@ ll
 
 
                 def fullPath = supportService.getResourcePath(record.id, entityCode, false)
+
+                if (OperationController.getPath('currentFolder.path')){
                 def currentPath = OperationController.getPath('currentFolder.path')
                 Files.createDirectories(Paths.get(fullPath))
                 if (new File(fullPath).exists()) {
                     new File(currentPath + '/current').delete()
                     java.nio.file.Files.createSymbolicLink(Paths.get(currentPath + '/current'), Paths.get(fullPath))
+                }
                 }
             }
             render(template: '/gTemplates/recordSummary', model: [record: record, showFull: 'on', mobileView: params.mobileView])
@@ -1269,15 +1312,32 @@ def markAsMarkdowned(Long id, String entityCode) {
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
         try {
             record.withMarkdown = true
-            render 'is ? ' + record.withMarkdown
-            render 'is ? ' + record.id
-            render 'is ? ' + record.hasErrors()
+//            render 'is ? ' + record.withMarkdown
+//            render 'is ? ' + record.id
+//            render 'is ? ' + record.hasErrors()
             record.save()
             render(template: '/layouts/achtung', model: [message: "Record with ID ${id} has been marked as markdown"])
 //            render(template: '/gTemplates/recordSummary', model: [record: record])
         }
         catch (Exception) {
             render(template: '/layouts/achtung', model: [message: "Record with ID ${id} could not be marked"])
+            println 'Error saving record.'
+        }
+    }
+
+    def unmarkAsMarkdowned(Long id, String entityCode) {
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+        try {
+            record.withMarkdown = false
+//            render 'is ? ' + record.withMarkdown
+//            render 'is ? ' + record.id
+//            render 'is ? ' + record.hasErrors()
+            record.save()
+            render(template: '/layouts/achtung', model: [message: "Record with ID ${id} has been ummarked as markdown"])
+//            render(template: '/gTemplates/recordSummary', model: [record: record])
+        }
+        catch (Exception) {
+            render(template: '/layouts/achtung', model: [message: "Record with ID ${id} could not be unmarked"])
             println 'Error saving record.'
         }
     }
@@ -1497,8 +1557,9 @@ def markAsMarkdowned(Long id, String entityCode) {
 
 //            newRecord.dateCreated = oldRecord.dateCreated
 
-
                 }
+
+                oldRecord.user = newRecord.user
 
 //        render(template: '/layouts/achtung', model: [message: "Record with ID ${id} deleted"])
                 render(template: '/gTemplates/recordSummary', model: [record: newRecord])
@@ -1586,7 +1647,28 @@ def markAsMarkdowned(Long id, String entityCode) {
     }
 
 
-    def markCompleted(Long id, String entityCode) {
+    def markPublic(Long id, String entityCode) {
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+//        !'RP'.contains(entityCode) &&
+        if (record.class.declaredFields.name.contains('isPrivate')) {
+            if (record.isPrivate == true) {
+                record.isPrivate = false
+                render(template: '/layouts/achtung', model: [message: 'Record marked as public'])
+            }
+            else {
+                record.isPrivate = true
+                render(template: '/layouts/achtung', model: [message: 'Record marked as private'])
+            }
+        }
+
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+
+    }
+
+
+def markCompleted(Long id, String entityCode) {
 
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
@@ -1654,6 +1736,30 @@ def markAsMarkdowned(Long id, String entityCode) {
 
         render(template: '/gTemplates/recordSummary', model: [record: record])
         render(template: '/layouts/achtung', model: [message: 'Record marked as completed'])
+    }
+    def unmarkCompleted(Long id, String entityCode) {
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+        if ('GTP'.contains(entityCode)) {
+            record.completedOn = null
+            record.status = WorkStatus.findByCode('pending')
+        }
+
+        if ('NJ'.contains(entityCode)) {
+            record.isMerged = false
+            record.mergedOn = null
+        }
+
+
+        if ('REN'.contains(entityCode)) {
+            if (!record.readOn) {
+                record.readOn = null
+            }
+        }
+
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+        render(template: '/layouts/achtung', model: [message: 'Record marked as uncompleted'])
     }
 
 //   static def markCompletedStatic(Long id, String entityCode) {
@@ -1932,8 +2038,10 @@ def markAsMarkdowned(Long id, String entityCode) {
 
                         typeRepositoryPath = OperationController.getPath('root.rps2.path') + '/' + entityCode + '/'
                         folders.add([typeSandboxPath + '/' + (b.id)])
-                        if (!b.bookmarked)
-                            folders.add([typeRepositoryPath + '/' + (b.id)])
+
+
+//                        if (!r.bookmarked)
+//                            folders.add([typeRepositoryPath + '/' + (b.id)])
 
 
 
@@ -2044,6 +2152,34 @@ def markAsMarkdowned(Long id, String entityCode) {
 //        if (!record.endDate)
         record.endDate = new Date()
         record.bookmarked = true
+//        else
+//            record.endDate = record.endDate  - 1
+
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+    }
+  def setEndDate() {
+        def entityCode = params.id.substring(0, 1)
+        def id = params.id.substring(1).toLong()
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+      def oldEndDate = record.endDate
+
+//        if (!record.endDate)
+        record.endDate = new Date() + params.i.toInteger()
+
+      if (params.i.toInteger() > 3)
+        record.bookmarked = false
+
+
+
+      if (oldEndDate) {
+          Calendar cal = GregorianCalendar.getInstance(); // turned out to be not needed, but old dates where in a different timezones!!!
+          cal.setTime(oldEndDate)
+
+//          record.endDate = record.endDate.copyWith(hourOfDay: cal.get(Calendar.HOUR), minute: oldEndDate.getMinutes())
+          record.endDate.setHours(oldEndDate.getHours())
+          record.endDate.setMinutes(oldEndDate.getMinutes())
+      }
 //        else
 //            record.endDate = record.endDate  - 1
 
@@ -2603,16 +2739,20 @@ def markAsMarkdowned(Long id, String entityCode) {
                 }
 
                 // postToBlog(String blogId, String title, String categoriesString, String tags, String fullText) {
-                sleep(2000)
-                int r = supportService.postToBlog(record.blog.id, summary, categories, tags, contents, record.entityCode(), record.publishedNodeId)
+                sleep(500)
+                try {
+                    int r = supportService.postToBlog(record.blog.id, summary, categories, tags, contents, record.entityCode(), record.publishedNodeId, null)
 
-                if (r) {
-                    record.publishedNodeId = r
-                    record.publishedOn = new Date()
-                    //render r
-                    render(template: '/layouts/achtung', model: [message: "Record published with id " + r])
-                } else "Problem posting the record"
-
+                    if (r) {
+                        record.publishedNodeId = r
+                        record.publishedOn = new Date()
+                        //render r
+                        render(template: '/layouts/achtung', model: [message: "Record published with id " + r])
+                    } else "Problem posting the record"
+                } catch (Exception e){
+                    println 'Problem occurred while posting '  + e.toString()
+                    render 'Problem occurred while posting '  + e.toString()
+                }
 
                 list.add(record)
             }
@@ -2998,6 +3138,11 @@ def markAsMarkdowned(Long id, String entityCode) {
             if (params.id)
                 record = grailsApplication.classLoader.loadClass(params.entityController).get(params.id)
 
+            if (params.id && params.entityController == 'mcs.parameters.SavedSearch')
+                render(template: '/gTemplates/recordSummary', model: [
+                        title: "",
+                        record: record])
+
 
             render(template: '/gTemplates/addForm', model: [entityController: params.entityController,
                                                             fields          : grailsApplication.classLoader.loadClass(params.entityController).declaredFields.name,
@@ -3017,8 +3162,11 @@ def markAsMarkdowned(Long id, String entityCode) {
                                                             contexts        : contexts,
                                                             categories      : categories
             ])
-            if (params.isParameter)
-                render(template: '/gTemplates/recordListing', model: [list: grailsApplication.classLoader.loadClass(params.entityController).findAll([sort: 'id', order: 'desc'])])
+
+    if (params.isParameter)
+                render(template: '/gTemplates/recordListing', model: [
+                        title: "List of records",
+                        list: grailsApplication.classLoader.loadClass(params.entityController).findAll([sort: 'id', order: 'desc'])])
 
         }
         catch (Exception e) {
@@ -3275,9 +3423,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                 def queryHead = 'from ' + entityMapping[entityCode]
                 def queryCriteria = transformMcsNotation(input.substring(0, input.length() - 2))['queryCriteria']
 
-                def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by lastUpdated desc, id desc'
+                def fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by id desc' //lastUpdated desc,  buggy, todo: configurable with a warning
                 // println 'fq ' + fullquery
-                def list = Task.executeQuery(fullquery + ' order by lastUpdated desc, id desc', [], params)
+                def list = Task.executeQuery(fullquery + ' order by id desc', [], params) // lastUpdated desc,
                 def r
                 def limit = ker.OperationController.getPath('updateResultSet.max-items')?.toInteger() ?: 100
                 if (list.size() < limit) {
@@ -3329,7 +3477,7 @@ def markAsMarkdowned(Long id, String entityCode) {
 
                     def queryParams = ''
 
-                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')  + ' order by lastUpdated desc, id desc'
+                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')  + ' order by  id desc' // lastUpdated desc,
                     fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
 
                 def list = Task.executeQuery(fullquery, [], params)
@@ -3441,7 +3589,7 @@ def markAsMarkdowned(Long id, String entityCode) {
 
 
                 render(template: '/reports/genericGrouping', model: [
-                        items : Task.executeQuery(queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by lastUpdated desc, id desc', []),
+                        items : Task.executeQuery(queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by id desc', []), // lastUpdated desc,
                         groups: groups, groupBy: groupBy,
                         title : 'HQL Query: ' + input]
                 )
@@ -3453,11 +3601,14 @@ def markAsMarkdowned(Long id, String entityCode) {
                 def queryKey
                 if (input.startsWith('_')) {
                     fullquery = session[input]
-                    fullquerySort = 'select count(*) ' + fullquery
+                    fullquerySort = 'select count(*) ' + fullquery?.split('order by')[0] // bug: problem in h2 if "order by" is used with select count(*)
+                    // println 'query sort ' +  fullquery?.split('order by')[0]
                     queryKey = input
 //                    println 'fullquery ' + fullquery + '\n\n'
                 }
                 else {
+
+
                     def entityCode = input.split(/[ ]+/)[0]?.toUpperCase()
 
 //        input = params.input.substring(params.input.indexOf(' '))
@@ -3465,9 +3616,10 @@ def markAsMarkdowned(Long id, String entityCode) {
                     def queryHead = 'from ' + entityMapping[entityCode]
                     def queryCriteria = transformMcsNotation(input)['queryCriteria']
 
+                    // println 'queryCriteria ' + queryCriteria
                     def queryParams = ''
 
-                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')  + ' order by lastUpdated desc, id desc'
+                    fullquery = queryHead + (queryCriteria ? ' where ' + queryCriteria : '')  + ' order by id desc' // lastUpdated desc,
                     fullquerySort = 'select count(*) ' + queryHead + (queryCriteria ? ' where ' + queryCriteria : '')
                     queryKey = '_' + entityCode + '-' + new Date().format('ddMMyyHHmmss')
                     session[queryKey] = fullquery
@@ -3737,6 +3889,9 @@ def markAsMarkdowned(Long id, String entityCode) {
             } else {
                 def n = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).newInstance(properties)
 //                n.properties = properties
+
+                n.user = User.findByUsername(springSecurityService.currentUser.username)
+
                 if (!n.hasErrors() && n.save()) {
                     render(template: '/gTemplates/recordSummary', model: [
                             record: n, justSaved: true, justSaved: true])
@@ -3826,9 +3981,12 @@ def markAsMarkdowned(Long id, String entityCode) {
                                                                  record          : n
             ])
 
-            render 'Saved'
+//            render 'Saved' x
+            render(template: '/layouts/achtung', model: [message: 'Changes saved'])
 
-        } else render "Problem occurred."
+        } else
+            render(template: '/layouts/achtung', model: [message: 'Problem occurred'])
+
 
 
 
@@ -3928,6 +4086,7 @@ def markAsMarkdowned(Long id, String entityCode) {
         def types = []
         def statuses = []
         def topics = []
+        def goals = []
         def priorities = []
         def sources = []
         def departments = []
@@ -3946,6 +4105,7 @@ def markAsMarkdowned(Long id, String entityCode) {
             case 'mcs.Task':
                 statuses = WorkStatus.list([sort: 'name'])
                 locations = Location.list([sort: 'name'])
+                goals = Goal.findAllByBookmarked(true, [sort: 'name'])
                 break
             case 'mcs.Goal':
                 statuses = WorkStatus.list([sort: 'name'])
@@ -3955,7 +4115,7 @@ def markAsMarkdowned(Long id, String entityCode) {
             case 'mcs.Planner':
                 statuses = WorkStatus.list([sort: 'name'])
                 types = PlannerType.list([sort: 'name'])
-                goals = Goal.list([sort: 'summary'])
+                goals = Goal.findAllByBookmarked(true, [sort: 'name'])
                 break
 
              case 'app.Payment':
@@ -3990,7 +4150,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                     updateRegion    : params.updateRegion,
                     entityController: entityController,
                     savedRecord     : n,
-
+                    goals: goals,
                     types           : types,
                     statuses        : statuses,
                     topcis          : topics,
@@ -4013,7 +4173,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                     fields          : n.class.declaredFields.name,
                     record          : n,
                     savedRecord     : n,
-
+                    goals           : goals,
                     types           : types,
                     statuses        : statuses,
                     topcis          : topics,
@@ -4025,9 +4185,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                     locations       : locations,
                     categories      : categories
             ])
-//            n.errors.each() {
-//                render it
-//            }
+            n.errors.each() {
+                render it
+            }
 
         }
 
@@ -4041,16 +4201,16 @@ def markAsMarkdowned(Long id, String entityCode) {
         def filter = '%'
 
 
-        Writing.findAllBySummaryLike(filter, [sort: 'summary']).each() {
-            responce += [value: 'w ' + it.id + ' ' + it.summary]
-        }
-        Goal.findAllBySummaryLike(filter, [sort: 'summary']).each() {
-            responce += [value: 'g ' + it.id + ' ' + it.summary]
-        }
-        Task.findAllBySummaryLike(filter, [sort: 'summary']).each() {
+//        Writing.findAllBySummaryLike(filter, [sort: 'summary']).each() {
+//            responce += [value: 'w ' + it.id + ' ' + it.summary]
+//        }
+//        Goal.findAllBySummaryLike(filter, [sort: 'summary']).each() {
+//            responce += [value: 'g ' + it.id + ' ' + it.summary]
+//        }
+//        Task.findAllBySummaryLike(filter, [sort: 'summary']).each() {
 //            responce += (it.summary + '|t' + '' + it.id + '\n')
-            responce += [value: 't ' + it.id + ' ' + it.summary]
-        }
+//            responce += [value: 't ' + it.id + ' ' + it.summary]
+//        }
 
 
         if (1 == 2 && input && input.contains(' ') && input.split(/[ ]+/).size() >= 2) {
@@ -4093,7 +4253,9 @@ def markAsMarkdowned(Long id, String entityCode) {
 
 
         }
-        Book.findAllByStatus(ResourceStatus.get(1), [sort: 'title']).each() { // only textbooks
+
+
+        Book.findAll([sort: 'lastUpdated', order: 'desc', max: 100]).each() {
             responce += [id: it.id, value: 'r ' + it.id + ' ' + it.title, text: 'r ' + '' + it.id + '\n']
         }
 //
@@ -4104,21 +4266,30 @@ def markAsMarkdowned(Long id, String entityCode) {
 
         def r = new Relationship()
 
+
+        /*
+        id: 11909
+entityCode: N
+type: 1
+recordB: r 23451 الدين والأخلاق" بقلم العلامة الشيخ أحمد عارف الزين
+
+
+         */
         // the child
-        r.entityA = entityMapping[params.entityCode]
+        r.entityA = params.entityCode
         r.entityACode = params.entityCode
 
         r.recordA = params.id.toLong()
-        def child = grailsApplication.classLoader.loadClass(r.entityA).get(r.recordA)
+        def child = grailsApplication.classLoader.loadClass(entityMapping[r.entityA]).get(r.recordA)
 
         // the parent
         def parentEntityCode = params.recordB.substring(0, 1).toUpperCase()
-        r.entityB = entityMapping[parentEntityCode]
+        r.entityB = parentEntityCode
         r.entityBCode = parentEntityCode
 
         r.recordB = params.recordB.split(' ')[1].toLong()
 
-        def parent = grailsApplication.classLoader.loadClass(r.entityB).get(r.recordB)
+        def parent = grailsApplication.classLoader.loadClass(entityMapping[r.entityB]).get(r.recordB)
 
 
         r.type = RelationshipType.get(params.type)
@@ -4250,6 +4421,9 @@ def markAsMarkdowned(Long id, String entityCode) {
                 record.description = description
 
 
+
+            record.user = User.findByUsername(springSecurityService.currentUser.username)
+
             if (!record.hasErrors() && record.save()) {
                 render(template: '/gTemplates/recordSummary', model: [
                         record: record, justSaved: true])
@@ -4302,9 +4476,9 @@ def markAsMarkdowned(Long id, String entityCode) {
         record.description += ('\n' + params.text + ' (' + new Date().format('dd.MM.yyyy') + ')')
 //        record.description += ('\n\n' + params.text)
 
-        render params.text
-        render '<br/>'
-        render '<br/>'
+//        render params.text
+//        render '<br/>'
+//        render '<br/>'
 
         render(template: '/gTemplates/recordSummary', model: [record: record])
         //render(template: '/gTemplates/recordDetails', model: [record: record])
@@ -4824,7 +4998,7 @@ def markAsMarkdowned(Long id, String entityCode) {
                 description = input.substring(input.indexOf('::') + 2).trim()
                 properties[descriptionFieldName] = description
                 if (entityCode == 'R')
-                    queryCriteria.add("fullText like '%" + description + "%' or description like '%" + description + "%'")
+                    queryCriteria.add("(fullText like '%" + description + "%' or description like '%" + description + "%')")
                 else
                     queryCriteria.add(descriptionFieldName + " like '%" + description + "%'")
 
@@ -5195,10 +5369,10 @@ def addTagToAll(String input) {
              def savedSearch = SavedSearch.get(id)
 
 
-             if (params.reportType != 'tab') {
-                 render(template: '/gTemplates/recordSummary', model: [record: savedSearch])
-                 render('<br/>')
-             }
+//             if (params.reportType != 'tab') {
+//                 render(template: '/gTemplates/recordSummary', model: [record: savedSearch])
+//                 render('<br/>')
+//             }
 
 
              if (savedSearch.queryType == 'random' || params.reportType == 'random') {
@@ -5274,11 +5448,14 @@ def addTagToAll(String input) {
 
                      if (params.reportType == 'tab') {
                          params.max = null
-                         render(view: '/page/kanbanCrs', model: [groups: groups, groupBy: groupBy,
+                         render(view: '/page/kanbanCrs',
+                                 model: [groups: groups, groupBy: groupBy,
+//                                         reportType: params.reportType,
                                                                  title : savedSearch.summary,
                                                                  ssId  : savedSearch.id,
                                                                  items : Task.executeQuery(input, [])])
                      } else {
+
                          render(template: '/reports/genericGrouping', model: [groups: groups, groupBy: groupBy,
                                                                               title : savedSearch.summary,
                                                                               ssId  : savedSearch.id,
@@ -5311,6 +5488,7 @@ def addTagToAll(String input) {
                          params.max = null
                          render(view: '/page/kanbanCrs', model: [
                                  ssId              : id,
+//                                 reportType: params.reportType,
                                  searchResultsTotal: savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
                                  totalHits         : savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
                                  list              : Task.executeQuery(savedSearch.query, []),
@@ -5324,7 +5502,8 @@ def addTagToAll(String input) {
                                  searchResultsTotal: savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
                                  totalHits         : savedSearch.countQuery ? Task.executeQuery(savedSearch.countQuery)[0] : '',
                                  list              : list,
-                                 title             : savedSearch.summary
+                                 title             : savedSearch.summary,
+                                 query:  savedSearch.query
                          ])
                      }
                  }
@@ -5338,12 +5517,14 @@ def addTagToAll(String input) {
              } else if (savedSearch.queryType == 'lucene') {
                  render(template: '/gTemplates/recordListing', model: [
                          list : searchableService.search(savedSearch.query, [max: 100]),
+                         query:  savedSearch.query,
                          title: savedSearch.summary + " (" + savedSearch.query + ")"])
              } else if (savedSearch.queryType == 'adhoc') {
                  render(template: '/reports/adHocQueryResults', model: [
                          list : mcs.Task.executeQuery(savedSearch.query),
                          ssId : savedSearch.id,
-                         title: '' + savedSearch.summary + " (" + savedSearch.query + ")"
+                         title: '' + savedSearch.summary,
+                         query:  savedSearch.query
                  ])
              } else
                  render(template: '/layouts/achtung', model: [message: 'Unknown query type'])
@@ -5368,27 +5549,17 @@ def addTagToAll(String input) {
         def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
 // TODO: fix 
         if (record.description) {
-            record.description = record.description?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/^و /, ' و')
-                    .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك')
+            record.description = fixText(record.description)
             record.save(flush: true)
             render(record.description.replace('\n', '<br/>'))
         }
         if (record.notes) {
-            record.notes = record.notes?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/^و /, 'و')
-                    .replaceAll(/\nو /, '\nو')
-                    .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك')
+            record.notes = fixText(record.notes)
             record.save(flush: true)
             render(record.notes.replace('\n', '<br/>'))
         }
         if (record.class.declaredFields.name.contains('fullText') && record.fullText) {
-            record.fullText = record.fullText?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/\nوَ /, ' وَ')
-                    .replaceAll(/^و /, ' و')
-                    .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك')
+            record.fullText = fixText(record.fullText)
             record.save(flush: true)
             render(record.fullText.replace('\n', '<br/>'))
         }
@@ -5397,9 +5568,21 @@ def addTagToAll(String input) {
 
     }
 
-    def publish() {
 
-        def record = grailsApplication.classLoader.loadClass(entityMapping[params.entityCode]).get(params.id)
+    static long staticPublish(String entityCode, Long id) {
+
+//        params.id = id
+//        params.entityCode = entityCode
+
+//        publish()
+
+    }
+
+    def publish(String entityCode, Long id) {
+
+
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
         def tags = ''
         record.tags.each() {
@@ -5415,7 +5598,7 @@ def addTagToAll(String input) {
 
         String summary, contents, type
 
-        switch (params.entityCode) {
+        switch (entityCode) {
             case 'W': summary = record.summary
                 contents = //ys.wikiparser.WikiParser.renderXHTML(record.description)?.decodeHTML()
                         (record.language == 'ar' ? ('<div style="direction: rtl; text-align: right">' + record.descriptionHTML + '</div>') : record.descriptionHTML)
@@ -5432,20 +5615,57 @@ def addTagToAll(String input) {
                 //record.description//?.encodeAsHTML()
                 type = record.type?.name
                 break
+
+            case 'R': summary = record.title
+                contents = record.fullText//ys.wikiparser.WikiParser.renderXHTML(record.description)?.decodeHTML()
+                //record.description//?.encodeAsHTML()
+                type = record.type?.name
+                break
         }
 
-        // postToBlog(String blogId, String title, String categoriesString, String tags, String fullText) {
-        int r = supportService.postToBlog(record.blog.id, record.code ?: record.id?.toString(), summary, categories, tags,
-                contents, record.shortDescription, params.entityCode, record.publishedNodeId)
+        def coverPath
+
+        if (new File(supportService.getResourcePath(record.id, entityCode, false) + '/cover.jpg').exists()){
+            coverPath = supportService.getResourcePath(record.id, entityCode, false) + '/cover.jpg'
+        }
+        else coverPath = null
+
+
+        String[] files = []
+
+        if (new File(supportService.getResourcePath(record.id, entityCode, false)).exists()) {
+            new File(supportService.getResourcePath(record.id, entityCode, false)).listFiles().each() {
+                if (it.name != 'cover.jpg' && it.isFile()) {
+                    files += it.name
+                }
+            }
+        }
+//        else
+//        files = null
+
+        // int postToBlog(Long blogId, String code, String title, String categoriesString, String tags, String fullText,
+        // String excerpt, String entityCode, Integer publishedNodeId) {
+        if (!record.blog)
+            record.blog = Blog.findByBookmarked(true)
+
+
+        int r = supportService.postToBlog(record.blog ? record.blog.id : null, record.code ?: record.id?.toString(), summary, categories, tags,
+                contents,
+                // record.shortDescription,
+                record.description,
+                entityCode, record.publishedNodeId, coverPath,
+                files, "https://jabal-amel.khuta.org/wp-content/uploads"
+        )
 
 
         if (r) {
             record.publishedNodeId = r
             record.publishedOn = new Date()
-            record.status = WritingStatus.findByCode('pub')
+//            record.status = WritingStatus.findByCode('pub')
             record.save(flush: true)
             render 'Published with id : ' + r //+ ' class ' + r.class
             render(template: '/layouts/achtung', model: [message: "Record published with id " + r])
+            return r
         } else "Problem posting the record"
 
     }
@@ -5916,6 +6136,7 @@ def addTagToAll(String input) {
 
         //println 'here 555'
 
+
         String pdfPath = params.path
 
         if (params.module == 'E')
@@ -5933,13 +6154,18 @@ def addTagToAll(String input) {
 
         try {
             // will output "my_image_2.jpg"
+
+            new File( getRecordPaths(params.module, params.id.toLong())[0]).mkdirs()
+
             PDFToImage.main(args_2);
             def ant = new AntBuilder()
             ant.move(file: args_2[5] + '1.jpg', tofile: (args_2[5] + ''))
+            render 'Cover generated to ' + args_2[5]
 
         }
         catch (Exception e) {
             e.printStackTrace()
+            render 'Problem generating the cover ' + e.toString()
         }
     }
 
@@ -6027,6 +6253,11 @@ def addTagToAll(String input) {
     }
 
     def viewRecordImage() {
+
+
+        params.entityCode = params.entityCode ?: 'R'
+        if (params.id.contains('.'))
+            params.id = params.id?.split('.')[0]
 
 
         def paths = getRecordPaths(params.entityCode, params.id.toLong())
@@ -6395,4 +6626,77 @@ def body
         render "All operations have been marked as settled"
     }
 
+    String fixText(String text){
+        return text?.replace(' وَ ', ' وَ')?.replaceAll(/\nوَ /, ' وَ')
+                .replaceAll(/\nوَ /, ' وَ')
+                .replaceAll(/ـ/, '')
+                .replaceAll(/[ ]+/, / /)
+                .replaceAll(/^[ ]+/, '')
+                .replace(' ,', ',')
+                .replace(' :', ':')
+                .replace(' ،', '،')
+                .replace(' .', '.')
+                .replaceAll(/^و /, ' و')
+                .replace(/^وَ /, '\n وَ').replace(' و ', ' و').replace('ی', 'ي').replace('ک', 'ك')
+    }
+
+
+    def generateWritingsBookToFile() {
+
+        def siteRecords = []
+        def ant = new AntBuilder()
+        def coverPath
+
+        for (h in app.IndexCard.executeQuery('from IndexCard where course = ? and priority >= ?', [Course.get(params.id), 2])) {
+
+            siteRecords.push([entity: 'N', id: h.id])
+
+            if (h.tags)
+                for (t in h.tags?.sort() { i, j -> i.name.toLowerCase().compareTo(j.name.toLowerCase()) }) {
+
+//                     t.bookmarked = true
+//                    t.save(flush: true)
+
+                    for (r in mcs.Book.createCriteria().list() { tags { idEq(t.id.toLong()) } }) {
+                        siteRecords.push([entity: 'R', id: r.id])
+
+
+                        def f = new File('/home/maitham/sites/jabal-amel/posts/' + r.id + '.html')
+                        f.write(g.include([controller: 'page', action: 'staticPage', id: r.id]).toString(), 'UTF-8')
+
+//                        coverPath = supportService.getResourcePath(r.id, 'R', false) + '/cover.jpg'
+//                        if (new File(coverPath).exists())
+//                            ant.copy(file: coverPath,
+//                                    tofile: '/home/maitham/sites/jabal-amel/covers' + '/' + r.id + '.jpg')
+
+                        def recordPath = supportService.getResourcePath(r.id, 'R', false)
+
+                   //     publish('R', r.id)
+
+                        if (new File(recordPath).exists()) {
+                            new File(recordPath).listFiles().each() {
+                                if (it.name != 'cover.jpg' && it.isFile()) {
+                                    ant.copy(file: it.path,
+                                            tofile: '/home/maitham/sites/jabal-amel/files' + '/' + r.id + '/' + it.name)
+                                }
+                            }
+
+                        }
+                    }
+                }
+        }
+
+        println 'Site records: ' + siteRecords.size()
+
+//        ' + (OperationController.getPath('root.rps1.path') ?: '')
+        def sitePath = '/home/maitham/sites/jabal-amel/' + 'index' + '.html'
+        def f = new File(sitePath)
+        f.write(g.include([controller: 'indexCard', action: 'generateWritingsBook', id: params.id]).toString(), 'UTF-8')
+        render 'Generation done: ' + new Date().format('HH:mm:ss') + '. Site saved to: ' + sitePath
+
+
+
+
+
+    }
 }

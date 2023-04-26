@@ -2,6 +2,8 @@ package ker
 
 import app.IndexCard
 import app.parameters.*
+import cmn.Setting
+import mcs.Department
 import mcs.Operation
 import mcs.parameters.*
 import grails.converters.XML
@@ -15,6 +17,7 @@ import grails.converters.JSON
 import org.grails.web.json.JSONObject
 import org.json.JSONArray
 import org.springframework.http.HttpRequest
+import security.User
 import sun.reflect.generics.factory.GenericsFactory
 
 
@@ -93,6 +96,7 @@ class SyncController {
             println p.errors
         }
     }
+
 
     def rssPile() {
         render(feedType: "rss", feedVersion: "2.0") {
@@ -173,6 +177,7 @@ class SyncController {
             }
         }
     }
+
 
     def fetchFullText() {
         def b = mcs.Book.get(params.id)
@@ -258,8 +263,22 @@ class SyncController {
         def builder = new JSONBuilder()
 
         def records = []
-        for (i in mcs.Planner.executeQuery("from Planner where startDate >= ? and startDate <= ? and completedOn is null order by startDate asc",
-                [new Date() - 4, new Date() + 4])) {
+        for (i in mcs.Planner.executeQuery("from Planner t where t.startDate >= ? and t.startDate <= ? and t.completedOn is null and (t.user.username = ? or t.isPrivate = true) order by t.startDate asc",
+                [new Date() - 7, new Date() + 7, params.id])) {
+            records += [type    : 'P', id: i.id, ecode: 'P',
+                        meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
+                        date    : i?.startDate?.format('dd-MM-yyyy'),
+                        datediff: i?.startDate - new Date(),
+                        color   : 'darkblue',
+                        filesList   : i.filesList,
+                        nbFiles : i.nbFiles,
+                        summary   : (i.task ? ('[' + i.task?.summary + '] ') : '') + i.summary,
+                        language: i.language,
+                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+        }
+
+        for (i in mcs.Planner.executeQuery("from Planner t where t.bookmarked = true and (t.user.username = ? or t.isPrivate = true) order by t.startDate asc",
+                [params.id])) { // new Date() - 20, new Date() + 20
             records += [type    : 'P', id: i.id, ecode: 'P',
                         meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
                         date    : i?.startDate?.format('dd-MM-yyyy'),
@@ -282,11 +301,17 @@ class SyncController {
     }
 
     def exportJsonJ = {
+
+        supportService.updateBookmarkedRecordsFileCount()
+
+
         def builder = new JSONBuilder()
 
+//        println ' in jsonJ, username: ' + params.id
+
         def records = []
-        for (i in mcs.Planner.executeQuery("from Journal where startDate >= ? and startDate <= ? and bookmarked = ? order by startDate desc ",
-                [new Date() - 14, new Date() + 7, true])) {
+        for (i in mcs.Planner.executeQuery("from Journal t where t.startDate >= ? and t.startDate <= ? and t.bookmarked = ? and (t.user.username = ? or t.isPrivate = true) order by t.startDate desc ",
+                [new Date() - 4, new Date() + 1, true, params.id])) {
             records += [type       : 'J',
                         id         : i.id,
                         ecode      : 'J',
@@ -345,12 +370,15 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
-        for (i in Task.executeQuery("from Task t where  t.bookmarked = ? order by t.priority desc, t.id desc", [true])) {
+        for (i in Task.executeQuery("from Task t where  t.bookmarked = ?  and (t.user.username = ? or t.isPrivate = true) order by t.priority desc, t.id desc", [true, params.id])) {
             // t.context.code asc, t.priority todo: fix
             records += [type       : (i.isTodo == true ? 'Todo' : 'T'),
                         id         : i.id,
                         ecode      : 'T',
                         meta       : (i.context ? '@' + i.context?.code : '-') + ' ' + (i.priority ? priorityMap[i.priority] : ''),
+                        context       : (i.context ? '@' + i.context?.code : '-'),
+                        date    : i?.endDate?.format('dd-MM-yyyy-HH-mm'),
+                        textDate    : i?.endDate?.format('EEE dd, HH-mm'),
                         color      : 'lightgreen',
                         summary    : i.summary,
                         filesList  : i.filesList,
@@ -359,16 +387,34 @@ class SyncController {
                         description: i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
-        for (i in Task.executeQuery("from Task t where  t.endDate >= ? and t.endDate <= ? order by t.priority desc, t.id desc", [new Date() - 3, new Date() + 3])) {
+        def json = builder.build {
+            result = "ok"
+            data = records
+        }
+
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+
+def exportJsonV = {
+        def builder = new JSONBuilder()
+
+        def records = []
+        def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
+
+
+        for (i in Task.executeQuery("from Task t where t.endDate >= ? and t.endDate <= ? and t.completedOn is null  and (t.user.username = ? or t.isPrivate = true) order by t.priority desc, t.id desc", [new Date() - 14, new Date() + 32, params.id])) {
             // t.context.code asc, t.priority todo: fix
             records += [type       : (i.isTodo == true ? 'Todo' : 'T'),
                         id         : i.id,
                         ecode      : 'T',
                         meta       : (i.context ? '@' + i.context?.code : '-') + ' ' + (i.priority ? priorityMap[i.priority] : ''),
+                        context       : (i.context ? '@' + i.context?.code : '-'),
+                        date    : i?.endDate ? i?.endDate?.format('dd-MM-yyyy-HH-mm') : null,
                         color      : 'lightgreen',
                         summary    : i.summary,
                         filesList  : i.filesList,
                         nbFiles    : i.nbFiles,
+                    bookmarked: i.bookmarked ? '1' : '0',
                         language   : i.language,
                         description: i.description ? i.description?.replace('\n', '<br/>') : '']
         }
@@ -412,20 +458,20 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 // order by department.orderNumber asc, course.orderNumber asc, orderNumber asc
-        for (i in IndexCard.executeQuery("from Book where bookmarked = ? order by priority desc, id desc",
-                [true])) {
+        for (i in IndexCard.executeQuery("from Book b where b.bookmarked = ? and (b.user.username = ? or b.isPrivate = true) order by b.id desc", //  b.priority desc // b.type.code asc, b.title asc
+                [true, params.id])) {
 //            OperationController.countResourceFiles(i.id)
             records += [type        : 'R',
                         id          : i.id,
                         resourceType: i?.type?.code,
                         ecode       : 'R',
-                        meta        : '#' + i.type?.code + (i.publishedOn ? ' ' + i.publishedOn?.format('yyyy') + '' : ''),
+                        meta        : '#' + i.type?.code, // + (i.publishedOn ? ' ' + i.publishedOn?.format('yyyy') + '' : ''),
                         color       : 'DarkSlateBlue',
                         language    : i.language,
                         filesList   : i.filesList,
                         nbFiles     : i.nbFiles,
                         summary     : i.title + (i.legacyTitle ? ' [' + i.legacyTitle + ' ]' : ''),
-                        description : (i.description ? i.description?.replace('\n', '<br/>'): '') + ' --- ' + (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
+                        description : (i.description ? i.description?.replace('\n', '<br/>'): '') + ' <br/> ' + (i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
                                 ?.replaceAll(/www[\S\.]*/, '') ?: '')]
         }
 
@@ -439,14 +485,15 @@ class SyncController {
 
     def exportJsonG = {
 
-        //  syncMobile(params.tosync)
 
+        //  syncMobile(params.tosync)
+//println ' in jsonG' + params.id
 
         def builder = new JSONBuilder()
 
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
-        for (i in Task.executeQuery("from Goal g where g.bookmarked = ? order by g.priority desc, g.id desc", [true])) {
+        for (i in Task.executeQuery("from Goal g where g.bookmarked = ? and (g.user.username = ? or g.isPrivate = true) order by g.priority desc, g.id desc", [true, params.id])) {
             // g.department.code asc, g.priority desc todo:
             records += [type       : 'G',
                         id         : i.id,
@@ -541,6 +588,10 @@ class SyncController {
                         color      : 'lightorange',
                         summary    : i.summary,
                         language   : i.language,
+
+                        filesList  : i.filesList,
+                        nbFiles    : i.nbFiles,
+
                         description: (i.description ? i.description?.replace('\n', '<br/>') : '') +
                                 (i.notes ? '<br/>===<br/>' + i.notes?.replace('\n', '<br/>')?.replace('__________________________________________________', '---') : '')]
         }
@@ -559,7 +610,7 @@ class SyncController {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 
-        for (i in IndexCard.executeQuery("from IndexCard where  bookmarked = ? order by priority desc, lastUpdated desc", [true])) {
+        for (i in IndexCard.executeQuery("from IndexCard t where  t.bookmarked = ?  and (t.user.username = ? or t.isPrivate = true) order by t.lastUpdated desc", [true, params.id])) {
             records += [type       : 'N',
                         id         : i.id,
                         ecode      : 'N',
@@ -672,24 +723,39 @@ class SyncController {
 
     def mobilePush() {
 
+
+        if (Setting.findByName('lastMobileSync'))
+        OperationController.setPath('lastMobileSync', new Date().format('dd.MM.yyyy HH:mm'))
+        else {
+            new Setting([name: 'lastMobileSync', value: new Date().format('dd.MM.yyyy HH:mm')]).save(flush: true)
+        }
+
+
         def builder = new JSONBuilder()
         def json
-        //new File('d:/test.log').write(request.JSON.data, 'UTF-8')
+
+//        try {
+//            new File('/nbr/mbl.log').write('\n Mobile push request, ' + new Date()?.format('dd.MM.yyyy HH:mm') + ':\n')
+//            new File('/nbr/mbl.log').write(request.JSON.data?.toString(), 'UTF-8')
+//        } catch (Exception e){
+//            println 'Error write mobile push log file'
+//        }
 
         def data = request.JSON.data
 
-        println 'new data ' + data
+//        println 'new data ' + data
 
         def c = 0
+
 //        println 'in mobile push json ' + params.dump()
         //      println 'in mobile push json ' + params.tosyncText
 //println 'dump ' +        params.dump()
         if (params.tosyncText)
-            println 'array ' + params.tosyncText
+//            println 'array ' + params.tosyncText
         data.each() { r ->
 
 //            r = JSON.parse(r)
-            println ' processing row ' + r
+//            println ' processing row ' + r
             c++
             //     println GenericsController.markCompletedStatic(r.substring(1).toLong(), r.substring(0, 1).toUpperCase())
 
@@ -760,8 +826,14 @@ if (!record.notes)
 
             }
 }
-        render c
-    }
+
+
+        json = builder.build {
+            result = c + ' processed updates'
+        }
+
+    render(status: 200, contentType: 'application/json', text: json)
+}
 
     def mobilePush0() {
         def c = 0
@@ -834,7 +906,7 @@ if (!record.notes)
                 }
             }
 
-        render c
+        render (c + ' processed updates')
     }
 
 
@@ -925,7 +997,7 @@ if (!record.notes)
         def json
 //        new File('/home/maitham/test.log').write(request.JSON.data, 'UTF-8')
         def data = request.JSON.data
-        println 'data is ' + data
+      //  println 'data is ' + data
 
         /** for non-json requests!!! ionic 6
          *    def data = JSON.parse(params['data'])
@@ -966,7 +1038,13 @@ if (!record.notes)
 
             }
 
-            record.bookmarked = true
+
+            // if set to true, new records will be synced back to reader
+
+            //  record.bookmarked = true
+
+
+            record.department = Department.findByCode(o.department)
             record.priority = o.priority
             record.nbFiles = o.nbFiles
             record.filesList = o.filesList?.join(',')
@@ -985,38 +1063,54 @@ if (!record.notes)
                 record.publishedOn = Date.parse('dd.MM.yyyy_HHmm', o.textDate)
 
 
-            def savedRecord = record.save(flush: true)
 
-            def newPath = supportService.getResourcePath(savedRecord.id, module.toUpperCase(), false)
+//            println ' entered by ' + request.JSON.username + ' is found ' + security.User.findByUsername(request.JSON.username)
+            record.user = security.User.findByUsername(request.JSON.username)
 
-            def path
-            if (new File(OperationController.getPath('root.rps1.path') + '/new').exists()) {
-                new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${o.operationId} [\S\s]*/) { f ->
-                    path = f.path
-                }
 
-                if (path) {
-                    //println 'found a folder for this operation'
-                    //OperationController.getPath('root.rps1.path') + '/O/' + o.id
-                    new File(newPath).mkdirs()
-                    def ant = new AntBuilder()
-                    new File(path).eachFile() {
-                        ant.move(file: it.path,
-                                tofile: newPath + '/' + it.name)
+//            def savedRecord = record.save(flush: true)
+
+            if (!record.hasErrors() && record.save(flush: true)) {
+
+                def newPath = supportService.getResourcePath(record.id, module.toUpperCase(), false)
+
+                def path
+
+                if (new File(OperationController.getPath('root.rps1.path') + '/new').exists()) {
+                    new File(OperationController.getPath('root.rps1.path') + '/new').eachFileMatch(~/${o.operationId} [\S\s]*/) { f ->
+                        path = f.path
                     }
-                    new File(path).delete()
+
+                    if (path) {
+                        //println 'found a folder for this operation'
+                        //OperationController.getPath('root.rps1.path') + '/O/' + o.id
+                        new File(newPath).mkdirs()
+                        def ant = new AntBuilder()
+                        new File(path).eachFile() {
+                            ant.move(file: it.path,
+                                    tofile: newPath + '/' + it.name)
+                        }
+                        new File(path).delete()
+
+                    }
+
 
                 }
-
-
-            }
 
 //            println data.size() + ' records found.'
 
 //            n.save(flush: true)
 
-            json = builder.build {
-                result = 'Record committed with id ' + savedRecord.id
+                json = builder.build {
+                    result = 'Record imported to Nibras Desktop'// with id ' + record.id
+                }
+            }
+
+            else {
+
+                println 'Errors in record ' + record.dump() + ' errors are: '
+                record.errors.each() { println it }
+
             }
         } else {
             json = builder.build {
@@ -1025,6 +1119,122 @@ if (!record.notes)
             }
         }
         render(status: 200, contentType: 'application/json', text: json)
+    }
+
+
+    ////
+
+    def types() {
+
+//        println 'here in modules \n\n\n'
+
+        def types = []
+
+        [
+                [id: 'T', name: 'Task', code: 'tasks'],
+                [id: 'P', name: 'Plan', code: 'plans'],
+                [id: 'G', name: 'Goal', code: 'goals'],
+                [id: 'N', name: 'Note', code: 'notes'],
+                [id: 'W', name: 'Writing', code: 'writings'],
+                [id: 'J', name: 'Journal', code: 'journal'],
+//                [id: 'Jt', name: 'Yesterday journal', code: 'journal'],
+                [id: 'P', name: 'Planner', code: 'planner'],
+                [id: 'R', name: 'Resource', code: 'resources']
+        ].each(){
+            if (OperationController.getPath(it.code + '.enabled') == 'yes'){
+                types += it
+//                println 'here in modules \n\n\n' + it.name
+            }
+
+        }
+
+
+
+
+        def builder = new JSONBuilder()
+        def json
+
+            json = builder.build {
+                result = 'yes'
+                modules = types
+            }
+
+            render(status: 200, contentType: 'application/json', text: json)
+    }
+
+    def departments() {
+
+//        println 'here in deparmtns \n\n\n'
+        def builder = new JSONBuilder()
+        def json
+
+            json = builder.build {
+                result = 'yes'
+                departments = Department.findAllByBookmarked(true, [sort: 'code', order: 'asc'])
+            }
+
+            render(status: 200, contentType: 'application/json', text: json)
+
+
+    }
+
+    def nibrasFilesNestedById() {
+
+        def builder = new JSONBuilder()
+        def json
+       // def result = 'no'
+//
+    def resourceNestedById = 'no'
+
+        if (OperationController.getPath('resourceNestedById') == 'yes') {
+            resourceNestedById = 'yes'
+
+
+            json = builder.build {
+                result = 'yes'
+            }
+
+            render(status: 200, contentType: 'application/json', text: json)
+        }
+
+        else {
+            json = builder.build {
+            result = 'no'
+        }
+
+            render(status: 200, contentType: 'application/json', text: json)
+
+        }
+    }
+
+    def nibrasFilesNestedByType() {
+
+        def builder = new JSONBuilder()
+        def json
+      //  def result = 'no'
+//
+    def resourceNestedByType = 'no'
+
+    if (OperationController.getPath('resourceNestedByType') == 'yes') {
+        resourceNestedByType = 'yes'
+
+
+        json = builder.build {
+            result = 'yes'
+        }
+
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+        else {
+        json = builder.build {
+            result = 'no'
+        }
+
+        render(status: 200, contentType: 'application/json', text: json)
+    }
+
+
+
     }
 
 

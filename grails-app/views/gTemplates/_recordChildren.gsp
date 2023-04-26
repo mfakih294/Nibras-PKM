@@ -132,6 +132,25 @@
                   model="[list: Book.findAllByCourseAndStatusIsNull(record, [sort: 'orderNumber', order: 'asc'])]"/>
     </g:elseif>
 
+<g:elseif test="${entityCode == 'D'}">
+        <g:render template="/gTemplates/recordListing" model="[list: Planner.findAllByDepartment(record)]"/>
+        <g:render template="/gTemplates/recordListing" model="[list: Journal.findAllByDepartment(record)]"/>
+        <g:render template="/gTemplates/recordListing" model="[list: Writing.findAllByDepartment(record, [sort: 'orderNumber'])]"/>
+        <g:render template="/gTemplates/recordListing" model="[list: mcs.Goal.findAllByDepartment(record)]"/>
+        <g:render template="/gTemplates/recordListing" model="[list: mcs.Task.findAllByDepartment(record)]"/>
+        <g:render template="/gTemplates/recordListing"
+                  model="[list: IndexCard.findAllByDepartment(record, [sort: 'orderNumber', order: 'asc'])]"/>
+        <h4>Core resources</h4>
+        <g:render template="/gTemplates/recordListing"
+                  model="[list: Book.findAllByDepartmentAndStatus(record, ResourceStatus.findByCode('core'), [sort: 'orderNumber', order: 'asc'])]"/>
+        <h4>Non-core resources</h4>
+        <g:render template="/gTemplates/recordListing"
+                  model="[list: Book.findAllByDepartmentAndStatusNot(record, ResourceStatus.findByCode('core'), [sort: 'orderNumber', order: 'asc'])]"/>
+        <h4>Resources without status</h4>
+        <g:render template="/gTemplates/recordListing"
+                  model="[list: Book.findAllByDepartmentAndStatusIsNull(record, [sort: 'orderNumber', order: 'asc'])]"/>
+    </g:elseif>
+
 <g:elseif test="${entityCode == 'R'}">
 
     <g:render template="/gTemplates/recordListing"

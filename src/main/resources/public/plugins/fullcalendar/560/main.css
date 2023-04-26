@@ -177,7 +177,7 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
     background-color: transparent;
     border: 1px solid transparent;
     padding: 0.4em 0.65em;
-    font-size: 1em;
+    font-size: 1.1em;
     line-height: 1.5;
     border-radius: 0.25em;
   }
@@ -421,7 +421,8 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
 .fc {
 
   /* when the harness controls the height, make the view liquid */
-
+    font-size: 1.1em;
+    z-index: 10000 !important;
 }
 .fc .fc-view-harness-active > .fc-view {
     position: absolute;
@@ -433,6 +434,7 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
 .fc .fc-col-header-cell-cushion {
     display: inline-block; /* x-browser for when sticky (when multi-tier header) */
     padding: 2px 4px;
+
   }
 .fc .fc-bg-event,
   .fc .fc-non-business,
@@ -969,6 +971,7 @@ A VERTICAL event
     font-size: 1.2em;
   }
 
+
 .fc-v-event .fc-event-title-container { /* a container for the sticky cushion */
     flex-grow: 1;
     flex-shrink: 1;
@@ -1097,6 +1100,7 @@ A VERTICAL event
   }
 .fc .fc-timegrid-slot-label {
     vertical-align: middle; /* vertical align the slots */
+    font-size: 1.1em;
   }
 .fc {
 

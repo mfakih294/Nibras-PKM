@@ -18,6 +18,7 @@
 package app.parameters
 
 import cmn.DataChangeAudit
+import security.User
 
 class Module implements Comparable {  // entity id = 20
 
@@ -25,6 +26,8 @@ class Module implements Comparable {  // entity id = 20
     // static searchable = [only:['name', 'notes' ]]
 
     // Fields
+
+    User user
 
     String summary
     String code
@@ -53,7 +56,7 @@ class Module implements Comparable {  // entity id = 20
     }
 
     static mapping = {
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
     }
 
     static namedQueries = {

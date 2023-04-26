@@ -81,7 +81,7 @@ class Goal implements Comparable {  // entity id = 126
     Date endDate
 
     Boolean bookmarked = false
-    Boolean isPrivate = false
+    Boolean isPrivate = true
     // new value - migrate to it
     WorkStatus status
 
@@ -126,14 +126,14 @@ class Goal implements Comparable {  // entity id = 126
     }
 
     static mapping = {
-        summary(sqlType: 'longtext')
+        // summary(sqlType: 'long varchar')
         table 'goal'
-        description(sqlType: 'longtext')
-        stepsHistory(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        stepsHistory(sqlType: 'long varchar')
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

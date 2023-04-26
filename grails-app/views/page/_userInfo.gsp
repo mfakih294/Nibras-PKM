@@ -24,6 +24,30 @@
 
 </g:formRemote>
 
+<br/>
+<br/>
+<h4>New user:</h4>
+
+<g:formRemote name="batchAdd3"
+              url="[controller: 'operation', action: 'createUser']"
+              update="responceArea" style="display: inline"
+              method="post">
+
+%{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
+
+    <g:textField name="username" value="" id="speedsearch"
+                 autocomplete="off"
+                 style="display: inline;  width: 220px !important; height: 24px; padding: 3px; margin: 1px; font-size: 11px;"
+                 placeholder="Username"
+                 class=""/>
+
+    <g:submitButton name="Set" value="Create"
+                    style="margin: 0px;"
+                    id=" "
+                    class="ui-widget ui-state-default"/>
+
+</g:formRemote>
+
 <div id="responceArea"></div>
 
 <br/>

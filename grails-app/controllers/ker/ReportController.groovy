@@ -28,7 +28,6 @@ import mcs.Planner
 import mcs.Writing
 import mcs.parameters.ResourceStatus
 
-
 import com.intuit.fuzzymatcher.component.MatchService;
 import com.intuit.fuzzymatcher.domain.Document;
 import com.intuit.fuzzymatcher.domain.Element;
@@ -40,7 +39,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import grails.converters.JSON
+import grails.web.JSONBuilder
 
+import com.ibm.icu.text.Transliterator;
 
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -258,6 +260,32 @@ def enterJournalWithType() {
     }
 
 
+    def updateIps() {
+
+        def ips = []
+        def ip
+        def interf
+
+        def interfaces = NetworkInterface.getNetworkInterfaces()
+
+        while (interfaces.hasMoreElements()) {
+
+            interf = interfaces.nextElement()
+            def addresses = interf.getInetAddresses()
+
+            while (addresses.hasMoreElements()) {
+                ip = addresses.nextElement().getHostAddress().toString()
+                if (ip && ip != '' && !ip.contains(':') && !ip.startsWith('127'))
+                    ips.add([name: interf.getName(), title: interf.getDisplayName(), ip: ip]) //?.split(/\(/)[0]
+//                println (addresses.nextElement().getCanonicalHostName())
+//                println (addresses.nextElement().hostAddress)
+            }
+        }
+
+
+        render(template: '/reports/ips', model: [ips: ips])
+    }
+
     def tagCloud() {
 
         Tag.list().each() { t ->
@@ -344,27 +372,18 @@ def enterJournalWithType() {
 //                journals: Journal.findAll('from Journal where date(startDate) >= ? and date(endDate) <= ?', [startDate, endDate]),
 //                startDate: startDate, endDate: endDate])
 //
-                def title = 'Activity log and agenda for: <b> ' +
+                def title = // 'Activity log and agenda for: ' +
                         (startDate.format('dd.MM.yyyy') == endDate.format('dd.MM.yyyy') ? startDate.format('EE dd.MM.yyyy') :
-                                startDate.format('EE dd.MM.yyyy') + ' - ' + endDate.format('EE dd.MM.yyyy')) + '</b>'
-                if (session['Kanban'] == 1)
-                    render(template: '/reports/kanbanCalendar', model: [startDate: startDate, endDate: endDate])
-                if (session['P'] == 1)
-                    render(template: '/reports/pCalendar', model: [startDate: startDate, endDate: endDate])
-                if (session['J'] == 1)
-                    render(template: '/reports/jCalendar', model: [startDate: startDate, endDate: endDate])
+                                startDate.format('EE dd.MM.yyyy') + ' - ' + endDate.format('EE dd.MM.yyyy')) + ''
 
-                if (session['Jtrk'] == 1)
-                    render(template: '/reports/jtrkReport', model: [startDate: startDate, endDate: endDate])
 
-                if (session['Qtrans'] == 1)
-                    render(template: '/reports/financialReportTrans', model: [startDate: startDate, endDate: endDate])
-
-                if (session['Qacc'] == 1)
-                    render(template: '/reports/financialReportAcc', model: [startDate: startDate, endDate: endDate])
+                def list = []
+                for (c in [
+                        mcs.Goal, mcs.Task]) {
+                    list += c.executeQuery(' from ' + c.name + ' where endDate between ? and ? ', [startDate, endDate])
+                }
 
                 if (session['log'] == 1) {
-                    def list = []
                     for (c in [
                             mcs.Goal, mcs.Task, mcs.Planner, mcs.Journal,
                             mcs.Writing, app.IndexCard, mcs.Book]) {
@@ -379,9 +398,31 @@ def enterJournalWithType() {
                             app.Payment, app.IndicatorData]) {
                         list += c.executeQuery(' from ' + c.name + ' where date between ? and ? ', [startDate, endDate])
                     }
-
-                    render(template: '/gTemplates/recordListing', model: [list: list, title: title])
                 }
+
+                render(template: '/gTemplates/recordListing', model: [list: list, title: title])
+
+
+//                if (session['Kanban'] == 1)
+                    render(template: '/reports/kanbanCalendar', model: [startDate: startDate, endDate: endDate])
+//                if (session['P'] == 1)
+                    render(template: '/reports/pCalendar', model: [startDate: startDate, endDate: endDate])
+//                if (session['J'] == 1)
+                    render(template: '/reports/jCalendar', model: [startDate: startDate, endDate: endDate])
+
+//                if (session['Jtrk'] == 1)
+                    render(template: '/reports/jtrkReport', model: [startDate: startDate, endDate: endDate])
+
+//                if (session['Qtrans'] == 1)
+                if (ker.OperationController.getPath('payments.enabled')?.toLowerCase() == 'yes') {
+                    render(template: '/reports/financialReportTrans', model: [startDate: startDate, endDate: endDate])
+
+//                if (session['Qacc'] == 1)
+
+                    render(template: '/reports/financialReportAcc', model: [startDate: startDate, endDate: endDate])
+                }
+
+
 
 //                            Planner.executeQuery('from Planner where (date(dateCreated) >= ? and date(dateCreated) <= ?) or (date(startDate) >= ? and date(startDate) <= ?) order by dateCreated desc', [startDate, endDate, startDate, endDate]) +
 //
@@ -600,16 +641,46 @@ def enterJournalWithType() {
     }
 
 
+    def duplicateCandidates(){
+
+
+        def results = []
+        Goal.list([sort: 'id', order: 'desc']).each(){a->
+        Goal.findAllByIdLessThan(a.id, [sort: 'id', order: 'desc']).each() { b ->
+
+            if (supportService.similarity(a.summary, b.summary) > 0.85)
+                results.add(a)
+                results.add(b)
+
+        }
+
+        }
+
+        render(template: '/gTemplates/recordListing', model: [list: results])
+
+    }
+
     def duplicatesList2(){
+
+
+
+
+//        String anything = "ш щ ч ц х ф г я चंब्रिद्गॆ цамбридге كَمبرِدگِ かんぶりでげ";
+        String id = "Any-Latin";
+
+
+        ;
+
+
         String[][] input = [
         ];
 
+        def summary = ''
         Goal.list().each(){
-            input  += [[it.id.toString(), it.summary?: it.id.toString(), '']]
+            summary = it.summary + ' ' + Transliterator.getInstance(id).transform(it.summary?: it.id.toString())
+            input  += [[it.id.toString(), summary , '']]
         }
-
 //        println input
-
 
         List<Document> documentList = Arrays.asList(input).stream().map({contact ->
             return new Document.Builder(contact[0])
@@ -625,7 +696,10 @@ def enterJournalWithType() {
 
         result.entrySet().forEach({ entry ->
             entry.getValue().forEach({ match ->
-                render("Data: " + match.getData() + " Matched With:<br/> " + match.getMatchedWith() + " Score: " + new java.text.DecimalFormat('#.##').format(match.getScore().getResult()) + '<br/><br/><br/>');
+//
+                render("<br/><br/>f g i" + match.getData().getKey() + ' -- ' +  match.getData() + // "  Matched With:<br/> " + match.getMatchedWith() + " Score: " + new java.text.DecimalFormat('#.##').format(match.getScore().getResult()) + '<br/><br/><br/>');
+                "<br/>f g i" + match.getMatchedWith().getKey() + ' -- ' +  match.getMatchedWith() ) // "  Matched With:<br/> " + match.getMatchedWith() + " Score: " + new java.text.DecimalFormat('#.##').format(match.getScore().getResult()) + '<br/><br/><br/>');
+                // render("Data: " + match.getData() + " Matched With:<br/> " + match.getMatchedWith() + " Score: " + new java.text.DecimalFormat('#.##').format(match.getScore().getResult()) + '<br/><br/><br/>');
             });
         });
 
@@ -658,5 +732,58 @@ render (view: '/reports/customReport1', model: [list: list, i: 1])
 
     }
 
+
+
+// trn charts
+    def chartData = {
+
+
+        def dataAll = []
+
+        def x = []
+        def y = []
+        def data = [:]
+        def lastValue = 0
+
+        for (c in [
+                [app.IndexCard, 'IndexCard', 'Notes', 'fa8042'],
+                [mcs.Book, 'Book', 'Resources', 'c38ea3'],
+                [mcs.Journal, 'Journal', 'Jounal', '90accf'],
+                [mcs.Planner, 'Planner', 'Planner', '238cCC'],
+                [mcs.Goal, 'Goal', 'Goals', 'a1c650'],
+                [mcs.Task, 'Task', 'Tasks', 'cbe0a1']
+        ]) {
+
+            x = []
+            y = []
+            data = [:]
+            lastValue = 0
+
+            for (t in c[0].executeQuery('select date(dateCreated), count(*) from ' + c[1] + ' where dateCreated > ? group by date(dateCreated) order by date(dateCreated)',
+                    [new Date() - 14])) {
+//				def date = t[0].format('yyyy-MM-dd')
+                x+= t[0].format('yyyy-MM-dd') // + '-' + t[1] + t[2] // '-01'//
+//                println 'in chart data '  + t[0]
+//                println 'in chart data '  + t[0].class
+//                println 'in chart data '  + t[0].format('yyyy-MM-dd')
+                println ''
+                println ''
+//				x+= date
+                y += t[1] // + lastValue // cumulative value
+//				lastValue = t[2] + lastValue
+            }
+
+            data =	[x: x[1..-1], y: y[1..-1],
+                       name: '' + c[2] + ' ',
+                       type: 'line', // scatter, lines, markers,
+                       line: [
+                               color: "#${c[3]}", // 'rgb(' + Math.random() * 255 + ', ' + Math.random() * 255 + ',' +  Math.random() * 255 + ')',
+                               width: 2
+                       ]
+            ]
+            dataAll += [data]
+        }
+        render dataAll as JSON
+    }
 
 } // end of class

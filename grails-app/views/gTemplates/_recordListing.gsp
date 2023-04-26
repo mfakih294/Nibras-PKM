@@ -12,35 +12,50 @@
 %{--</script>--}%
 %{--Todo--}%
 
-<g:if test="${totalHits != 0}">
+
 <g:if test="${title && !ssId}">
-    <h4 style="font-family: Georgia; font-size: 14px; font-weight: bold; line-height: 20px;">
+    <h2 style="line-height: 20px;">
        ${title} ${totalHits != null ? ' (' + totalHits + ')' : ''}
-    </h4>
+    </h2>
 %{--<hr/>--}%
 </g:if>
 
-<g:if test="${1 == 2 && title && ssId}">
+<g:if test="${title && ssId}">
     <div id="savedSearch${ssId}">
-       <g:remoteLink controller="generics" action="executeSavedSearch"
-                  id="${ssId}"
-                  before="jQuery.address.value(jQuery(this).attr('href'));"
-                  update="centralArea">
-      <h1 dir="rtl" style="text-align: center;"> &sect;  ${title}
-      </h1>
-    </g:remoteLink>
+      <h4>
+          <g:remoteLink controller="generics" action="executeSavedSearch"
+                        id="${ssId}"
+                        before="jQuery.address.value(jQuery(this).attr('href'));"
+                        update="centralArea">
+
+              &sect;  ${title}
+       </g:remoteLink>
+          <g:remoteLink controller="generics" action="fetchAddForm" id="${ssId}"
+                        params="[entityController: 'mcs.parameters.SavedSearch',
+                                 updateRegion: '3rdPanel',
+                                 finalRegion: '3rdPanel']"
+                        update="3rdPanel"
+                        title="Edit">
+              (Edit)
+          </g:remoteLink>
+    </h4>
+
+        <g:if test="${query}">
+            <i style="line-height: 20px;">
+                (${query})
+            </i>
+        %{--<hr/>--}%
+            <br/>
+        </g:if>
+
+
+
     </div>
 
-    <g:remoteLink controller="generics" action="fetchAddForm" id="${ssId}"
-                  params="[entityController: 'mcs.parameters.SavedSearch',
-                           updateRegion: 'centralArea',
-                           finalRegion: 'centralArea']"
-                  update="savedSearch${ssId}"
-                  title="Edit">
-        *
-    </g:remoteLink>
+    %{--<g:if test="${totalHits != 0}">--}%
 
 
+    <g:if test="${1 == 1}">
     <g:if test="${SavedSearch.get(ssId).queryType == 'hql'}">
         <sup>
             <g:remoteLink controller="generics" action="executeSavedSearch"
@@ -71,6 +86,7 @@
                 </g:link>
 
             </sub>
+        </g:if>
         </g:if>
 
     </g:if>
@@ -198,28 +214,36 @@
 <g:if test="${session['showLine1Only'] == 'on'}">
 <g:each in="${list}" status="i" var="record">
 
+%{--<div class="uk-margin-medium-right uk-margin-medium-left">--}%
     <g:render template="/gTemplates/recordSummary" model="[record: record, tabIndex: i, expanded: expanded]"/>
+    <br/>
+%{--</div>--}%
+
+
 </g:each>
 </g:if>
 <g:else>
     <g:each in="${list}" status="i" var="record">
+        %{--<div class="uk-margin-medium-right uk-margin-medium-left">--}%
         <g:render template="/gTemplates/recordSummary" model="[
                 expanded: expanded,
                 record: (record.entityCode() == 'R' ? mcs.Book.findById(record.id): record),
                 tabIndex: i,
                 context: (highlights && highlights[i] ? highlights[i] : null)]"/>
+        <br/>
+        %{--</div>--}%
     </g:each>
 
 </g:else>
 
 
-    </g:if>
-<g:else>
-    <br/>
-    <i style="color: darkgray">No matching
+    %{--</g:if>--}%
+%{--<g:else>--}%
+    %{--<br/>--}%
+    %{--<i style="color: darkgray">No matching--}%
     %{--todo fix ${entity?.toLowerCase()?.split(/\./)[1]}--}%
-    records found.</i>
-</g:else>
+    %{--records found.</i>--}%
+%{--</g:else>--}%
 
 <sec:ifLoggedIn>
     <sec:ifAnyGranted roles="ROLE_ADMIN">
@@ -236,7 +260,6 @@
 
 <g:set var="customId"
        value="${new Date().format('hhmmss')}"/>
-
 
 <script type="text/javascript">
 jQuery('#selectBasketRegion').load('${request.contextPath}/generics/countSelection');

@@ -114,9 +114,9 @@
 
                 <g:each in="${IndexCard.findAllByCourseAndWbsParentIsNull(record, [sort: 'orderNumber', order: 'asc'])}"
                         var="n">
-                    <g:render template="/gTemplates/recordSummary" model="[record: n]"/>
+                    %{--<g:render template="/gTemplates/recordSummary" model="[record: n]"/>--}%
                     <div style="padding-left: 14px">
-                        <g:render template="/appCourse/childrenofNotesBox" model="[record: record, parent: n]"/>
+                        %{--<g:render template="/appCourse/childrenofNotesBox" model="[record: record, parent: n]"/>--}%
                     </div>
                 </g:each>
 
@@ -162,7 +162,11 @@
                 <g:select name="type" from="${['J','N', 'W', 'T', 'G', 'R']}"
                           id="typeField"
                           tabindex="1"
+                          onchange="if (this.value == 'R') {jQuery('#resourceType').prop('disabled',false)} else {jQuery('#resourceType').prop('disabled',true);}"
                           value="N"/>
+                <g:select name="resourceType" id="resourceType" from="${app.parameters.ResourceType.list([sort: 'code', order: 'asc'])}"
+                          optionKey="id" style="" optionValue="code" noSelection="${['': '...']}"/>
+
                 <g:textField name="title" value=""
                              tabindex="2" id="summayDaftar"
                              style="background: #f8f9fa; padding: 3px; text-align: right; display: inline;  font-family: tahoma ; width: 60% !important;"

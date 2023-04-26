@@ -99,13 +99,13 @@ class Course implements Comparable {  // entity id = 130
     }
 
     static mapping = {
-        description(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
 
         table 'course'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

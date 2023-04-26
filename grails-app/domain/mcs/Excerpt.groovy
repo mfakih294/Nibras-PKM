@@ -98,9 +98,9 @@ class Excerpt implements Comparable {  // entity id = 143
         table 'excerpt'
         //sort "id":"desc"
         //name (index:'name_index')
-        description(sqlType: 'longtext')
-        notes(sqlType: 'longtext')
-        filesList(sqlType: 'longtext')
+        description(sqlType: 'long varchar')
+        notes(sqlType: 'long varchar')
+        filesList(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

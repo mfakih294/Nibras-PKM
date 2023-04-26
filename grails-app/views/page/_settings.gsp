@@ -17,7 +17,11 @@
 
             <table border="0" style="border-collapse: collapse; width: 99%">
                 <tr>
-                    <td width="25%" style="width: 25%; max-width: 25%;">     <b>${it.name}</b>:</td>
+                    <td width="25%" style="width: 25%; max-width: 25%; vertical-align: top;">
+
+                        <b>${it.name}</b>:
+
+                    </td>
                     <td width="75%" style="">
 
                         <g:formRemote name="saveSettings"
@@ -26,9 +30,10 @@
                                           method="post">
 
                     %{--<g:hiddenField name="sth2" value="${new java.util.Date()}"/>--}%
-
+Value:
                             <g:if test="${it.allowedValues}">
                                 <g:select name="newValue" from="${it.allowedValues?.split(',')}" value="${it.value}"
+                                    class="uk-select uk-width-auto"
                                           style="overflow: visible; z-index: 200" noSelection="${['0': '']}"/>
                             </g:if>
                             <g:else>
@@ -38,12 +43,13 @@
                                              placeholder="Value"
                                              class=""/>
                             </g:else>
-
+Allowed values:
                             <g:textField name="allowedValues" value="${it.allowedValues ?: 'yes,no'}"
                                          autocomplete="off"
                                          style="display: inline; direction: ltr; text-align: right; "
                                          placeholder="allowedValues"
                                          class=""/>
+                            Description:
                         <g:textField name="description" value="${it.description}"
                                          style="display: inline; direction: ltr; text-align: right; "
                                          placeholder="description"

@@ -85,7 +85,8 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
 
 
 <ol class="sortable ui-sortable mjs-nestedSortable-branch mjs-nestedSortable-expanded">
-    <g:each in="${app.IndexCard.findAllByCourseAndWbsParentIsNull(record, [sort: 'orderNumber', order: 'asc'])}"
+    %{--<g:each in="${app.IndexCard.findAllByCourseAndWbsParentIsNull(record, [sort: 'orderNumber', order: 'asc'])}"--}%
+    <g:each in="${app.IndexCard.executeQuery('from IndexCard where priority >= 2 and course = ? and wbsParent is null order by orderNumber asc' , [record])}"
             var="n">
     %{--<g:if test="${!n.wbsNumber?.contains('.')}">--}%
         <li style="display: list-item;" class="mjs-nestedSortable-branch mjs-nestedSortable-expanded" id="menuItem_${n.id}">
@@ -153,7 +154,7 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
         tabSize: 25,
         tolerance: 'pointer',
         toleranceElement: '> div',
-        maxLevels: 4,
+        maxLevels: 6,
        isTree: true,
         expandOnHover: 700,
         startCollapsed: false

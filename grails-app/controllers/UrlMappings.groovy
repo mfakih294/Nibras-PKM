@@ -26,6 +26,8 @@ class UrlMappings {
         "/slides"(controller: 'page', action: 'slides')
         "/filed"(controller: 'operation', action: 'filed')
 
+        "/irfan"(controller: 'page', action: 'appIrfan')
+    //    "/jabal-amel"(controller: 'indexCard', action: 'generateWritingsBook')
         "/$controller/$action?/$id?"{
             constraints {
                 // apply constraints here

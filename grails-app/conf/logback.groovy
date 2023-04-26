@@ -112,7 +112,12 @@ appender("STDOUT", ConsoleAppender) {
 
 
 //logger('nibras', INFO, ['STDOUT'], false)
-logger('nibras', ERROR, ['STDOUT'], false)
+logger('nibras', INFO, ['STDOUT'], false)
+logger('org.hibernate.SQL', WARN, ['STDOUT'], false)
+logger ' org.quartz.core.QuartzScheduler ', INFO
+logger 'org.hibernate.type.descriptor.sql.BasicBinder', DEBUG
+logger 'grails.app.controllers', DEBUG
+
 //logger('nibras', WARN, ['STDOUT'], false)
 
 

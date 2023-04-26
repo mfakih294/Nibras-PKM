@@ -1,3 +1,26 @@
+/*td, div {*/
+    /*text-align: start !important; unicode-bidi: plaintext !important;*/
+    /*/!*line-height: 20px;*!/*/
+/*}*/
+
+/*td div {*/
+    /*text-align: start !important; unicode-bidi: plaintext !important;*/
+    /*/!*line-height: 20px;*!/*/
+/*}*/
+/*td ul, td li, div ul, div li, div a {*/
+    /*text-align: start !important; unicode-bidi: plaintext !important;*/
+    /*/!*line-height: 20px;*!/*/
+/*}*/
+/*td a {*/
+    /*text-align: start !important; unicode-bidi: plaintext !important;*/
+    /*/!*line-height: 20px;*!/*/
+/*}*/
+
+input, textarea {
+    text-align: start !important; unicode-bidi: plaintext !important;
+}
+
+
 
 .fileCard {
     border-bottom: 1px solid darkgreen;
@@ -28,4 +51,49 @@
 
 .hidden {
     display: none;
+}
+
+.fc-event-title {
+    font-size: 1em !important;
+    line-height: 1.3;
+}
+
+.fc-event-time {
+    display: inline-block !important;
+
+
+}
+
+.fc-timegrid-event .fc-event-time
+{
+    font-weight: bold !important;
+    font-size: 1em;
+    display: none !important;
+}
+
+.fc-v-event .fc-event-title-container{
+    display: inline;
+}
+
+.fc-v-event .fc-event-main-frame {
+    display: inline;
+}
+.fc-sticky {
+    display: inline-block !important;
+    text-align: right;
+    direction: rtl;
+    float: right;
+}
+
+.fileBox:hover {
+    background: lightgreen;
+}
+
+.fileBox:active {
+    background: darkgreen;
+}
+
+.panelActions:hover {
+    cursor: pointer;
+    border: 1px solid darkgreen;
 }

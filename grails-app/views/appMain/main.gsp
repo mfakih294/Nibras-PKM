@@ -92,7 +92,20 @@ ${new Date()?.format('HH:mm')}
 
 
 
-   %{--<r:layoutResources/>--}%
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit-icons.js')}"></script>
+    %{--<script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'jquery-ui-1.7.2.custom.min.js')}"></script>--}%
+    %{--<script type="text/javascript" src="${resource(dir: 'js/jquery', file: 'chosen.jquery.min-new.js')}"></script>--}%
+    %{--<link rel="stylesheet" href="${resource(dir: 'css', file: 'chosen1.8.7.css')}"/>--}%
+
+
+    <link rel="stylesheet" href="${resource(dir: 'uikit-min/css', file: 'uikit.css') }"/>
+
+
+
+
+
+    %{--<r:layoutResources/>--}%
 
     <script type="text/javascript">
 
@@ -166,8 +179,8 @@ ${new Date()?.format('HH:mm')}
 
 
             myLayout = $('body').layout({
-                west__size: 300,
-                east__size: 380,
+                west__size: 330,
+                east__size: 420,
                  east__initClosed: true,
                 east__togglerContent_closed: '<<',
                 // RESIZE Accordion widget when panes resize
@@ -197,7 +210,7 @@ ${new Date()?.format('HH:mm')}
 
 
             $.fn.editable.defaults.mode = 'inline';
-            $.fn.editable.defaults.showbuttons = false;
+            $.fn.editable.defaults.showbuttons = true;
 
             jQuery('.fg-button').hover(
                     function () {
@@ -486,16 +499,25 @@ $("#accordionCenter").accordion({
 
     </script>
 
+    <style>
+
+    body {
+        margin-left: ${OperationController.getPath('app.margin.left') ?: '10%'} !important;
+        margin-right: ${OperationController.getPath('app.margin.right') ?: '10%'}  !important;
+    }
+    </style>
+
+
 </head>
 
 <body>
 
 <g:render template="/appMain/regions" model="[htmlContent: htmlContent, ips: ips, rpsSize: rpsSize, recentRecords: recentRecords, types: types]"/>
+
 <div id="idletimeout"></div>
 
 
 
 
-</body>
 </body>
 </html>

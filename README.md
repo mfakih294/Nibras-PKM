@@ -3,7 +3,11 @@
 
 
 
-**Nibras PKM** is a __web-based self-hosted open source__ system for the __long-term management__ of __personal__ information. It is a combination of a __web-based__ application intended for desktop use and where all the records are entered, and an Android __reader and note taker__ application.
+**Nibras PKM** is a __web-based self-hosted open source__ system for
+ the __long-term management__ of __personal__ information.
+  It is a combination of a __web-based__ application 
+  intended for desktop use and where all the records are entered,
+   and an Android __mobile__ reader application.
 
 ![](https://raw.githubusercontent.com/mfakih294/Nibras-PKM/master/docs/images/screenshot.jpg)
 
@@ -25,7 +29,7 @@ It manages resources (articles, books, documents), notes, writings, tasks, goals
 It was designed with large amounts of information in mind. In current usage, it manages dozens of thousands of records. With its commands and saved searches, it makes easy to navigate through all the information.
 
 
-# Features
+## Main Features
 
 * **Flexible text-based commands** to add, update and search records, which provides powerful ways to manage information.
 * **Saved searches** to save searches for later use.
@@ -38,7 +42,7 @@ It was designed with large amounts of information in mind. In current usage, it 
 
 ## Documentation
 
-Documentation is available online at [https://mfakih294.github.io/Nibras-PKM/pages](https://mfakih294.github.io/Nibras-PKM/pages/).
+User's guide is available online at [https://mfakih294.github.io/Nibras-PKM/](https://mfakih294.github.io/Nibras-PKM/).
 
 
 ## Releases

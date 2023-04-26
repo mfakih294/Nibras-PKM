@@ -2,9 +2,11 @@ package nibras
 
 import ker.OperationController
 import security.*
-
+import grails.core.GrailsApplication
 
 class BootStrap {
+
+    GrailsApplication grailsApplication
 
     def init = { servletContext ->
 
@@ -41,12 +43,16 @@ class BootStrap {
 
 
 """
+
+        def port = grailsApplication.config.getProperty('server.port')
+        def contextPath = grailsApplication.config.getProperty('server.contextPath')
+
         println ''
         println ' ************************************************************'
         println ' *                                                          *'
         println ' * Nibras has launched. You can access it from:             *'
         println ' *                                                          *'
-        println ' * https://localhost:1441/                            *'
+        println " * https://localhost:${port}${contextPath}                 "
         println ' *                                                          *'
 //	println ' * Note: To stop Nibras, press ctrl+c in this window, or          *'
 //	println ' * run ./scripts/stop script.                               *'
@@ -56,9 +62,9 @@ class BootStrap {
         println ''
 
         if (org.apache.commons.lang.SystemUtils.IS_OS_WINDOWS) {
-            """c:\\windows\\explorer  "" https://localhost:1441/""".execute()
+            """c:\\windows\\explorer  "" https://localhost:${port}/${contextPath}""".execute()
         } else if (org.apache.commons.lang.SystemUtils.IS_OS_LINUX){
-            """/usr/bin/xdg-open https://localhost:1441/""".execute()
+            """/usr/bin/xdg-open https://localhost:${port}${contextPath}""".execute()
         }
 
 

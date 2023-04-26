@@ -23,6 +23,17 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/shutdown',       access: ['permitAll']],
 	[pattern: '/json/**',      access: ['permitAll']], // working! 19.07.2019
 	[pattern: '**/json/**',      access: ['permitAll']], // working! 19.07.2019
+	[pattern: '**/jabal-amel/**',      access: ['permitAll']],
+	[pattern: '*/jabal-amel/**',      access: ['permitAll']],
+	[pattern: '/jabal-amel/**',      access: ['permitAll']],
+	[pattern: '**/indexCard/generateWritingsBook/**',      access: ['permitAll']],
+	[pattern: '**/staticPage/**',      access: ['permitAll']],
+	[pattern: '**/viewRecordImage/**/**',      access: ['permitAll']],
+	[pattern: '*/*/viewRecordImage/**/*',      access: ['permitAll']],
+	[pattern: '**/generics/viewRecordImage/**',      access: ['permitAll']],
+	[pattern: '**/staticRecord/**',      access: ['permitAll']],
+	[pattern: '**/download/**',      access: ['permitAll']],
+	[pattern: '**//jabal-amel/**',      access: ['permitAll']],
 	[pattern: '/assets/**',      access: ['permitAll']],
 	[pattern: '/**/js/**',       access: ['permitAll']],
 	[pattern: '/**/plugins/**',       access: ['permitAll']],
@@ -34,9 +45,11 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/filed/**',       access: ['permitAll']],
 	[pattern: '/**/download/**',       access: ['permitAll']],
 	[pattern: '/**/page/mobile*/**',       access: ['permitAll']],
-
+	[pattern: '/**/page/appPile*/**',       access: ['permitAll']],
+	[pattern: '/**/page/panel*/**',       access: ['permitAll']],
 	[pattern: '/**/sync/**',       access: ['permitAll']],
 	[pattern: '/**/css/**',      access: ['permitAll']],
+	[pattern: '/**/layout/**',      access: ['permitAll']],
 	[pattern: '/**/kickstart/**',      access: ['permitAll']],
 	[pattern: '/**/file-icons/**',      access: ['permitAll']],
 //	[pattern: '/**/slides/**',      access: ['permitAll']],
@@ -46,11 +59,19 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 ]
 
 grails.plugin.springsecurity.filterChain.chainMap = [
+	[pattern: '/jabal-amel/**',      filters: 'none'],
 	[pattern: '/assets/**',      filters: 'none'],
 	[pattern: '/page/heartbeat*/**',      filters: 'none'],
 	[pattern: '/page/mobile*/**',      filters: 'none'],
 	[pattern: '/sync/**',      filters: 'none'],
 	[pattern: '**/sync/**',      filters: 'none'],
+	[pattern: '/**/download/**',      filters: 'none'],
+	[pattern: '/**/generateWritingsBook/**',      filters: 'none'],
+	[pattern: '**/generics/viewRecordImage/**',   filters: 'none'],
+	[pattern: '/**/generics/viewRecordImage/**',   filters: 'none'],
+	[pattern: '**/viewRecordImage/**',   filters: 'none'],
+	[pattern: '/**/viewRecordImage/**',   filters: 'none'],
+	[pattern: '/**/staticPage/**',      filters: 'none'],
 	[pattern: '/**/download/**',      filters: 'none'],
 	[pattern: '/**/filed/**',      filters: 'none'],
 	[pattern: '/json/**',      filters: 'none'],
@@ -91,3 +112,16 @@ environments {
 		grails.dbconsole.enabled = true
 	}
 }
+elasticSearch.datastoreImpl = 'hibernateDatastore'
+elasticSearch.client.mode = 'local'
+elasticSearch.migration.strategy = 'delete'
+elasticSearch.disableAutoIndex = false
+elasticSearch.bulkIndexOnStartup = true
+//grails.app.enable.reload = true
+//grails.gsp.view.dir = "/nibras/sys/views"
+
+//log4j = { // not here
+//	trace 'org.hibernate.type.descriptor.sql.BasicBinder'
+// error 'org.hibernate.SQL'
+// debug 'grails.app.controllers'
+//}

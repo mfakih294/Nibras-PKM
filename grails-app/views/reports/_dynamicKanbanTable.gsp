@@ -17,7 +17,8 @@
             <g:if test="${items[groupBy].contains(g)}">
 %{--                <td style="vertical-align: top">--}%
                     <div style="height: 50px; vertical-align: top">
-                    <h4 style="-moz-column-break-after: column !important;-moz-column-break-before: column !important; text-align: center; font-weight: bold; padding-left: 0 !important; margin-left: 0 !important">${g}</h4>
+                        %{---moz-column-break-after: column !important;-moz-column-break-before: column !important;--}%
+                    <h4 style=" text-align: center; font-weight: bold; padding-left: 0 !important; margin-left: 0 !important">${g}</h4>
                     </div>
                     <g:findAll in="${items}" expr="${it[groupBy] == g}">
                         <g:render template="/gTemplates/box" model="[record: it]"/>

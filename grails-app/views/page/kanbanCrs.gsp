@@ -41,6 +41,13 @@
 
 
 
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'uikit-min/js', file: 'uikit-icons.js')}"></script>
+
+    <link rel="stylesheet" href="${resource(dir: 'uikit-min/css', file: 'uikit.css') }"/>
+
+
+
 
 
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'jquery-ui-1.8.22.custom.css')}"/>
@@ -156,20 +163,27 @@
 %{--</div>--}%
 
 
-<div class="ui-layout-center appBkg" style="margin-top: 40px !important; margin-bottom: 5px !important; ">
+<div class="ui-layout-center appBkg" style="margin-top: 10px !important; margin-bottom: 5px !important; ">
     %{--ToDo: display none?!--}%
-    <div class="ui-layout-content ui-widget-content" onmouseover="jQuery('#hintArea').html('')">
+    %{--<div class="ui-layout-content" onmouseover="jQuery('#hintArea').html('')">--}%
         <div id="notificationArea"></div>
 
     <g:if test="${items}">
-    <g:render template="/reports/dynamicKanbanTable"
-              model="[items: items, groups: groups, groupBy: groupBy, title:title, ssId: ssId]"/>
+
+        %{--/reports/dynamicKanbanTable"--}%
+    <g:render
+            template="/reports/genericGrouping"
+              model="[items: items, groups: groups,
+//                      reportType: reportType,
+                      groupBy: groupBy, title:title, ssId: ssId]"/>
         </g:if>
     <g:elseif test="${ssId}">
-            <g:render template="/gTemplates/recordListing" model="[
+            %{--<g:render template="/gTemplates/recordListing" model="[--}%
+        <g:render template="/reports/genericGrouping" model="[
                     ssId: ssId,
                     searchResultsTotal: searchResultsTotal,
                     totalHits: totalHits,
+//                    reportType: reportType,
                     box: 1,
                     list: list,
                     title: title]"/>
@@ -187,7 +201,7 @@
 
     </div>
 
-   </div>
+   %{--</div>--}%
 </body>
 
 <r:layoutResources/>

@@ -23,7 +23,9 @@ import mcs.*
 
       import cmn.*
       import grails.converters.*
-      import java.text.SimpleDateFormat
+import security.User
+
+import java.text.SimpleDateFormat
     
 
 class SavedSearch implements Comparable {  // entity id = 451
@@ -37,6 +39,7 @@ class SavedSearch implements Comparable {  // entity id = 451
 
     // Fields
 
+    User user
 
   String queryType = 'hql'
   String reportType = 'list'
@@ -92,9 +95,9 @@ class SavedSearch implements Comparable {  // entity id = 451
 	static mapping = {
      table 'saved_search'
       
-	  query (sqlType: 'longtext')
-	  countQuery (sqlType: 'longtext')
-	  notes (sqlType: 'longtext')
+	  query (sqlType: 'long varchar')
+	  countQuery (sqlType: 'long varchar')
+	  notes (sqlType: 'long varchar')
     }
     
     static namedQueries = {

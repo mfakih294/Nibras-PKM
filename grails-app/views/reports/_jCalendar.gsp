@@ -11,7 +11,7 @@
 }
 </style>
 
-<h2>JP board</h2>
+<h2>Journal and Planner Board</h2>
 
 <div id="jpCalendar">
     <table border="1" style="width: 98%; border: #496779; border-collapse: collapse;">

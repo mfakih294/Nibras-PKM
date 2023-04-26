@@ -8,7 +8,7 @@
     <g:hiddenField name="entityCode" value="${entity}"/>
     <g:textField id="newTagField${entity}${instance.id}" name="tag" placeholder="Add tag..."
                  class="newTagField"
-                 style="width:100px; display: inline; " value=""/>
+                 style="width:250px; display: inline; " value=""/>
     <g:submitButton name="add" value="add" style="display:none;"
                     class="fg-button  ui-widget ui-state-default ui-corner-all"/>
 </g:formRemote>
@@ -32,9 +32,21 @@
 <script type="text/javascript">
 
     var bestPictures = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+//        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                datumTokenizer: function(d) {
+        var test = Bloodhound.tokenizers.whitespace(d.value);
+        $.each(test,function(k,v){
+            i = 0;
+            while( (i+1) < v.length ){
+                test.push(v.substr(i,v.length));
+                i++;
+            }
+        })
+        return test;
+    },
         queryTokenizer: Bloodhound.tokenizers.whitespace
 		, remote: '${request.contextPath}/operation/autoCompleteTagsJSON'
+		, limit: 12
         ,prefetch: '${request.contextPath}/operation/autoCompleteTagsJSON?date=${new Date().format('ddMMyyyHHMMss')}'
     });
 

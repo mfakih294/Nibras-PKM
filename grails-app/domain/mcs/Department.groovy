@@ -64,7 +64,7 @@ class Department {  // entity id = 131
     //long getNumberOfTasks() { return tasks ? tasks.size() : 0 }
 
     static constraints = {
-        code(unique: true)
+        code(nullable: true, unique: true)
         summary(nullable: false, blank: false)
         courses()
 
@@ -79,7 +79,7 @@ class Department {  // entity id = 131
         table 'department'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // courses: Course cascade: 'persist,merge,save-update'
     }
 

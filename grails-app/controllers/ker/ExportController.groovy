@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat
 
 import grails.plugin.springsecurity.annotation.Secured
 
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 import static com.cronutils.model.CronType.QUARTZ;
@@ -241,7 +242,7 @@ class ExportController {
     def allCalendarEvents() {
         def events = []
 
-            Task.executeQuery("from Journal t where t.bookmarked = 1 and  t.startDate  between :start and :end",
+            Task.executeQuery("from Journal t where t.startDate  between :start and :end", //  t.bookmarked = 1 and
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -264,7 +265,7 @@ class ExportController {
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=J',
                             allDay         : (it.level != 'm' || it.startDate.hours < 5 ? true : false)])
             }
-      Task.executeQuery("from Planner t where t.bookmarked = 1 and t.startDate between :start and :end",
+      Task.executeQuery("from Planner t where t.startDate between :start and :end", //t.bookmarked = 1
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -281,15 +282,15 @@ class ExportController {
                             title          : StringUtils.abbreviate(title, 80),
                             description    : it.summary + '|' + it.description,
                             classNames: it.completedOn != null ? ['done'] : [''],
-                            backgroundColor: 'Chocolate',//it.type?.color ?: '#F7F9EE',
-                            borderColor    : 'Chocolate',
+                            backgroundColor: '#92B450',//it.type?.color ?: '#F7F9EE',
+                            borderColor    : '#92B450',
                             textColor      : 'white',//it.type?.style ?: '#515150',
 
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=P',
                             allDay         : (it.level != 'm' || it.startDate.hours < 7 || it.task != null ? true : false)])
             }
 
-            Task.executeQuery("from Task t where t.bookmarked = 1 and t.endDate between :start and :end",
+            Task.executeQuery("from Task t where t.endDate between :start and :end", //  t.bookmarked = 1 and
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -310,8 +311,8 @@ class ExportController {
                             allDay         : false   ])
             }
 
-
-    Task.executeQuery("from Goal t where t.bookmarked = 1 and t.endDate between  :start and :end",
+/*
+    Task.executeQuery("from Goal t where  t.bookmarked = 1 and t.endDate between  :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -332,10 +333,9 @@ class ExportController {
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=T',
                             allDay         : false   ])
             }
+*/
 
-
-
-            Task.executeQuery("from Book t where t.bookmarked = 1 and t.readOn between :start and :end",
+            Task.executeQuery("from Book t where t.readOn between :start and :end",
                     //[new Date(Long.parseLong(params.start) * 1000), new Date(Long.parseLong(params.end) * 1000)]).each() {
                     [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
 
@@ -355,22 +355,25 @@ class ExportController {
                             url            : request.contextPath + '/page/record/' + it.id + '?entityCode=R',
                             allDay         : false   ])
             }
-/*
-        def cc = 1000
 
-        [
-                ['Oil every month on Monday', '0 15 1 * 1'],
-                ['Internet every 14th of month', '0 15 14 * *'],
-                ['Filter every two month on Monday', '0 15 1 /2 1'],
-                ['Every Friday', '0 15 * * 5'],
-                ['Every day', '0 15 * * *'],
-                ['Every last of month', '0 15 29 * *']
-        ].each() { jobTitle, quartzCronExpression ->
+//        def cc = 1000
 
+//        [
+//                ['Oil every month on Monday', '0 15 1 * 1'],
+//                ['Internet every 14th of month', '0 15 14 * *'],
+//                ['Filter every two month on Monday', '0 15 1 /2 1'],
+//                ['Every Friday', '0 15 * * 5'],
+//                ['Every day', '0 15 * * *'],
+//                ['Every last of month', '0 15 29 * *']
+//        ]
+           Task.executeQuery('from Task where recurringCron is not null and bookmarked = true').each() {
+               def id = it.id
+               def jobTitle = it.summary
+               def quartzCronExpression = it.recurringCron
 
-            //String quartzCronExpression = "0 0 1 2 7";
-            CronParser quartzCronParser =
-                    new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
+               //String quartzCronExpression = "0 0 1 2 7";
+               CronParser quartzCronParser =
+                       new CronParser(CronDefinitionBuilder.instanceDefinitionFor(UNIX));
 
 // parse the QUARTZ cron expression.
             Cron parsedQuartzCronExpression =
@@ -378,16 +381,14 @@ class ExportController {
 
 // Create ExecutionTime for a given cron expression.
 
-
 //    DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
 //    ZonedDateTime dateTime = ZonedDateTime.parse("2020-06-01 00:00:00 AM +02:00", formatter0);
-            ZonedDateTime now = ZonedDateTime.now();
 
 
-            ExecutionTime executionTime =
-                    ExecutionTime.forCron(parsedQuartzCronExpression);
+               ExecutionTime executionTime =
+                       ExecutionTime.forCron(parsedQuartzCronExpression);
 
-            //  render 'quartz ' + parsedQuartzCronExpression.asString()
+               //  render 'quartz ' + parsedQuartzCronExpression.asString()
 
 // Given a Cron instance, we can ask for next/previous execution
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("w E dd.MM.yyyy HH:mm Z");
@@ -400,22 +401,37 @@ class ExportController {
 //                    Date.from(executionTime.nextExecution(now).get().toInstant()).format("w E dd.MM.yyyy HH:mm")
 //                    //executionTime.nextExecution(now).get().format(formatter)
 //            ))
+               ZonedDateTime now = ZonedDateTime.now();
 
-            events.add([id             : cc++,
-                        start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(executionTime.nextExecution(now).get().toInstant())),
-                        end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(executionTime.nextExecution(now).get().toInstant())),
-                        //it.type?.name +
-                        title          : jobTitle,
-                        description    : 'cron generated',
-                        backgroundColor: 'DarkRed',//it.type?.color ?: '#F7F9EE',
-                        borderColor    : 'DarkRed',
-                        textColor      : 'white',//it.type?.style ?: '#515150',
-                        url            : request.contextPath + '/page/record/' + cc + '?entityCode=T',
-                        allDay         : false   ])
-        }
+//               for (d in (-7..+7)) {
 
 
-*/
+               def zdtStart = (new Date() - 7).toInstant().atZone(ZoneId.systemDefault())
+               def zdt = executionTime.nextExecution(zdtStart).get()
+               def zdtEnd = (new Date() + 14).toInstant().atZone(ZoneId.systemDefault())
+//def d = -7
+               while (zdt <= zdtEnd) {
+//               [start: Date.parse('yyyy-MM-dd', params.start) - 20, end: Date.parse('yyyy-MM-dd', params.end) + 20]).each() {
+//                       d++
+//                   println 'new cron task: ' + it.description + ' at date ' + new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(zdt.toInstant()))
+                   events.add([id             : it.id + System.currentTimeMillis(),
+                               start          : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(zdt.toInstant())),
+                               end            : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm':00'").format(Date.from(zdt.toInstant())),
+                               //it.type?.name +
+                               title          : '* ' + it.summary,
+                               description    :  it.summary + ' | ' + it.description,
+                               backgroundColor: 'DarkGray',//it.type?.color ?: '#F7F9EE',
+                               borderColor    : 'Black',
+                               textColor      : 'white',//it.type?.style ?: '#515150',
+                               url            : request.contextPath + '/page/record/' + id + '?entityCode=T',
+                               allDay         : false])
+                   zdt = executionTime.nextExecution(zdt).get()
+
+               }
+
+           }
+
+
         render events as JSON
 
     }
@@ -792,7 +808,7 @@ This presentation aims to give an overview of Pomegranate PKM system.
             def ref = now
         def dates = []
         def i = 1
-        render 'Dates in the next 40 days:<br/><br/>'
+        render 'Occurrences in the next 40 days (' + t.recurringInterval + ' times) ' + '<br/><br/>'
 //            while (Date.from(executionTime.nextExecution(now).get().toInstant()) < new Date() + 40){
         while (i <= (t.recurringInterval ?: 4)){
             render i++ + ': '  + Date.from(executionTime.nextExecution(now).get().toInstant())?.format('EEE dd.MM.yyyy HH:mm') + '<br/>'

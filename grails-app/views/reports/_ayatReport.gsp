@@ -70,7 +70,7 @@
 
     <div id="tab1">
 
-        <div style="direction: rtl; text-align: justify; line-height: 300%;">
+        <div style="direction: rtl; text-align: justify; line-height: 400%;">
             <g:set var="s" value="${1}"></g:set>
             <g:each in="${list}" var="r">
                 <g:if test="${r.orderInWriting == 1}">
@@ -205,12 +205,11 @@
            %{--<g:render template="/gTemplates/recordSummary" model="[record: writing, entityCode: 'W']"/>--}%
            <br/>
            <br/>
-
        </div>
 
    </div>
    <div id="tab3">
-       <div style="direction: rtl; text-align: justify; line-height: 300%;">
+       <div style="direction: rtl; text-align: justify; line-height: 400%;">
            <g:each in="${list}" var="r">
                <g:if test="${r.isNewSection}">
                    <br/>

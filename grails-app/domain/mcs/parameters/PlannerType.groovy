@@ -30,7 +30,7 @@ class PlannerType implements Comparable {  // entity id = 157
     String color
     String style
     String name
-    Integer category
+//    Integer category
 
 
     String notes
@@ -56,7 +56,7 @@ class PlannerType implements Comparable {  // entity id = 157
         table 'planner_type'
         //sort "id":"desc"
         //name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
         // null cascade: 'persist,merge,save-update'
     }
 

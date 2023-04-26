@@ -56,7 +56,7 @@ class Tag implements Comparable {  // entity id = 12
     static mapping = {
 
         // name (index:'name_index')
-        notes(sqlType: 'longtext')
+        notes(sqlType: 'long varchar')
     }
 
     static namedQueries = {

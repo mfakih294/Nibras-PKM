@@ -3,34 +3,31 @@
 <g:formRemote name="addRelationship" url="[controller: 'generics', action: 'addRelationship']"
               onComplete="jQuery('#newRelationshipField${entity}${record.id}').val('')"
               update="relationshipRegion${entity}${record.id}"
-
               style="display: inline;">
-
-
 
     <g:hiddenField name="id" value="${record.id}"/>
     <g:hiddenField name="entityCode" value="${entity}"/>
     <g:select name="type" style="width: 90px; display: inline;"
               from="${mcs.parameters.RelationshipType.list()}" optionKey="id" optionValue="name"/>
-<br/>
+%{--<br/>--}%
     <g:textField id="newRelationshipField${entity}${record.id}" name="recordB" class="ui-corner-all"
                  title="[type][id] ([type] [summary] for autocomplete)" placeholder="[type] [summary] to start autocomplete"
-                 style="width:150px; display: inline; " value=""/>
+                 style="width:130px; display: inline; " value=""/>
     <g:submitButton name="add" value="add" style="display:none;"
                     class="fg-button  ui-widget ui-state-default ui-corner-all"/>
 </g:formRemote>
 
 <script type="text/javascript">
-    %{--jQuery("#newRelationshipField${entity}${record.id}").find('input').autocomplete("generics/autoCompleteMainEntities", {--}%
-        %{--mustMatch: false, minChars: 4, highlight: false, autoFill: false,--}%
-        %{--delay: 100, matchSubset: 0, matchContains: 1, selectFirst: false,--}%
-%{--//        cacheLength:100,--}%
-        %{--multiple: false,--}%
-        %{--formatResult: function (data, p, l) {--}%
-            %{--return data[1]--}%
-        %{--}--}%
-    %{--});--}%
-
+    %{--<!--jQuery("newRelationshipField${entity}${record.id}").find('input').autocomplete("generics/autoCompleteMainEntities", {-->--}%
+//        mustMatch: false, minChars: 4, highlight: false, autoFill: false,
+//        delay: 100, matchSubset: 0, matchContains: 1, selectFirst: false,
+//        cacheLength:100,
+//        multiple: false,
+//        formatResult: function (data, p, l) {
+//            return data[1]
+//        }
+//    });
+//
 
     var bestPictures = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -51,9 +48,6 @@
         source: bestPictures.ttAdapter()
     });
 
-
-
-
 </script>
 
 
@@ -72,33 +66,34 @@
 <div id="relationshipRegion${entity}${record.id}">
 
 <g:each in="${RelationshipType.findAll()}" var="type">
-    <g:if test="${Relationship.executeQuery('select count(*) from Relationship where (entityA = ? or entityA = ? or entityA = ?) and recordA = ? and type = ? ',
-            ['mcs.' + record.entityController(), 'app.' + record.entityController(), 'app.parameters.' + record.entityController(), record.id, type])[0] > 0}">
+    <g:if test="${Relationship.executeQuery('select count(*) from Relationship where (entityA = ?) and recordA = ? and type = ? ',
+            [record.entityCode(), record.id, type])[0] > 0}">
         <b>${type.name}</b>:
         <br/>
 
-        <g:each in="${Relationship.executeQuery('from Relationship where (entityA = ? or entityA = ? or entityA = ?) and recordA = ? and type = ? ',
-                ['mcs.' + record.entityController(), 'app.' + record.entityController(), 'app.parameters.' + record.entityController(), record.id, type])}"
+        <g:each in="${Relationship.executeQuery('from Relationship where (entityA = ?) and recordA = ? and type = ? ',
+                [record.entityCode(), record.id, type])}"
                 status="c"
                 var="t">
-            <table border="0">
-                <tr>
-                    <td>
+            %{--<table border="0">--}%
+                %{--<tr>--}%
+                    %{--<td>--}%
                         <g:remoteLink controller="relationship" action="delete" id="${t.id}"
                                       update="notificationArea"
                                       before="if(!confirm('Are you sure you want to delete the relationship?')) return false"
                                       title="Logical delete">
                             x
                         </g:remoteLink>
-                    </td>
-                    <td>
+                    %{--</td>--}%
+                    %{--<td>--}%
                         %{--todo: works only for mcs package --}%
                         <g:render template="/gTemplates/recordSummary"
-                                  model="[record: grailsApplication.classLoader.loadClass(t.entityB).get(t.recordB)]"/>
+                                  model="[record: mcs.Book.get(t.recordB)]"/>
+                        %{--todo: only linking to resources is now allowed!--}%
 
-                    </td>
-                </tr>
-            </table>
+                    %{--</td>--}%
+                %{--</tr>--}%
+            %{--</table>--}%
 
         </g:each>
 
@@ -106,7 +101,7 @@
 
 
 
-    <g:if test="${Relationship.executeQuery('select count(*) from Relationship where (entityB = ? or entityB = ? or entityB = ?) and recordB = ? and type = ? ',
+    <g:if test="${1 == 2 && Relationship.executeQuery('select count(*) from Relationship where (entityB = ? or entityB = ? or entityB = ?) and recordB = ? and type = ? ',
             ['mcs.' + record.entityController(), 'app.' + record.entityController(), 'app.parameters.' + record.entityController(), record.id, type])[0] > 0}">
         <b>${type.inverseName ?: '?'}</b>:
 
@@ -115,7 +110,7 @@
                 status="c"
                 var="t">
 
-        %{--todo: works only for mcs package --}%
+        %{--todo: works only for mcs package--}%
             <g:render template="/gTemplates/recordSummary"
                       model="[record: grailsApplication.classLoader.loadClass(t.entityA).get(t.recordA)]"/>
         </g:each>
