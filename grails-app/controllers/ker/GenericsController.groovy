@@ -3590,8 +3590,8 @@ def markCompleted(Long id, String entityCode) {
 
                 render(template: '/reports/genericGrouping', model: [
                         items : Task.executeQuery(queryHead + (queryCriteria ? ' where ' + queryCriteria : '') + ' order by id desc', []), // lastUpdated desc,
-                        groups: groups, groupBy: groupBy,
-                        title : 'HQL Query: ' + input]
+                        groups: groups, groupBy: groupBy, query: input,
+                        title : 'HQL Query']
                 )
             }
 
@@ -3710,8 +3710,8 @@ def markCompleted(Long id, String entityCode) {
 
             render(template: '/reports/genericGrouping', model: [
                     items : Task.executeQuery(query, []),
-                    groups: groups, groupBy: groupBy,
-                    title : 'HQL Query: ' + input]
+                    groups: groups, groupBy: groupBy, query: query,
+                    title : 'HQL Query']
             )
         } else {
 
@@ -3750,7 +3750,7 @@ def markCompleted(Long id, String entityCode) {
                     list     : Task.executeQuery(fullquery, [], params),
                     totalHits: Task.executeQuery(fullquerySort)[0],
                     queryKey2: queryKey, fullquery: fullquery,
-                    title    : 'HQL Query ' + (!input.contains('select') ? '(' + Task.executeQuery(fullquerySort)[0] + ')' : '') + ' : ' + fullquery
+                    title    : 'HQL Query ', query:  fullquery // (!input.contains('select') ? '(' + Task.executeQuery(fullquerySort)[0] + ')' : '')  + fullquery
             ])
 
         }
@@ -3778,8 +3778,8 @@ def markCompleted(Long id, String entityCode) {
             render(template: '/gTemplates/recordListing', model: [
                     list     : list,
                     totalHits: list.size(),
-                    queryKey2: queryKey, fullquery: fullquery,
-                    title    : 'HQL Query: ' + fullquery
+                    queryKey2: queryKey, query: fullquery,
+                    title    : 'HQL Query '// + fullquery
             ])
 
     }

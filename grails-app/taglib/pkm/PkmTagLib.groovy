@@ -873,7 +873,11 @@ source src="${createLink(controller: 'operation', action: 'download', id: fileId
      long minutes = (((dur.toMinutes()  % 365 ) % 30) % 24 ) % 60;
 
 // todo: fine tune the display
-                out <<  (minutes ? minutes + 'min ' : '') + (hours ? hours + 'h ' : '')  +(days ? days + 'd ' : '') + (months ? months + 'm ' : '') + (years ? years + 'y ' : '')
+                out <<  (years ? years + 'y ' : '') +
+                (months ? months + 'm ' : '') +
+                        (days ? days + 'd ' : '') +
+                        (hours ? hours + 'h ' : '')  +
+                        (minutes ? minutes + 'min ' : '')
 
 
 

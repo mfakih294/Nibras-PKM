@@ -15,7 +15,7 @@
 
 		${OperationController.getPath('app.name') ?: 'Nibras PKM'}
 		%{--<g:meta name="app.version"/>--}%
-		${new Date()?.format('HH:mm')}
+		%{--${new Date()?.format('HH:mm')}--}%
 
 	</title>
 

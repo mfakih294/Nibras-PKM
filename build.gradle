@@ -1,8 +1,5 @@
-def esVersion = '7.3.0'
-ext['elasticsearch.version'] = esVersion
-ext {
-    elasticsearchVersion = esVersion
-}
+
+
 buildscript {
     repositories {
         mavenLocal()
@@ -25,7 +22,7 @@ buildscript {
     }
 }
 
-version "1.8.0"
+version "1.9.5"
 group "nibras"
 
 //apply plugin:"eclipse"
@@ -200,3 +197,10 @@ war {
 //grails {
   //  pathingJar = true
 //}
+
+
+def esVersion = '7.3.0'
+ext['elasticsearch.version'] = esVersion
+ext {
+    elasticsearchVersion = esVersion
+}

@@ -40,14 +40,6 @@
           </g:remoteLink>
     </h4>
 
-        <g:if test="${query}">
-            <i style="line-height: 20px;">
-                (${query})
-            </i>
-        %{--<hr/>--}%
-            <br/>
-        </g:if>
-
 
 
     </div>
@@ -93,6 +85,15 @@
 
 
 %{--<hr/>--}%
+</g:if>
+
+<g:if test="${query}">
+    <i style="line-height: 20px;">
+        (${query})
+    </i>
+%{--<hr/>--}%
+    <br/>
+    <br/>
 </g:if>
 
 

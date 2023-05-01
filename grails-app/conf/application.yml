@@ -21,7 +21,7 @@ grails:
 info:
     app:
         name: nibras
-        version: 1.9.1
+        version: 1.9.5
         grailsVersion: '@info.app.grailsVersion@'
 server:
     contextPath: '/nibras' # ContextPath must start with '/' and not end with '/'

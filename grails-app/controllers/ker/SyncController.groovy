@@ -458,7 +458,7 @@ def exportJsonV = {
         def records = []
         def priorityMap = [5: 'p5', 4: 'p4', 3: 'p3', 2: 'p2', 1: 'p1']
 // order by department.orderNumber asc, course.orderNumber asc, orderNumber asc
-        for (i in IndexCard.executeQuery("from Book b where b.bookmarked = ? and (b.user.username = ? or b.isPrivate = true) order by b.id desc", //  b.priority desc // b.type.code asc, b.title asc
+        for (i in IndexCard.executeQuery("from Book b where b.bookmarked = ? and (b.user.username = ? or b.isPrivate = true) order by b.lastUpdated desc", //  b.priority desc // b.type.code asc, b.title asc
                 [true, params.id])) {
 //            OperationController.countResourceFiles(i.id)
             records += [type        : 'R',
@@ -719,6 +719,107 @@ def exportJsonV = {
 
         render(status: 200, contentType: 'application/json', text: json)
     }
+
+
+    def mobilePushSplit() {
+
+
+        sleep((Math.random() * 4000).toInteger()) // wait for pandoc to finish converting the document
+
+
+        if (Setting.findByName('lastMobileSync'))
+            OperationController.setPath('lastMobileSync', new Date().format('dd.MM.yyyy HH:mm'))
+        else {
+            new Setting([name: 'lastMobileSync', value: new Date().format('dd.MM.yyyy HH:mm')]).save(flush: true)
+        }
+
+        def builder = new JSONBuilder()
+        def json
+
+//        try {
+//            new File('/nbr/mbl.log').write('\n Mobile push request, ' + new Date()?.format('dd.MM.yyyy HH:mm') + ':\n')
+//            new File('/nbr/mbl.log').write(request.JSON.data?.toString(), 'UTF-8')
+//        } catch (Exception e){
+//            println 'Error write mobile push log file'
+//        }
+
+        def key = request.JSON.key
+        def value = request.JSON.value
+
+
+        def id =  key.substring(6).split('=')[0]
+        def entityCode = key.substring(4,5)
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+
+
+
+        switch(key.substring(2,3)){
+            case 'a':
+
+                println 'in split operationType append to record ' + id +  ' and entityCode ' + entityCode + ' with value ' + value
+
+                    if (!record.notes)
+                        record.notes = value
+                    else record.notes += '\n\n' + value
+
+
+
+                    break;
+            case 'd':
+                println 'in split operationType done to record ' + id +  ' and code ' + entityCode
+
+
+                    if (record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
+                        record.bookmarked = false
+
+                    if ('GTP'.contains(entityCode)) {
+                        record.completedOn = new Date()
+
+//        record.percentComplete = new Date()
+                        record.status = mcs.parameters.WorkStatus.findByCode('done')
+                    }
+
+                if ('REN'.contains(entityCode)) {
+
+                    if (!record.readOn) {
+                        record.readOn = new Date()
+                    }
+                }
+                if ('R'.contains(entityCode)) {
+
+                    //todo
+                    record.status = mcs.parameters.ResourceStatus.findByCode('read')
+                }
+                if ('W'.contains(entityCode)) {
+
+                    if (!record.firstReviewed) {
+                        record.firstReviewed = new Date()
+                    }
+                    if (!record.reviewCount) {
+                        record.reviewCount = 1
+                    } else record.reviewCount++
+
+                    record.lastReviewed = new Date()
+                    record.status = WritingStatus.findByCode('revised')
+                }
+
+
+
+                break;
+
+        }
+
+        json = builder.build {
+            result = key + ' update committed'
+        }
+
+        render(status: 200, contentType: 'application/json', text: json)
+
+
+    }
+
 
 
     def mobilePush() {
@@ -1029,7 +1130,9 @@ if (!record.notes)
 
             if (module == 'r') {
                 record.title = o.summary?.trim() //inconsistancy
-                record.type = ResourceType.findByCode('doc')
+
+                record.type = ResourceType.findByCode('doc') ?: new ResourceType([code: 'doc', name: 'Document']).save(flush: true)
+
                 record.fullText = o.description?.trim()
 
             } else {
