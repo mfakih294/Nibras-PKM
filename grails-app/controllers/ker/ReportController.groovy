@@ -773,7 +773,9 @@ render (view: '/reports/customReport1', model: [list: list, i: 1])
 //				lastValue = t[2] + lastValue
             }
 
-            data =	[x: x[1..-1], y: y[1..-1],
+            data =	[x: x, //                       x[1..-1], y: y[1..-1],
+                       y: y,
+
                        name: '' + c[2] + ' ',
                        type: 'line', // scatter, lines, markers,
                        line: [

@@ -21,10 +21,10 @@ grails:
 info:
     app:
         name: nibras
-        version: 1.9.5
+        version: 1.9.5u3
         grailsVersion: '@info.app.grailsVersion@'
 server:
-    contextPath: '/nibras' # ContextPath must start with '/' and not end with '/'
+    contextPath: '/nibras' # ContextPath should start with '/' and should not end with '/'
     port: 1445 # The port to listen on
     session:
         timeout: 720000  # 20 hours (in ms)

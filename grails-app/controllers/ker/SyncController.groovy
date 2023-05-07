@@ -274,7 +274,7 @@ class SyncController {
                         nbFiles : i.nbFiles,
                         summary   : (i.task ? ('[' + i.task?.summary + '] ') : '') + i.summary,
                         language: i.language,
-                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+                        description    : i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
         for (i in mcs.Planner.executeQuery("from Planner t where t.bookmarked = true and (t.user.username = ? or t.isPrivate = true) order by t.startDate asc",
@@ -288,7 +288,7 @@ class SyncController {
                         nbFiles : i.nbFiles,
                         summary   : (i.task ? ('[' + i.task?.summary + '] ') : '') + i.summary,
                         language: i.language,
-                        body    : i.description ? i.description?.replace('\n', '<br/>') : '']
+                        description    : i.description ? i.description?.replace('\n', '<br/>') : '']
         }
 
 //println 'records' + records
@@ -348,7 +348,7 @@ class SyncController {
                             color   : 'darkblue',
                             meta    : i?.startDate?.format('dd-MM-yyyy-HH-mm'),
                             language: 'ar',
-                            title   : i.summary, body: i.description]
+                            title   : i.summary, description: i.description]
 //        }
 //            if (t != '')
 
@@ -536,7 +536,7 @@ def exportJsonV = {
                     color   : 'DarkSlateBlue',
                     language: i.language,
                     title   : i.title,
-                    body    : i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
+                    description    : i.fullText?.replace('\n', '<br/>')?.replaceAll(/http[\S\.]*/, '')
                             ?.replaceAll(/www[\S\.]*/, '') ?: '']
         }
 
@@ -680,7 +680,7 @@ def exportJsonV = {
                         meta    : (i.department ? 'd' + i.department?.code : '-'),
                         color   : 'darkorange',
                         title   : i.summary,
-                        language: i.language,
+                        language: i.language, // todo: replace 'body' by 'description'
                         body    : (i.description ? i.description?.replace('\n', '<br/>') : '') +
                                 (i.notes ? '<br/>===<br/>' + i.notes?.replace('\n', '<br/>')?.replace('__________________________________________________', '---') : '')]
         }

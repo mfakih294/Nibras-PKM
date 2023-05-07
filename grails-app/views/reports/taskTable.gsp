@@ -91,7 +91,7 @@
                    title="Toggle bookmark"
                    class="quickBookmarkButton"
                    value="${t.bookmarked}"
-                   onclick="jQuery('#TRecord${t.id}').load('${request.contextPath}/generics/quickBookmark/T-${t.id}')">
+                   onclick="jQuery('#TRecord${t.id}').load('${request.contextPath}/generics/quickBookmarkSilent/T-${t.id}')">
                     %{--<span class="icon-star-gm"></span>--}%
                     <span class="uk-icon-button" uk-icon="star"></span>
                 </a>
@@ -132,8 +132,8 @@
             </td>
 <td>
 
-    <span id="doneLog${t.id}"></span>
-    <g:remoteLink controller="generics" action="markCompleted"
+    <span id="doneLog${t.id}">
+    <g:remoteLink controller="generics" action="quickMarkCompleted"
                   id="${t.id}"
                   class="uk-button"
                   params="[entityCode: 'T']"
@@ -141,8 +141,28 @@
                   title="Mark completed">
         <span class="uk-icon-button" uk-icon="check"></span>
     </g:remoteLink>
+</span>
+  <span id="startLog${t.id}">
+    <g:remoteLink controller="generics" action="startTask"
+                  id="${t.id}"
+                  class="uk-button"
+                  params="[entityCode: 'T']"
+                  update="startLog${t.id}"
+                  title="Start the task">
+        <span class="uk-icon-button" uk-icon="play-circle"></span>
+    </g:remoteLink>
+</span>
+  <span id="stopLog${t.id}">
+    <g:remoteLink controller="generics" action="stopTask"
+                  id="${t.id}"
+                  class="uk-button"
+                  params="[entityCode: 'T']"
+                  update="stopLog${t.id}"
+                  title="Stop the task">
+        <span class="uk-icon-button" uk-icon="history"></span>
+    </g:remoteLink>
 
-
+</span>
 
 </td>
 

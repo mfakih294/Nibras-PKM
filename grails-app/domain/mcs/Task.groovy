@@ -106,6 +106,8 @@ class Task implements Comparable {  // entity id = 127
     String endTime
     Date actualEndDate
 
+    Journal lastJournal
+
     String language = 'ar'
 
 

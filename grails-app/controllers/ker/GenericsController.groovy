@@ -1672,6 +1672,91 @@ def markCompleted(Long id, String entityCode) {
 
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
+    markCompletedOperation(id, entityCode)
+
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+        render(template: '/layouts/achtung', model: [message: 'Record marked as completed'])
+
+
+    }
+
+    def startTask(Long id, String entityCode) {
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+
+        def j = new Journal()
+        j.task = record
+        j.startDate = new Date()
+
+        j.save(flush: true)
+
+   //     println 'j is ' + j.dump()
+
+        record.save(flush: true)
+
+
+        j.errors.each() {
+            render 'error ' + it
+        }
+
+
+        record.lastJournal = j
+
+//        println 't,j is ' + j.dump()
+
+        record.save(flush: true)
+
+        record.errors.each() {
+            render 'error ' + it
+        }
+
+        render 'Started'
+//        render(template: '/gTemplates/recordSummary', model: [record: record])
+        render(template: '/layouts/achtung', model: [message: 'Task started'])
+
+    }
+
+
+    def stopTask(Long id, String entityCode) {
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+//        println 'T to stop is ' + record
+
+
+        def j = record.lastJournal
+
+//        println 'Last j is ' + j
+        if (j) {
+            j.endDate = new Date()
+
+//        render(template: '/gTemplates/recordSummary', model: [record: record])
+            render 'Stopped'
+            render(template: '/layouts/achtung', model: [message: 'Task stopped'])
+        } else render 'Not started!'
+
+    }
+
+
+    def quickMarkCompleted(Long id, String entityCode) {
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+    markCompletedOperation(id, entityCode)
+
+      render 'Done'
+//        render(template: '/gTemplates/recordSummary', model: [record: record])
+        render(template: '/layouts/achtung', model: [message: 'Record marked as completed'])
+
+
+    }
+
+
+    def markCompletedOperation(Long id, String entityCode){
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+
 //        !'RP'.contains(entityCode) &&
         if (record.class.declaredFields.name.contains('bookmarked') && record.bookmarked)
             record.bookmarked = false
@@ -1733,9 +1818,6 @@ def markCompleted(Long id, String entityCode) {
             record.status = WritingStatus.findByCode('revised')
         }
 
-
-        render(template: '/gTemplates/recordSummary', model: [record: record])
-        render(template: '/layouts/achtung', model: [message: 'Record marked as completed'])
     }
     def unmarkCompleted(Long id, String entityCode) {
 
@@ -1860,10 +1942,22 @@ def markCompleted(Long id, String entityCode) {
 
 
     def quickBookmark() {
+
         def entityCode = params.id.split('-')[0]//substring(0, 1)
         def id = params.id.split('-')[1].toLong()
+
         def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
+        quickBookmarkOperation(id, entityCode)
+
+        render(template: '/gTemplates/recordSummary', model: [record: record])
+
+
+    }
+
+    def quickBookmarkOperation(Long id, String entityCode){
+
+        def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
 
         def resourceNestedById = false
         def resourceNestedByType = false
@@ -1923,14 +2017,14 @@ def markCompleted(Long id, String entityCode) {
                     }
 */
 
-            //        def ant = new AntBuilder()
+                    //        def ant = new AntBuilder()
 
-            //        filesList.each() { f ->
-           //             ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
-           //         }
+                    //        filesList.each() { f ->
+                    //             ant.copy(file: f.path, tofile: rps1Folder + '/' + f.name)
+                    //         }
 //                    render filesList.size() + ' file(s) copied.'
 
-              //      message = filesList.size() + ' file(s) copied.'
+                    //      message = filesList.size() + ' file(s) copied.'
                 } else {
                     render 'Record not found.'
                 }
@@ -2011,7 +2105,7 @@ def markCompleted(Long id, String entityCode) {
                                 new File(folder[0]).eachFile() {
 //Match(~/[\S\s]*\.[\S\s]*/) { //ToDo: only files with extensions!
                                     if (it.isFile()){
-                                       // filesList += '*** ' + it.name
+                                        // filesList += '*** ' + it.name
 //                                    else {
 
                                         filesCount++
@@ -2063,7 +2157,7 @@ def markCompleted(Long id, String entityCode) {
                         b.filesList = filesList.join('\n')
                     }
                 }
-              //  render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])
+                //  render(template: '/layouts/achtung', model: [message: message + '...' + filesCount + ' files'])
 // + filesList.join('\n').replace('\n', '<br/>')])
 //                render '<br/>' + filesCount + ' files: <br/>' + filesList.join('\n').replace('\n', '<br/>')
 
@@ -2079,8 +2173,22 @@ def markCompleted(Long id, String entityCode) {
         record.save(flush: true)
 
 
-        render(template: '/gTemplates/recordSummary', model: [record: record])
+
     }
+
+
+   def quickBookmarkSilent(){
+
+       def entityCode = params.id.split('-')[0]//substring(0, 1)
+       def id = params.id.split('-')[1].toLong()
+       def record = grailsApplication.classLoader.loadClass(entityMapping[entityCode]).get(id)
+
+       quickBookmarkOperation(id, entityCode)
+
+//       render(template: '/gTemplates/recordSummary', model: [record: record])
+       render(template: '/layouts/achtung', model: [message: 'Record bookmarked'])
+
+   }
 
     def setPriority() {
 
